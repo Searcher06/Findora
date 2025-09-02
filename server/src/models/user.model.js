@@ -29,3 +29,6 @@ const schema = new mongoose.Schema({
     default: "student",
   },
 });
+
+// Creating a model
+export const userModel = mongoose.model("User", schema);
