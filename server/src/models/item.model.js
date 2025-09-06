@@ -9,4 +9,8 @@ const schema = new mongoose.Schema({
     type: String,
     required: [true, "Item description is required"],
   },
+  location: {
+    type: String,
+    required: [true, "Item location is required"],
+  },
 });
