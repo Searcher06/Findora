@@ -9,7 +9,7 @@ const itemSchema = new mongoose.Schema(
     },
     description: {
       type: String,
-      required: [true, "Please provide the description of the item"],
+      required: [true, "Please provide the item description"],
       trim: true,
     },
     category: {
