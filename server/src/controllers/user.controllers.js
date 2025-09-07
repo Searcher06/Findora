@@ -1,4 +1,5 @@
-import { userModel } from "../models/user.model";
+import { userModel } from "../models/user.model.js";
+import bcrypt from "bcryptjs";
 
 const createUser = async (req, res) => {
   let { firstName, lastName, email, password } = req.body;
@@ -27,6 +28,72 @@ const createUser = async (req, res) => {
   if (firstName.length < 3 || lastName.length < 3) {
     res.status(400);
     throw new Error("Firstname and Lastname must be atleast 4 characters long");
+  }
+
+  if (password.length < 6) {
+    res.status(400);
+    throw new Error("Password must be atleast 6 characters length");
+  }
+
+  let contains;
+  const symbols = [
+    "`",
+    "~",
+    "!",
+    "@",
+    "#",
+    "$",
+    "%",
+    "^",
+    "&",
+    "*",
+    "(",
+    ")",
+    "-",
+    "_",
+    "+",
+    "=",
+    "/",
+    "[",
+    "]",
+    "{",
+    "}",
+    "|",
+    ",",
+    "'",
+    `"`,
+    ".",
+    "?",
+  ];
+  symbols.forEach((current) => {
+    if (firstName.includes(current) || lastName.includes(current)) {
+      contains = true;
+      return;
+    }
+  });
+
+  if (contains) {
+    res.status(400);
+    throw new Error(
+      "Use of special characters is not allowed for Firstname and Lastname"
+    );
+  }
+
+  const salt = await bcrypt.genSalt(12);
+  const hashedpwd = await bcrypt.hash(password, salt);
+
+  let user = await userModel.create({
+    firstName,
+    lastName,
+    email,
+    password: hashedpwd,
+  });
+
+  if (user) {
+    res.status(201).json({ ...user, password: "" });
+  } else {
+    res.status(400);
+    throw new Error("Invalid user data");
   }
 };
 
