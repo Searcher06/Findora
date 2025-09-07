@@ -4,7 +4,8 @@ dotenv.config();
 import connectDB from "./config/connectDB.js";
 import { userModel } from "./models/user.model.js";
 import userRoute from "./routes/user.routes.js";
-import cookieparser from "cookie-parser";
+import cookieParser from "cookie-parser";
+import loggerMiddleware from "./middleware/logger.js";
 
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -12,12 +13,18 @@ const DATABASE_URI =
   process.env.DATABASE_URI || "mongodb://127.0.0.1:27017/Findora";
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(cookieparser());
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
 
+// Logger middleware
+app.use(loggerMiddleware);
+
+// user routes
 app.use("/api/v1/user", userRoute);
+
+// api testing
 app.get("/api/v1/welcome", async (req, res) => {
-  res.json({ message: "working" });
+  res.status(200).json({ message: "working" });
 });
 
 connectDB(DATABASE_URI);
