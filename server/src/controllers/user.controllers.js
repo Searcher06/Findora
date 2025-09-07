@@ -1,5 +1,6 @@
 import { userModel } from "../models/user.model.js";
 import bcrypt from "bcryptjs";
+import generateToken from "../utils/generateToken.js";
 
 const createUser = async (req, res) => {
   let { firstName, lastName, email, password } = req.body;
@@ -96,8 +97,24 @@ const createUser = async (req, res) => {
     throw new Error("Invalid user data");
   }
 };
+const login = async (req, res) => {
+  const { password, email } = req.body;
 
-const login = async (req, res) => {};
+  if (!email || !password) {
+    res.status(400);
+    throw new Error("Please add all fields");
+  }
+
+  let user = await userModel.findOne({ email });
+  if (user && (await bcrypt.compare(password, user.password))) {
+    generateToken(user, res);
+    res.status(200).json({ ...user._doc, password: "" });
+  } else {
+    res.status(400);
+    throw new Error("Invalid user credentials");
+  }
+};
+
 const updateProfile = async (req, res) => {};
 const getUser = async (req, res) => {};
 const signOut = async (req, res) => {};
