@@ -19,7 +19,7 @@ const createUser = async (req, res) => {
     throw new Error("Please enter a valid email");
   }
 
-  const userExists = await userModel.find({ email });
+  const userExists = await userModel.findOne({ email });
   if (userExists) {
     res.status(400);
     throw new Error("User already exists");
@@ -90,7 +90,7 @@ const createUser = async (req, res) => {
   });
 
   if (user) {
-    res.status(201).json({ ...user, password: "" });
+    res.status(201).json({ ...user._doc, password: "" });
   } else {
     res.status(400);
     throw new Error("Invalid user data");
