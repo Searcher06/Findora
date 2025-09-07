@@ -28,6 +28,14 @@ const schema = new mongoose.Schema({
     type: String,
     default: "student",
   },
+  department: {
+    type: String,
+    trim: true,
+  },
+  foculty: {
+    type: String,
+    trim: true,
+  },
 });
 
 // Creating a model
