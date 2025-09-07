@@ -117,7 +117,13 @@ const login = async (req, res) => {
 
 const updateProfile = async (req, res) => {};
 const getUser = async (req, res) => {};
-const signOut = async (req, res) => {};
+const signOut = async (req, res) => {
+  res.cookie("findoraToken", "", {
+    httpOnly: true,
+    expires: new Date(0),
+  });
+  res.status(200).json({ message: "Logged out successfully" });
+};
 const getUserById = async (req, res) => {};
 const userProfile = async (req, res) => {};
 
