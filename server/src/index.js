@@ -2,7 +2,6 @@ import express from "express";
 import dotenv from "dotenv";
 dotenv.config();
 import connectDB from "./config/connectDB.js";
-import { userModel } from "./models/user.model.js";
 import userRoute from "./routes/user.routes.js";
 import cookieParser from "cookie-parser";
 import loggerMiddleware from "./middleware/logger.js";
