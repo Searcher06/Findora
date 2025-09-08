@@ -8,7 +8,7 @@ const generateToken = (user, res) => {
     process.env.JWT_SECRET,
     { expiresIn: "7d" }
   );
-  res.cookie("findoraToken", token, {
+  res.cookie("token", token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production" ? true : false,
     sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",

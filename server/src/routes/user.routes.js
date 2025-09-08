@@ -1,4 +1,5 @@
 import express from "express";
+import authMiddleWare from "../middleware/auth.js";
 import {
   createUser,
   login,
@@ -17,7 +18,7 @@ router.post("/login", login);
 
 router.post("/sign-out", signOut);
 
-router.get("/", getUser);
+router.get("/", authMiddleWare, getUser);
 
 router.get("/:id", getUserById);
 

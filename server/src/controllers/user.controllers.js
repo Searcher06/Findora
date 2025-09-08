@@ -114,15 +114,17 @@ const login = async (req, res) => {
     throw new Error("Invalid user credentials");
   }
 };
-
-const updateProfile = async (req, res) => {};
-const getUser = async (req, res) => {};
 const signOut = async (req, res) => {
-  res.cookie("findoraToken", "", {
+  res.cookie("token", "", {
     httpOnly: true,
     expires: new Date(0),
   });
   res.status(200).json({ message: "Logged out successfully" });
+};
+
+const updateProfile = async (req, res) => {};
+const getUser = async (req, res) => {
+  res.status(200).json({ message: "I am a protected route" });
 };
 const getUserById = async (req, res) => {};
 const userProfile = async (req, res) => {};
