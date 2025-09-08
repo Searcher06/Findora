@@ -128,81 +128,125 @@ const getUser = async (req, res) => {
   const user = await userModel.findById(req.user._id).select("-password");
   res.status(200).json(user);
 };
-
 const updateProfile = async (req, res) => {
-  const {
-    firstName,
-    lastName,
-    email,
-    oldPassword,
-    newPassword,
-    department,
-    foculty,
-  } = req.body;
-  const condition =
-    !firstName &&
-    !lastName &&
-    !email &&
-    !oldPassword &&
-    !newPassword &&
-    !department &&
-    !foculty;
+  try {
+    const {
+      firstName,
+      lastName,
+      email,
+      oldPassword,
+      newPassword,
+      department,
+      foculty,
+    } = req.body;
+    const condition =
+      !firstName &&
+      !lastName &&
+      !email &&
+      !oldPassword &&
+      !newPassword &&
+      !department &&
+      !foculty;
 
-  if (condition) {
-    res.status(200).json({ message: "No changes made" });
-  }
-
-  const user = await userModel.findById(req.user._id);
-
-  if (!user) {
-    clearCookie(req, res);
-    res.status(401);
-    throw new Error("Not authorized, no user found");
-  }
-
-  if (firstName) {
-    if (textValidator(firstName)) {
-      res.status(401);
-      throw new Error("Firstname can not contain special characters");
+    if (condition) {
+      res.status(200).json({ message: "No changes made" });
     }
 
-    if (firstName.length < 3) {
+    const user = await userModel.findById(req.user._id);
+
+    if (!user) {
+      clearCookie(req, res);
       res.status(401);
-      throw new Error("Firstname must be atlease 4 characters length");
-    } else if (firstName.length > 20) {
-      res.status(401);
-      throw new Error("Firstname is 20 characters max");
+      throw new Error("Not authorized, no user found");
     }
 
-    user.firstName = firstName;
-  }
+    if (firstName) {
+      if (textValidator(firstName)) {
+        res.status(401);
+        throw new Error("Firstname can not contain special characters");
+      }
 
-  if (lastName) {
-    if (textValidator(lastName)) {
-      res.status(401);
-      throw new Error("lastname can not contain special characters");
+      if (firstName.length < 3) {
+        res.status(401);
+        throw new Error("Firstname must be atlease 4 characters length");
+      } else if (firstName.length > 20) {
+        res.status(401);
+        throw new Error("Firstname is 20 characters max");
+      }
+
+      user.firstName = firstName;
     }
 
-    if (lastName.length < 3) {
-      res.status(401);
-      throw new Error("lastname must be atlease 4 characters length");
-    } else if (lastName.length > 20) {
-      res.status(401);
-      throw new Error("lastname is 20 characters max");
+    if (lastName) {
+      if (textValidator(lastName)) {
+        res.status(401);
+        throw new Error("lastname can not contain special characters");
+      }
+
+      if (lastName.length < 3) {
+        res.status(401);
+        throw new Error("lastname must be atlease 4 characters length");
+      } else if (lastName.length > 20) {
+        res.status(401);
+        throw new Error("lastname is 20 characters max");
+      }
+
+      user.lastName = lastName;
     }
 
-    user.lastName = lastName;
-  }
+    if (email) {
+      if (!validateEmail(email)) {
+        res.status(400);
+        throw new Error("Please enter a valid email");
+      }
 
-  if (email) {
-    if (!validateEmail(email)) {
-      res.status(400);
-      throw new Error("Please enter a valid email");
+      const checkEmail = await userModel.findOne({ email });
+      // checking if the new email exists
+      if (checkEmail) {
+        res.status(400);
+        throw new Error("User already exist!");
+      }
+
+      user.email = email;
     }
 
-    user.email = email;
+    if (oldPassword) {
+      if (!newPassword) {
+        res.status(400);
+        throw new Error("Fill in the new password!");
+      }
+
+      if (!(await bcrypt.compare(oldPassword, user.password))) {
+        res.status(400);
+        throw new Error("Old password is incorrect");
+      }
+
+      if (newPassword.length < 6) {
+        res.status(400);
+        throw new Error("New password must be atleast 6 characters long");
+      }
+
+      user.password = await bcrypt.hash(newPassword, 12);
+    }
+
+    if (department) {
+      user.department = department;
+    }
+
+    if (foculty) {
+      user.foculty = foculty;
+    }
+
+    await user.save();
+    const updatedUser = await userModel.findById(user._id).select("-password");
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    console.error("Update profile Error \nHERE YOU GO:\n", error);
+    res.status(500);
+    throw new Error(error.message || "Internal server error");
   }
 };
+
 const getUserById = async (req, res) => {};
 const userProfile = async (req, res) => {};
 
