@@ -20,8 +20,11 @@ router.post("/sign-out", signOut);
 
 router.get("/", authMiddleWare, getUser);
 
-router.get("/:id", getUserById);
+router.get("/:id", authMiddleWare, getUserById);
 
-router.route("/profile").get(userProfile).post(updateProfile);
+router
+  .route("/profile")
+  .get(authMiddleWare, userProfile)
+  .post(authMiddleWare, updateProfile);
 
 export default router;

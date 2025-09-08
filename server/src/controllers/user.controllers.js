@@ -1,6 +1,9 @@
 import { userModel } from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import generateToken from "../utils/generateToken.js";
+import { clearCookie } from "../utils/clearCookies.js";
+import { textValidator } from "../utils/symbolchecker.js";
+import { validateEmail } from "../utils/emailValidator.js";
 
 const createUser = async (req, res) => {
   let { firstName, lastName, email, password } = req.body;
@@ -121,10 +124,84 @@ const signOut = async (req, res) => {
   });
   res.status(200).json({ message: "Logged out successfully" });
 };
-
-const updateProfile = async (req, res) => {};
 const getUser = async (req, res) => {
-  res.status(200).json({ message: "I am a protected route" });
+  const user = await userModel.findById(req.user._id).select("-password");
+  res.status(200).json(user);
+};
+
+const updateProfile = async (req, res) => {
+  const {
+    firstName,
+    lastName,
+    email,
+    oldPassword,
+    newPassword,
+    department,
+    foculty,
+  } = req.body;
+  const condition =
+    !firstName &&
+    !lastName &&
+    !email &&
+    !oldPassword &&
+    !newPassword &&
+    !department &&
+    !foculty;
+
+  if (condition) {
+    res.status(200).json({ message: "No changes made" });
+  }
+
+  const user = await userModel.findById(req.user._id);
+
+  if (!user) {
+    clearCookie(req, res);
+    res.status(401);
+    throw new Error("Not authorized, no user found");
+  }
+
+  if (firstName) {
+    if (textValidator(firstName)) {
+      res.status(401);
+      throw new Error("Firstname can not contain special characters");
+    }
+
+    if (firstName.length < 3) {
+      res.status(401);
+      throw new Error("Firstname must be atlease 4 characters length");
+    } else if (firstName.length > 20) {
+      res.status(401);
+      throw new Error("Firstname is 20 characters max");
+    }
+
+    user.firstName = firstName;
+  }
+
+  if (lastName) {
+    if (textValidator(lastName)) {
+      res.status(401);
+      throw new Error("lastname can not contain special characters");
+    }
+
+    if (lastName.length < 3) {
+      res.status(401);
+      throw new Error("lastname must be atlease 4 characters length");
+    } else if (lastName.length > 20) {
+      res.status(401);
+      throw new Error("lastname is 20 characters max");
+    }
+
+    user.lastName = lastName;
+  }
+
+  if (email) {
+    if (!validateEmail(email)) {
+      res.status(400);
+      throw new Error("Please enter a valid email");
+    }
+
+    user.email = email;
+  }
 };
 const getUserById = async (req, res) => {};
 const userProfile = async (req, res) => {};
