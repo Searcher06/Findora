@@ -5,6 +5,7 @@ import connectDB from "./config/connectDB.js";
 import userRoute from "./routes/user.routes.js";
 import cookieParser from "cookie-parser";
 import loggerMiddleware from "./middleware/logger.js";
+import { errorMiddleware } from "./middleware/error.js";
 
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -25,6 +26,9 @@ app.use("/api/v1/user", userRoute);
 app.get("/api/v1/welcome", async (req, res) => {
   res.status(200).json({ message: "working" });
 });
+
+// Error Handler middleware
+app.use(errorMiddleware);
 
 connectDB(DATABASE_URI);
 
