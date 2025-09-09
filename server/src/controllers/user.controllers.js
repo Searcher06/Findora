@@ -7,7 +7,6 @@ import { validateEmail } from "../utils/emailValidator.js";
 
 const createUser = async (req, res) => {
   let { firstName, lastName, email, password, username } = req.body;
-
   if (!firstName || !lastName || !email || !password || !username) {
     res.status(400);
     throw new Error("Please add all fields");
@@ -29,7 +28,10 @@ const createUser = async (req, res) => {
     throw new Error("User already exists");
   }
 
-  const userNameExists = await userModel.findOne({ username });
+  let lowercasedUsername = username.toLowerCase();
+  const userNameExists = await userModel.findOne({
+    username: lowercasedUsername,
+  });
   if (userNameExists) {
     res.status(400);
     throw new Error("Username unavailable. Try a different one");
@@ -72,7 +74,8 @@ const createUser = async (req, res) => {
     firstName,
     lastName,
     email,
-    username,
+    username: lowercasedUsername,
+    displayUsername: username,
     password: hashedpwd,
   });
 
@@ -231,7 +234,7 @@ const updateProfile = async (req, res) => {
   // }
 };
 
-const getUserById = async (req, res) => {};
+const getUserByUsername = async (req, res) => {};
 const userProfile = async (req, res) => {};
 
 export {
@@ -240,6 +243,6 @@ export {
   updateProfile,
   signOut,
   getUser,
-  getUserById,
+  getUserByUsername,
   userProfile,
 };

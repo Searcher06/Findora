@@ -6,7 +6,7 @@ import {
   updateProfile,
   signOut,
   getUser,
-  getUserById,
+  getUserByUsername,
   userProfile,
 } from "../controllers/user.controllers.js";
 
@@ -20,7 +20,7 @@ router.post("/sign-out", signOut);
 
 router.get("/", authMiddleWare, getUser);
 
-router.get("/:id", authMiddleWare, getUserById);
+router.get("/:username", authMiddleWare, getUserByUsername);
 
 router
   .route("/profile")
