@@ -6,19 +6,19 @@ import { textValidator } from "../utils/symbolchecker.js";
 import { validateEmail } from "../utils/emailValidator.js";
 
 const createUser = async (req, res) => {
-  let { firstName, lastName, email, password } = req.body;
+  let { firstName, lastName, email, password, username } = req.body;
 
-  if (!firstName || !lastName || !email || !password) {
+  if (!firstName || !lastName || !email || !password || !username) {
     res.status(400);
     throw new Error("Please add all fields");
   }
   firstName = firstName.trim();
   lastName = lastName.trim();
   password = password.trim();
+  username = username.trim();
 
   // check if email is valid
-  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailPattern.test(email)) {
+  if (!validateEmail(email)) {
     res.status(400);
     throw new Error("Please enter a valid email");
   }
@@ -29,7 +29,26 @@ const createUser = async (req, res) => {
     throw new Error("User already exists");
   }
 
-  if (firstName.length < 3 || lastName.length < 3) {
+  const userNameExists = await userModel.findOne({ username });
+  if (userNameExists) {
+    res.status(400);
+    throw new Error("Username unavailable. Try a different one");
+  }
+
+  if (username.length < 4) {
+    res.status(400);
+    throw new Error("Username must be atleast 4 characters long");
+  } else if (username.includes(" ")) {
+    res.status(400);
+    throw new Error("Username cannot contain spaces");
+  }
+
+  if (textValidator(username)) {
+    res.status(400);
+    throw new Error("Username can only contain letters and numbers");
+  }
+
+  if (firstName.length < 4 || lastName.length < 4) {
     res.status(400);
     throw new Error("Firstname and Lastname must be atleast 4 characters long");
   }
@@ -39,44 +58,7 @@ const createUser = async (req, res) => {
     throw new Error("Password must be atleast 6 characters length");
   }
 
-  let contains;
-  const symbols = [
-    "`",
-    "~",
-    "!",
-    "@",
-    "#",
-    "$",
-    "%",
-    "^",
-    "&",
-    "*",
-    "(",
-    ")",
-    "-",
-    "_",
-    "+",
-    "=",
-    "/",
-    "[",
-    "]",
-    "{",
-    "}",
-    "|",
-    ",",
-    "'",
-    `"`,
-    ".",
-    "?",
-  ];
-  symbols.forEach((current) => {
-    if (firstName.includes(current) || lastName.includes(current)) {
-      contains = true;
-      return;
-    }
-  });
-
-  if (contains) {
+  if (textValidator(firstName) || textValidator(lastName)) {
     res.status(400);
     throw new Error(
       "Use of special characters is not allowed for Firstname and Lastname"
@@ -90,6 +72,7 @@ const createUser = async (req, res) => {
     firstName,
     lastName,
     email,
+    username,
     password: hashedpwd,
   });
 
@@ -129,122 +112,123 @@ const getUser = async (req, res) => {
   res.status(200).json(user);
 };
 const updateProfile = async (req, res) => {
-  try {
-    const {
-      firstName,
-      lastName,
-      email,
-      oldPassword,
-      newPassword,
-      department,
-      foculty,
-    } = req.body;
-    const condition =
-      !firstName &&
-      !lastName &&
-      !email &&
-      !oldPassword &&
-      !newPassword &&
-      !department &&
-      !foculty;
+  const {
+    firstName,
+    lastName,
+    email,
+    oldPassword,
+    newPassword,
+    department,
+    foculty,
+  } = req.body;
+  const condition =
+    !firstName &&
+    !lastName &&
+    !email &&
+    !oldPassword &&
+    !newPassword &&
+    !department &&
+    !foculty;
 
-    if (condition) {
-      res.status(200).json({ message: "No changes made" });
-    }
-
-    const user = await userModel.findById(req.user._id);
-
-    if (!user) {
-      clearCookie(req, res);
-      res.status(401);
-      throw new Error("Not authorized, no user found");
-    }
-
-    if (firstName) {
-      if (textValidator(firstName)) {
-        res.status(401);
-        throw new Error("Firstname can not contain special characters");
-      }
-
-      if (firstName.length < 3) {
-        res.status(401);
-        throw new Error("Firstname must be atlease 4 characters length");
-      } else if (firstName.length > 20) {
-        res.status(401);
-        throw new Error("Firstname is 20 characters max");
-      }
-
-      user.firstName = firstName;
-    }
-
-    if (lastName) {
-      if (textValidator(lastName)) {
-        res.status(401);
-        throw new Error("lastname can not contain special characters");
-      }
-
-      if (lastName.length < 3) {
-        res.status(401);
-        throw new Error("lastname must be atlease 4 characters length");
-      } else if (lastName.length > 20) {
-        res.status(401);
-        throw new Error("lastname is 20 characters max");
-      }
-
-      user.lastName = lastName;
-    }
-
-    if (email) {
-      if (!validateEmail(email)) {
-        res.status(400);
-        throw new Error("Please enter a valid email");
-      }
-
-      const checkEmail = await userModel.findOne({ email });
-      // checking if the new email exists
-      if (checkEmail) {
-        res.status(400);
-        throw new Error("User already exist!");
-      }
-
-      user.email = email;
-    }
-
-    if (oldPassword) {
-      if (!newPassword) {
-        res.status(400);
-        throw new Error("Fill in the new password!");
-      }
-
-      if (!(await bcrypt.compare(oldPassword, user.password))) {
-        res.status(400);
-        throw new Error("Old password is incorrect");
-      }
-
-      if (newPassword.length < 6) {
-        res.status(400);
-        throw new Error("New password must be atleast 6 characters long");
-      }
-
-      user.password = await bcrypt.hash(newPassword, 12);
-    }
-
-    if (department) {
-      user.department = department;
-    }
-
-    if (foculty) {
-      user.foculty = foculty;
-    }
-
-    await user.save();
-    const updatedUser = await userModel.findById(user._id).select("-password");
-    res.status(200).json(updatedUser);
-  } catch (error) {
-    console.error("Update profile Error \nHERE YOU GO:\n", error);
-    res.status(500);
-    throw new Error(error.message || "Internal server error");
+  if (condition) {
+    res.status(200).json({ message: "No changes made" });
   }
+
+  const user = await userModel.findById(req.user._id);
+
+  if (!user) {
+    clearCookie(req, res);
+    res.status(401);
+    throw new Error("Not authorized, no user found");
+  }
+
+  if (firstName) {
+    if (textValidator(firstName)) {
+      res.status(401);
+      throw new Error("Firstname can not contain special characters");
+    }
+
+    if (firstName.length < 3) {
+      res.status(401);
+      throw new Error("Firstname must be atlease 4 characters length");
+    } else if (firstName.length > 20) {
+      res.status(401);
+      throw new Error("Firstname is 20 characters max");
+    }
+
+    user.firstName = firstName;
+  }
+
+  if (lastName) {
+    if (textValidator(lastName)) {
+      res.status(401);
+      throw new Error("lastname can not contain special characters");
+    }
+
+    if (lastName.length < 3) {
+      res.status(401);
+      throw new Error("lastname must be atlease 4 characters length");
+    } else if (lastName.length > 20) {
+      res.status(401);
+      throw new Error("lastname is 20 characters max");
+    }
+
+    user.lastName = lastName;
+  }
+
+  if (email) {
+    if (!validateEmail(email)) {
+      res.status(400);
+      throw new Error("Please enter a valid email");
+    }
+
+    const checkEmail = await userModel.findOne({ email });
+    // checking if the new email exists
+    if (checkEmail) {
+      res.status(400);
+      throw new Error("User already exist!");
+    }
+
+    user.email = email;
+  }
+
+  if (oldPassword) {
+    if (!newPassword) {
+      res.status(400);
+      throw new Error("Fill in the new password!");
+    }
+
+    if (!(await bcrypt.compare(oldPassword, user.password))) {
+      res.status(400);
+      throw new Error("Old password is incorrect");
+    }
+
+    if (newPassword.length < 6) {
+      res.status(400);
+      throw new Error("New password must be atleast 6 characters long");
+    }
+
+    user.password = await bcrypt.hash(newPassword, 12);
+  }
+
+  if (department) {
+    user.department = department;
+  }
+
+  if (foculty) {
+    user.foculty = foculty;
+  }
+
+  await user.save();
+  const updatedUser = await userModel.findById(user._id).select("-password");
+  res.status(200).json(updatedUser);
+
+  // Todo: get back to this later
+  // } catch (error) {
+  //   console.error("Update profile Error \nHERE YOU GO:\n", error);
+  //   res.status(500);
+  //   throw new Error(error.message || "Internal server error");
+  // }
 };
 
 const getUserById = async (req, res) => {};
