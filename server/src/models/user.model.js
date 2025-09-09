@@ -15,6 +15,12 @@ const schema = new mongoose.Schema({
     type: String,
     required: [true, "username is required"],
     trim: true,
+    unique: true,
+    lowercase: true,
+  },
+  displayUsername: {
+    type: String,
+    required: true,
   },
   email: {
     type: String,
@@ -40,6 +46,10 @@ const schema = new mongoose.Schema({
   foculty: {
     type: String,
     trim: true,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now(),
   },
 });
 
