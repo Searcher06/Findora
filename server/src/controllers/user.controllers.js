@@ -234,7 +234,23 @@ const updateProfile = async (req, res) => {
   // }
 };
 
-const getUserByUsername = async (req, res) => {};
+const getUserByUsername = async (req, res) => {
+  // Getting the username from the request parameter
+  const username = req.params.username;
+
+  // Getting the full user info from the username provided
+  const user = await userModel
+    .findOne({ username: username })
+    .select("-password");
+
+  // checking if user does not exist
+  if (!user) {
+    res.status(404);
+    throw new Error("User not found");
+  }
+
+  res.status(200).json(user);
+};
 const userProfile = async (req, res) => {};
 
 export {
