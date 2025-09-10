@@ -7,7 +7,6 @@ import {
   signOut,
   getUser,
   getUserByUsername,
-  userProfile,
 } from "../controllers/user.controllers.js";
 
 const router = express.Router();
@@ -22,9 +21,6 @@ router.get("/", authMiddleWare, getUser);
 
 router.get("/:username", authMiddleWare, getUserByUsername);
 
-router
-  .route("/profile")
-  .get(authMiddleWare, userProfile)
-  .post(authMiddleWare, updateProfile);
+router.post("/profile", authMiddleWare, updateProfile);
 
 export default router;

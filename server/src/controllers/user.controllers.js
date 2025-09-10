@@ -233,7 +233,6 @@ const updateProfile = async (req, res) => {
   //   throw new Error(error.message || "Internal server error");
   // }
 };
-
 const getUserByUsername = async (req, res) => {
   // Getting the username from the request parameter
   const username = req.params.username;
@@ -251,7 +250,6 @@ const getUserByUsername = async (req, res) => {
 
   res.status(200).json(user);
 };
-const userProfile = async (req, res) => {};
 
 export {
   createUser,
@@ -260,5 +258,4 @@ export {
   signOut,
   getUser,
   getUserByUsername,
-  userProfile,
 };
