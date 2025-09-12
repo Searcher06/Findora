@@ -10,6 +10,8 @@ const itemSchema = new mongoose.Schema(
     description: {
       type: String,
       required: [true, "Please provide the item description"],
+      maxlength: 200,
+      minlength: 20,
       trim: true,
     },
     category: {
@@ -44,6 +46,10 @@ const itemSchema = new mongoose.Schema(
     reportedBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
+      required: true,
+    },
+    dateLostOrFound: {
+      type: Date,
       required: true,
     },
     dateReported: {
