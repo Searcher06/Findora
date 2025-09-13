@@ -81,19 +81,8 @@ const createItem = async (req, res) => {
     throw new Error("Invalid data");
   }
 };
-
 const updateItem = async (req, res) => {
-  // Getting the item id from the request url, then checking the DB for the item
-  const item = await itemModel.findById(req.params.id);
-
-  // checking if item exists
-  if (!item) {
-    res.status(404);
-    throw new Error("Item not found!");
-  }
-
-  // prettier-ignore
-
+  const item = await itemModel.findById(req.item._id);
   // destructuring the all the fields
   let {
     itemName,
