@@ -73,6 +73,13 @@ const createItem = async (req, res) => {
     reportedBy: user._id,
     dateLostOrFound,
   });
+
+  if (item) {
+    res.status(201).json(item);
+  } else {
+    res.status(400);
+    throw new Error("Invalid data");
+  }
 };
 
 const updateItem = async (req, res) => {};
