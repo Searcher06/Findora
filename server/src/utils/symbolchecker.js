@@ -22,7 +22,6 @@ export const textValidator = (text) => {
     "{",
     "}",
     "|",
-    ",",
     "'",
     `"`,
     ".",
