@@ -59,3 +59,5 @@ const itemSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+export const itemModel = mongoose.model("Item", itemSchema);
