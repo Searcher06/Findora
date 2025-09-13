@@ -1,7 +1,9 @@
-import { textValidator } from "../utils/symbolchecker";
+import { textValidator } from "../utils/symbolchecker.js";
+import { itemModel } from "../models/item.model.js";
+import { userModel } from "../models/user.model.js";
 
 const createItem = async (req, res) => {
-  const {
+  let {
     itemName,
     itemDescription,
     category,
@@ -11,8 +13,14 @@ const createItem = async (req, res) => {
     dateLostOrFound,
   } = req.body;
 
+  const user = await userModel.findById(req.user._id).select("-password");
+  if (!user) {
+    res.status(404);
+    throw new Error("User not found!");
+  }
+
   // prettier-ignore
-  if(!itemName || !itemDescription || !category || !location || !image || !status || !dateLostOrFound){
+  if(!itemName || !itemDescription || !category || !location  || !status || !dateLostOrFound){
     res.status(400);
     throw new Error("Please add fields!")
   }
@@ -29,6 +37,11 @@ const createItem = async (req, res) => {
     throw new Error("Description must be between 20 to 200 characters");
   }
 
+  if (textValidator(itemName)) {
+    res.status(400);
+    throw new Error("Item name can not contain special characters");
+  }
+
   if (location.length < 3 || location.length > 150) {
     res.status(400);
     throw new Error("Location must be between 10 to 150 characters");
@@ -42,9 +55,24 @@ const createItem = async (req, res) => {
     throw new Error("Invalid date!");
   }
 
+  // todo:build this later
   // checking if theres an image to upload to claudinary
-  if (image) {
-  }
+  // if (image) {
+  // }
+
+  itemName = itemName.trim();
+  itemDescription = itemDescription.trim();
+  location = location.trim();
+
+  const item = await itemModel.create({
+    name: itemName,
+    description: itemDescription,
+    category: category,
+    location,
+    status,
+    reportedBy: user._id,
+    dateLostOrFound,
+  });
 };
 
 const updateItem = async (req, res) => {};
