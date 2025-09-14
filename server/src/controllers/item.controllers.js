@@ -156,9 +156,8 @@ const updateItem = async (req, res) => {
   const updatedItem = await itemModel.findById(item._id);
   res.status(200).json(updatedItem);
 };
-const lostItems = async (req, res) => {};
-const foundItems = async (req, res) => {};
 const deleteItem = async (req, res) => {
+  // todo:implement checking if an item is claimed
   const deletedItem = await itemModel.findByIdAndDelete(req.item._id);
   if (deletedItem) {
     res.status(200).json({ message: "Item deleted successfully" });
@@ -166,6 +165,14 @@ const deleteItem = async (req, res) => {
     res.status(500);
     throw new Error("Item deletion failed!");
   }
+};
+const lostItems = async (req, res) => {
+  const items = await itemModel.find({ status: "lost" });
+  res.status(200).json(items);
+};
+const foundItems = async (req, res) => {
+  const items = await itemModel.find({ status: "found" });
+  res.status(200).json(items);
 };
 
 export { createItem, updateItem, lostItems, foundItems, deleteItem };
