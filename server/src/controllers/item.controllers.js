@@ -158,6 +158,14 @@ const updateItem = async (req, res) => {
 };
 const lostItems = async (req, res) => {};
 const foundItems = async (req, res) => {};
-const deleteItem = async (req, res) => {};
+const deleteItem = async (req, res) => {
+  const deletedItem = await itemModel.findByIdAndDelete(req.item._id);
+  if (deletedItem) {
+    res.status(200).json({ message: "Item deleted successfully" });
+  } else {
+    res.status(500);
+    throw new Error("Item deletion failed!");
+  }
+};
 
 export { createItem, updateItem, lostItems, foundItems, deleteItem };
