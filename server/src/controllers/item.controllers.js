@@ -174,5 +174,16 @@ const foundItems = async (req, res) => {
   const items = await itemModel.find({ status: "found" });
   res.status(200).json(items);
 };
-
-export { createItem, updateItem, lostItems, foundItems, deleteItem };
+const getUserItems = async (req, res) => {
+  const user = await userModel.findById(req.user._id);
+  const items = await itemModel.find({ reportedBy: user._id.toString() });
+  res.status(200).json(items);
+};
+export {
+  createItem,
+  updateItem,
+  lostItems,
+  foundItems,
+  deleteItem,
+  getUserItems,
+};

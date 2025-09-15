@@ -7,6 +7,7 @@ import {
   lostItems,
   foundItems,
   deleteItem,
+  getUserItems,
 } from "../controllers/item.controllers.js";
 const router = express.Router();
 
@@ -20,5 +21,5 @@ router.patch("/:id", authMiddleWare, ownerShipMiddleware, updateItem); // requir
 router.get("/lost", authMiddleWare, lostItems);
 router.get("/found", authMiddleWare, foundItems);
 router.delete("/:id", authMiddleWare, ownerShipMiddleware, deleteItem); // requires an ownership middleware
-
+router.get("/", authMiddleWare, getUserItems);
 export default router;
