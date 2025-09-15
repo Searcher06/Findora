@@ -179,6 +179,21 @@ const getUserItems = async (req, res) => {
   const items = await itemModel.find({ reportedBy: user._id.toString() });
   res.status(200).json(items);
 };
+const getUserPostsByUsername = async (req, res) => {
+  const username = req.params.username;
+  const user = await userModel
+    .findOne({ username: username })
+    .select("-password");
+
+  // checking if user does not exist
+  if (!user) {
+    res.status(404);
+    throw new Error("User not found");
+  }
+
+  const items = await itemModel.find({ reportedBy: user._id.toString() });
+  res.status(200).json(items);
+};
 export {
   createItem,
   updateItem,
@@ -186,4 +201,5 @@ export {
   foundItems,
   deleteItem,
   getUserItems,
+  getUserPostsByUsername,
 };
