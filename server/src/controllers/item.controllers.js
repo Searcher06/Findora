@@ -194,6 +194,15 @@ const getUserPostsByUsername = async (req, res) => {
   const items = await itemModel.find({ reportedBy: user._id.toString() });
   res.status(200).json(items);
 };
+const getItemById = async (req, res) => {
+  const item = await itemModel.findOne({ _id: req.params.id });
+
+  if (!item) {
+    res.status(404);
+    throw new Error("Item not found!");
+  }
+  res.status(200).json(item);
+};
 export {
   createItem,
   updateItem,
@@ -202,4 +211,5 @@ export {
   deleteItem,
   getUserItems,
   getUserPostsByUsername,
+  getItemById,
 };
