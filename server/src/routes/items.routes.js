@@ -18,12 +18,18 @@ router.delete("/:id")
  Delete an item from the DB using its ID when status == "returned"
 */
 
-router.post("/", authMiddleWare, createItem);
-router.patch("/:id", authMiddleWare, ownerShipMiddleware, updateItem); // requires an ownership middleware
 router.get("/lost", authMiddleWare, lostItems);
 router.get("/found", authMiddleWare, foundItems);
-router.delete("/:id", authMiddleWare, ownerShipMiddleware, deleteItem); // requires an ownership middleware
-router.get("/", authMiddleWare, getUserItems);
 router.get("/user/:username", authMiddleWare, getUserPostsByUsername);
-router.get("/:id", authMiddleWare, getItemById);
+
+router
+  .route("/")
+  .post(authMiddleWare, createItem)
+  .get(authMiddleWare, getUserItems);
+
+router
+  .route("/:id")
+  .delete(authMiddleWare, ownerShipMiddleware, deleteItem)
+  .patch(authMiddleWare, ownerShipMiddleware, updateItem)
+  .get(authMiddleWare, getItemById);
 export default router;
