@@ -1,8 +1,14 @@
 import { userModel } from "../models/user.model.js";
 import { itemModel } from "../models/item.model.js";
+import mongoose from "mongoose";
 
 export const ownerShipMiddleware = async (req, res, next) => {
-  const id = req.params.id;
+  const { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    res.status(400);
+    throw new Error("Invalid item ID");
+  }
   const item = await itemModel.findById(id);
   const user = await userModel.findById(req.user._id);
 
