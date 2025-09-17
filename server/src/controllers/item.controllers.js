@@ -1,6 +1,7 @@
 import { textValidator } from "../utils/symbolchecker.js";
 import { itemModel } from "../models/item.model.js";
 import { userModel } from "../models/user.model.js";
+import mongoose from "mongoose";
 
 const createItem = async (req, res) => {
   let {
@@ -180,7 +181,7 @@ const getUserItems = async (req, res) => {
   res.status(200).json(items);
 };
 const getUserPostsByUsername = async (req, res) => {
-  const username = req.params.username;
+  const { username } = req.params;
   const user = await userModel
     .findOne({ username: username })
     .select("-password");
@@ -195,7 +196,14 @@ const getUserPostsByUsername = async (req, res) => {
   res.status(200).json(items);
 };
 const getItemById = async (req, res) => {
-  const item = await itemModel.findOne({ _id: req.params.id });
+  const { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    res.status(400);
+    throw new Error("Invalid item ID");
+  }
+
+  const item = await itemModel.findOne({ _id: id });
 
   if (!item) {
     res.status(404);

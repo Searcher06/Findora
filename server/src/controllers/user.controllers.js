@@ -235,7 +235,7 @@ const updateProfile = async (req, res) => {
 };
 const getUserByUsername = async (req, res) => {
   // Getting the username from the request parameter
-  const username = req.params.username;
+  const { username } = req.params;
 
   // Getting the full user info from the username provided
   const user = await userModel
