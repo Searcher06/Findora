@@ -2,6 +2,7 @@ import { textValidator } from "../utils/symbolchecker.js";
 import { itemModel } from "../models/item.model.js";
 import { userModel } from "../models/user.model.js";
 import mongoose from "mongoose";
+import { requestModel } from "../models/request.model.js";
 
 const createItem = async (req, res) => {
   let {
@@ -211,6 +212,35 @@ const getItemById = async (req, res) => {
   }
   res.status(200).json(item);
 };
+
+const claimItem = async (req, res) => {
+  const { id: userID } = req.user;
+  const { id: itemId } = req.item;
+  const finderId = item.reportedBy;
+
+  const requestExists = await requestModel.findOne({
+    itemId,
+    finderId,
+    claimerId: userID,
+  });
+
+  // checking if the there is claim request for the same item by the same finder and claimer
+  if (requestExists) {
+    res.status(400);
+    throw new Error("You already sent a claim request for this item!");
+  }
+
+  const item = await itemModel.findById(itemId);
+
+  const request = await requestModel.create({
+    itemId,
+    finderId,
+    claimerId: userID,
+  });
+
+  res.status(201).json(request);
+};
+
 export {
   createItem,
   updateItem,
@@ -220,4 +250,5 @@ export {
   getUserItems,
   getUserPostsByUsername,
   getItemById,
+  claimItem,
 };
