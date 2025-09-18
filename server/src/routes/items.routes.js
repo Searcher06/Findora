@@ -10,7 +10,9 @@ import {
   getUserItems,
   getUserPostsByUsername,
   getItemById,
+  claimItem,
 } from "../controllers/item.controllers.js";
+import { itemOwner } from "../middleware/itemOwner.js";
 const router = express.Router();
 
 /* 
@@ -32,4 +34,6 @@ router
   .delete(authMiddleWare, ownerShipMiddleware, deleteItem)
   .patch(authMiddleWare, ownerShipMiddleware, updateItem)
   .get(authMiddleWare, getItemById);
+
+router.post("/claim/:id", authMiddleWare, itemOwner, claimItem); // /api/v1/items/claim/68c8868991eead5cafc502ab -> creates and sends a claim request doc
 export default router;
