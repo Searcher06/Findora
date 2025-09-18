@@ -3,6 +3,7 @@ import { itemModel } from "../models/item.model.js";
 import { userModel } from "../models/user.model.js";
 import mongoose from "mongoose";
 import { requestModel } from "../models/request.model.js";
+import { request } from "express";
 
 const createItem = async (req, res) => {
   let {
@@ -212,10 +213,10 @@ const getItemById = async (req, res) => {
   }
   res.status(200).json(item);
 };
-
 const claimItem = async (req, res) => {
   const { id: userID } = req.user;
   const { id: itemId } = req.item;
+  const item = await itemModel.findById(itemId);
   const finderId = item.reportedBy;
 
   const requestExists = await requestModel.findOne({
@@ -230,8 +231,6 @@ const claimItem = async (req, res) => {
     throw new Error("You already sent a claim request for this item!");
   }
 
-  const item = await itemModel.findById(itemId);
-
   const request = await requestModel.create({
     itemId,
     finderId,
@@ -239,6 +238,14 @@ const claimItem = async (req, res) => {
   });
 
   res.status(201).json(request);
+};
+const getAllClaimRequests = async (req, res) => {
+  const { id: userId } = req.user;
+  const requests = await requestModel.find({
+    $or: [{ finderId: userId }, { claimerId: userId }],
+  });
+
+  res.status(200).json(requests);
 };
 
 export {
@@ -251,4 +258,5 @@ export {
   getUserPostsByUsername,
   getItemById,
   claimItem,
+  getAllClaimRequests,
 };
