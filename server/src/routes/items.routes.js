@@ -22,13 +22,6 @@ router.get("/lost", authMiddleWare, lostItems);
 router.get("/found", authMiddleWare, foundItems);
 router.get("/user/:username", authMiddleWare, getUserPostsByUsername);
 
-// router.get("/claim", authMiddleWare, getAllClaimRequests);
-// router.post("/claim/:id", authMiddleWare, itemOwner, claimItem); // /api/v1/items/claim/68c8868991eead5cafc502ab -> creates and sends a claim request doc
-
-// sends a verification questions inform of array of objects [{question:"what is the name of the item"}]
-// claim/questions/:requestId
-// router.post("/claim/questions/:requestId", authMiddleWare, setRequestQuestions);
-
 router
   .route("/")
   .post(authMiddleWare, createItem)
