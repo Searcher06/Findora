@@ -6,6 +6,7 @@ import {
   getAllRequests,
   setRequestQuestions,
 } from "../controllers/request.controller.js";
+import { setRequestVerificationMiddleware } from "../middleware/request.js";
 
 const router = express.Router();
 
@@ -19,6 +20,7 @@ router.post("/claim/:id", authMiddleWare, itemOwner, claimItem);
 router.post(
   "/verify/setquestion/:requestId",
   authMiddleWare,
+  setRequestVerificationMiddleware,
   setRequestQuestions
 );
 export default router;

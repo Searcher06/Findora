@@ -10,11 +10,11 @@ import loggerMiddleware from "./middleware/logger.js";
 import { errorMiddleware } from "./middleware/error.js";
 
 const app = express();
+app.use(express.json());
 const PORT = process.env.PORT || 8080;
 const DATABASE_URI =
   process.env.DATABASE_URI || "mongodb://127.0.0.1:27017/Findora";
 
-app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
