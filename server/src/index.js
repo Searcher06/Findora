@@ -4,6 +4,7 @@ dotenv.config();
 import connectDB from "./config/connectDB.js";
 import userRoute from "./routes/user.routes.js";
 import itemRoute from "./routes/items.routes.js";
+import requestRoute from "./routes/requests.routes.js";
 import cookieParser from "cookie-parser";
 import loggerMiddleware from "./middleware/logger.js";
 import { errorMiddleware } from "./middleware/error.js";
@@ -25,6 +26,9 @@ app.use("/api/v1/user", userRoute);
 
 // items route
 app.use("/api/v1/items", itemRoute);
+
+// request route
+app.use("/api/v1/request", requestRoute);
 
 // api testing
 app.get("/api/v1/welcome", async (req, res) => {
