@@ -22,6 +22,11 @@ export const setRequestVerificationMiddleware = async (req, res, next) => {
     throw new Error("Forbidden, not authorized!");
   }
 
+  if (request.questions[0]) {
+    res.status(403);
+    throw new Error("Item request already have questions");
+  }
+
   if (request.status == "accepted") {
     res.status(404);
     throw new Error("This request was already accepted");
