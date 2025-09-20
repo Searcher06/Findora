@@ -4,9 +4,13 @@ import { itemOwner } from "../middleware/itemOwner.js";
 import {
   claimItem,
   getAllRequests,
+  setRequestAnswers,
   setRequestQuestions,
 } from "../controllers/request.controller.js";
-import { setRequestVerificationMiddleware } from "../middleware/request.js";
+import {
+  setRequestVerificationMiddleware,
+  setVerificationAnswersMiddleware,
+} from "../middleware/request.js";
 
 const router = express.Router();
 
@@ -17,10 +21,18 @@ router.get("/", authMiddleWare, getAllRequests);
 router.post("/claim/:id", authMiddleWare, itemOwner, claimItem);
 
 // sends a verification questions inform of array of objects [{question:"what is the name of the item"}]
-router.post(
+router.put(
   "/verify/setquestion/:requestId",
   authMiddleWare,
   setRequestVerificationMiddleware,
   setRequestQuestions
+);
+
+// sends verification answers inform of array objects [{questionId:12345678910,answer:"It's a yellow bag"}]
+router.post(
+  "/verify/setanswers/:requestId",
+  authMiddleWare,
+  setVerificationAnswersMiddleware,
+  setRequestAnswers
 );
 export default router;
