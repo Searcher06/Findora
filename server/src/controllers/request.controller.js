@@ -59,11 +59,11 @@ const setRequestQuestions = async (req, res) => {
     }
   }
 
-  request.questions = [...questions];
+  request.questions.push(...questions);
   await request.save();
 
   const updatedRequest = await requestModel.findById(requestId);
   res.status(200).json(updatedRequest);
 };
-
-export { claimItem, getAllRequests, setRequestQuestions };
+const setRequestAnswers = async (req, res) => {};
+export { claimItem, getAllRequests, setRequestQuestions, setRequestAnswers };
