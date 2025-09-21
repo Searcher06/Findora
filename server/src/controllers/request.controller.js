@@ -93,7 +93,22 @@ const setRequestAnswers = async (req, res) => {
       );
     }
   }
+
+  // looping through each answer to find the question that matches the questionId
+  answers.forEach(({ questionId, answer }) => {
+    const q = request.questions.id(questionId);
+    if (!q) {
+      res.status(400);
+      throw new Error("Invalid question ID");
+    }
+    q.answer = answer;
+  });
+
+  await request.save();
+  const updatedRequest = await requestModel.findById(requestId);
+  res.status(200).json(updatedRequest);
 };
+
 export { claimItem, getAllRequests, setRequestQuestions, setRequestAnswers };
 
 /*
