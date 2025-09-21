@@ -65,5 +65,49 @@ const setRequestQuestions = async (req, res) => {
   const updatedRequest = await requestModel.findById(requestId);
   res.status(200).json(updatedRequest);
 };
-const setRequestAnswers = async (req, res) => {};
+const setRequestAnswers = async (req, res) => {
+  // Destructuring the request id from requesObject and changing the name to requestId
+  const { id: requestId } = req.requestObject;
+
+  // Getting the full request info from
+  const request = await requestModel.findById(requestId);
+
+  // Destructuring the answers array
+  const { answers } = req.body;
+
+  // Getting the questions array from the request document
+  const questions = request.questions;
+
+  // checking if both the questions and answers array have the same length
+  // to make sure all questions are answered
+  if (questions.length != answers.length) {
+    res.status(400);
+    throw new Error("All questions needs to be answered.");
+  }
+
+  for (const a of answers) {
+    if (!a.answer || a.answer.trim().length < 1) {
+      res.status(400);
+      throw new Error(
+        "Answer should not be blank\nAll questions needs to be answered"
+      );
+    }
+  }
+};
 export { claimItem, getAllRequests, setRequestQuestions, setRequestAnswers };
+
+/*
+
+  [
+    {questionId:123456,answer:"The bag is red in color"},
+    {questionId:245435,answer:"There is a black logo written on the bag"},
+    {questionId:245435,answer:""},
+  ]
+
+
+  [
+  {_id:123456,question:"What is the color of the bag"},
+  {_id:245435,question:"What is the color of the bags logo"},
+  ]
+
+*/
