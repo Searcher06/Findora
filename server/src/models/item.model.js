@@ -39,7 +39,7 @@ const itemSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["lost", "found", "returned"],
+      enum: ["lost", "found", "returned", "claimed"],
       required: true,
       default: "lost",
     },
