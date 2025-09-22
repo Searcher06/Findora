@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { itemModel } from "../models/item.model.js";
 import { requestModel } from "../models/request.model.js";
 
@@ -97,9 +98,15 @@ const setRequestAnswers = async (req, res) => {
   // looping through each answer to find the question that matches the questionId
   answers.forEach(({ questionId, answer }) => {
     const q = request.questions.id(questionId);
-    if (!q) {
+
+    if (!mongoose.Types.ObjectId.isValid(questionId)) {
       res.status(400);
       throw new Error("Invalid question ID");
+    }
+
+    if (!q) {
+      res.status(404);
+      throw new Error("Question not found!");
     }
     q.answer = answer;
   });
@@ -108,8 +115,36 @@ const setRequestAnswers = async (req, res) => {
   const updatedRequest = await requestModel.findById(requestId);
   res.status(200).json(updatedRequest);
 };
+const setRequestDecision = async (req, res) => {
+  const { id: requestId } = req.requestObject;
 
-export { claimItem, getAllRequests, setRequestQuestions, setRequestAnswers };
+  const { value: decision } = req.body.decision;
+
+  const request = await requestModel.findById(requestId);
+
+  if (!decision) {
+    res.status(400);
+    throw new Error("Decision can't be blank!");
+  }
+
+  if (decision != "accept" || decision != "reject") {
+    res.status(400);
+    throw new Error("Decision can either be accept or reject");
+  }
+
+  request.status = decision;
+  await request.save();
+  const updatedRequest = await requestModel.findById(requestId);
+  res.status(200).json(updatedRequest);
+};
+
+export {
+  claimItem,
+  getAllRequests,
+  setRequestQuestions,
+  setRequestAnswers,
+  setRequestDecision,
+};
 
 /*
 
