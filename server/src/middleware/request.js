@@ -76,7 +76,7 @@ export const setVerificationAnswersMiddleware = async (req, res, next) => {
     throw new Error("This request was already rejected");
   }
 
-  if (request.questions[0]) {
+  if (request.questions[0].answer) {
     res.status(400);
     throw new Error(
       "The request is already assigned with answer\nwait for the finders decision"

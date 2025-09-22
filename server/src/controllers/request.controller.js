@@ -116,11 +116,12 @@ const setRequestAnswers = async (req, res) => {
   res.status(200).json(updatedRequest);
 };
 const setRequestDecision = async (req, res) => {
-  const { id: requestId } = req.requestObject;
-
+  const { id: requestId, itemId } = req.requestObject;
+  // const { itemId } = req.requestObject;
   let { value: decision } = req.body.decision;
 
   const request = await requestModel.findById(requestId);
+  const item = await itemModel.findById(itemId);
 
   if (!decision) {
     res.status(400);
@@ -130,6 +131,11 @@ const setRequestDecision = async (req, res) => {
   if (decision != "accept" && decision != "reject") {
     res.status(400);
     throw new Error("Decision can either be accept or reject");
+  }
+
+  if (decision == "accept") {
+    item.status = "claimed";
+    await item.save();
   }
 
   decision += "ed";
