@@ -111,7 +111,7 @@ export const requestDecisionMiddleware = async (req, res, next) => {
   }
 
   // checking if request lack question or answer
-  if (!request.questions[0] || !request[0].answer) {
+  if (!request.questions[0] || !request.questions[0].answer) {
     res.status(400);
     throw new Error(
       "Decision can only be made when request has questions with answer"

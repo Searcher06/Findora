@@ -118,7 +118,7 @@ const setRequestAnswers = async (req, res) => {
 const setRequestDecision = async (req, res) => {
   const { id: requestId } = req.requestObject;
 
-  const { value: decision } = req.body.decision;
+  let { value: decision } = req.body.decision;
 
   const request = await requestModel.findById(requestId);
 
@@ -127,11 +127,12 @@ const setRequestDecision = async (req, res) => {
     throw new Error("Decision can't be blank!");
   }
 
-  if (decision != "accept" || decision != "reject") {
+  if (decision != "accept" && decision != "reject") {
     res.status(400);
     throw new Error("Decision can either be accept or reject");
   }
 
+  decision += "ed";
   request.status = decision;
   await request.save();
   const updatedRequest = await requestModel.findById(requestId);
