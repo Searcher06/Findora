@@ -6,8 +6,10 @@ import {
   getAllRequests,
   setRequestAnswers,
   setRequestQuestions,
+  setRequestDecision,
 } from "../controllers/request.controller.js";
 import {
+  requestDecisionMiddleware,
   setRequestVerificationMiddleware,
   setVerificationAnswersMiddleware,
 } from "../middleware/request.js";
@@ -34,5 +36,14 @@ router.post(
   authMiddleWare,
   setVerificationAnswersMiddleware,
   setRequestAnswers
+);
+
+// modifies the request with either accept or reject i.e making final decision based
+// the verification answers provided by the item claimer
+router.put(
+  "/verify/:requestId",
+  authMiddleWare,
+  requestDecisionMiddleware,
+  setRequestDecision
 );
 export default router;
