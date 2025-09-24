@@ -5,4 +5,8 @@ const router = express.Router();
 
 // Get's all the users the current user can send message to
 router.get("/users", authMiddleWare, getUsersToChat);
+
+// send message
+router.post("/:username", authMiddleWare);
+
 export default router;
