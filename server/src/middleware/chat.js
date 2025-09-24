@@ -20,4 +20,11 @@ export const chatMiddleware = async (req, res, next) => {
       { finderId: userToChat.id, claimerId: userId },
     ],
   });
+
+  if (!request) {
+    res.status(403);
+    throw new Error(
+      "You can't chat with this user, you don't have any request case"
+    );
+  }
 };
