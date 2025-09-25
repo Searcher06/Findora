@@ -39,5 +39,17 @@ const sendMessage = async (req, res) => {
 
   res.status(201).json(newMessage);
 };
+const getAllMessages = async (req, res) => {
+  const { id: userToChatId } = req.userToChat;
+  const { id: userId } = req.user;
 
-export { getUsersToChat, sendMessage };
+  const messages = await messageModel.find({
+    $or: [
+      { senderId: userId, receiverId: userToChatId },
+      { senderId: userToChatId, receiverId: userId },
+    ],
+  });
+
+  res.status(200).json(messages);
+};
+export { getUsersToChat, sendMessage, getAllMessages };
