@@ -1,5 +1,5 @@
-import { userModel } from "../models/user.model.js";
 import { requestModel } from "../models/request.model.js";
+import { messageModel } from "../models/message.model.js";
 const getUsersToChat = async (req, res) => {
   const { id: userId } = req.user;
   let usersArray = [];
@@ -20,5 +20,24 @@ const getUsersToChat = async (req, res) => {
   usersArray = usersArray.filter((user) => user._id != userId.toString());
   res.status(200).json(usersArray);
 };
+const sendMessage = async (req, res) => {
+  const { id: userToChatId } = req.userToChat;
+  const { id: userId } = req.user;
+  let { value: text } = req.body.message;
+  text = text.trim();
 
-export { getUsersToChat };
+  if (!text) {
+    res.status(400);
+    throw new Error("Message can't be blank");
+  }
+
+  const newMessage = await messageModel.create({
+    senderId: userId,
+    receiverId: userToChatId,
+    text,
+  });
+
+  res.status(201).json(newMessage);
+};
+
+export { getUsersToChat, sendMessage };
