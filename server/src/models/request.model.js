@@ -28,6 +28,12 @@ const schema = new mongoose.Schema(
         answer: { type: String },
       },
     ],
+    finderCode: {
+      type: Number,
+    },
+    claimerCode: {
+      type: Number,
+    },
     decisionAt: {
       type: Date,
     },
