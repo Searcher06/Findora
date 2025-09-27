@@ -119,6 +119,8 @@ const setRequestDecision = async (req, res) => {
   const { id: requestId, itemId } = req.requestObject;
   // const { itemId } = req.requestObject;
   let { value: decision } = req.body.decision;
+  let finderCode = "";
+  let claimerCode = "";
 
   const request = await requestModel.findById(requestId);
   const item = await itemModel.findById(itemId);
@@ -135,6 +137,12 @@ const setRequestDecision = async (req, res) => {
 
   if (decision == "accept") {
     item.status = "claimed";
+    for (let i = 1; i <= 4; i++) {
+      finderCode += Math.floor(Math.random() * 10);
+      claimerCode += Math.floor(Math.random() * 10);
+    }
+    request.finderCode = finderCode;
+    request.claimerCode = claimerCode;
     await item.save();
   }
 
