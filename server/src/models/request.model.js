@@ -28,11 +28,21 @@ const schema = new mongoose.Schema(
         answer: { type: String },
       },
     ],
+
     finderCode: {
-      type: Number,
+      type: string,
     },
     claimerCode: {
-      type: Number,
+      type: string,
+    },
+
+    finderVerified: {
+      type: Boolean,
+      default: false,
+    },
+    claimerVerified: {
+      type: Boolean,
+      default: false,
     },
     decisionAt: {
       type: Date,

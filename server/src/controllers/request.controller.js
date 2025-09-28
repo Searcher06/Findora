@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import { itemModel } from "../models/item.model.js";
 import { requestModel } from "../models/request.model.js";
+import { validateId } from "../utils/validateID.js";
 
 const claimItem = async (req, res) => {
   const { id: userID } = req.user;
@@ -152,6 +153,72 @@ const setRequestDecision = async (req, res) => {
   const updatedRequest = await requestModel.findById(requestId);
   res.status(200).json(updatedRequest);
 };
+const handleItem = async (req, res) => {
+  const { requestId } = req.params;
+  const { id: userID } = req.user;
+  const { code } = req.body.verification;
+  // checking if the requestId is valid
+  if (validateId(requestId)) {
+    res.status(400);
+    throw new Error("Invalid request ID");
+  }
+  const request = await requestModel.findOne({
+    _id: requestId,
+    $or: [{ finderId: userID }, { claimerId: userID }],
+    status: "accepted",
+  });
+
+  // checking if there's no request
+  if (!request) {
+    res.status(404);
+    throw new Error("Request not found!");
+  }
+
+  const item = await itemModel.findById(request.itemId);
+  if (!item) {
+    res.status(404);
+    throw new Error("Item not found!");
+  }
+
+  if (request.status == "returned") {
+    res.status(403);
+    throw new Error("Item already returned");
+  }
+
+  // checking if the current user is the finder
+  if (userID.toString() == request.finderId.toString()) {
+    // checking if the finder code is not equal to the claimer code
+    if (code != request.claimerCode) {
+      res.status(400);
+      throw new Error("Invalid code,try again.");
+    }
+    // verifying the claimer
+    request.claimerVerified = true;
+  } else if (userID.toString() == request.claimerId.toString()) {
+    if (code != request.finderCode) {
+      res.status(400);
+      throw new Error("Invalid code,try again.");
+    }
+    request.finderVerified = true;
+  } else {
+    res.status(403);
+    throw new Error("Forbidden, not authorized!");
+  }
+
+  await request.save();
+  const updatedRequest = await requestModel.findById(requestId);
+
+  if (updatedRequest.finderVerified && updatedRequest.claimerVerified) {
+    updatedRequest.status = "returned";
+    item.status = "returned";
+    await item.save();
+    await updatedRequest.save();
+    const finalRequestDoc = await requestModel.findById(requestId);
+    res.status(200).json(finalRequestDoc);
+  } else {
+    res.status(200).json(updatedRequest);
+  }
+};
 
 export {
   claimItem,
@@ -159,6 +226,7 @@ export {
   setRequestQuestions,
   setRequestAnswers,
   setRequestDecision,
+  handleItem,
 };
 
 /*

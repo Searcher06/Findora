@@ -7,6 +7,7 @@ import {
   setRequestAnswers,
   setRequestQuestions,
   setRequestDecision,
+  handleItem,
 } from "../controllers/request.controller.js";
 import {
   requestDecisionMiddleware,
@@ -46,4 +47,7 @@ router.put(
   requestDecisionMiddleware,
   setRequestDecision
 );
+
+// Item handling
+router.post("/handle/:requestId", authMiddleWare, handleItem);
 export default router;
