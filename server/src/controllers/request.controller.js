@@ -192,6 +192,11 @@ const handleItem = async (req, res) => {
       res.status(400);
       throw new Error("Invalid code,try again.");
     }
+
+    if (request.claimerVerified) {
+      res.status(400);
+      throw new Error("Claimer already verified!");
+    }
     // verifying the claimer
     request.claimerVerified = true;
   } else if (userID.toString() == request.claimerId.toString()) {
@@ -199,6 +204,12 @@ const handleItem = async (req, res) => {
       res.status(400);
       throw new Error("Invalid code,try again.");
     }
+
+    if (request.finderVerified) {
+      res.status(400);
+      throw new Error("Finder already verified!");
+    }
+
     request.finderVerified = true;
   } else {
     res.status(403);

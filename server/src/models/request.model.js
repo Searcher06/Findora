@@ -30,10 +30,10 @@ const schema = new mongoose.Schema(
     ],
 
     finderCode: {
-      type: string,
+      type: String,
     },
     claimerCode: {
-      type: string,
+      type: String,
     },
 
     finderVerified: {
