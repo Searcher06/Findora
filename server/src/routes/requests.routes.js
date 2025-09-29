@@ -8,6 +8,7 @@ import {
   setRequestQuestions,
   setRequestDecision,
   handleItem,
+  sendFoundRequest,
 } from "../controllers/request.controller.js";
 import {
   requestDecisionMiddleware,
@@ -22,6 +23,9 @@ router.get("/", authMiddleWare, getAllRequests);
 
 // sends a claim request with item id
 router.post("/claim/:id", authMiddleWare, itemOwner, claimItem);
+
+// sends a found request with item id
+router.post("/found/:id", authMiddleWare, itemOwner, sendFoundRequest);
 
 // sends a verification questions inform of array of objects [{question:"what is the name of the item"}]
 router.put(

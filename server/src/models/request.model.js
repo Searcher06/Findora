@@ -7,6 +7,11 @@ const schema = new mongoose.Schema(
       ref: "Item",
       required: true,
     },
+    requestType: {
+      type: "string",
+      enum: ["claim", "found"],
+      required: true,
+    },
     finderId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",

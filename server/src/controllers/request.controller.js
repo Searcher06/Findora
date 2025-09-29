@@ -13,6 +13,7 @@ const claimItem = async (req, res) => {
     itemId,
     finderId,
     claimerId: userID,
+    requestType: "claim",
   });
 
   // checking if the there is claim request for the same item by the same finder and claimer
@@ -25,6 +26,34 @@ const claimItem = async (req, res) => {
     itemId,
     finderId,
     claimerId: userID,
+    requestType: "claim",
+  });
+
+  res.status(201).json(request);
+};
+const sendFoundRequest = async (req, res) => {
+  const { id: userID } = req.user;
+  const { id: itemId } = req.item;
+  const item = await itemModel.findById(itemId);
+  const claimerId = item.reportedBy;
+
+  const requestExists = await requestModel.findOne({
+    itemId,
+    finderId: userID,
+    claimerId,
+    requestType: "found",
+  });
+
+  if (requestExists) {
+    res.status(400);
+    throw new Error("You already sent a found request for this item!");
+  }
+
+  const request = await requestModel.create({
+    itemId,
+    finderId: userID,
+    claimerId,
+    requestType: "found",
   });
 
   res.status(201).json(request);
@@ -233,6 +262,7 @@ const handleItem = async (req, res) => {
 
 export {
   claimItem,
+  sendFoundRequest,
   getAllRequests,
   setRequestQuestions,
   setRequestAnswers,

@@ -20,7 +20,7 @@ export const itemOwner = async (req, res, next) => {
 
   if (item.reportedBy.toString() == user._id.toString()) {
     res.status(403);
-    throw new Error("Forbidden, Can't claim the item you posted");
+    throw new Error("Forbidden, not authorized");
   }
 
   req.item = await itemModel.findById(item.id);
