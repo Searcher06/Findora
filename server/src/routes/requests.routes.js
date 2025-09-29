@@ -1,6 +1,6 @@
 import express from "express";
 import authMiddleWare from "../middleware/auth.js";
-import { itemOwner } from "../middleware/itemOwner.js";
+import { itemMiddleware } from "../middleware/itemOwner.js";
 import {
   claimItem,
   getAllRequests,
@@ -22,10 +22,10 @@ const router = express.Router();
 router.get("/", authMiddleWare, getAllRequests);
 
 // sends a claim request with item id
-router.post("/claim/:id", authMiddleWare, itemOwner, claimItem);
+router.post("/claim/:id", authMiddleWare, itemMiddleware, claimItem);
 
 // sends a found request with item id
-router.post("/found/:id", authMiddleWare, itemOwner, sendFoundRequest);
+router.post("/found/:id", authMiddleWare, itemMiddleware, sendFoundRequest);
 
 // sends a verification questions inform of array of objects [{question:"what is the name of the item"}]
 router.put(
