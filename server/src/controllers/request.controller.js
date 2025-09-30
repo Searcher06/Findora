@@ -33,7 +33,6 @@ const claimItem = async (req, res) => {
     const foundRequestExists = await requestModel.findOne({
       itemId,
       claimerId: item.reportedBy,
-      requestType: "claim",
     });
 
     if (foundRequestExists) {
