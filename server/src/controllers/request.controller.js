@@ -12,23 +12,18 @@ const claimItem = async (req, res) => {
   // checking if there is a found request in which the item id is the current item id
   // the claimerid is the current user and the requestType is "found"
   const foundRequest = await requestModel.findOne({
-    itemId,
-    claimerId: userID,
-    requestType: "found",
+    itemId, // the current item
+    claimerId: userID, // the current user and also == item.reportedby
+    requestType: "found", // claim
   });
 
   if (foundRequest) {
     foundRequest.requestType = "claim";
     await foundRequest.save();
     const updatedFoundRequest = await requestModel.findById(foundRequest.id);
+    console.log("got a found request and updates it");
     res.status(200).json(updatedFoundRequest);
   } else {
-    // checking if the current user id matches the id of who reported the item
-    // in order to prevent the user who posted an item from making a claim request on the item they posted
-    if (userID == item.reportedBy.toString()) {
-      res.status(403);
-      throw new Error("You can't claim an item you posted");
-    }
     const requestExists = await requestModel.findOne({
       itemId,
       finderId,
@@ -36,10 +31,27 @@ const claimItem = async (req, res) => {
       requestType: "claim",
     });
 
+    const foundRequestExists = await requestModel.findOne({
+      itemId,
+      claimerId: item.reportedBy,
+      requestType: "claim",
+    });
+
+    if (foundRequestExists) {
+      res.status(400);
+      throw new Error("You already sent a claim request for this item!");
+    }
+
     // checking if the there is claim request for the same item by the same finder and claimer
     if (requestExists) {
       res.status(400);
       throw new Error("You already sent a claim request for this item!");
+    }
+    // checking if the current user id matches the id of who reported the item
+    // in order to prevent the user who posted an item from making a claim request on the item they posted
+    if (userID == item.reportedBy.toString()) {
+      res.status(403);
+      throw new Error("You can't claim an item you posted");
     }
 
     const request = await requestModel.create({
@@ -68,6 +80,11 @@ const sendFoundRequest = async (req, res) => {
   if (requestExists) {
     res.status(400);
     throw new Error("You already sent a found request for this item!");
+  }
+
+  if (item.status != "lost") {
+    res.status(400);
+    throw new Error("Can only send a found request to a lost item");
   }
 
   const request = await requestModel.create({
