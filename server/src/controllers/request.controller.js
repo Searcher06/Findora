@@ -21,7 +21,6 @@ const claimItem = async (req, res) => {
     foundRequest.requestType = "claim";
     await foundRequest.save();
     const updatedFoundRequest = await requestModel.findById(foundRequest.id);
-    console.log("got a found request and updates it");
     res.status(200).json(updatedFoundRequest);
   } else {
     const requestExists = await requestModel.findOne({
@@ -38,6 +37,12 @@ const claimItem = async (req, res) => {
     });
 
     if (foundRequestExists) {
+      // checking if the finder who sends a found request initially
+      // is trying to make a claim request of the item they find
+      if (userID == foundRequestExists.finderId.toString()) {
+        res.status(404);
+        throw new Error("Can't claim the item you found!");
+      }
       res.status(400);
       throw new Error("You already sent a claim request for this item!");
     }
@@ -47,6 +52,7 @@ const claimItem = async (req, res) => {
       res.status(400);
       throw new Error("You already sent a claim request for this item!");
     }
+
     // checking if the current user id matches the id of who reported the item
     // in order to prevent the user who posted an item from making a claim request on the item they posted
     if (userID == item.reportedBy.toString()) {
