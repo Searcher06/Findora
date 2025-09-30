@@ -5,7 +5,7 @@ import { validateId } from "../utils/validateID.js";
 
 const claimItem = async (req, res) => {
   const { id: userID } = req.user;
-  const { id: itemId } = req.item;
+  const { id: itemId } = req.item; // id
   const item = await itemModel.findById(itemId);
   const finderId = item.reportedBy;
 
@@ -42,8 +42,6 @@ const claimItem = async (req, res) => {
         res.status(404);
         throw new Error("Can't claim the item you found!");
       }
-      res.status(400);
-      throw new Error("You already sent a claim request for this item!");
     }
 
     // checking if the there is claim request for the same item by the same finder and claimer
