@@ -1,10 +1,6 @@
-import { Card } from "./components/ui/card";
+import AppRoutes from "./routes/routes";
 function App() {
-  return (
-    <>
-      <Card className={`w-10 h-30`} />
-    </>
-  );
+  return <AppRoutes />;
 }
 
 export default App;
