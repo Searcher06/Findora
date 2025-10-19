@@ -4,5 +4,5 @@ export const useToggleNavbar = () => {
   function handleSidebar() {
     setOpenSidebar((prevs) => !prevs);
   }
-  return { handleSidebar, openSidebar };
+  return { handleSidebar, openSidebar, setOpenSidebar };
 };
