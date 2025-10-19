@@ -1,4 +1,4 @@
 import { MenuIcon } from "lucide-react";
-export const Menu = () => {
-  return <MenuIcon />;
+export const Menu = ({ styles, onclickEvent }) => {
+  return <MenuIcon className={styles} onClick={onclickEvent} />;
 };
