@@ -4,7 +4,7 @@ import { Logo } from "./logo";
 export const SideBar = ({ setOpenSidebar }) => {
   return (
     <div className="h-full fixed w-60 bg-white transition duration-300 ease-in-out ">
-      <div className="h-14 w-full border-b-2 border-gray-100 mb-2.5 flex justify-between items-center pr-2">
+      <div className="h-14 w-full border-b-2 border-gray-200 mb-2.5 flex justify-between items-center pr-2">
         <Logo className={``} />
         <X
           onClick={() => {
