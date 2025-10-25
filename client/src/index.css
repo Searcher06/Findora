@@ -118,3 +118,28 @@
     @apply bg-background text-foreground;
   }
 }
+
+@font-face {
+  font-family: "Space Grotesk";
+  src: url("../src/assets/fonts/SpaceGrotesk-Regular.ttf") format("ttf");
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Space Grotesk";
+  src: url("../src/assets/fonts/SpaceGrotesk-Bold.ttf") format("ttf");
+  font-weight: 700;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Manrope";
+  src: url("../src/assets/fonts/Manrope-Regular.ttf") format("ttf");
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Manrope";
+  src: url("../src/assets/fonts/Manrope-Bold.ttf") format("ttf");
+  font-weight: 700;
+  font-style: normal;
+}
