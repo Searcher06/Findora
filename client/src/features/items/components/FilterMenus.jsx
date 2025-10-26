@@ -11,7 +11,7 @@ export const FilterMenus = () => {
   return (
     <div className="flex gap-6 text-[13px]">
       {/* Category */}
-      <div className="relative">
+      <div className="">
         <button
           onClick={() => toggleMenu("category")}
           className="flex items-center gap-1 hover:text-black transition"
@@ -40,7 +40,7 @@ export const FilterMenus = () => {
       </div>
 
       {/* Date */}
-      <div className="relative">
+      <div className="">
         <button
           onClick={() => toggleMenu("date")}
           className="flex items-center gap-1 hover:text-black transition"
