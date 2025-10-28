@@ -14,7 +14,7 @@ const BrowsePage = () => {
         <SearchBar />
       </div>
       <TabsBar className={`mt-3`} />
-      <ItemsContainer />
+      <ItemsContainer className={"mt-3"} />
     </div>
   );
 };
