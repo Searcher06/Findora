@@ -8,7 +8,7 @@ export const MainNavbar = () => {
   const { handleSidebar, openSidebar, setOpenSidebar } = useToggleNavbar();
   return (
     <>
-      <nav className="h-14 w-full border-b-2 border-gray-200 flex pl-2 pr-2 items-center justify-between">
+      <nav className="fixed bg-white h-14 w-full border-b-2 border-gray-200 flex pl-2 pr-2 items-center justify-between">
         <Menu onclickEvent={handleSidebar} />
         <UserAvatar />
       </nav>

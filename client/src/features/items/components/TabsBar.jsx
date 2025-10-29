@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useItemType } from "../context/ItemTypeContext";
 import { FilterMenus } from "./FilterMenus";
 
 export const TabsBar = ({ className }) => {
-  const [bar, setBar] = useState("found");
+  const { bar, setBar } = useItemType();
   return (
     <div
       className={`${className} font-sans w-[97%] flex justify-between pr-1 h-7 border-b`}

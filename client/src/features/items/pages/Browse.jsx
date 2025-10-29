@@ -5,7 +5,7 @@ import { ItemsContainer } from "../components/ItemsContainer";
 
 const BrowsePage = () => {
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center mt-14">
       <Header
         content={"Browse Lost and found Items"}
         className={"text-[26px] font-medium pl-4 pr-4 leading-7 mt-1"}
