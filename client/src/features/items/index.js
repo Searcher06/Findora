@@ -1,2 +1,3 @@
 import BrowsePage from "./pages/Browse";
-export { BrowsePage };
+import { ViewItem } from "./pages/ViewItem";
+export { BrowsePage, ViewItem };
