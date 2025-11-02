@@ -2,6 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { MapPin, CalendarDays } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 export const ItemCard = ({
   image,
   name,
@@ -9,7 +10,9 @@ export const ItemCard = ({
   location,
   date,
   status,
+  id,
 }) => {
+  const navigate = useNavigate();
   return (
     <Card className={`w-60 shadow-gray-300 pb-3`}>
       <div className="w-full pr-4 pl-4 pt-0 flex flex-col gap-2">
@@ -28,7 +31,14 @@ export const ItemCard = ({
             <p className="pl-1">{date}</p>
           </div>
         </div>
-        <Button className={""}>view more</Button>
+        <Button
+          className={""}
+          onClick={() => {
+            navigate(`items/${id}`);
+          }}
+        >
+          view more
+        </Button>
       </div>
     </Card>
   );
