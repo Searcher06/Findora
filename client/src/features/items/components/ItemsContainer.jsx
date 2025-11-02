@@ -90,6 +90,7 @@ export const ItemsContainer = ({ className }) => {
                 description={current.description}
                 status={current.status}
                 key={index}
+                id={index}
               />
             ))
         : items
@@ -105,6 +106,7 @@ export const ItemsContainer = ({ className }) => {
                 description={current.description}
                 status={current.status}
                 key={index}
+                id={index}
               />
             ))}
     </div>

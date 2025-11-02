@@ -1,3 +1,4 @@
 import BrowsePage from "./pages/Browse";
 import { ViewItem } from "./pages/ViewItem";
-export { BrowsePage, ViewItem };
+import imagesample from "./item.png";
+export { BrowsePage, ViewItem, imagesample };
