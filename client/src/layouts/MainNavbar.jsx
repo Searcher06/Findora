@@ -3,6 +3,7 @@ import { Menu } from "@/components/ui/menu";
 import { UserAvatar } from "@/components/userAvatar";
 import { useToggleNavbar } from "@/hooks/useToggleNavbar";
 import { SideBar } from "@/components/SideBar";
+import { AddButton } from "@/features/items";
 import { Overlay } from "./Overlay";
 export const MainNavbar = () => {
   const { handleSidebar, openSidebar, setOpenSidebar } = useToggleNavbar();
