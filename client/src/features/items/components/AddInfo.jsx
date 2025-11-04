@@ -1,9 +1,12 @@
+import { Button } from "@/components/ui/button";
 import Label from "./Label";
+import ToggleImage from "./ToggleImage";
 
 const AddInfo = ({ className, postType }) => {
   return (
     <form
       className={`w-full border  rounded-lg border-gray-200 p-4  ${className}`}
+      onSubmit={(event) => event.preventDefault()}
     >
       <Label text={"Item Name"} htmlFor={"itemName"} />
       <input
@@ -55,8 +58,17 @@ const AddInfo = ({ className, postType }) => {
         type="date"
         name="date"
         id="date"
-        className="block p-2 border border-gray-300 rounded-lg focus:outline-0 text-xs w-full"
+        className="mb-3 block p-2 border border-gray-300 rounded-lg focus:outline-0 text-xs w-full"
       />
+
+      <div className="w-full flex justify-between">
+        <Label text={"Upload Photo"} htmlFor={"photo"} />
+        <ToggleImage />
+      </div>
+
+      <Button className={"text-xs mt-3 font-sans mb-0 w-full"}>
+        Post Item
+      </Button>
     </form>
   );
 };
