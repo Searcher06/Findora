@@ -1,8 +1,15 @@
 import { Button } from "@/components/ui/button";
 import { PlusIcon } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 const AddButton = ({ className }) => {
+  const navigate = useNavigate();
   return (
-    <Button className={`w-11 h-11 rounded-full fixed ${className}`}>
+    <Button
+      className={`${className}`}
+      onClick={() => {
+        navigate("/report");
+      }}
+    >
       <PlusIcon />
     </Button>
   );

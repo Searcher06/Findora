@@ -3,6 +3,7 @@ import { SearchBar } from "../components/SearchBar";
 import { TabsBar } from "../components/TabsBar";
 import { ItemsContainer } from "../components/ItemsContainer";
 import AddButton from "../components/AddButton";
+import ReportButton from "../components/ReportButton.";
 
 const BrowsePage = () => {
   return (
@@ -16,6 +17,12 @@ const BrowsePage = () => {
       </div>
       <TabsBar className={`mt-3`} />
       <ItemsContainer className={"mt-3"} />
+      {/* <AddButton
+        className={
+          "fixed bottom-6 right-6 rounded-full w-11 h-11 active:scale-95 transition-transform duration-200"
+        }
+      /> */}
+      <ReportButton />
     </div>
   );
 };

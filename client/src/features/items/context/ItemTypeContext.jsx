@@ -4,8 +4,9 @@ const ItemTypeContext = createContext();
 
 export const ItemTypeProvider = ({ children }) => {
   const [bar, setBar] = useState("lost");
+  const [postType, setPostType] = useState(null);
   return (
-    <ItemTypeContext.Provider value={{ bar, setBar }}>
+    <ItemTypeContext.Provider value={{ bar, setBar, postType, setPostType }}>
       {children}
     </ItemTypeContext.Provider>
   );
