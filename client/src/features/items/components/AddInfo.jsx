@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import Label from "./Label";
 import ToggleImage from "./ToggleImage";
+import PhotoDisplay from "./PhotoDisplay";
 
 const AddInfo = ({ className, postType }) => {
   return (
@@ -12,7 +13,7 @@ const AddInfo = ({ className, postType }) => {
       <input
         id="itemName"
         type="text"
-        placeholder="e.g. Black Backpack"
+        placeholder="e.g. Samsung Galaxy S5"
         className="mb-2 p-2 border border-gray-300 outline-0 text-xs w-full h-8 rounded-sm"
       />
 
@@ -37,7 +38,7 @@ const AddInfo = ({ className, postType }) => {
         name="description"
         id="description"
         rows={4}
-        placeholder="Describe the item, where it was lost or found..."
+        placeholder="A Dark colored samsung phone left in the library..."
         className="mb-2 block outline-0 text-xs font-sans p-2 border border-gray-300 rounded-lg resize-none w-full"
       ></textarea>
 
@@ -66,7 +67,9 @@ const AddInfo = ({ className, postType }) => {
         <ToggleImage />
       </div>
 
-      <Button className={"text-xs mt-3 font-sans mb-0 w-full"}>
+      <PhotoDisplay />
+
+      <Button className={"text-xs mt-3 font-sans mb-3 w-full"}>
         Post Item
       </Button>
     </form>
