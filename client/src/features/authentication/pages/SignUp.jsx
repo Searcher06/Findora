@@ -1,12 +1,7 @@
 import { Button } from "@/components/ui/button";
-import {
-  GoalIcon,
-  LockIcon,
-  LockKeyholeIcon,
-  UserLockIcon,
-} from "lucide-react";
+import { GoalIcon, LockKeyholeIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-
+import GoogleIcon from "../components/icons/Google";
 export const SignUpPage = () => {
   const navigate = useNavigate();
   return (
@@ -55,7 +50,7 @@ export const SignUpPage = () => {
             </div>
 
             <button className="mt-3 h-9  w-full sm:w-65 border-gray-200 border-[1.9px] rounded-[8px] flex items-center justify-center">
-              <GoalIcon size={20} className="mr-3" />
+              <GoogleIcon className="mr-3 w-5 h-5" />
               <span className="font-sans text-[13px] font-bold text-gray-700">
                 Sign Up with Google
               </span>
@@ -74,8 +69,8 @@ export const SignUpPage = () => {
             </p>
 
             <hr className="h-[1px] bg-gray-200 border-0 flex-1 mt-4" />
-            <p className="font-semibold text-gray-500 text-xs font-sans flex items-center gap-1.5 mt-4">
-              <LockKeyholeIcon size={16} /> Protected by Findoras security
+            <p className="font-semibold text-gray-500 text-[11px] font-sans flex items-center gap-1.5 mt-4">
+              <LockKeyholeIcon size={16} /> Protected by Findora's security
               system
             </p>
           </form>
