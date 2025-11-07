@@ -5,7 +5,15 @@ import GoogleIcon from "../components/icons/Google";
 import InputField from "../components/InputField";
 import InputFieldsContainer from "../components/InputFieldsContainer";
 import ContinueWith from "../components/ContinueWith";
+import { useState } from "react";
 export const SignUpPage = () => {
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    username: "",
+    email: "",
+    password: "",
+  });
   const navigate = useNavigate();
   return (
     <div className="min-h-screen w-full flex justify-center items-center">
@@ -26,22 +34,41 @@ export const SignUpPage = () => {
                 icon={"UserIcon"}
                 type={"text"}
                 placeholder={"Firstname"}
+                value={formData.firstName}
+                change={"firstName"}
+                setFormData={setFormData}
               />
               <InputField
                 icon={"UserIcon"}
                 type={"text"}
                 placeholder={"Lastname"}
+                value={formData.lastName}
+                change={"lastName"}
+                setFormData={setFormData}
               />
               <InputField
                 icon={"AtSignIcon"}
                 type={"text"}
                 placeholder={"Username"}
+                change={"username"}
+                value={formData.username}
+                setFormData={setFormData}
               />
-              <InputField icon={"Mail"} type={"email"} placeholder={"Email"} />
+              <InputField
+                icon={"Mail"}
+                type={"email"}
+                placeholder={"Email"}
+                value={formData.email}
+                change={"email"}
+                setFormData={setFormData}
+              />
               <InputField
                 icon={"Lock"}
                 type={"password"}
                 placeholder={"Password"}
+                value={formData.password}
+                change={"password"}
+                setFormData={setFormData}
               />
 
               <Button
