@@ -167,6 +167,10 @@ const deleteItem = async (req, res) => {
     throw new Error("Item deletion failed!");
   }
 };
+const allItems = async (req, res) => {
+  const items = await itemModel.find({});
+  res.status(200).json(items);
+};
 const lostItems = async (req, res) => {
   const items = await itemModel.find({ status: "lost" });
   res.status(200).json(items);
@@ -221,4 +225,5 @@ export {
   getUserItems,
   getUserPostsByUsername,
   getItemById,
+  allItems,
 };
