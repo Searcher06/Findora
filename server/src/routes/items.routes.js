@@ -10,6 +10,7 @@ import {
   getUserItems,
   getUserPostsByUsername,
   getItemById,
+  allItems,
 } from "../controllers/item.controller.js";
 const router = express.Router();
 
@@ -25,8 +26,8 @@ router.get("/user/:username", authMiddleWare, getUserPostsByUsername);
 router
   .route("/")
   .post(authMiddleWare, createItem)
-  .get(authMiddleWare, getUserItems);
-
+  .get(authMiddleWare, getUserItems)
+  .get(authMiddleWare, allItems);
 router
   .route("/:id")
   .delete(authMiddleWare, ownerShipMiddleware, deleteItem)

@@ -9,16 +9,14 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import { useAuth } from "../hooks/useAuth";
 const LoginPage = () => {
-  const { login, isLoading } = useAuth();
+  const { login, isLoading, user } = useAuth();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
-  // const disapledStyle =!formData.password || !formData.email ? "bg-gray-500" : null;
 
   const handleSubmit = async () => {
-    // checking all the fields
     if (!formData.email || !formData.password) {
       toast.error("Please add all fields");
       return;
@@ -26,10 +24,11 @@ const LoginPage = () => {
 
     try {
       const response = await login(formData);
-      console.log("Sign up successfull", response);
       setFormData({ email: "", password: "" });
       toast.success("Logged in successfully");
       navigate("/");
+      console.log("Sign up successfull", response);
+      console.log(user);
     } catch (error) {
       if (error.response) {
         // server responded with a non-2xx status
