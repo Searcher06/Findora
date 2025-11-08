@@ -26,8 +26,7 @@ export const SignUpPage = () => {
     !formData.lastName ||
     !formData.password ||
     !formData.email ||
-    !formData.username ||
-    formData.password.length < 6
+    !formData.username
       ? "bg-gray-500"
       : null;
 
@@ -137,6 +136,7 @@ export const SignUpPage = () => {
                     firstName: e.target.value,
                   }));
                 }}
+                disabled={isLoading ? true : false}
               />
               <InputField
                 icon={"UserIcon"}
@@ -151,6 +151,7 @@ export const SignUpPage = () => {
                     lastName: e.target.value,
                   }));
                 }}
+                disabled={isLoading ? true : false}
               />
               <InputField
                 icon={"AtSignIcon"}
@@ -165,6 +166,7 @@ export const SignUpPage = () => {
                     username: e.target.value,
                   }));
                 }}
+                disabled={isLoading ? true : false}
               />
               <InputField
                 icon={"Mail"}
@@ -179,6 +181,7 @@ export const SignUpPage = () => {
                     email: e.target.value,
                   }));
                 }}
+                disabled={isLoading ? true : false}
               />
               <InputField
                 icon={"Lock"}
@@ -193,6 +196,7 @@ export const SignUpPage = () => {
                     password: e.target.value,
                   }));
                 }}
+                disabled={isLoading ? true : false}
               />
 
               <Button
@@ -203,7 +207,7 @@ export const SignUpPage = () => {
                   !formData.password ||
                   !formData.email ||
                   !formData.username ||
-                  formData.password.length < 6
+                  isLoading
                 }
                 onClick={handleSignUp}
               >
