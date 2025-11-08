@@ -5,8 +5,45 @@ import ContinueWith from "../components/ContinueWith";
 import GoogleIcon from "../components/icons/Google";
 import { useNavigate } from "react-router-dom";
 import { LockKeyholeIcon } from "lucide-react";
+import { useState } from "react";
+import { toast } from "react-toastify";
+import { useAuth } from "../hooks/useAuth";
 const LoginPage = () => {
+  const { login, isLoading } = useAuth();
   const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+  // const disapledStyle =!formData.password || !formData.email ? "bg-gray-500" : null;
+
+  const handleSubmit = async () => {
+    // checking all the fields
+    if (!formData.email || !formData.password) {
+      toast.error("Please add all fields");
+      return;
+    }
+
+    try {
+      const response = await login(formData);
+      console.log("Sign up successfull", response);
+      setFormData({ email: "", password: "" });
+      toast.success("Logged in successfully");
+      navigate("/");
+    } catch (error) {
+      if (error.response) {
+        // server responded with a non-2xx status
+        toast.error(error.response.data.message || "Sign up failed");
+      } else if (error.request) {
+        toast.error("No response from server");
+      } else {
+        // something else happended
+        toast.error("An error occured.");
+      }
+      console.error(error);
+    }
+  };
+
   return (
     <div className="min-h-screen w-full flex justify-center items-center">
       <div className="flex border w-74  shadow-lg rounded-lg">
@@ -21,11 +58,36 @@ const LoginPage = () => {
             <h1 className="font-bold text-2xl font-display mb-3">Login</h1>
 
             <InputFieldsContainer>
-              <InputField icon={"Mail"} type={"email"} placeholder={"Email"} />
+              <InputField
+                icon={"Mail"}
+                type={"email"}
+                placeholder={"Email"}
+                value={formData.email}
+                change={"email"}
+                setFormData={setFormData}
+                onChange={(e) => {
+                  setFormData((prevState) => ({
+                    ...prevState,
+                    email: e.target.value,
+                  }));
+                }}
+                disabled={isLoading ? true : false}
+              />
+
               <InputField
                 icon={"Lock"}
                 type={"password"}
                 placeholder={"Password"}
+                value={formData.password}
+                change={"password"}
+                setFormData={setFormData}
+                onChange={(e) => {
+                  setFormData((prevState) => ({
+                    ...prevState,
+                    password: e.target.value,
+                  }));
+                }}
+                disabled={isLoading ? true : false}
               />
 
               <div className="text-[12.5px] font-sans text-gray-700 flex gap-2">
@@ -34,7 +96,9 @@ const LoginPage = () => {
               </div>
 
               <Button
-                className={"text-[13px] active:scale-95 active:bg-black/90"}
+                className={`text-[13px] active:scale-95 active:bg-black/90`}
+                onClick={handleSubmit}
+                disabled={isLoading}
               >
                 Login
               </Button>

@@ -1,11 +1,13 @@
 import { toast } from "react-toastify";
 import { validateEmail } from "@/utils/validateEmail";
 import { textValidator } from "@/utils/textValidator";
-const useSingUp = ({ formData }) => {
+const useSignUp = async (formData, setFormData, navigate, signUp) => {
+  console.log(formData);
+
   formData.firstName = formData.firstName.trim();
-  formData.lastName = formData.firstName.trim();
-  formData.email = formData.firstName.trim();
-  formData.username = formData.firstName.trim();
+  formData.lastName = formData.lastName.trim();
+  formData.email = formData.email.trim();
+  formData.username = formData.username.trim();
   // checking all the fields
   if (
     !formData.firstName ||
@@ -51,6 +53,31 @@ const useSingUp = ({ formData }) => {
     toast.error("Please enter a valid email address");
     return;
   }
+
+  try {
+    const response = await signUp(formData);
+    toast.success("Account created successfully");
+    console.log("Account created:", response);
+    navigate("/");
+    setFormData({
+      firstName: "",
+      lastName: "",
+      username: "",
+      password: "",
+      email: "",
+    });
+  } catch (error) {
+    if (error.response) {
+      // server responded with a non-2xx status
+      toast.error(error.response.data.message || "Sign up failed");
+    } else if (error.request) {
+      toast.error("No response from server");
+    } else {
+      // something else happended
+      toast.error("An error occured.");
+    }
+    console.error(error);
+  }
 };
 
-export { useSingUp };
+export { useSignUp };
