@@ -1,12 +1,18 @@
+/* eslint-disable no-unused-vars */
 import { Button } from "@/components/ui/button";
-import { GoalIcon, LockKeyholeIcon } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { LockKeyholeIcon } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 import GoogleIcon from "../components/icons/Google";
 import InputField from "../components/InputField";
 import InputFieldsContainer from "../components/InputFieldsContainer";
 import ContinueWith from "../components/ContinueWith";
 import { useState } from "react";
+import { toast } from "react-toastify";
+import { validateEmail } from "@/utils/validateEmail";
+import { textValidator } from "@/utils/textValidator";
+import { useAuth } from "../hooks/useAuth";
 export const SignUpPage = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -14,7 +20,95 @@ export const SignUpPage = () => {
     email: "",
     password: "",
   });
-  const navigate = useNavigate();
+  const { signUp, isLoading, error } = useAuth();
+  const disabledStyle =
+    !formData.firstName ||
+    !formData.lastName ||
+    !formData.password ||
+    !formData.email ||
+    !formData.username ||
+    formData.password.length < 6
+      ? "bg-gray-500"
+      : null;
+
+  const handleSignUp = async () => {
+    console.log(formData);
+
+    formData.firstName = formData.firstName.trim();
+    formData.lastName = formData.lastName.trim();
+    formData.email = formData.email.trim();
+    formData.username = formData.username.trim();
+    // checking all the fields
+    if (
+      !formData.firstName ||
+      !formData.lastName ||
+      !formData.email ||
+      !formData.password ||
+      !formData.username
+    ) {
+      toast.error("Please add all fields");
+      return;
+    }
+
+    // checking the password length
+    if (formData.password.length < 6) {
+      toast.error("Password must be atleast 6 characters");
+      return;
+    }
+
+    // checking the firstname length
+    if (formData.firstName.length < 4) {
+      toast.error("Firstname must be atleast 4 characters long");
+      return;
+    }
+
+    // checking the lastname length
+    if (formData.lastName.length < 4) {
+      toast.error("Lastname must be atleast 4 characters long");
+      return;
+    }
+
+    // checking the username length
+    if (formData.username.length < 4) {
+      toast.error("username must be atleast 4 characters long");
+      return;
+    }
+
+    if (textValidator(formData.username)) {
+      toast.error("Username can only contain letters and numbers");
+      return;
+    }
+
+    if (!validateEmail(formData.email)) {
+      toast.error("Please enter a valid email address");
+      return;
+    }
+
+    try {
+      const response = await signUp(formData);
+      toast.success("Account created successfully");
+      console.log("Account created:", response);
+      navigate("/");
+      setFormData({
+        firstName: "",
+        lastName: "",
+        username: "",
+        password: "",
+        email: "",
+      });
+    } catch (error) {
+      if (error.response) {
+        // server responded with a non-2xx status
+        toast.error(error.response.data.message || "Sign up failed");
+      } else if (error.request) {
+        toast.error("No response from server");
+      } else {
+        // something else happended
+        toast.error("An error occured.");
+      }
+      console.error(error);
+    }
+  };
   return (
     <div className="min-h-screen w-full flex justify-center items-center">
       <div className="flex border w-75 shadow-lg rounded-lg">
@@ -24,8 +118,8 @@ export const SignUpPage = () => {
         <div id="right" className="w-full">
           <form
             className="w-full p-6"
-            onSubmit={(event) => {
-              event.preventDefault();
+            onSubmit={(e) => {
+              e.preventDefault();
             }}
           >
             <h1 className="font-bold text-2xl font-display mb-3">Sign Up</h1>
@@ -37,6 +131,12 @@ export const SignUpPage = () => {
                 value={formData.firstName}
                 change={"firstName"}
                 setFormData={setFormData}
+                onChange={(e) => {
+                  setFormData((prevState) => ({
+                    ...prevState,
+                    firstName: e.target.value,
+                  }));
+                }}
               />
               <InputField
                 icon={"UserIcon"}
@@ -45,6 +145,12 @@ export const SignUpPage = () => {
                 value={formData.lastName}
                 change={"lastName"}
                 setFormData={setFormData}
+                onChange={(e) => {
+                  setFormData((prevState) => ({
+                    ...prevState,
+                    lastName: e.target.value,
+                  }));
+                }}
               />
               <InputField
                 icon={"AtSignIcon"}
@@ -53,6 +159,12 @@ export const SignUpPage = () => {
                 change={"username"}
                 value={formData.username}
                 setFormData={setFormData}
+                onChange={(e) => {
+                  setFormData((prevState) => ({
+                    ...prevState,
+                    username: e.target.value,
+                  }));
+                }}
               />
               <InputField
                 icon={"Mail"}
@@ -61,6 +173,12 @@ export const SignUpPage = () => {
                 value={formData.email}
                 change={"email"}
                 setFormData={setFormData}
+                onChange={(e) => {
+                  setFormData((prevState) => ({
+                    ...prevState,
+                    email: e.target.value,
+                  }));
+                }}
               />
               <InputField
                 icon={"Lock"}
@@ -69,10 +187,25 @@ export const SignUpPage = () => {
                 value={formData.password}
                 change={"password"}
                 setFormData={setFormData}
+                onChange={(e) => {
+                  setFormData((prevState) => ({
+                    ...prevState,
+                    password: e.target.value,
+                  }));
+                }}
               />
 
               <Button
-                className={"text-[13px] active:scale-95 active:bg-black/90"}
+                className={`text-[13px] active:scale-95 active:bg-black/90 ${disabledStyle}`}
+                disabled={
+                  !formData.firstName ||
+                  !formData.lastName ||
+                  !formData.password ||
+                  !formData.email ||
+                  !formData.username ||
+                  formData.password.length < 6
+                }
+                onClick={handleSignUp}
               >
                 Create Account
               </Button>
@@ -89,14 +222,9 @@ export const SignUpPage = () => {
 
             <p className="mt-4 text-gray-600 font-sans text-xs w-full flex justify-center">
               Already have an account?
-              <span
-                className="text-blue-600 pl-1 cursor-pointer"
-                onClick={() => {
-                  navigate("/login");
-                }}
-              >
+              <Link className="text-blue-600 pl-1 cursor-pointer" to={"/login"}>
                 Log in
-              </span>
+              </Link>
             </p>
 
             <hr className="h-[1px] bg-gray-200 border-0 flex-1 mt-4" />

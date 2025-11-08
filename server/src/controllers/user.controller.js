@@ -80,6 +80,7 @@ const createUser = async (req, res) => {
   });
 
   if (user) {
+    generateToken(user, res);
     res.status(201).json({ ...user._doc, password: "" });
   } else {
     res.status(400);
