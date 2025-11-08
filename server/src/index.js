@@ -9,7 +9,7 @@ import messageRoute from "./routes/message.routes.js";
 import cookieParser from "cookie-parser";
 import loggerMiddleware from "./middleware/logger.js";
 import { errorMiddleware } from "./middleware/error.js";
-
+import cors from "cors";
 const app = express();
 app.use(express.json());
 const PORT = process.env.PORT || 8080;
@@ -18,6 +18,13 @@ const DATABASE_URI =
 
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL || "http://localhost:5173",
+    credentials: true,
+  })
+);
 
 // Logger middleware
 app.use(loggerMiddleware);

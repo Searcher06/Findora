@@ -1,14 +1,7 @@
 import * as Link from "lucide-react";
 import { useState } from "react";
 import { EyeOff, Eye } from "lucide-react";
-const InputField = ({
-  icon,
-  type,
-  placeholder,
-  value,
-  setFormData,
-  change,
-}) => {
+const InputField = ({ icon, type, placeholder, value, onChange }) => {
   const [show, setShow] = useState(false);
   const LucideIcon = Link[icon];
   return (
@@ -19,12 +12,7 @@ const InputField = ({
         className="w-full h-full outline-0 pl-[5px] placeholder-gray-500"
         placeholder={`${placeholder}`}
         value={value}
-        onChange={(e) => {
-          setFormData((prevState) => ({
-            ...prevState,
-            [change]: e.target.value,
-          }));
-        }}
+        onChange={onChange}
       />
       {type == "password" && show == false ? (
         <Eye
