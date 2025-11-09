@@ -22,11 +22,11 @@ router.delete("/:id")
 router.get("/lost", authMiddleWare, lostItems);
 router.get("/found", authMiddleWare, foundItems);
 router.get("/user/:username", authMiddleWare, getUserPostsByUsername);
+router.get("/user", authMiddleWare, getUserItems);
 
 router
   .route("/")
   .post(authMiddleWare, createItem)
-  .get(authMiddleWare, getUserItems)
   .get(authMiddleWare, allItems);
 router
   .route("/:id")

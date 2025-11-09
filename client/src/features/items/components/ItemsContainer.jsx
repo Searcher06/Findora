@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { ItemCard } from "./ItemCard";
 import itemImage from "../item.png";
 import { useItemType } from "../context/ItemTypeContext";
