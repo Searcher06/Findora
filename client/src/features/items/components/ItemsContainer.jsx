@@ -1,6 +1,7 @@
 import { ItemCard } from "./ItemCard";
 import itemImage from "../item.png";
 import { useItemType } from "../context/ItemTypeContext";
+import { useItems } from "../hooks/useItems";
 let items = [
   {
     name: "Black HP Laptop",
