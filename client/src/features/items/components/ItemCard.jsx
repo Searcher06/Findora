@@ -1,17 +1,9 @@
-/* eslint-disable no-unused-vars */
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { MapPin, CalendarDays } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-export const ItemCard = ({
-  image,
-  name,
-  description,
-  location,
-  date,
-  status,
-  id,
-}) => {
+export const ItemCard = ({ image, name, description, location, date, id }) => {
+  const dateReported = new Date(date).toDateString();
   const navigate = useNavigate();
   return (
     <Card className={`w-60 shadow-gray-300 pb-3`}>
@@ -28,7 +20,7 @@ export const ItemCard = ({
           </div>
           <div className="text-[13px] flex items-center">
             <p>{<CalendarDays className="text-[13px] text-gray-700" />} </p>
-            <p className="pl-1">{date}</p>
+            <p className="pl-1">{dateReported}</p>
           </div>
         </div>
         <Button
