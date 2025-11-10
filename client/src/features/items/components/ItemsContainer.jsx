@@ -2,6 +2,7 @@ import { ItemCard } from "./ItemCard";
 import itemImage from "../item.png";
 import { useItemType } from "../context/ItemTypeContext";
 import { useItems } from "../hooks/useItems";
+import { ItemCardSkeleton } from "./ItemCardSkeleton";
 // let items = [
 //   {
 //     name: "Black HP Laptop",
@@ -74,13 +75,12 @@ import { useItems } from "../hooks/useItems";
 export const ItemsContainer = ({ className }) => {
   const { bar } = useItemType();
   const { items, loading, error } = useItems();
-  console.log(items);
   return (
     <div
       className={`${className} w-full flex flex-wrap justify-center gap-2.5`}
     >
       {loading
-        ? "Fetching..."
+        ? Array.from({ length: 6 }).map((_, i) => <ItemCardSkeleton key={i} />)
         : error
         ? error
         : bar == "lost"

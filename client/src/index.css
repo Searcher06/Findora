@@ -40,6 +40,22 @@
   animation: fadeIn 0.35s ease-out;
 }
 
+/* Softer shimmer for Skeletons */
+.animate-pulse {
+  background-color: rgb(156 163 175 / 0.4) !important; /* gray-400/40 */
+  animation: pulse-soft 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse-soft {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
 @theme {
   --font-display: "Space Grotesk", sans-serif;
   --font-sans: "Manrope", sans-serif;
