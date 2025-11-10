@@ -2,7 +2,6 @@ import { Header } from "@/components/Header";
 import { SearchBar } from "../components/SearchBar";
 import { TabsBar } from "../components/TabsBar";
 import { ItemsContainer } from "../components/ItemsContainer";
-import AddButton from "../components/AddButton";
 import ReportButton from "../components/ReportButton.";
 
 const BrowsePage = () => {

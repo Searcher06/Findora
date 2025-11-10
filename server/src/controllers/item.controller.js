@@ -207,7 +207,9 @@ const getItemById = async (req, res) => {
     throw new Error("Invalid item ID");
   }
 
-  const item = await itemModel.findOne({ _id: id });
+  const item = await itemModel
+    .findOne({ _id: id })
+    .populate("reportedBy", "firstName lastName profilePic");
 
   if (!item) {
     res.status(404);
