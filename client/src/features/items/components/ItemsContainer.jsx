@@ -101,7 +101,7 @@ export const ItemsContainer = ({ className }) => {
               />
             ))
         : items
-            .filter((current) => {
+            ?.filter((current) => {
               return current.status == bar;
             })
             .map((current) => (

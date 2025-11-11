@@ -168,6 +168,7 @@ const deleteItem = async (req, res) => {
   }
 };
 const allItems = async (req, res) => {
+  const { category, date } = req.query;
   const items = await itemModel.find({});
   res.status(200).json(items);
 };

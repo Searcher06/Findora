@@ -6,8 +6,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useItemType } from "@/features/items/context/ItemTypeContext"; // adjust path
-import { ChevronDown } from "lucide-react"; // optional chevron icon
+import { useItemType } from "@/features/items/context/ItemTypeContext";
 
 export const TabsBar = ({
   className = "",
@@ -19,14 +18,14 @@ export const TabsBar = ({
   const { bar, setBar } = useItemType();
 
   return (
-    <div className={`w-full ${className} px-3 py-2`}>
+    <div className={`w-full ${className} px-3 py-2 font-display`}>
       <div className="flex items-center w-full">
         {/* Lost */}
-        <div className="flex-1 flex justify-center">
+        <div className="flex-1 flex justify-center min-w-0">
           <button
             type="button"
             onClick={() => setBar("lost")}
-            className={`text-sm font-medium px-1 py-1 ${
+            className={`text-sm  px-1 py-1 whitespace-nowrap ${
               bar === "lost" ? "text-black" : "text-gray-600"
             }`}
           >
@@ -35,11 +34,11 @@ export const TabsBar = ({
         </div>
 
         {/* Found */}
-        <div className="flex-1 flex justify-center">
+        <div className="flex-1 flex justify-center min-w-0">
           <button
             type="button"
             onClick={() => setBar("found")}
-            className={`text-sm font-medium px-1 py-1 ${
+            className={`text-sm  px-1 py-1 whitespace-nowrap ${
               bar === "found" ? "text-black" : "text-gray-600"
             }`}
           >
@@ -48,19 +47,16 @@ export const TabsBar = ({
         </div>
 
         {/* Category */}
-        <div className="flex-1 flex justify-center">
+        <div className="flex-1 flex justify-center min-w-0">
           <Select
             onValueChange={(val) => onCategoryChange?.(val)}
             value={categoryValue}
           >
             <SelectTrigger
               aria-label="Category"
-              className="h-8 px-0 text-sm flex items-center justify-center gap-1 bg-transparent border-0 shadow-none"
+              className="h-8 px-2 text-sm flex items-center justify-center gap-1 bg-transparent border-0 shadow-none max-w-full"
             >
-              <SelectValue
-                placeholder="Category"
-                className="truncate max-w-[70%]"
-              />
+              <SelectValue placeholder="Category" className="truncate" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Categories</SelectItem>
@@ -87,19 +83,16 @@ export const TabsBar = ({
         </div>
 
         {/* Date */}
-        <div className="flex-1 flex justify-center">
+        <div className="flex-1 flex justify-center min-w-0">
           <Select
             onValueChange={(val) => onDateChange?.(val)}
             value={dateValue}
           >
             <SelectTrigger
               aria-label="Date"
-              className="h-8 px-0 text-sm flex items-center justify-center gap-1 bg-transparent border-0 shadow-none"
+              className="h-8 px-2 text-sm flex items-center justify-center gap-1 bg-transparent border-0 shadow-none max-w-full"
             >
-              <SelectValue
-                placeholder="Date"
-                className="truncate max-w-[70%]"
-              />
+              <SelectValue placeholder="Date" className="truncate" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="latest">Latest</SelectItem>
