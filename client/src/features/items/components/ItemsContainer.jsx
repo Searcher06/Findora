@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { ItemCard } from "./ItemCard";
 import itemImage from "../item.png";
 import { useItemType } from "../context/ItemTypeContext";
@@ -72,9 +73,9 @@ import { ItemCardSkeleton } from "./ItemCardSkeleton";
 //   },
 // ];
 
-export const ItemsContainer = ({ className }) => {
+export const ItemsContainer = ({ className, filters = {} }) => {
   const { bar } = useItemType();
-  const { items, loading, error } = useItems();
+  const { items, loading, error } = useItems(filters);
   return (
     <div
       className={`${className} w-full flex flex-wrap justify-center gap-2.5`}

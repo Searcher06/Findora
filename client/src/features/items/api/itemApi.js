@@ -34,3 +34,21 @@ export const getItemInfo = async (id) => {
   const { data } = await Api.get(`/items/${id}`);
   return data;
 };
+
+export const getFilteredItems = async (filters = {}) => {
+  const params = new URLSearchParams();
+
+  if (filters.category && filters.category !== "all") {
+    params.append("category", filters.category);
+  }
+
+  if (filters.date && filters.date !== "latest") {
+    params.append("date", filters.date);
+  }
+
+  const queryString = params.toString();
+  const url = queryString ? `/items?${queryString}` : "/items";
+
+  const { data } = await Api.get(url);
+  return data;
+};

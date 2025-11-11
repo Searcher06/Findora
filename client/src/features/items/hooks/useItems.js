@@ -1,3 +1,4 @@
+// hooks/useItems.js - Modified version
 import { useEffect, useState } from "react";
 import {
   getAllItems,
@@ -7,30 +8,40 @@ import {
   getFoundItems,
   getItemInfo,
   getLostItems,
+  getFilteredItems, // Import the new function
 } from "../api/itemApi";
-export const useItems = () => {
+
+export const useItems = (filters = null) => {
   const [items, setItems] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  //  fetch items when page loads
   useEffect(() => {
     const loadItems = async () => {
       try {
         setLoading(true);
-        const data = await getAllItems();
+        let data;
+
+        if (filters) {
+          // Use filtered items if filters are provided
+          data = await getFilteredItems(filters);
+        } else {
+          // Use regular getAllItems if no filters
+          data = await getAllItems();
+        }
+
         setItems(data);
       } catch (error) {
         setError(error.response?.data?.message || "failed to load items");
         setItems(null);
-        throw error;
       } finally {
         setLoading(false);
       }
     };
     loadItems();
-  }, []);
+  }, [filters]); // Add filters to dependency array
 
+  // All your existing functions remain exactly the same
   const createAnItem = async (itemData) => {
     try {
       setLoading(true);
@@ -108,6 +119,7 @@ export const useItems = () => {
       setLoading(false);
     }
   };
+
   return {
     loading,
     error,
