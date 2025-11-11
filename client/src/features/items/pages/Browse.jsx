@@ -3,8 +3,20 @@ import { SearchBar } from "../components/SearchBar";
 import { TabsBar } from "../components/TabsBar";
 import { ItemsContainer } from "../components/ItemsContainer";
 import ReportButton from "../components/ReportButton.";
-
+import { useState } from "react";
 const BrowsePage = () => {
+  const [filters, setFilters] = useState({
+    category: "all",
+    date: "latest",
+  });
+
+  const handleCategoryChange = (category) => {
+    setFilters((prev) => ({ ...prev, category }));
+  };
+
+  const handleDateChange = (date) => {
+    setFilters((prev) => ({ ...prev, date }));
+  };
   return (
     <div className="flex flex-col items-center mt-14">
       <Header
@@ -14,13 +26,14 @@ const BrowsePage = () => {
       <div className="mt-3 bg-[linear-gradient(90deg,#A8C5FF_0%,#F3D9FF_100%)] h-14 w-[97%] flex items-center justify-center rounded-[3px]">
         <SearchBar />
       </div>
-      <TabsBar className={`mt-3`} />
-      <ItemsContainer className={"mt-3"} />
-      {/* <AddButton
-        className={
-          "fixed bottom-6 right-6 rounded-full w-11 h-11 active:scale-95 transition-transform duration-200"
-        }
-      /> */}
+      <TabsBar
+        className={`mt-3`}
+        onCategoryChange={handleCategoryChange}
+        onDateChange={handleDateChange}
+        dateValue={filters.date}
+        categoryValue={filters.category}
+      />
+      <ItemsContainer className={"mt-3"} filters={filters} />
       <ReportButton />
     </div>
   );
