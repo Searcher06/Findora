@@ -169,7 +169,37 @@ const deleteItem = async (req, res) => {
 };
 const allItems = async (req, res) => {
   const { category, date } = req.query;
-  const items = await itemModel.find({});
+  const query = {};
+  const now = new Date();
+  let sortOption = { dateReported: -1 }; // Default to latest
+
+  // console.log("Received query params:", { category, date }); // Debug log
+
+  // Category filter - ONLY apply if category exists and is not "all"
+  if (category && category !== "all") {
+    query.category = category;
+  }
+
+  // Date handling
+  if (date === "last7") {
+    const sevenDaysAgo = new Date(now);
+    sevenDaysAgo.setDate(now.getDate() - 7);
+    query.dateReported = { $gte: sevenDaysAgo };
+  } else if (date === "last30") {
+    const thirtyDaysAgo = new Date(now);
+    thirtyDaysAgo.setDate(now.getDate() - 30);
+    query.dateReported = { $gte: thirtyDaysAgo };
+  } else if (date === "oldest") {
+    sortOption = { dateReported: 1 };
+  }
+  // 'latest' uses default sort (-1)
+
+  // console.log("Final query:", query); // Debug log
+  // console.log("Sort option:", sortOption); // Debug log
+
+  const items = await itemModel.find(query).sort(sortOption);
+  // console.log("Found items:", items.length); // Debug log
+
   res.status(200).json(items);
 };
 const lostItems = async (req, res) => {
