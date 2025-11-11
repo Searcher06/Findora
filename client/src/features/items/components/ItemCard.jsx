@@ -1,9 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { formatDate } from "@/utils/formatDate";
 import { MapPin, CalendarDays } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 export const ItemCard = ({ image, name, description, location, date, id }) => {
-  const dateReported = new Date(date).toDateString();
+  const dateReported = formatDate(date);
   const navigate = useNavigate();
   return (
     <Card className={`w-60 shadow-gray-300 pb-3`}>
