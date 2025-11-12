@@ -1,28 +1,44 @@
+/* eslint-disable no-unused-vars */
 import { Button } from "@/components/ui/button";
 import Label from "./Label";
 import ToggleImage from "./ToggleImage";
 import PhotoDisplay from "./PhotoDisplay";
-
 const AddInfo = ({
   className,
-  postType,
   itemData,
-  setItemData,
   handleInputChange,
+  handleSubmit,
+  loading,
+  item,
 }) => {
   return (
     <form
       className={`w-full border  rounded-lg border-gray-200 p-4  ${className}`}
       onSubmit={(event) => event.preventDefault()}
     >
+      <Label text={"Item Type"} htmlFor={"status"} />
+      <select
+        name="status"
+        id="status"
+        value={itemData.status}
+        className="mb-2 font-sans w-full text-xs h-8 block p-1  border border-gray-300 rounded-lg  focus:outline-none"
+        onChange={handleInputChange}
+      >
+        <option value="" disabled>
+          Select item type
+        </option>
+        <option value="lost">Lost</option>
+        <option value="found">Found</option>
+      </select>
+
       <Label text={"Item Name"} htmlFor={"itemName"} />
       <input
         id="itemName"
         type="text"
-        name="name"
+        name="itemName"
         placeholder="e.g. Samsung Galaxy S5"
         className="mb-2 p-2 border border-gray-300 outline-0 text-xs w-full h-8 rounded-sm"
-        value={itemData.name}
+        value={itemData.itemName}
         onChange={handleInputChange}
       />
 
@@ -32,11 +48,9 @@ const AddInfo = ({
         id="category"
         value={itemData.category}
         className="mb-2 font-sans w-full text-xs h-8 block p-1  border border-gray-300 rounded-lg  focus:outline-none"
-        onChange={(e) =>
-          setItemData((prevs) => ({ ...prevs, category: e.target.value }))
-        }
+        onChange={handleInputChange}
       >
-        <option value="" disabled selected>
+        <option value="" disabled>
           Select category
         </option>
         <option value="Electronics">Electronics</option>
@@ -45,11 +59,11 @@ const AddInfo = ({
         <option value="Clothing & Wearables">Clothing & Wearables</option>
       </select>
 
-      <Label text={"Description"} htmlFor={"description"} />
+      <Label text={"Description"} htmlFor={"itemDescription"} />
       <textarea
-        name="description"
-        id="description"
-        value={itemData.description}
+        name="itemDescription"
+        id="itemDescription"
+        value={itemData.itemDescription}
         onChange={handleInputChange}
         rows={4}
         placeholder="A Dark colored samsung phone left in the library..."
@@ -68,20 +82,15 @@ const AddInfo = ({
       />
 
       <Label
-        text={`${postType == "lost" ? "Date Lost" : "Date Found"}`}
-        htmlFor={"date"}
+        text={`${itemData.status == "lost" ? "Date Lost" : "Date Found"}`}
+        htmlFor={"dateLostOrFound"}
       />
       <input
         type="date"
-        name="date"
+        name="dateLostOrFound"
         value={itemData.dateLostOrFound}
-        onChange={(e) =>
-          setItemData((prevs) => ({
-            ...prevs,
-            dateLostOrFound: e.target.value,
-          }))
-        }
-        id="date"
+        onChange={handleInputChange}
+        id="dateLostOrFound"
         className="mb-3 block p-2 border border-gray-300 rounded-lg focus:outline-0 text-xs w-full"
       />
 
@@ -92,7 +101,10 @@ const AddInfo = ({
 
       <PhotoDisplay />
 
-      <Button className={"text-xs mt-3 font-sans mb-3 w-full"}>
+      <Button
+        className={"text-xs mt-3 font-sans mb-3 w-full"}
+        onClick={handleSubmit}
+      >
         Post Item
       </Button>
     </form>
