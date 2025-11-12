@@ -51,9 +51,13 @@ const createItem = async (req, res) => {
     throw new Error("Location can not contain special characters");
   }
 
-  if (dateLostOrFound > Date.now()) {
+  const submittedDate = new Date(dateLostOrFound);
+  const currentDate = new Date();
+  if (submittedDate > currentDate) {
     res.status(400);
-    throw new Error("Invalid date!");
+    throw new Error(
+      "Date cannot be in the future! Please select today or a past date"
+    );
   }
 
   // todo:build this later

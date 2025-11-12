@@ -13,6 +13,7 @@ import {
 
 export const useItems = (filters = null) => {
   const [items, setItems] = useState(null);
+  const [item, setItem] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -46,7 +47,7 @@ export const useItems = (filters = null) => {
     try {
       setLoading(true);
       const data = await createItem(itemData);
-      setItems(data);
+      setItem(data);
     } catch (error) {
       setError(error.response?.data?.message || "failed to create item");
       throw error;
@@ -59,7 +60,7 @@ export const useItems = (filters = null) => {
     try {
       setLoading(true);
       const data = await updateItem(itemData);
-      setItems(data);
+      setItem(data);
     } catch (error) {
       setError(error.response?.data?.message || "failed to update item");
       throw error;
@@ -72,7 +73,7 @@ export const useItems = (filters = null) => {
     try {
       setLoading(true);
       const data = await deleteItem(id);
-      setItems(data);
+      setItem(data);
     } catch (error) {
       setError(error.response?.data?.message || "failed to delete item");
       throw error;
@@ -111,7 +112,7 @@ export const useItems = (filters = null) => {
     try {
       setLoading(true);
       const data = await getItemInfo(id);
-      setItems(data);
+      setItem(data);
     } catch (error) {
       setError(error.response?.data?.message || "failed to get item info");
       throw error;
@@ -130,5 +131,6 @@ export const useItems = (filters = null) => {
     getAllFoundItems,
     getAll_LostItems,
     getFullItemInfo,
+    item,
   };
 };
