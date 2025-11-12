@@ -3,7 +3,13 @@ import Label from "./Label";
 import ToggleImage from "./ToggleImage";
 import PhotoDisplay from "./PhotoDisplay";
 
-const AddInfo = ({ className, postType }) => {
+const AddInfo = ({
+  className,
+  postType,
+  itemData,
+  setItemData,
+  handleInputChange,
+}) => {
   return (
     <form
       className={`w-full border  rounded-lg border-gray-200 p-4  ${className}`}
@@ -13,16 +19,22 @@ const AddInfo = ({ className, postType }) => {
       <input
         id="itemName"
         type="text"
+        name="name"
         placeholder="e.g. Samsung Galaxy S5"
         className="mb-2 p-2 border border-gray-300 outline-0 text-xs w-full h-8 rounded-sm"
+        value={itemData.name}
+        onChange={handleInputChange}
       />
 
       <Label text={"Category"} htmlFor={"category"} />
-
       <select
         name="category"
         id="category"
+        value={itemData.category}
         className="mb-2 font-sans w-full text-xs h-8 block p-1  border border-gray-300 rounded-lg  focus:outline-none"
+        onChange={(e) =>
+          setItemData((prevs) => ({ ...prevs, category: e.target.value }))
+        }
       >
         <option value="" disabled selected>
           Select category
@@ -37,6 +49,8 @@ const AddInfo = ({ className, postType }) => {
       <textarea
         name="description"
         id="description"
+        value={itemData.description}
+        onChange={handleInputChange}
         rows={4}
         placeholder="A Dark colored samsung phone left in the library..."
         className="mb-2 block outline-0 text-xs font-sans p-2 border border-gray-300 rounded-lg resize-none w-full"
@@ -47,6 +61,8 @@ const AddInfo = ({ className, postType }) => {
         type="text"
         id="location"
         name="location"
+        value={itemData.location}
+        onChange={handleInputChange}
         placeholder="e.g. Main library"
         className="mb-2 p-2 border border-gray-300 outline-0 text-xs w-full h-8 rounded-sm"
       />
@@ -58,6 +74,13 @@ const AddInfo = ({ className, postType }) => {
       <input
         type="date"
         name="date"
+        value={itemData.dateLostOrFound}
+        onChange={(e) =>
+          setItemData((prevs) => ({
+            ...prevs,
+            dateLostOrFound: e.target.value,
+          }))
+        }
         id="date"
         className="mb-3 block p-2 border border-gray-300 rounded-lg focus:outline-0 text-xs w-full"
       />
