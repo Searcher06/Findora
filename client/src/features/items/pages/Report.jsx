@@ -3,7 +3,9 @@ import { useState } from "react";
 import { useItems } from "../hooks/useItems";
 import { toast } from "react-toastify";
 import { useItemType } from "../context/ItemTypeContext";
+import { useNavigate } from "react-router-dom";
 const ReportPage = () => {
+  const navigate = useNavigate();
   const { item, loading, createAnItem } = useItems();
   const { postType } = useItemType();
   const [itemData, setItemData] = useState({
@@ -28,6 +30,7 @@ const ReportPage = () => {
     try {
       const response = await createAnItem(itemData);
       console.log(response);
+      navigate("/");
       toast.success("Report created successfully");
     } catch (error) {
       if (error.response) {

@@ -8,8 +8,11 @@ import { LockKeyholeIcon } from "lucide-react";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { useAuth } from "../hooks/useAuth";
+import { Spinner } from "@/components/ui/spinner";
+import { useAuthStore } from "@/context/AuthContext";
 const LoginPage = () => {
-  const { login, isLoading, user } = useAuth();
+  const { login } = useAuth();
+  const { isLoading, user } = useAuthStore();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
@@ -99,7 +102,8 @@ const LoginPage = () => {
                 onClick={handleSubmit}
                 disabled={isLoading}
               >
-                Login
+                {isLoading ? <Spinner /> : null}
+                {isLoading ? "Signing you in..." : "Login"}
               </Button>
             </InputFieldsContainer>
 

@@ -40,9 +40,8 @@ export const useItems = (filters = null) => {
       }
     };
     loadItems();
-  }, [filters]); // Add filters to dependency array
+  }, [filters]); 
 
-  // All your existing functions remain exactly the same
   const createAnItem = async (itemData) => {
     try {
       setLoading(true);

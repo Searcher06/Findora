@@ -1,31 +1,9 @@
-import { useEffect, useState } from "react";
-import {
-  loginUser,
-  registerUser,
-  logoutUser,
-  getCurrentUser,
-} from "../services/authApi";
+import { loginUser, registerUser, logoutUser } from "../services/authApi";
+import { useAuthStore } from "@/context/AuthContext";
 
 export const useAuth = () => {
-  const [user, setUser] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const data = await getCurrentUser();
-        setUser(data);
-        // eslint-disable-next-line no-unused-vars
-      } catch (error) {
-        setUser(null);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchUser();
-  }, []);
+  const { user, setUser, isLoading, setIsLoading, error, setError } =
+    useAuthStore();
 
   const login = async (credentials) => {
     try {
@@ -61,5 +39,5 @@ export const useAuth = () => {
     }
   };
 
-  return { login, signUp, logOut, isLoading, error, user };
+  return { login, signUp, logOut, isLoading, error, user, setIsLoading };
 };

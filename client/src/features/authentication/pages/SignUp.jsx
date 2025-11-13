@@ -11,6 +11,8 @@ import { toast } from "react-toastify";
 import { validateEmail } from "@/utils/validateEmail";
 import { textValidator } from "@/utils/textValidator";
 import { useAuth } from "../hooks/useAuth";
+import { Spinner } from "@/components/ui/spinner";
+import { useAuthStore } from "@/context/AuthContext";
 export const SignUpPage = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -20,14 +22,15 @@ export const SignUpPage = () => {
     email: "",
     password: "",
   });
-  const { signUp, isLoading, error } = useAuth();
+  const { signUp } = useAuth();
+  const { isLoading, error } = useAuthStore();
   const disabledStyle =
     !formData.firstName ||
     !formData.lastName ||
     !formData.password ||
     !formData.email ||
     !formData.username
-      ? "bg-gray-500"
+      ? "bg-gray-900"
       : null;
 
   const handleSignUp = async () => {
@@ -211,7 +214,8 @@ export const SignUpPage = () => {
                 }
                 onClick={handleSignUp}
               >
-                Create Account
+                {isLoading ? <Spinner /> : null}
+                {isLoading ? "Creating your account" : "Create Account"}
               </Button>
             </InputFieldsContainer>
 

@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
 import Label from "./Label";
 import ToggleImage from "./ToggleImage";
 import PhotoDisplay from "./PhotoDisplay";
@@ -105,7 +106,8 @@ const AddInfo = ({
         className={"text-xs mt-3 font-sans mb-3 w-full"}
         onClick={handleSubmit}
       >
-        Post Item
+        {loading ? <Spinner /> : null}
+        {loading ? "Posting item..." : "Post Item"}
       </Button>
     </form>
   );
