@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { BrowsePage, ReportPage, ViewItem } from "@/features/items";
+import { BrowsePage, ReportPage, ViewItem, UpdateItem } from "@/features/items";
 import { AppLayout } from "@/layouts/AppLayout";
 import { ItemTypeProvider } from "@/features/items/context/ItemTypeContext";
 import { LoginPage, SignUpPage } from "@/features/authentication";
@@ -7,7 +7,6 @@ import { UploadPhotoProvider } from "@/features/items/context/UploadPhotoContext
 import { AuthProvider } from "@/context/AuthContext";
 import { ToastContainer } from "react-toastify";
 import PrivateRoute from "./privateRoute";
-
 function AppRoutes() {
   return (
     <BrowserRouter>
@@ -25,6 +24,7 @@ function AppRoutes() {
                   <Route path="/" element={<BrowsePage />} />
                   <Route path="/items/:id" element={<ViewItem />} />
                   <Route path="/report" element={<ReportPage />} />
+                  <Route path="/update/:id" element={<UpdateItem />} />
                 </Route>
               </Route>
             </Routes>

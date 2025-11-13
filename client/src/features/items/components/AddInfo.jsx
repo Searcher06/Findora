@@ -10,7 +10,6 @@ const AddInfo = ({
   handleInputChange,
   handleSubmit,
   loading,
-  item,
 }) => {
   return (
     <form

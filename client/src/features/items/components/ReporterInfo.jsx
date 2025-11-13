@@ -1,6 +1,5 @@
 import { UserAvatar } from "@/components/userAvatar";
 import { BadgeCheck } from "lucide-react";
-UserAvatar;
 export const ReporterInfo = ({ reportedBy, status }) => {
   const { firstName, lastName } = reportedBy;
   const fullName = `${firstName} ${lastName}`;

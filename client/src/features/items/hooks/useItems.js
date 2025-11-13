@@ -40,7 +40,7 @@ export const useItems = (filters = null) => {
       }
     };
     loadItems();
-  }, [filters]); 
+  }, [filters]);
 
   const createAnItem = async (itemData) => {
     try {
@@ -55,10 +55,10 @@ export const useItems = (filters = null) => {
     }
   };
 
-  const updateAnItem = async (itemData) => {
+  const updateAnItem = async (id, itemData) => {
     try {
       setLoading(true);
-      const data = await updateItem(itemData);
+      const data = await updateItem(id, itemData);
       setItem(data);
     } catch (error) {
       setError(error.response?.data?.message || "failed to update item");
