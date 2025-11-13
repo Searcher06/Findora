@@ -3,4 +3,5 @@ import { ViewItem } from "./pages/ViewItem";
 import imagesample from "./item.png";
 import AddButton from "./components/AddButton";
 import ReportPage from "./pages/Report";
-export { BrowsePage, ViewItem, imagesample, AddButton, ReportPage };
+import { UpdateItem } from "./pages/UpdateItem";
+export { BrowsePage, ViewItem, imagesample, AddButton, ReportPage, UpdateItem };
