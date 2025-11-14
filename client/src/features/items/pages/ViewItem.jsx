@@ -14,7 +14,7 @@ export const ViewItem = () => {
   if (!item) {
     return <div>Item not found</div>;
   }
-
+  console.log(item);
   return (
     <div className="mt-14 flex flex-col">
       <DetailedItemCard item={item} />
