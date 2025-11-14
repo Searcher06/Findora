@@ -3,10 +3,11 @@ import { imagesample } from "..";
 import { ItemInfo } from "./ItemInfo";
 import { useAuthStore } from "@/context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { DeleteItemButton } from "./AlertDialogBox";
 export const DetailedItemCard = ({ item }) => {
   const navigate = useNavigate();
   const { user } = useAuthStore();
-  const { status, reportedBy, _id } = item;
+  const { status, reportedBy, _id, name } = item;
   return (
     <div className="w-full mt-2 flex flex-col items-center">
       <img src={imagesample} className="w-[90%] border rounded-lg" />
@@ -14,9 +15,11 @@ export const DetailedItemCard = ({ item }) => {
       <div className="mt-5 w-full flex justify-center items-center">
         {user._id == reportedBy._id ? (
           <div className="w-full gap-3 flex justify-center">
-            <Button className={"w-30 active:scale-95 bg-red-500 rounded-sm"}>
-              Delete
-            </Button>
+            <DeleteItemButton
+              itemId={_id}
+              itemName={name}
+              className={"w-30 bg-red-500"}
+            />
             <Button
               className={"w-30 active:scale-95 rounded-sm"}
               onClick={() => {
