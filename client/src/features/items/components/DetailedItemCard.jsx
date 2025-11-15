@@ -13,7 +13,7 @@ export const DetailedItemCard = ({ item }) => {
       <img src={imagesample} className="w-[90%] border rounded-lg" />
       <ItemInfo item={item} />
       <div className="mt-5 w-full flex justify-center items-center">
-        {user._id == reportedBy._id ? (
+        {user?._id == reportedBy?._id ? (
           <div className="w-full gap-3 flex justify-center">
             <DeleteItemButton
               itemId={_id}
