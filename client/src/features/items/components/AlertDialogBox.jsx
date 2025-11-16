@@ -82,20 +82,27 @@ export const DeleteItemButton = ({ itemId, itemName, className }) => {
   );
 };
 export const RequestButton = ({ itemId, itemName, className, status }) => {
-  const { sendClaimRequest, loading, data, setLoading } = useVerify();
+  const { sendClaimRequest, loading, data, setLoading, sendFoundRequest } =
+    useVerify();
 
   const navigate = useNavigate();
   const handleRequest = async () => {
     try {
       setLoading(true);
-      await sendClaimRequest(itemId);
+      status == "lost"
+        ? await sendFoundRequest(itemId)
+        : status == "found" && (await sendClaimRequest(itemId));
       navigate("/");
-      toast.success("Claim request sent successfully");
+      toast.success(
+        status == "lost"
+          ? `Found request sent successfully`
+          : `Claim request sent successfully`
+      );
     } catch (error) {
       if (error.response) {
         // server responded with a non-2xx status
         toast.error(
-          error?.response?.data?.message || "Failed to send claim request"
+          error?.response?.data?.message || "Failed to send  request"
         );
       } else if (error.request) {
         toast.error("No response from server");
@@ -129,7 +136,7 @@ export const RequestButton = ({ itemId, itemName, className, status }) => {
         <AlertDialogHeader>
           <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
           <AlertDialogDescription>
-            {status == "lost"
+            {status == "found"
               ? `This action cannot be undone. This will send a claim request to the
             finder of the item
             ${(
