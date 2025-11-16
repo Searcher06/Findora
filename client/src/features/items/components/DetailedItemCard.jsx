@@ -3,7 +3,7 @@ import { imagesample } from "..";
 import { ItemInfo } from "./ItemInfo";
 import { useAuthStore } from "@/context/AuthContext";
 import { useNavigate } from "react-router-dom";
-import { DeleteItemButton } from "./AlertDialogBox";
+import { DeleteItemButton, RequestButton } from "./AlertDialogBox";
 export const DetailedItemCard = ({ item }) => {
   const navigate = useNavigate();
   const { user } = useAuthStore();
@@ -30,9 +30,12 @@ export const DetailedItemCard = ({ item }) => {
             </Button>
           </div>
         ) : (
-          <Button className={"w-[70%] active:scale-95  bg-blue-600"}>
-            {status == "lost" ? "Mark as found" : "Claim This Item"}
-          </Button>
+          <RequestButton
+            itemId={_id}
+            itemName={name}
+            status={status}
+            className={`w-[70%] active:scale-95`}
+          />
         )}
       </div>
 

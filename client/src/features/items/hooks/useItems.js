@@ -122,6 +122,7 @@ export const useItems = (filters = null) => {
 
   return {
     loading,
+    setLoading,
     error,
     items,
     createAnItem,
