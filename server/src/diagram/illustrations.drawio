@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram id="sjTv0YCN3FJlPjP7VC1Z" name="Page-1">
-        <mxGraphModel dx="1722" dy="475" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="1693" dy="475" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -69,7 +69,7 @@
                 <mxCell id="24" value="chat window opened" style="whiteSpace=wrap;html=1;strokeWidth=2;" parent="1" vertex="1">
                     <mxGeometry x="450" y="420" width="120" height="60" as="geometry"/>
                 </mxCell>
-                <mxCell id="60" value="" style="edgeStyle=none;html=1;" edge="1" parent="1" source="28" target="59">
+                <mxCell id="60" value="" style="edgeStyle=none;html=1;" parent="1" source="28" target="59" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
                 <mxCell id="28" value="schedule meetup" style="whiteSpace=wrap;html=1;strokeWidth=2;" parent="1" vertex="1">
@@ -123,28 +123,28 @@
                 <mxCell id="51" value="Claimer" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
                     <mxGeometry x="430" y="500" width="60" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="52" value="You are required to generate verificat&lt;span style=&quot;color: rgb(192, 192, 192); background-color: transparent;&quot;&gt;ion questions for item {item} by&amp;nbsp;&lt;/span&gt;&lt;div&gt;{claimer}&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;align=left;" vertex="1" parent="1">
+                <mxCell id="52" value="You are required to generate verificat&lt;span style=&quot;color: rgb(192, 192, 192); background-color: transparent;&quot;&gt;ion questions for item {item} by&amp;nbsp;&lt;/span&gt;&lt;div&gt;{claimer}&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;align=left;" parent="1" vertex="1">
                     <mxGeometry x="90" y="570" width="230" height="50" as="geometry"/>
                 </mxCell>
-                <mxCell id="53" value="Your claim request has been sent&lt;div&gt;to {finder} waiting for verification&lt;/div&gt;&lt;div&gt;questions&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;align=left;" vertex="1" parent="1">
+                <mxCell id="53" value="Your claim request has been sent&lt;div&gt;to {finder} waiting for verification&lt;/div&gt;&lt;div&gt;questions&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;align=left;" parent="1" vertex="1">
                     <mxGeometry x="355" y="580" width="225" height="50" as="geometry"/>
                 </mxCell>
-                <mxCell id="54" style="edgeStyle=none;html=1;" edge="1" parent="1" source="45" target="24">
+                <mxCell id="54" style="edgeStyle=none;html=1;" parent="1" source="45" target="24" edge="1">
                     <mxGeometry relative="1" as="geometry">
                         <Array as="points">
                             <mxPoint x="650" y="640"/>
                         </Array>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="56" style="edgeStyle=none;html=1;" edge="1" parent="1" source="36" target="24">
+                <mxCell id="56" style="edgeStyle=none;html=1;" parent="1" source="36" target="24" edge="1">
                     <mxGeometry relative="1" as="geometry">
                         <mxPoint x="50" y="770" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="57" value="status:&quot;accepted&quot;&amp;nbsp;&lt;div&gt;the finderId&lt;/div&gt;&lt;div&gt;the claimerId&lt;/div&gt;&lt;div&gt;requstId&lt;/div&gt;&lt;div&gt;item status = &quot;claimed&quot;&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+                <mxCell id="57" value="status:&quot;accepted&quot;&amp;nbsp;&lt;div&gt;the finderId&lt;/div&gt;&lt;div&gt;the claimerId&lt;/div&gt;&lt;div&gt;requstId&lt;/div&gt;&lt;div&gt;item status = &quot;claimed&quot;&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
                     <mxGeometry x="410" y="320" width="150" height="90" as="geometry"/>
                 </mxCell>
-                <mxCell id="59" value="item handling" style="whiteSpace=wrap;html=1;strokeWidth=2;" vertex="1" parent="1">
+                <mxCell id="59" value="item handling" style="whiteSpace=wrap;html=1;strokeWidth=2;" parent="1" vertex="1">
                     <mxGeometry x="650" y="550" width="120" height="60" as="geometry"/>
                 </mxCell>
             </root>
