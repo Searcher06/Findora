@@ -1,11 +1,22 @@
 import { X } from "lucide-react";
 import { NavLink } from "./ui/Links";
 import { Logo } from "./logo";
+import { Link, useLocation } from "react-router-dom";
+import { useEffect, useRef } from "react";
 export const SideBar = ({ setOpenSidebar }) => {
+  const location = useLocation();
+  const previousPathRef = useRef(location.pathname);
+
+  useEffect(() => {
+    if (previousPathRef.current !== location.pathname) {
+      setOpenSidebar(false);
+      previousPathRef.current = location.pathname;
+    }
+  }, [location.pathname, setOpenSidebar]);
   return (
-    <div className="h-full fixed w-60 bg-white transition duration-300 ease-in-out z-40">
+    <div className="h-full fixed w-60 bg-white transition duration-300 ease-in-out z-10">
       <div className="h-14 w-full border-b-2 border-gray-200 mb-2.5 flex justify-between items-center pr-2">
-        <Logo className={``} />
+        <Logo className={"h-12 w-auto -ml-4"} />
         <X
           onClick={() => {
             setOpenSidebar(false);
@@ -18,7 +29,10 @@ export const SideBar = ({ setOpenSidebar }) => {
           <NavLink Icon={"LayoutDashboard"} text={`Dashboard`} />
           <NavLink Icon={"SearchIcon"} text={"Browse"} />
           <NavLink Icon={"MessageSquare"} text={"Messages"} />
-          <NavLink Icon={"Bell"} text={"Notifications"} />
+          <Link to={"/notification"}>
+            {" "}
+            <NavLink Icon={"Bell"} text={"Notifications"} />
+          </Link>
         </div>
       </div>
     </div>

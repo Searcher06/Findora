@@ -8,7 +8,7 @@ export default function ReportButton() {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   return (
-    <div className="fixed bottom-6 right-6 z-50">
+    <div className="fixed bottom-6 right-6 z-5">
       {/* Floating button */}
       <Button
         onClick={() => setOpen(!open)}

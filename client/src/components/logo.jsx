@@ -3,8 +3,6 @@ export const Logo = ({ className }) => {
     <svg
       version="1.0"
       xmlns="http://www.w3.org/2000/svg"
-      width=""
-      height=""
       viewBox="0 0 900.000000 333.000000"
       preserveAspectRatio="xMidYMid meet"
       className={`${className}`}
