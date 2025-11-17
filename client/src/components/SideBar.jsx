@@ -26,11 +26,16 @@ export const SideBar = ({ setOpenSidebar }) => {
       </div>
       <div className="pl-2 pr-2">
         <div className="font-normal  text-[13px] text-gray-700 flex-col flex gap-7">
-          <NavLink Icon={"LayoutDashboard"} text={`Dashboard`} />
-          <NavLink Icon={"SearchIcon"} text={"Browse"} />
-          <NavLink Icon={"MessageSquare"} text={"Messages"} />
-          <Link to={"/notification"}>
-            {" "}
+          <Link to="/" onClick={() => setOpenSidebar(false)}>
+            <NavLink Icon={"LayoutDashboard"} text={`Dashboard`} />
+          </Link>
+          <Link to="/" onClick={() => setOpenSidebar(false)}>
+            <NavLink Icon={"SearchIcon"} text={"Browse"} />
+          </Link>
+          <Link to="/" onClick={() => setOpenSidebar(false)}>
+            <NavLink Icon={"MessageSquare"} text={"Messages"} />
+          </Link>
+          <Link to={"/notification"} onClick={() => setOpenSidebar(false)}>
             <NavLink Icon={"Bell"} text={"Notifications"} />
           </Link>
         </div>
