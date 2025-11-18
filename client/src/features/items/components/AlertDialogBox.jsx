@@ -89,15 +89,16 @@ export const RequestButton = ({ itemId, itemName, className, status }) => {
   const handleRequest = async () => {
     try {
       setLoading(true);
-      status == "lost"
-        ? await sendFoundRequest(itemId)
-        : status == "found" && (await sendClaimRequest(itemId));
+
+      if (status === "lost") {
+        await sendFoundRequest(itemId);
+        toast.success("Found request sent successfully");
+      } else if (status === "found") {
+        await sendClaimRequest(itemId);
+        toast.success("Claim request sent successfully");
+      }
+
       navigate("/");
-      toast.success(
-        status == "lost"
-          ? `Found request sent successfully`
-          : `Claim request sent successfully`
-      );
     } catch (error) {
       if (error.response) {
         // server responded with a non-2xx status

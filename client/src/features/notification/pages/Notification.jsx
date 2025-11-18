@@ -4,7 +4,7 @@ import { sampleRequests } from "../sample";
 import NotificationItemTest from "../components/NotificationItemTest";
 
 const Notification = () => {
-  const currentUserId = "finder1"; // Mike Chen
+  const currentUserId = "claimer1"; // Mike Chen
 
   // FILTER: Only show notifications where current user is involved
   const userNotifications = sampleRequests.filter(

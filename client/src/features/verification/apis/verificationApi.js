@@ -5,7 +5,7 @@ export const sendClaim = async (itemId) => {
   return data;
 };
 export const sendFound = async (itemId) => {
-  const { data } = await Api.get(`/request/found/${itemId}`);
+  const { data } = await Api.post(`/request/found/${itemId}`);
   return data;
 };
 export const sendQuestion = async (requestId, questions) => {

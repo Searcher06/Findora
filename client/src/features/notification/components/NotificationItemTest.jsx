@@ -16,8 +16,9 @@ const NotificationItemTest = ({ notification, currentUserId }) => {
             return {
               icon: "HelpCircle",
               title: "Verification Required",
-              description: `You are required to generate verification questions for ${notification.itemId.name} by ${notification.claimerId.name}`,
+              description: `Generate verification questions for ${notification.itemId.name} from ${notification.claimerId.name}`,
               buttonText: "Generate Questions",
+              status: "Action Required",
               color: "blue",
             };
           }
@@ -29,8 +30,9 @@ const NotificationItemTest = ({ notification, currentUserId }) => {
             return {
               icon: "Clock",
               title: "Awaiting Answers",
-              description: `Waiting for ${notification.claimerId.name} to answer verification questions for ${notification.itemId.name}`,
+              description: `Waiting for ${notification.claimerId.name} to answer questions for ${notification.itemId.name}`,
               buttonText: null,
+              status: "Pending",
               color: "orange",
             };
           }
@@ -42,8 +44,9 @@ const NotificationItemTest = ({ notification, currentUserId }) => {
             return {
               icon: "Scale",
               title: "Decision Required",
-              description: `You are required to make decision on "${notification.itemId.name}" by ${notification.claimerId.name}`,
+              description: `Make a decision on "${notification.itemId.name}" claim by ${notification.claimerId.name}`,
               buttonText: "Review Claim",
+              status: "Action Required",
               color: "orange",
             };
           }
@@ -51,8 +54,9 @@ const NotificationItemTest = ({ notification, currentUserId }) => {
           return {
             icon: "HelpCircle",
             title: "Verification Required",
-            description: `You are required to generate verification questions for ${notification.itemId.name}`,
+            description: `Generate verification questions for ${notification.itemId.name}`,
             buttonText: "Generate Questions",
+            status: "Action Required",
             color: "blue",
           };
         }
@@ -61,32 +65,36 @@ const NotificationItemTest = ({ notification, currentUserId }) => {
           return {
             icon: "XCircle",
             title: "Claim Rejected",
-            description: `You rejected the claim by ${notification.claimerId.name} for ${notification.itemId.name}`,
+            description: `You rejected ${notification.claimerId.name}'s claim for ${notification.itemId.name}`,
             buttonText: null,
+            status: "Completed",
             color: "red",
           };
         case "accepted":
           return {
             icon: "MessageCircle",
             title: "Claim Accepted",
-            description: `You accepted the claim by ${notification.claimerId.name} for ${notification.itemId.name}. You can now chat to coordinate the return.`,
+            description: `You accepted ${notification.claimerId.name}'s claim. Chat to coordinate return.`,
             buttonText: "Open Chat",
+            status: "Completed",
             color: "green",
           };
         case "returned":
           return {
             icon: "CheckCircle2",
             title: "Item Returned",
-            description: `The item ${notification.itemId.name} has been marked as returned`,
+            description: `${notification.itemId.name} has been successfully returned`,
             buttonText: null,
+            status: "Completed",
             color: "green",
           };
         default:
           return {
             icon: "HelpCircle",
             title: "Verification Required",
-            description: `You are required to generate verification questions for ${notification.itemId.name}`,
+            description: `Generate verification questions for ${notification.itemId.name}`,
             buttonText: "Generate Questions",
+            status: "Action Required",
             color: "blue",
           };
       }
@@ -97,8 +105,9 @@ const NotificationItemTest = ({ notification, currentUserId }) => {
             return {
               icon: "Clock",
               title: "Awaiting Questions",
-              description: `Your claim request for ${notification.itemId.name} is awaiting verification questions from ${notification.finderId.name}`,
+              description: `Your claim for ${notification.itemId.name} is awaiting questions from ${notification.finderId.name}`,
               buttonText: null,
+              status: "Pending",
               color: "orange",
             };
           }
@@ -110,8 +119,9 @@ const NotificationItemTest = ({ notification, currentUserId }) => {
             return {
               icon: "HelpCircle",
               title: "Questions Received",
-              description: `${notification.finderId.name} has sent verification questions for ${notification.itemId.name}`,
+              description: `${notification.finderId.name} sent verification questions for ${notification.itemId.name}`,
               buttonText: "Answer Questions",
+              status: "Action Required",
               color: "blue",
             };
           }
@@ -123,8 +133,9 @@ const NotificationItemTest = ({ notification, currentUserId }) => {
             return {
               icon: "UserCheck",
               title: "Under Review",
-              description: `Your answers are being reviewed by ${notification.finderId.name} for ${notification.itemId.name}`,
+              description: `Your answers are being reviewed by ${notification.finderId.name}`,
               buttonText: null,
+              status: "Pending",
               color: "orange",
             };
           }
@@ -132,8 +143,9 @@ const NotificationItemTest = ({ notification, currentUserId }) => {
           return {
             icon: "Clock",
             title: "Awaiting Questions",
-            description: `Your claim request for ${notification.itemId.name} is being processed`,
+            description: `Your claim for ${notification.itemId.name} is being processed`,
             buttonText: null,
+            status: "Pending",
             color: "orange",
           };
         }
@@ -142,32 +154,36 @@ const NotificationItemTest = ({ notification, currentUserId }) => {
           return {
             icon: "Ban",
             title: "Claim Rejected",
-            description: `Your claim request for ${notification.itemId.name} was rejected by ${notification.finderId.name}`,
+            description: `Your claim for ${notification.itemId.name} was rejected`,
             buttonText: null,
+            status: "Completed",
             color: "red",
           };
         case "accepted":
           return {
             icon: "CheckCircle2",
             title: "Claim Accepted",
-            description: `Your claim request for ${notification.itemId.name} was accepted by ${notification.finderId.name}. You can now chat to coordinate the return.`,
+            description: `Your claim was accepted! Chat to coordinate return.`,
             buttonText: "Open Chat",
+            status: "Completed",
             color: "green",
           };
         case "returned":
           return {
             icon: "CheckCircle2",
             title: "Item Returned",
-            description: `The item ${notification.itemId.name} has been marked as returned`,
+            description: `${notification.itemId.name} has been returned`,
             buttonText: null,
+            status: "Completed",
             color: "green",
           };
         default:
           return {
             icon: "SendHorizonal",
             title: "Request Sent",
-            description: `Your claim request has been sent to ${notification.finderId.name}`,
+            description: `Claim request sent to ${notification.finderId.name}`,
             buttonText: null,
+            status: "Pending",
             color: "blue",
           };
       }
@@ -178,6 +194,7 @@ const NotificationItemTest = ({ notification, currentUserId }) => {
       title: "Notification",
       description: "You have a new notification",
       buttonText: null,
+      status: "Info",
       color: "blue",
     };
   };
@@ -185,25 +202,52 @@ const NotificationItemTest = ({ notification, currentUserId }) => {
   const config = getNotificationConfig();
   const LucideIcon = Icon[config.icon];
 
-  // Fix: Proper color mapping for icons and buttons
-  const getIconColor = () => {
-    const colors = {
-      blue: "text-blue-500",
-      orange: "text-orange-500",
-      red: "text-red-500",
-      green: "text-green-500",
-    };
-    return colors[config.color] || "text-blue-500";
+  // Enhanced styling functions
+  const getStatusBadgeClass = () => {
+    const baseClasses = "text-xs font-semibold px-2 py-1 rounded-full border";
+
+    switch (config.status) {
+      case "Action Required":
+        return `${baseClasses} bg-red-50 text-red-700 border-red-200`;
+      case "Pending":
+        return `${baseClasses} bg-yellow-50 text-yellow-700 border-yellow-200`;
+      case "Completed":
+        return `${baseClasses} bg-green-50 text-green-700 border-green-200`;
+      default:
+        return `${baseClasses} bg-gray-50 text-gray-700 border-gray-200`;
+    }
+  };
+
+  const getIconContainerClass = () => {
+    switch (config.color) {
+      case "blue":
+        return "bg-blue-100 text-blue-600";
+      case "orange":
+        return "bg-orange-100 text-orange-600";
+      case "red":
+        return "bg-red-100 text-red-600";
+      case "green":
+        return "bg-green-100 text-green-600";
+      default:
+        return "bg-gray-100 text-gray-600";
+    }
   };
 
   const getButtonClass = () => {
-    const colors = {
-      blue: "bg-blue-500 hover:bg-blue-600",
-      orange: "bg-orange-500 hover:bg-orange-600",
-      red: "bg-red-500 hover:bg-red-600",
-      green: "bg-green-500 hover:bg-green-600",
-    };
-    return colors[config.color] || "bg-blue-500 hover:bg-blue-600";
+    const baseClasses = "text-xs h-8 px-4 font-medium text-white";
+
+    switch (config.color) {
+      case "blue":
+        return `${baseClasses} bg-blue-600 hover:bg-blue-700`;
+      case "orange":
+        return `${baseClasses} bg-orange-600 hover:bg-orange-700`;
+      case "red":
+        return `${baseClasses} bg-red-600 hover:bg-red-700`;
+      case "green":
+        return `${baseClasses} bg-green-600 hover:bg-green-700`;
+      default:
+        return `${baseClasses} bg-blue-600 hover:bg-blue-700`;
+    }
   };
 
   // Calculate time ago
@@ -215,41 +259,59 @@ const NotificationItemTest = ({ notification, currentUserId }) => {
     const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
     const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
 
-    if (diffMins < 60) return `${diffMins} mins ago`;
-    if (diffHours < 24) return `${diffHours} hours ago`;
-    return `${diffDays} days ago`;
+    if (diffMins < 1) return "Just now";
+    if (diffMins < 60) return `${diffMins}m ago`;
+    if (diffHours < 24) return `${diffHours}h ago`;
+    if (diffDays === 1) return "Yesterday";
+    return `${diffDays}d ago`;
   };
 
   const handleButtonClick = () => {
     console.log("Button clicked for:", config.title);
+    // Add your actual button handling logic here
   };
 
   return (
-    <div className="flex gap-2 items-center border-2 p-2 rounded-sm">
-      {/* FIXED: Use stroke instead of fill for Lucide icons */}
-      <LucideIcon className={`w-10 h-10 ${getIconColor()}`} />
-      <div className="w-[85%]">
-        <div className="flex items-center justify-between">
-          <Header content={config.title} className={"text-sm font-bold"} />
-          <Icon.ChevronRight size={20} className="text-gray-500" />
+    <div className="flex gap-4 items-start p-4 border border-gray-200 rounded-lg hover:border-gray-300 hover:shadow-sm transition-all duration-200 bg-white group cursor-pointer">
+      {/* Icon with background */}
+      <div className={`p-2 rounded-lg ${getIconContainerClass()}`}>
+        <LucideIcon className="w-5 h-5" />
+      </div>
+
+      {/* Content */}
+      <div className="flex-1 min-w-0 space-y-2">
+        {/* Header with status badge and title */}
+        <div className="flex items-start justify-between gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className={getStatusBadgeClass()}>{config.status}</span>
+            <Header
+              content={config.title}
+              className={"text-sm font-semibold text-gray-900"}
+            />
+          </div>
+          <Icon.ChevronRight
+            size={16}
+            className="text-gray-400 flex-shrink-0 mt-1 group-hover:text-gray-600 transition-colors"
+          />
         </div>
-        <p className="text-[13px] font-sans line-clamp-2">
+
+        {/* Description */}
+        <p className="text-sm text-gray-600 leading-relaxed">
           {config.description}
         </p>
-        <p className="text-[12px] font-sans">
-          {getTimeAgo(notification.createdAt)}
-        </p>
-        {config.buttonText && (
-          <div>
-            {/* FIXED: Use proper button color classes */}
-            <Button
-              className={`text-xs h-8 mt-1 w-full text-white ${getButtonClass()}`}
-              onClick={handleButtonClick}
-            >
+
+        {/* Footer with timestamp and button */}
+        <div className="flex items-center justify-between pt-1">
+          <p className="text-xs text-gray-500 font-medium">
+            {getTimeAgo(notification.createdAt)}
+          </p>
+
+          {config.buttonText && (
+            <Button className={getButtonClass()} onClick={handleButtonClick}>
               {config.buttonText}
             </Button>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );
