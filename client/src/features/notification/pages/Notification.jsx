@@ -1,14 +1,19 @@
 import { Header } from "@/components/Header";
-import { sampleRequests } from "../sample";
 import NotificationItemTest from "../components/NotificationItemTest";
 import { useState, useMemo } from "react";
+import { useNotification } from "../hooks/useNotifications";
+import { useAuthStore } from "@/context/AuthContext";
 
 const Notification = () => {
-  const currentUserId = "finder1";
+  const { notifications: sampleRequests, loading, error } = useNotification();
+  const { user } = useAuthStore();
+  const currentUserId = user._id;
   const [filter, setFilter] = useState("All");
 
   // Filter notifications based on current filter
   const userNotifications = useMemo(() => {
+    if (!sampleRequests) return [];
+
     // First, get all notifications for the current user
     const userNotifications = sampleRequests.filter(
       (request) =>
@@ -52,14 +57,7 @@ const Notification = () => {
       default:
         return userNotifications;
     }
-  }, [filter, currentUserId]);
-
-  console.log(
-    "User's notifications:",
-    userNotifications.length,
-    "Filter:",
-    filter
-  );
+  }, [filter, currentUserId, sampleRequests]);
 
   // Helper function to get button styles based on active filter
   const getFilterButtonClass = (filterName) => {
@@ -70,6 +68,36 @@ const Notification = () => {
       : `${baseClass} border border-gray-300 hover:bg-gray-50`;
   };
 
+  // Loading state
+  if (loading) {
+    return (
+      <div className="mt-14 w-full pl-2 pr-2">
+        <Header
+          content={"Notifications"}
+          className={"text-[26px] font-medium"}
+        />
+        <div className="text-center py-8 text-gray-500">
+          Loading notifications...
+        </div>
+      </div>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <div className="mt-14 w-full pl-2 pr-2">
+        <Header
+          content={"Notifications"}
+          className={"text-[26px] font-medium"}
+        />
+        <div className="text-center py-8 text-red-500">
+          Error loading notifications: {error.message}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="mt-14 w-full pl-2 pr-2">
       <div>
@@ -79,6 +107,7 @@ const Notification = () => {
         />
       </div>
 
+      {/* Filter Buttons */}
       <div className="font-sans text-[13px] flex justify-between mt-4">
         <div
           className={getFilterButtonClass("All")}

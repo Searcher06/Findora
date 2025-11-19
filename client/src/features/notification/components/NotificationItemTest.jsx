@@ -7,6 +7,11 @@ const NotificationItemTest = ({ notification, currentUserId }) => {
   const isFinder = currentUserId === notification.finderId._id;
   const isClaimer = currentUserId === notification.claimerId._id;
 
+  // Helper function to get full name
+  const getFullName = (user) => {
+    return `${user.firstName} ${user.lastName}`;
+  };
+
   // Notification configuration
   const getNotificationConfig = () => {
     if (isFinder) {
@@ -16,7 +21,9 @@ const NotificationItemTest = ({ notification, currentUserId }) => {
             return {
               icon: "HelpCircle",
               title: "Verification Required",
-              description: `Generate verification questions for ${notification.itemId.name} from ${notification.claimerId.name}`,
+              description: `Generate verification questions for ${
+                notification.itemId.name
+              } from ${getFullName(notification.claimerId)}`,
               buttonText: "Generate Questions",
               status: "Action Required",
               color: "blue",
@@ -30,7 +37,9 @@ const NotificationItemTest = ({ notification, currentUserId }) => {
             return {
               icon: "Clock",
               title: "Awaiting Answers",
-              description: `Waiting for ${notification.claimerId.name} to answer questions for ${notification.itemId.name}`,
+              description: `Waiting for ${getFullName(
+                notification.claimerId
+              )} to answer questions for ${notification.itemId.name}`,
               buttonText: null,
               status: "Pending",
               color: "orange",
@@ -44,7 +53,9 @@ const NotificationItemTest = ({ notification, currentUserId }) => {
             return {
               icon: "Scale",
               title: "Decision Required",
-              description: `Make a decision on "${notification.itemId.name}" claim by ${notification.claimerId.name}`,
+              description: `Make a decision on "${
+                notification.itemId.name
+              }" claim by ${getFullName(notification.claimerId)}`,
               buttonText: "Review Claim",
               status: "Action Required",
               color: "orange",
@@ -65,7 +76,9 @@ const NotificationItemTest = ({ notification, currentUserId }) => {
           return {
             icon: "XCircle",
             title: "Claim Rejected",
-            description: `You rejected ${notification.claimerId.name}'s claim for ${notification.itemId.name}`,
+            description: `You rejected ${getFullName(
+              notification.claimerId
+            )}'s claim for ${notification.itemId.name}`,
             buttonText: null,
             status: "Completed",
             color: "red",
@@ -74,7 +87,9 @@ const NotificationItemTest = ({ notification, currentUserId }) => {
           return {
             icon: "MessageCircle",
             title: "Claim Accepted",
-            description: `You accepted ${notification.claimerId.name}'s claim. Chat to coordinate return.`,
+            description: `You accepted ${getFullName(
+              notification.claimerId
+            )}'s claim. Chat to coordinate return.`,
             buttonText: "Open Chat",
             status: "Completed",
             color: "green",
@@ -105,7 +120,11 @@ const NotificationItemTest = ({ notification, currentUserId }) => {
             return {
               icon: "Clock",
               title: "Awaiting Questions",
-              description: `Your claim for ${notification.itemId.name} is awaiting questions from ${notification.finderId.name}`,
+              description: `Your claim for ${
+                notification.itemId.name
+              } is awaiting questions from ${getFullName(
+                notification.finderId
+              )}`,
               buttonText: null,
               status: "Pending",
               color: "orange",
@@ -119,7 +138,9 @@ const NotificationItemTest = ({ notification, currentUserId }) => {
             return {
               icon: "HelpCircle",
               title: "Questions Received",
-              description: `${notification.finderId.name} sent verification questions for ${notification.itemId.name}`,
+              description: `${getFullName(
+                notification.finderId
+              )} sent verification questions for ${notification.itemId.name}`,
               buttonText: "Answer Questions",
               status: "Action Required",
               color: "blue",
@@ -133,7 +154,9 @@ const NotificationItemTest = ({ notification, currentUserId }) => {
             return {
               icon: "UserCheck",
               title: "Under Review",
-              description: `Your answers are being reviewed by ${notification.finderId.name}`,
+              description: `Your answers are being reviewed by ${getFullName(
+                notification.finderId
+              )}`,
               buttonText: null,
               status: "Pending",
               color: "orange",
@@ -181,7 +204,9 @@ const NotificationItemTest = ({ notification, currentUserId }) => {
           return {
             icon: "SendHorizonal",
             title: "Request Sent",
-            description: `Claim request sent to ${notification.finderId.name}`,
+            description: `Claim request sent to ${getFullName(
+              notification.finderId
+            )}`,
             buttonText: null,
             status: "Pending",
             color: "blue",
