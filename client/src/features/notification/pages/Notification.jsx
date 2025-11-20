@@ -1,9 +1,10 @@
 import { Header } from "@/components/Header";
 import NotificationItemTest from "../components/NotificationItemTest";
+import NotificationSkeleton from "../components/NotificationSkeleton";
 import { useState, useMemo } from "react";
 import { useNotification } from "../hooks/useNotifications";
 import { useAuthStore } from "@/context/AuthContext";
-
+import { Skeleton } from "@/components/ui/skeleton";
 const Notification = () => {
   const { notifications: sampleRequests, loading, error } = useNotification();
   const { user } = useAuthStore();
@@ -68,7 +69,7 @@ const Notification = () => {
       : `${baseClass} border border-gray-300 hover:bg-gray-50`;
   };
 
-  // Loading state
+  // Loading state with skeleton
   if (loading) {
     return (
       <div className="mt-14 w-full pl-2 pr-2">
@@ -76,8 +77,19 @@ const Notification = () => {
           content={"Notifications"}
           className={"text-[26px] font-medium"}
         />
-        <div className="text-center py-8 text-gray-500">
-          Loading notifications...
+
+        {/* Filter Buttons Skeleton */}
+        <div className="font-sans text-[13px] flex justify-between mt-4">
+          <Skeleton className="h-6 w-16 rounded-sm" />
+          <Skeleton className="h-6 w-20 rounded-sm" />
+          <Skeleton className="h-6 w-28 rounded-sm" />
+        </div>
+
+        {/* Notifications List Skeleton */}
+        <div className="mt-3 flex flex-col gap-2">
+          {[...Array(5)].map((_, index) => (
+            <NotificationSkeleton key={index} />
+          ))}
         </div>
       </div>
     );
