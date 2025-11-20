@@ -1,8 +1,11 @@
 import { Header } from "@/components/Header";
 import { Button } from "@/components/ui/button";
 import * as Icon from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const NotificationItemTest = ({ notification, currentUserId }) => {
+  const navigate = useNavigate();
+  const requestId = notification._id;
   // Determine if current user is finder or claimer
   const isFinder = currentUserId === notification.finderId._id;
   const isClaimer = currentUserId === notification.claimerId._id;
@@ -27,6 +30,7 @@ const NotificationItemTest = ({ notification, currentUserId }) => {
               buttonText: "Generate Questions",
               status: "Action Required",
               color: "blue",
+              navigate: `/verificaton/questions/${requestId}`,
             };
           }
 
@@ -144,6 +148,7 @@ const NotificationItemTest = ({ notification, currentUserId }) => {
               buttonText: "Answer Questions",
               status: "Action Required",
               color: "blue",
+              navigate: `/verificaton/answers/${requestId}`,
             };
           }
 
@@ -293,11 +298,11 @@ const NotificationItemTest = ({ notification, currentUserId }) => {
 
   const handleButtonClick = () => {
     console.log("Button clicked for:", config.title);
-    // Add your actual button handling logic here
+    navigate(`${config.navigate}`);
   };
 
   return (
-    <div className="flex gap-4 items-start p-4 border border-gray-200 rounded-lg hover:border-gray-300 hover:shadow-sm transition-all duration-200 bg-white group cursor-pointer">
+    <div className="flex gap-4 items-start p-4 border border-gray-200 rounded-lg hover:border-gray-300 hover:shadow-sm transition-all duration-200 bg-white group cursor-pointer font-sans">
       {/* Icon with background */}
       <div className={`p-2 rounded-lg ${getIconContainerClass()}`}>
         <LucideIcon className="w-5 h-5" />
