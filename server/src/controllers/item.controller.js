@@ -1,6 +1,7 @@
 import { textValidator } from "../utils/symbolchecker.js";
 import { itemModel } from "../models/item.model.js";
 import { userModel } from "../models/user.model.js";
+import cloudinary from "../config/cloudinary.js";
 import mongoose from "mongoose";
 
 const createItem = async (req, res) => {
@@ -9,7 +10,6 @@ const createItem = async (req, res) => {
     itemDescription,
     category,
     location,
-    image,
     status,
     dateLostOrFound,
   } = req.body;
@@ -60,15 +60,44 @@ const createItem = async (req, res) => {
     );
   }
 
-  // todo:build this later
-  // checking if theres an image to upload to claudinary
-  // if (image) {
-  // }
+  // Handle image if uploaded
+  let imageUrl = null;
+  const file = req.file;
 
+  if (file) {
+    // Validation checks first
+    if (!file.mimetype.startsWith("image/")) {
+      res.status(400);
+      throw new Error("Uploaded file is not an image");
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      res.status(400);
+      throw new Error("File size must be less than 5MB");
+    }
+
+    if (!file.buffer) {
+      res.status(400);
+      throw new Error("File data is corrupted");
+    }
+
+    // Upload to Cloudinary
+    const base64 = file.buffer.toString("base64");
+    const dataUri = `data:${file.mimetype};base64,${base64}`;
+
+    const uploadResult = await cloudinary.uploader.upload(dataUri, {
+      folder: "lost_found_items",
+    });
+
+    imageUrl = uploadResult.secure_url;
+  }
+
+  // Trim fields
   itemName = itemName.trim();
   itemDescription = itemDescription.trim();
   location = location.trim();
 
+  // Create item
   const item = await itemModel.create({
     name: itemName,
     description: itemDescription,
@@ -77,6 +106,7 @@ const createItem = async (req, res) => {
     status,
     reportedBy: user._id,
     dateLostOrFound,
+    image: imageUrl,
   });
 
   if (item) {
@@ -162,8 +192,14 @@ const updateItem = async (req, res) => {
   res.status(200).json(updatedItem);
 };
 const deleteItem = async (req, res) => {
-  // todo:implement checking if an item is claimed
-  const deletedItem = await itemModel.findByIdAndDelete(req.item._id);
+  // Checking if an item has been claimed before deletion
+  const item = await itemModel.findById(req.item._id);
+  if (item.status == "claimed") {
+    res.status(403);
+    throw new Error("Item can't be deleted, It has already been claimed");
+  }
+
+  const deletedItem = await itemModel.findByIdAndDelete(item.id);
   if (deletedItem) {
     res.status(200).json({ message: "Item deleted successfully" });
   } else {

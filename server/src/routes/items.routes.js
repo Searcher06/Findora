@@ -12,6 +12,7 @@ import {
   getItemById,
   allItems,
 } from "../controllers/item.controller.js";
+import upload from "../middleware/upload.js";
 const router = express.Router();
 
 /* 
@@ -26,7 +27,7 @@ router.get("/user", authMiddleWare, getUserItems);
 
 router
   .route("/")
-  .post(authMiddleWare, createItem)
+  .post(authMiddleWare, upload.single("image"), createItem)
   .get(authMiddleWare, allItems);
 router
   .route("/:id")
