@@ -4,6 +4,7 @@ import generateToken from "../utils/generateToken.js";
 import { clearCookie } from "../utils/clearCookies.js";
 import { textValidator } from "../utils/symbolchecker.js";
 import { validateEmail } from "../utils/emailValidator.js";
+import cloudinary from "../config/cloudinary.js";
 
 const createUser = async (req, res) => {
   let { firstName, lastName, email, password, username } = req.body;
@@ -221,6 +222,32 @@ const updateProfile = async (req, res) => {
 
   if (foculty) {
     user.foculty = foculty;
+  }
+
+  const file = req.file;
+  if (file) {
+    // Validation checks first
+    if (!file.mimetype.startsWith("image/")) {
+      res.status(400);
+      throw new Error("Uploaded file is not an image");
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      res.status(400);
+      throw new Error("File size must be less than 5MB");
+    }
+    if (!file.buffer) {
+      res.status(400);
+      throw new Error("File data is corrupted");
+    }
+    // Upload to Cloudinary
+    const base64 = file.buffer.toString("base64");
+    const dataUri = `data:${file.mimetype};base64,${base64}`;
+
+    const uploadResult = await cloudinary.uploader.upload(dataUri, {
+      folder: "profile_pics",
+    });
+
+    user.profilePic = uploadResult.secure_url;
   }
 
   await user.save();

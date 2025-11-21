@@ -171,10 +171,6 @@ const updateItem = async (req, res) => {
     item.location = location;
   }
 
-  // todo:implement image upload
-  // if (image) {
-  // }
-
   if (status) {
     item.status = status;
   }
@@ -185,6 +181,35 @@ const updateItem = async (req, res) => {
       throw new Error("Invalid date!");
     }
     item.dateLostOrFound = dateLostOrFound;
+  }
+
+  const file = req.file;
+  if (file) {
+    // Validation checks first
+    if (!file.mimetype.startsWith("image/")) {
+      res.status(400);
+      throw new Error("Uploaded file is not an image");
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      res.status(400);
+      throw new Error("File size must be less than 5MB");
+    }
+
+    if (!file.buffer) {
+      res.status(400);
+      throw new Error("File data is corrupted");
+    }
+
+    // Upload to Cloudinary
+    const base64 = file.buffer.toString("base64");
+    const dataUri = `data:${file.mimetype};base64,${base64}`;
+
+    const uploadResult = await cloudinary.uploader.upload(dataUri, {
+      folder: "lost_found_items",
+    });
+
+    item.image = uploadResult.secure_url;
   }
 
   await item.save();

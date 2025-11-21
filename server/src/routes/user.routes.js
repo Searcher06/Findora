@@ -22,6 +22,6 @@ router.get("/", authMiddleWare, getUser);
 
 router.get("/:username", authMiddleWare, getUserByUsername);
 
-router.post("/profile", authMiddleWare, updateProfile);
+router.post("/profile", authMiddleWare, upload.single("image"), updateProfile);
 
 export default router;
