@@ -8,6 +8,7 @@ import {
   getUser,
   getUserByUsername,
 } from "../controllers/user.controller.js";
+import upload from "../middleware/upload.js";
 
 const router = express.Router();
 

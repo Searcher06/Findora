@@ -226,13 +226,6 @@ const updateProfile = async (req, res) => {
   await user.save();
   const updatedUser = await userModel.findById(user._id).select("-password");
   res.status(200).json(updatedUser);
-
-  // Todo: get back to this later
-  // } catch (error) {
-  //   console.error("Update profile Error \nHERE YOU GO:\n", error);
-  //   res.status(500);
-  //   throw new Error(error.message || "Internal server error");
-  // }
 };
 const getUserByUsername = async (req, res) => {
   // Getting the username from the request parameter
