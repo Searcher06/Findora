@@ -113,10 +113,7 @@ const Notification = () => {
   return (
     <div className="mt-14 w-full pl-2 pr-2">
       <div>
-        <Header
-          content={"Notifications"}
-          className={"text-[26px] font-medium"}
-        />
+        <Header className={"text-[26px] font-medium"}>Notifications</Header>
       </div>
 
       {/* Filter Buttons */}
