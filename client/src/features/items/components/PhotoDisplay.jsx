@@ -1,8 +1,8 @@
 import { useUploadPhoto } from "../context/UploadPhotoContext";
-import { usePhotoUpload } from "../hooks/usePhotoUpload";
-const PhotoDisplay = ({ setItemData }) => {
+// import { usePhotoUpload } from "../hooks/usePhotoUpload";
+const PhotoDisplay = ({ handlePhotoChange, preview }) => {
   const { on } = useUploadPhoto();
-  const { preview, handlePhotoChange } = usePhotoUpload(setItemData);
+  // const { preview, handlePhotoChange } = usePhotoUpload(setItemData);
   return (
     on && (
       <div>
