@@ -1,16 +1,15 @@
 import { useUploadPhoto } from "../context/UploadPhotoContext";
-import img from "../food.jpg";
 import { usePhotoUpload } from "../hooks/usePhotoUpload";
-const PhotoDisplay = () => {
+const PhotoDisplay = ({ setItemData }) => {
   const { on } = useUploadPhoto();
-  const { preview, handlePhotoChange } = usePhotoUpload();
+  const { preview, handlePhotoChange } = usePhotoUpload(setItemData);
   return (
     on && (
       <div>
         <div
-          className="w-full h-42 mt-3 mb-2 flex bg-center bg-cover rounded-md"
+          className={`w-full h-42 mt-3 mb-2 flex bg-center bg-cover rounded-md`}
           style={{
-            backgroundImage: `url(${preview ? preview : img})`,
+            backgroundImage: `url(${preview ? preview : null})`,
           }}
         ></div>
         <label id="photo-upload">

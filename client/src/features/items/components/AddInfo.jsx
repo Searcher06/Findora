@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import Label from "./Label";
@@ -10,6 +9,7 @@ const AddInfo = ({
   handleInputChange,
   handleSubmit,
   loading,
+  setItemData,
 }) => {
   return (
     <form
@@ -99,7 +99,7 @@ const AddInfo = ({
         <ToggleImage />
       </div>
 
-      <PhotoDisplay />
+      <PhotoDisplay setItemData={setItemData} />
 
       <Button
         className={"text-xs mt-3 font-sans mb-3 w-full"}
