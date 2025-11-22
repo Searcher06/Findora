@@ -1,12 +1,12 @@
-import { Api } from "@/lib/axios";
+import { Api, Api2 } from "@/lib/axios";
 
 export const createItem = async (itemData) => {
-  const { data } = await Api.post("/items", itemData);
+  const { data } = await Api2.post("/items", itemData);
   return data;
 };
 
 export const updateItem = async (id, itemData) => {
-  const { data } = await Api.patch(`/items/${id}`, itemData);
+  const { data } = await Api2.patch(`/items/${id}`, itemData);
   return data;
 };
 

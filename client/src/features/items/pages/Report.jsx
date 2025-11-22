@@ -8,6 +8,8 @@ const ReportPage = () => {
   const navigate = useNavigate();
   const { item, loading, createAnItem } = useItems();
   const { postType } = useItemType();
+  const [preview, setPreview] = useState(null);
+
   const [itemData, setItemData] = useState({
     itemName: "",
     itemDescription: "",
@@ -29,16 +31,16 @@ const ReportPage = () => {
     const formData = new FormData();
 
     if (itemData.itemName) formData.append("itemName", itemData.itemName);
-    if (itemData.itemDescription)
-      formData.append("itemDescription", itemData.itemDescription);
+    // prettier-ignore
+    if (itemData.itemDescription) formData.append("itemDescription", itemData.itemDescription);
     if (itemData.category) formData.append("category", itemData.category);
     if (itemData.image) formData.append("image", itemData.image);
     if (itemData.location) formData.append("location", itemData.location);
-    if (itemData.dateLostOrFound)
-      formData.append("dateLostOrFound", itemData.dateLostOrFound);
+    // prettier-ignore
+    if (itemData.dateLostOrFound)formData.append("dateLostOrFound", itemData.dateLostOrFound);
     if (itemData.status) formData.append("status", itemData.status);
     console.log(itemData);
-
+    console.log(formData);
     try {
       const response = await createAnItem(formData);
       console.log(response);
@@ -57,6 +59,16 @@ const ReportPage = () => {
       console.error(error);
     }
   };
+  const handlePhotoChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setItemData((prevs) => ({ ...prevs, image: file }));
+      const reader = new FileReader();
+      reader.onloadend = () => setPreview(reader.result);
+      reader.readAsDataURL(file);
+    }
+  };
+  console.log(`Item Data`, itemData);
   return (
     <div className="mt-14 flex flex-col pl-4 pr-4">
       <h1 className="text-[26px] font-medium pl-0 leading-7 font-display mt-4">
@@ -77,6 +89,8 @@ const ReportPage = () => {
         loading={loading}
         item={item}
         postType={postType}
+        handlePhotoChange={handlePhotoChange}
+        preview={preview}
       />
     </div>
   );

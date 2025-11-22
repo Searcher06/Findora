@@ -10,6 +10,8 @@ const AddInfo = ({
   handleSubmit,
   loading,
   setItemData,
+  handlePhotoChange,
+  preview,
 }) => {
   return (
     <form
@@ -99,7 +101,11 @@ const AddInfo = ({
         <ToggleImage />
       </div>
 
-      <PhotoDisplay setItemData={setItemData} />
+      <PhotoDisplay
+        setItemData={setItemData}
+        handlePhotoChange={handlePhotoChange}
+        preview={preview}
+      />
 
       <Button
         className={"text-xs mt-3 font-sans mb-3 w-full"}
