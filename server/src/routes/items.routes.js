@@ -31,7 +31,12 @@ router
   .get(authMiddleWare, allItems);
 router
   .route("/:id")
-  .delete(authMiddleWare, ownerShipMiddleware, deleteItem)
+  .delete(
+    authMiddleWare,
+    upload.single("image"),
+    ownerShipMiddleware,
+    deleteItem
+  )
   .patch(authMiddleWare, ownerShipMiddleware, updateItem)
   .get(authMiddleWare, getItemById);
 

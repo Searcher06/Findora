@@ -10,6 +10,7 @@ export const UpdateItem = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const { item, loading, error } = useSingleItem(id);
+  const [preview, setPreview] = useState(null);
   const [itemData, setItemData] = useState({
     itemName: "",
     itemDescription: "",
@@ -51,16 +52,28 @@ export const UpdateItem = () => {
   };
 
   const handleSubmit = async () => {
+    const formData = new FormData();
+
+    if (itemData.itemName) formData.append("itemName", itemData.itemName);
+    // prettier-ignore
+    if (itemData.itemDescription) formData.append("itemDescription", itemData.itemDescription);
+    if (itemData.category) formData.append("category", itemData.category);
+    if (itemData.image) formData.append("image", itemData.image);
+    if (itemData.location) formData.append("location", itemData.location);
+    // prettier-ignore
+    if (itemData.dateLostOrFound)formData.append("dateLostOrFound", itemData.dateLostOrFound);
+    if (itemData.status) formData.append("status", itemData.status);
     console.log(itemData);
+    console.log(formData);
     try {
-      const response = await updateAnItem(item._id, itemData);
+      const response = await updateAnItem(item._id, formData);
       console.log(response);
-      navigate("/");
       toast.success("Item updated successfully");
+      navigate("/");
     } catch (error) {
       if (error.response) {
         // server responded with a non-2xx status
-        toast.error(error.response.data.message || "Item update failed");
+        toast.error(error.response.data.message || "Failed to update item");
       } else if (error.request) {
         toast.error("No response from server");
       } else {
@@ -68,6 +81,15 @@ export const UpdateItem = () => {
         toast.error("An error occured.");
       }
       console.error(error);
+    }
+  };
+  const handlePhotoChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setItemData((prevs) => ({ ...prevs, image: file }));
+      const reader = new FileReader();
+      reader.onloadend = () => setPreview(reader.result);
+      reader.readAsDataURL(file);
     }
   };
   return (
@@ -88,6 +110,8 @@ export const UpdateItem = () => {
         handleSubmit={handleSubmit}
         loading={loading}
         item={item}
+        handlePhotoChange={handlePhotoChange}
+        preview={preview}
       />
     </div>
   );

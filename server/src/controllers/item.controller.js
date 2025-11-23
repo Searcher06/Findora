@@ -117,19 +117,18 @@ const createItem = async (req, res) => {
   }
 };
 const updateItem = async (req, res) => {
-  const item = await itemModel.findById(req.item._id);
-  // destructuring the all the fields
   let {
     itemName,
     itemDescription,
     category,
     location,
-    image,
     status,
     dateLostOrFound,
   } = req.body;
 
-  // if there item name is provided validate it and save
+  const item = await itemModel.findById(req.item._id);
+
+  // if item name is provided validate it and save
   if (itemName) {
     if (itemName.length < 3 || itemName.length > 25) {
       res.status(400);
@@ -144,7 +143,7 @@ const updateItem = async (req, res) => {
     item.name = itemName;
   }
 
-  // if there item description is provided validate it and save
+  // if item description is provided validate it and save
   if (itemDescription) {
     if (itemDescription.length < 20 || itemDescription.length > 200) {
       res.status(400);
