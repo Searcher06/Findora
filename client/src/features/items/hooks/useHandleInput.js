@@ -1,8 +1,10 @@
-const handleInputChange = (e, setItemData) => {
-  const { name, value } = e.target;
-  setItemData((prev) => ({
-    ...prev,
-    [name]: value,
-  }));
+export const useHandleInput = (setItemData) => {
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setItemData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+  return handleInputChange;
 };
-export default handleInputChange;
