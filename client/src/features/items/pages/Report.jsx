@@ -6,7 +6,7 @@ import { useItemType } from "../context/ItemTypeContext";
 import { useNavigate } from "react-router-dom";
 const ReportPage = () => {
   const navigate = useNavigate();
-  const { item, loading, createAnItem } = useItems();
+  const { loading, createAnItem } = useItems();
   const { postType } = useItemType();
   const [preview, setPreview] = useState(null);
 
@@ -87,7 +87,6 @@ const ReportPage = () => {
         setItemData={setItemData}
         handleSubmit={handleSubmit}
         loading={loading}
-        item={item}
         postType={postType}
         handlePhotoChange={handlePhotoChange}
         preview={preview}

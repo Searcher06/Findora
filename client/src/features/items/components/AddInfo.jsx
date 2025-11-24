@@ -1,8 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
+import { useLocation } from "react-router-dom";
 import Label from "./Label";
 import ToggleImage from "./ToggleImage";
 import PhotoDisplay from "./PhotoDisplay";
+
 const AddInfo = ({
   className,
   itemData,
@@ -13,9 +15,22 @@ const AddInfo = ({
   handlePhotoChange,
   preview,
 }) => {
+  const location = useLocation();
+
+  // Check if current route is an update route
+  const isUpdateRoute = location.pathname.startsWith("/update/");
+
+  // Determine button text based on route
+  const getButtonText = () => {
+    if (loading) {
+      return isUpdateRoute ? "Updating item..." : "Posting item...";
+    }
+    return isUpdateRoute ? "Update Item" : "Post Item";
+  };
+
   return (
     <form
-      className={`w-full border  rounded-lg border-gray-200 p-4  ${className}`}
+      className={`w-full border rounded-lg border-gray-200 p-4 ${className}`}
       onSubmit={(event) => event.preventDefault()}
     >
       <Label text={"Item Type"} htmlFor={"status"} />
@@ -23,7 +38,7 @@ const AddInfo = ({
         name="status"
         id="status"
         value={itemData.status}
-        className="mb-2 font-sans w-full text-xs h-8 block p-1  border border-gray-300 rounded-lg  focus:outline-none"
+        className="mb-2 font-sans w-full text-xs h-8 block p-1 border border-gray-300 rounded-lg focus:outline-none"
         onChange={handleInputChange}
       >
         <option value="" disabled>
@@ -49,7 +64,7 @@ const AddInfo = ({
         name="category"
         id="category"
         value={itemData.category}
-        className="mb-2 font-sans w-full text-xs h-8 block p-1  border border-gray-300 rounded-lg  focus:outline-none"
+        className="mb-2 font-sans w-full text-xs h-8 block p-1 border border-gray-300 rounded-lg focus:outline-none"
         onChange={handleInputChange}
       >
         <option value="" disabled>
@@ -112,7 +127,7 @@ const AddInfo = ({
         onClick={handleSubmit}
       >
         {loading ? <Spinner /> : null}
-        {loading ? "Posting item..." : "Post Item"}
+        {getButtonText()}
       </Button>
     </form>
   );
