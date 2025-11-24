@@ -31,13 +31,13 @@ router
   .get(authMiddleWare, allItems);
 router
   .route("/:id")
-  .delete(
+  .delete(authMiddleWare, ownerShipMiddleware, deleteItem)
+  .patch(
     authMiddleWare,
     upload.single("image"),
     ownerShipMiddleware,
-    deleteItem
+    updateItem
   )
-  .patch(authMiddleWare, ownerShipMiddleware, updateItem)
   .get(authMiddleWare, getItemById);
 
 export default router;
