@@ -6,10 +6,10 @@ import AddInfo from "../components/AddInfo";
 import { toast } from "react-toastify";
 import { useItems } from "../hooks/useItems";
 export const UpdateItem = () => {
-  const { updateAnItem } = useItems();
+  const { loading, updateAnItem } = useItems();
   const navigate = useNavigate();
   const { id } = useParams();
-  const { item, loading, error } = useSingleItem(id);
+  const { item, loading: itemLoading, error } = useSingleItem(id);
   const [preview, setPreview] = useState(null);
   const [itemData, setItemData] = useState({
     itemName: "",
@@ -33,7 +33,7 @@ export const UpdateItem = () => {
       });
     }
   }, [item]);
-  if (loading) {
+  if (itemLoading) {
     return <DetailedItemCardSkeleton />;
   }
   if (error) {
@@ -109,7 +109,6 @@ export const UpdateItem = () => {
         setItemData={setItemData}
         handleSubmit={handleSubmit}
         loading={loading}
-        item={item}
         handlePhotoChange={handlePhotoChange}
         preview={preview}
       />
