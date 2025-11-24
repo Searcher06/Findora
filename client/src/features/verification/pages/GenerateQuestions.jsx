@@ -1,12 +1,24 @@
+/* eslint-disable no-unused-vars */
 import { Header } from "@/components/Header";
-
+import { Progress } from "@/components/ui/progress";
+import itemImage from "../../items/item.png";
+import ItemCardHorizontal from "../components/ItemCardHorizontal";
+import { useState } from "react";
+import QuestionsSections from "../components/QuestionsSection";
 const GenerateQuestions = () => {
+  const [questions, setQuestions] = useState([]);
+
   return (
-    <div className="mt-14 font-sans pl-2 pr-2 w-full">
+    <div className="mt-14 px-4 w-full">
       <Header className={"text-xl pt-2 text-center"}>
         Create Verification Questions
       </Header>
-      <div className="mt-1 w-[90%] h-1 bg-blue-600 rounded-full"></div>
+      <Progress value={62} className={"h-1 mt-2 [&>div]:bg-blue-500"} />
+      <p className="font-sans text-[13px] text-gray-500  mt-2">
+        Step 2 of 3 - Verification Questions
+      </p>
+      <ItemCardHorizontal image={itemImage} className={"mt-3"} />
+      <QuestionsSections className={"mt-3"} />
     </div>
   );
 };
