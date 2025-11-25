@@ -36,7 +36,7 @@ router.put(
 );
 
 // sends verification answers inform of array objects [{questionId:12345678910,answer:"It's a yellow bag"}]
-router.post(
+router.put(
   "/verify/setanswers/:requestId",
   authMiddleWare,
   setVerificationAnswersMiddleware,
