@@ -1,16 +1,47 @@
-/* eslint-disable no-unused-vars */
 import { Header } from "@/components/Header";
 import { Progress } from "@/components/ui/progress";
 import itemImage from "../../items/item.png";
 import ItemCardHorizontal from "../components/ItemCardHorizontal";
 import { useState } from "react";
 import QuestionsSections from "../components/QuestionsSection";
+import { useNavigate, useParams } from "react-router-dom";
+import { useVerify } from "../hooks/useVerify";
+import { toast } from "react-toastify";
 const GenerateQuestions = () => {
+  const { sendVerificationQuestions, loading } = useVerify();
+  const navigate = useNavigate();
+  const { requestId } = useParams();
   const [questions, setQuestions] = useState([
     { question: "What is the name of the item" },
     { question: "Where do you lost it" },
   ]);
-
+  const handleSubmit = async () => {
+    try {
+      const finalQuestion = {
+        questions,
+      };
+      const response = await sendVerificationQuestions(
+        requestId,
+        finalQuestion
+      );
+      toast.success("Verification Questions Sent Successfully!");
+      console.log(response);
+      navigate("/");
+    } catch (error) {
+      if (error.response) {
+        // server responded with a non-2xx status
+        toast.error(
+          error?.response?.data?.message || "Failed to send questions!"
+        );
+      } else if (error.request) {
+        toast.error("No response from server");
+      } else {
+        // something else happended
+        toast.error("An error occured.");
+      }
+      console.error(error);
+    }
+  };
   return (
     <div className="mt-14 px-4 w-full">
       <Header className={"text-xl pt-1 text-center"}>
@@ -25,6 +56,8 @@ const GenerateQuestions = () => {
         className={"mt-3"}
         questions={questions}
         setQuestions={setQuestions}
+        handleSubmit={handleSubmit}
+        loading={loading}
       />
     </div>
   );

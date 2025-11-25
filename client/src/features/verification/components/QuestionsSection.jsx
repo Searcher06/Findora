@@ -1,10 +1,16 @@
-/* eslint-disable no-unused-vars */
 import { Button } from "@/components/ui/button";
 import { QuestionCard } from "./QuestionCard";
 import { ChevronRight, PlusIcon } from "lucide-react";
 import { useState } from "react";
+import { Spinner } from "@/components/ui/spinner";
 
-const QuestionsSections = ({ className, questions, setQuestions }) => {
+const QuestionsSections = ({
+  className,
+  questions,
+  setQuestions,
+  handleSubmit,
+  loading,
+}) => {
   const [addQuestion, setAddQuestion] = useState("");
 
   const handleAddQuestion = () => {
@@ -73,8 +79,13 @@ const QuestionsSections = ({ className, questions, setQuestions }) => {
         <ChevronRight size={20} className="text-gray-700" />
       </div>
 
-      <Button className="w-40 mt-3 text-xs h-[34px] rounded-sm mb-6">
-        Send Questions
+      <Button
+        className="w-40 mt-3 text-xs h-[34px] rounded-sm mb-6"
+        onClick={handleSubmit}
+        disabled={loading || questions.length === 0}
+      >
+        {loading ? <Spinner /> : null}
+        {loading ? "Sending" : "Send Questions"}
       </Button>
     </div>
   );

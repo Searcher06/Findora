@@ -9,17 +9,20 @@ export const sendFound = async (itemId) => {
   return data;
 };
 export const sendQuestion = async (requestId, questions) => {
-  const { data } = await Api.post(
-    `/verify/setquestion/${requestId}`,
+  const { data } = await Api.put(
+    `request/verify/setquestion/${requestId}`,
     questions
   );
   return data;
 };
 export const sendAnswers = async (requestId, questions) => {
-  const { data } = await Api.post(`/verify/setanswers/${requestId}`, questions);
+  const { data } = await Api.put(
+    `request/verify/setanswers/${requestId}`,
+    questions
+  );
   return data;
 };
 export const sendDecision = async (requestId, decision) => {
-  const { data } = await Api.post(`/verify/${requestId}`, decision);
+  const { data } = await Api.put(`request/verify/${requestId}`, decision);
   return data;
 };
