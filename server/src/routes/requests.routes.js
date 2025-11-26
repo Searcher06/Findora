@@ -9,8 +9,10 @@ import {
   setRequestDecision,
   handleItem,
   sendFoundRequest,
+  getRequestsById,
 } from "../controllers/request.controller.js";
 import {
+  basicRequestMiddleware,
   requestDecisionMiddleware,
   setRequestVerificationMiddleware,
   setVerificationAnswersMiddleware,
@@ -20,6 +22,14 @@ const router = express.Router();
 
 // Get all users requests
 router.get("/", authMiddleWare, getAllRequests);
+
+// Get request by id
+router.get(
+  "/:requestId",
+  authMiddleWare,
+  basicRequestMiddleware,
+  getRequestsById
+);
 
 // sends a claim request with item id
 router.post("/claim/:id", authMiddleWare, itemMiddleware, claimItem);

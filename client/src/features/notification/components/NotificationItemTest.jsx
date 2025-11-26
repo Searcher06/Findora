@@ -333,7 +333,7 @@ const NotificationItemTest = ({ notification, currentUserId }) => {
         {/* Footer with timestamp and button */}
         <div className="flex items-center justify-between pt-1">
           <p className="text-xs text-gray-500 font-medium">
-            {getTimeAgo(notification.createdAt)}
+            {getTimeAgo(notification.updatedAt)}
           </p>
 
           {config.buttonText && (
