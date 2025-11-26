@@ -7,14 +7,17 @@ import QuestionsSections from "../components/QuestionsSection";
 import { useNavigate, useParams } from "react-router-dom";
 import { useVerify } from "../hooks/useVerify";
 import { toast } from "react-toastify";
+import { useFetchRequestById } from "../hooks/useSingleRequest";
 const GenerateQuestions = () => {
+  const { requestId } = useParams();
+  const {
+    request,
+    loading: requestLoading,
+    error: requestError,
+  } = useFetchRequestById(requestId);
   const { sendVerificationQuestions, loading } = useVerify();
   const navigate = useNavigate();
-  const { requestId } = useParams();
-  const [questions, setQuestions] = useState([
-    { question: "What is the name of the item" },
-    { question: "Where do you lost it" },
-  ]);
+  const [questions, setQuestions] = useState([]);
   const handleSubmit = async () => {
     try {
       const finalQuestion = {
@@ -47,11 +50,17 @@ const GenerateQuestions = () => {
       <Header className={"text-xl pt-1 text-center"}>
         Create Verification Questions
       </Header>
-      <Progress value={62} className={"h-1 mt-2 [&>div]:bg-blue-500"} />
+      <Progress value={40} className={"h-1 mt-2 [&>div]:bg-blue-500"} />
       <p className="font-sans text-[13px] text-gray-500  mt-2">
-        Step 2 of 3 - Verification Questions
+        Step 2 of 5 - Verification Questions
       </p>
-      <ItemCardHorizontal image={itemImage} className={"mt-3"} />
+      <ItemCardHorizontal
+        image={itemImage}
+        className={"mt-3"}
+        request={request}
+        requestLoading={requestLoading}
+        requestError={requestError}
+      />
       <QuestionsSections
         className={"mt-3"}
         questions={questions}

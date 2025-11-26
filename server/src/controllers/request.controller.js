@@ -108,10 +108,22 @@ const getAllRequests = async (req, res) => {
     })
     .populate("finderId", "firstName lastName username profilePic") // Populate finder with user details
     .populate("claimerId", "firstName lastName username profilePic") // Populate claimer with user details
-    .populate("itemId", "name images"); // Populate item if needed
+    .populate("itemId", "name image");
 
   res.status(200).json(requests);
 };
+
+const getRequestsById = async (req, res) => {
+  const { id: requestId } = req.requestObject;
+  const request = await requestModel
+    .findById(requestId)
+    .populate("finderId", "firstName lastName username profilePic") // Populate finder with user details
+    .populate("claimerId", "firstName lastName username profilePic") // Populate claimer with user details
+    .populate("itemId", "name image");
+
+  res.status(200).json(request);
+};
+
 const setRequestQuestions = async (req, res) => {
   // Destructuring the request id from requesObject and changing the name to requestId
   const { id: requestId } = req.requestObject;
@@ -314,6 +326,7 @@ export {
   setRequestAnswers,
   setRequestDecision,
   handleItem,
+  getRequestsById,
 };
 
 /*
