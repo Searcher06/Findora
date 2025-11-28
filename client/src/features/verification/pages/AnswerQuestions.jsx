@@ -5,25 +5,16 @@ import ItemCardHorizontal from "../components/ItemCardHorizontal";
 import { useFetchRequestById } from "../hooks/useSingleRequest";
 import { useParams } from "react-router-dom";
 import { QuestionAndAnswerForm } from "../components/QuestionAndAnswerForm";
-import { useState } from "react";
 const AnswerQuestions = () => {
   const { requestId } = useParams();
   const {
     request,
+    questions,
+    setQuestions,
     loading: requestLoading,
     error: requestError,
   } = useFetchRequestById(requestId);
-  const [questions, setQuestions] = useState([
-    {
-      _id: 1,
-      question: "What is the name of the item ?",
-    },
-    { _id: 2, question: "What is the item brand ?" },
-    {
-      _id: 3,
-      question: "When last you see the item ?",
-    },
-  ]);
+  console.log(questions);
   return (
     <div className="mt-14 w-full px-4">
       <Header className={"text-xl pt-1 text-center line-clamp-1"}>
@@ -44,6 +35,9 @@ const AnswerQuestions = () => {
         className={"mt-3"}
         questions={questions}
         setQuestions={setQuestions}
+        requestLoading={requestLoading}
+        requestError={requestError}
+        requestId={requestId}
       />
     </div>
   );
