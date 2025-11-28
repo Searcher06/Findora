@@ -1,11 +1,44 @@
-/* eslint-disable no-unused-vars */
+import { useVerify } from "../hooks/useVerify";
 import { QuestionLabelAndInput } from "./QuestionLabelAndInput";
 import { Button } from "@/components/ui/button";
-export const InputsForm = ({ className, questions, setQuestions }) => {
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import { Spinner } from "@/components/ui/spinner";
+export const InputsForm = ({
+  className,
+  questions,
+  setQuestions,
+  requestId,
+}) => {
+  const navigate = useNavigate();
+  const { sendVerificationAnswers, loading } = useVerify();
   const handleQuestion = (index, answer) => {
     let copy = [...questions];
     copy[index] = { ...copy[index], answer: answer };
     setQuestions(copy);
+  };
+  const handelSubmint = async () => {
+    console.log(questions);
+    const finalQuestions = { answers: [...questions] };
+    try {
+      const response = await sendVerificationAnswers(requestId, finalQuestions);
+      toast.success("Answers sent successfully, wait for review");
+      console.log(response);
+      navigate("/");
+    } catch (error) {
+      if (error.response) {
+        // server responded with a non-2xx status
+        toast.error(
+          error?.response?.data?.message || "Failed to send answers!"
+        );
+      } else if (error.request) {
+        toast.error("No response from server");
+      } else {
+        // something else happended
+        toast.error("An error occured.");
+      }
+      console.error(error);
+    }
   };
   return (
     <form
@@ -23,9 +56,10 @@ export const InputsForm = ({ className, questions, setQuestions }) => {
       ))}
       <Button
         className={"text-xs mt-3 font-sans mb-3 w-full"}
-        onClick={() => console.log(questions)}
+        onClick={handelSubmint}
       >
-        Send Answers
+        {loading && <Spinner />}
+        {loading ? "Sending..." : "Send Answers"}
       </Button>
     </form>
   );

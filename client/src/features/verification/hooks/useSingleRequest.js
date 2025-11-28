@@ -3,6 +3,7 @@ import { getRequestById } from "../apis/verificationApi";
 export const useFetchRequestById = (requestId) => {
   const [request, setRequest] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [questions, setQuestions] = useState([]);
   const [error, setError] = useState(null);
   useEffect(() => {
     if (!requestId) return;
@@ -11,6 +12,7 @@ export const useFetchRequestById = (requestId) => {
         setLoading(true);
         const response = await getRequestById(requestId);
         setRequest(response);
+        response && setQuestions(response.questions);
       } catch (error) {
         setError(error.response?.data?.message || "failed to get request info");
         setRequest(null);
@@ -21,5 +23,5 @@ export const useFetchRequestById = (requestId) => {
     fetchFullRequest();
   }, [requestId]);
 
-  return { request, loading, error };
+  return { request, questions, setQuestions, loading, error };
 };
