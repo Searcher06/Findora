@@ -183,8 +183,8 @@ const setRequestAnswers = async (req, res) => {
     }
   }
 
-  // looping through each answer to find the question that matches the questionId
-  answers.forEach(({ questionId, answer }) => {
+  // looping through each answer to find the question that matches the question id
+  answers.forEach(({ _id: questionId, answer }) => {
     const q = request.questions.id(questionId);
 
     if (!mongoose.Types.ObjectId.isValid(questionId)) {
@@ -332,9 +332,9 @@ export {
 /*
 
   [
-    {questionId:123456,answer:"The bag is red in color"},
-    {questionId:245435,answer:"There is a black logo written on the bag"},
-    {questionId:245435,answer:""},
+    {_id:123456,answer:"The bag is red in color"},
+    {_id:245435,answer:"There is a black logo written on the bag"},
+    {_id:245435,answer:""},
   ]
 
 
