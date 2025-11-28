@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { Label } from "@/features/items";
 export const QuestionLabelAndInput = ({
   text,
