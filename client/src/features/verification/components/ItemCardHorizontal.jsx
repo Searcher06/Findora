@@ -34,6 +34,15 @@ const ItemCardHorizontal = ({
     );
   }
 
+  const displayClaimerOrFinder = () => {
+    if (location.pathname.includes("/verification/questions")) {
+      return `Claimer : ${request?.claimerId?.firstName} ${request?.claimerId?.lastName}`;
+    } else if (location.pathname.includes("/verification/answers")) {
+      return `Finder : ${request?.finderId?.firstName} ${request?.finderId?.lastName}`;
+    } else if (location.pathname.includes("/verification/decision")) {
+      return `Claimer : ${request?.claimerId?.firstName} ${request?.claimerId?.lastName}`;
+    }
+  };
   return (
     <div
       className={`flex items-center w-full h-20 gap-3 p-3 rounded-lg 
@@ -59,9 +68,7 @@ const ItemCardHorizontal = ({
           {request?.itemId?.name}
         </h1>
         <p className="font-sans text-xs text-gray-600 truncate">
-          {location.pathname.includes("/verificaton/questions")
-            ? `Claimer : ${request?.claimerId?.firstName} ${request?.claimerId?.lastName}`
-            : `Finder : ${request?.finderId?.firstName} ${request?.finderId?.lastName}`}
+          {displayClaimerOrFinder()}
         </p>
       </div>
     </div>

@@ -9,7 +9,11 @@ import { AuthProvider } from "@/context/AuthContext";
 import { ToastContainer } from "react-toastify";
 import PrivateRoute from "./privateRoute";
 import { NavProvider } from "@/context/NavContext";
-import { GenerateQuestions, AnswerQuestions } from "@/features/verification";
+import {
+  GenerateQuestions,
+  AnswerQuestions,
+  VerificationDecision,
+} from "@/features/verification";
 function AppRoutes() {
   return (
     <NavProvider>
@@ -31,12 +35,16 @@ function AppRoutes() {
                     <Route path="/update/:id" element={<UpdateItem />} />
                     <Route path="/notification" element={<Notification />} />
                     <Route
-                      path="/verificaton/questions/:requestId"
+                      path="/verification/questions/:requestId"
                       element={<GenerateQuestions />}
                     />
                     <Route
-                      path="/verificaton/answers/:requestId"
+                      path="/verification/answers/:requestId"
                       element={<AnswerQuestions />}
+                    />
+                    <Route
+                      path="/verification/decision/:requestId"
+                      element={<VerificationDecision />}
                     />
                   </Route>
                 </Route>
