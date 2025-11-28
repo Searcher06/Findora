@@ -1,6 +1,6 @@
 import { InputsForm } from "./InputsForm";
 import { InputsFormSkeleton } from "./InputsFormSkeleton"; // Import the skeleton
-
+import { useLocation } from "react-router-dom";
 export const QuestionAndAnswerForm = ({
   className,
   questions,
@@ -9,11 +9,14 @@ export const QuestionAndAnswerForm = ({
   requestError,
   requestId,
 }) => {
+  const location = useLocation();
   if (requestLoading) {
     return (
       <div className={`${className} w-full`}>
         <h1 className="font-sans text-[13px] font-bold text-gray-900">
-          Answer All Questions
+          {location.pathname.includes("/verification/decision")
+            ? "Make Decision"
+            : "Answer All Questions"}
         </h1>
         <InputsFormSkeleton className={"mt-2"} count={3} />
       </div>
@@ -25,13 +28,16 @@ export const QuestionAndAnswerForm = ({
   return (
     <div className={`${className} w-full`}>
       <h1 className="font-sans text-[13px] font-bold text-gray-900">
-        Answer All Questions
+        {location.pathname.includes("/verification/decision")
+          ? "Make Decision"
+          : "Answer All Questions"}
       </h1>
       <InputsForm
         className={"mt-2"}
         questions={questions}
         setQuestions={setQuestions}
         requestId={requestId}
+        location={location}
       />
     </div>
   );

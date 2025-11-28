@@ -4,13 +4,50 @@ import { Button } from "@/components/ui/button";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { Spinner } from "@/components/ui/spinner";
+import { CheckCircle, XCircle, Send } from "lucide-react";
+import { useEffect, useState } from "react";
 export const InputsForm = ({
   className,
   questions,
   setQuestions,
   requestId,
+  location,
 }) => {
+  const [decision, setDecision] = useState({
+    decision: {
+      value: "",
+    },
+  });
+  const { sendVerificationDecision } = useVerify();
   const navigate = useNavigate();
+  useEffect(() => {
+    if (decision.decision.value == "") return;
+    const sendDecision = async () => {
+      try {
+        const response = await sendVerificationDecision(requestId, decision);
+        toast.success("Decision sent successfully");
+        console.log(response);
+        navigate("/");
+      } catch (error) {
+        if (error.response) {
+          // server responded with a non-2xx status
+          toast.error(
+            error?.response?.data?.message || "Failed to send decision!"
+          );
+        } else if (error.request) {
+          toast.error("No response from server");
+        } else {
+          // something else happended
+          toast.error("An error occured.");
+        }
+        console.error(error);
+      }
+    };
+    sendDecision();
+  }, [decision]); // eslint-disable-line react-hooks/exhaustive-deps
+  const locationCondition = location.pathname.includes(
+    "/verification/decision"
+  );
   const { sendVerificationAnswers, loading } = useVerify();
   const handleQuestion = (index, answer) => {
     let copy = [...questions];
@@ -52,15 +89,43 @@ export const InputsForm = ({
           key={question._id}
           answer={question.answer}
           onChange={(answer) => handleQuestion(index, answer)}
+          location={location}
         />
       ))}
-      <Button
-        className={"text-xs mt-3 font-sans mb-3 w-full"}
-        onClick={handelSubmint}
-      >
-        {loading && <Spinner />}
-        {loading ? "Sending..." : "Send Answers"}
-      </Button>
+      {locationCondition ? (
+        <div className="w-full gap-3 flex justify-center items-center mt-3 mb-2">
+          <Button
+            className={"text-xs w-30"}
+            onClick={() => {
+              setDecision((prev) => ({
+                ...prev,
+                decision: { value: "accept" },
+              }));
+            }}
+          >
+            Accept
+          </Button>
+          <Button
+            className={"text-xs w-30"}
+            onClick={() => {
+              setDecision((prev) => ({
+                ...prev,
+                decision: { value: "reject" },
+              }));
+            }}
+          >
+            Reject
+          </Button>
+        </div>
+      ) : (
+        <Button
+          className={"text-xs mt-3 font-sans mb-3 w-full"}
+          onClick={handelSubmint}
+        >
+          {loading && <Spinner />}
+          {loading ? "Sending..." : "Send Answers"}
+        </Button>
+      )}
     </form>
   );
 };

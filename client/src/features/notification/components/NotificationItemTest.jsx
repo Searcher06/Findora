@@ -30,7 +30,7 @@ const NotificationItemTest = ({ notification, currentUserId }) => {
               buttonText: "Generate Questions",
               status: "Action Required",
               color: "blue",
-              navigate: `/verificaton/questions/${requestId}`,
+              navigate: `/verification/questions/${requestId}`,
             };
           }
 
@@ -63,6 +63,7 @@ const NotificationItemTest = ({ notification, currentUserId }) => {
               buttonText: "Review Claim",
               status: "Action Required",
               color: "orange",
+              navigate: `/verification/decision/${requestId}`,
             };
           }
 
@@ -148,7 +149,7 @@ const NotificationItemTest = ({ notification, currentUserId }) => {
               buttonText: "Answer Questions",
               status: "Action Required",
               color: "blue",
-              navigate: `/verificaton/answers/${requestId}`,
+              navigate: `/verification/answers/${requestId}`,
             };
           }
 
