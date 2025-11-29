@@ -40,6 +40,7 @@ export const VerificationDecision = () => {
         requestLoading={requestLoading}
         requestError={requestError}
         requestId={requestId}
+        request={request}
       />
     </div>
   );
