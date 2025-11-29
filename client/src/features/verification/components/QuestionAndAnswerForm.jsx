@@ -8,6 +8,7 @@ export const QuestionAndAnswerForm = ({
   requestLoading,
   requestError,
   requestId,
+  request,
 }) => {
   const location = useLocation();
   if (requestLoading) {
@@ -38,6 +39,7 @@ export const QuestionAndAnswerForm = ({
         setQuestions={setQuestions}
         requestId={requestId}
         location={location}
+        request={request}
       />
     </div>
   );

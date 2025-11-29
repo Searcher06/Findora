@@ -1,17 +1,19 @@
+/* eslint-disable no-unused-vars */
 import { useVerify } from "../hooks/useVerify";
 import { QuestionLabelAndInput } from "./QuestionLabelAndInput";
 import { Button } from "@/components/ui/button";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { Spinner } from "@/components/ui/spinner";
-import { CheckCircle, XCircle, Send } from "lucide-react";
 import { useEffect, useState } from "react";
+import { AcceptButton } from "./AlertBoxes";
 export const InputsForm = ({
   className,
   questions,
   setQuestions,
   requestId,
   location,
+  request,
 }) => {
   const [decision, setDecision] = useState({
     decision: {
@@ -77,6 +79,7 @@ export const InputsForm = ({
       console.error(error);
     }
   };
+
   return (
     <form
       className={`${className} w-full border rounded-lg p-4`}
@@ -94,7 +97,7 @@ export const InputsForm = ({
       ))}
       {locationCondition ? (
         <div className="w-full gap-3 flex justify-center items-center mt-3 mb-2">
-          <Button
+          <AcceptButton
             className={"text-xs w-30"}
             onClick={() => {
               setDecision((prev) => ({
@@ -102,9 +105,8 @@ export const InputsForm = ({
                 decision: { value: "accept" },
               }));
             }}
-          >
-            Accept
-          </Button>
+            request={request}
+          />
           <Button
             className={"text-xs w-30"}
             onClick={() => {
