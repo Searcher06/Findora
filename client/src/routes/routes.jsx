@@ -8,6 +8,7 @@ import { UploadPhotoProvider } from "@/features/items/context/UploadPhotoContext
 import { AuthProvider } from "@/context/AuthContext";
 import { ToastContainer } from "react-toastify";
 import PrivateRoute from "./privateRoute";
+import { ChatPage } from "@/features/chat";
 import { NavProvider } from "@/context/NavContext";
 import {
   GenerateQuestions,
@@ -46,6 +47,7 @@ function AppRoutes() {
                       path="/verification/decision/:requestId"
                       element={<VerificationDecision />}
                     />
+                    <Route path="/chat/:requestId" element={<ChatPage />} />
                   </Route>
                 </Route>
               </Routes>

@@ -328,19 +328,3 @@ export {
   handleItem,
   getRequestsById,
 };
-
-/*
-
-  [
-    {_id:123456,answer:"The bag is red in color"},
-    {_id:245435,answer:"There is a black logo written on the bag"},
-    {_id:245435,answer:""},
-  ]
-
-
-  [
-  {_id:123456,question:"What is the color of the bag"},
-  {_id:245435,question:"What is the color of the bags logo"},
-  ]
-
-*/

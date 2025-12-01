@@ -17,6 +17,7 @@ import {
   setRequestVerificationMiddleware,
   setVerificationAnswersMiddleware,
 } from "../middleware/request.js";
+import { notOwnerShipMiddleware } from "../middleware/itemOwnership.js";
 
 const router = express.Router();
 
@@ -32,10 +33,11 @@ router.get(
 );
 
 // sends a claim request with item id
-router.post("/claim/:id", authMiddleWare, itemMiddleware, claimItem);
+router.post("/claim/:id", authMiddleWare, notOwnerShipMiddleware, claimItem);
 
 // sends a found request with item id
-router.post("/found/:id", authMiddleWare, itemMiddleware, sendFoundRequest);
+// prettier-ignore
+router.post("/found/:id",authMiddleWare,notOwnerShipMiddleware,sendFoundRequest);
 
 // sends a verification questions inform of array of objects [{question:"what is the name of the item"}]
 router.put(
