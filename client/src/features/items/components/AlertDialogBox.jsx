@@ -137,18 +137,23 @@ export const RequestButton = ({ itemId, itemName, className, status }) => {
         <AlertDialogHeader>
           <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
           <AlertDialogDescription>
-            {status == "found"
-              ? `This action cannot be undone. This will send a claim request to the
-            finder of the item
-            ${(
-              <span className="font-semibold"> "{itemName}" </span>
-            )} they will then
-            set questions for you to answer in other to successfully verify you
-            are the real ownwer of the item`
-              : `This action cannot be undone. This will alert the
-            owner of the item
-            <span className="font-semibold"> "${itemName}" </span>
-            they will then send a claim request to you in other to start the verification process`}
+            {status == "found" ? (
+              <>
+                This action cannot be undone. This will send a claim request to
+                the finder of the item{" "}
+                <span className="font-semibold">"{itemName}"</span>
+                they will then set questions for you to answer in order to
+                successfully verify you are the real owner of the item.
+              </>
+            ) : (
+              <>
+                This action cannot be undone. This will alert the owner of the
+                item
+                <span className="font-semibold"> "{itemName}" </span> they will
+                then send a claim request to you in order to start the
+                verification process.
+              </>
+            )}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

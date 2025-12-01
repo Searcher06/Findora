@@ -1,4 +1,3 @@
-import { userModel } from "../models/user.model.js";
 import { itemModel } from "../models/item.model.js";
 import mongoose from "mongoose";
 
@@ -10,7 +9,6 @@ export const itemMiddleware = async (req, res, next) => {
     throw new Error("Invalid item ID");
   }
   const item = await itemModel.findById(id);
-  const user = await userModel.findById(req.user._id);
 
   // checking if there's no item
   if (!item) {
