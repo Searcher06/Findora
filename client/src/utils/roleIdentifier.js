@@ -1,7 +1,7 @@
 const getFinderOrclaimer = (userId, document) => {
-  if (userId == document.finderId._id) {
+  if (userId == document?.finderId?._id) {
     return "finder";
-  } else if (userId == document.claimerId._id) {
+  } else if (userId == document?.claimerId?._id) {
     return "claimer";
   }
 };

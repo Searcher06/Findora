@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { useVerify } from "../hooks/useVerify";
 import { QuestionLabelAndInput } from "./QuestionLabelAndInput";
 import { Button } from "@/components/ui/button";
@@ -6,7 +5,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { Spinner } from "@/components/ui/spinner";
 import { useEffect, useState } from "react";
-import { AcceptButton } from "./AlertBoxes";
+import { DecisionButton } from "./AlertBoxes";
 export const InputsForm = ({
   className,
   questions,
@@ -97,7 +96,7 @@ export const InputsForm = ({
       ))}
       {locationCondition ? (
         <div className="w-full gap-3 flex justify-center items-center mt-3 mb-2">
-          <AcceptButton
+          <DecisionButton
             className={"text-xs w-30"}
             onClick={() => {
               setDecision((prev) => ({
@@ -106,8 +105,9 @@ export const InputsForm = ({
               }));
             }}
             request={request}
+            type={"accept"}
           />
-          <Button
+          <DecisionButton
             className={"text-xs w-30"}
             onClick={() => {
               setDecision((prev) => ({
@@ -115,9 +115,9 @@ export const InputsForm = ({
                 decision: { value: "reject" },
               }));
             }}
-          >
-            Reject
-          </Button>
+            request={request}
+            type={"reject"}
+          />
         </div>
       ) : (
         <Button
