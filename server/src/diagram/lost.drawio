@@ -88,16 +88,13 @@
                     <mxGeometry x="170" y="540" width="110" height="30" as="geometry"/>
                 </mxCell>
                 <mxCell id="145" value="You rejected the claim requst by {owner} for {item}" style="rounded=1;whiteSpace=wrap;html=1;align=left;" parent="1" vertex="1">
-                    <mxGeometry x="100" y="760" width="230" height="40" as="geometry"/>
-                </mxCell>
-                <mxCell id="146" value="&lt;div style=&quot;&quot;&gt;{itemOwner} claims it&#39;s his {item}&lt;/div&gt;&lt;div style=&quot;&quot;&gt;generate a verification question&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;align=left;" parent="1" vertex="1">
-                    <mxGeometry x="100" y="640" width="230" height="50" as="geometry"/>
+                    <mxGeometry x="100" y="700" width="230" height="40" as="geometry"/>
                 </mxCell>
                 <mxCell id="147" value="You are required to review the following answers by {owner} for {item}" style="rounded=1;whiteSpace=wrap;html=1;align=left;" parent="1" vertex="1">
-                    <mxGeometry x="100" y="700" width="230" height="50" as="geometry"/>
+                    <mxGeometry x="100" y="640" width="230" height="50" as="geometry"/>
                 </mxCell>
-                <mxCell id="148" value="You accepted the claim request by {ownder{ for {item} you can now chat" style="rounded=1;whiteSpace=wrap;html=1;align=left;" parent="1" vertex="1">
-                    <mxGeometry x="100" y="810" width="230" height="50" as="geometry"/>
+                <mxCell id="148" value="You accepted the claim request by {owner} for {item} you can now chat" style="rounded=1;whiteSpace=wrap;html=1;align=left;" parent="1" vertex="1">
+                    <mxGeometry x="100" y="750" width="230" height="50" as="geometry"/>
                 </mxCell>
                 <mxCell id="149" value="" style="rounded=0;whiteSpace=wrap;html=1;rotation=90;" parent="1" vertex="1">
                     <mxGeometry x="279.7" y="620.31" width="398.12" height="242.5" as="geometry"/>
@@ -106,16 +103,10 @@
                     <mxGeometry x="420" y="540" width="110" height="30" as="geometry"/>
                 </mxCell>
                 <mxCell id="151" value="Your claim request was rejected for {item}&lt;div&gt;by {finder}&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;align=left;" parent="1" vertex="1">
-                    <mxGeometry x="365" y="760" width="225" height="40" as="geometry"/>
-                </mxCell>
-                <mxCell id="152" value="&lt;div style=&quot;&quot;&gt;You are required to answer the following&lt;/div&gt;&lt;div style=&quot;&quot;&gt;questions by {finder} for {item}&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;align=left;" parent="1" vertex="1">
-                    <mxGeometry x="362.5" y="640" width="225" height="50" as="geometry"/>
-                </mxCell>
-                <mxCell id="153" value="Your claim request was sent waiting for final decision" style="rounded=1;whiteSpace=wrap;html=1;align=left;" parent="1" vertex="1">
-                    <mxGeometry x="362.5" y="700" width="225" height="50" as="geometry"/>
+                    <mxGeometry x="362.5" y="645" width="225" height="40" as="geometry"/>
                 </mxCell>
                 <mxCell id="154" value="your claim request was accepted by {finder} for {item} you can now chat" style="rounded=1;whiteSpace=wrap;html=1;align=left;" parent="1" vertex="1">
-                    <mxGeometry x="362.5" y="810" width="225" height="50" as="geometry"/>
+                    <mxGeometry x="362.5" y="695" width="225" height="50" as="geometry"/>
                 </mxCell>
                 <mxCell id="155" value="Finder" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
                     <mxGeometry x="200" y="510" width="60" height="30" as="geometry"/>
@@ -123,10 +114,10 @@
                 <mxCell id="156" value="Claimer" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
                     <mxGeometry x="440" y="510" width="60" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="157" value="You sent a found request to {itemOwner}&lt;div&gt;wait for his response&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;align=left;" parent="1" vertex="1">
+                <mxCell id="157" value="You sent a found request to {itemOwner}&lt;div&gt;You are required to generate verification questions [generate]&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;align=left;" parent="1" vertex="1">
                     <mxGeometry x="100" y="580" width="230" height="50" as="geometry"/>
                 </mxCell>
-                <mxCell id="158" value="{itemFinder} claims he found your {item}&lt;div&gt;waiting for your claim request&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;align=left;" parent="1" vertex="1">
+                <mxCell id="158" value="{itemFinder} claims he found your {item}&lt;div&gt;now they have send verification question to prove ownership [proceed]&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;align=left;" parent="1" vertex="1">
                     <mxGeometry x="365" y="580" width="225" height="50" as="geometry"/>
                 </mxCell>
                 <mxCell id="159" style="edgeStyle=none;html=1;" parent="1" source="151" target="138" edge="1">
@@ -148,10 +139,10 @@
                     <mxGeometry x="660" y="560" width="120" height="60" as="geometry"/>
                 </mxCell>
                 <mxCell id="163" value="The item {item} was marked as returned" style="rounded=1;whiteSpace=wrap;html=1;align=left;" parent="1" vertex="1">
-                    <mxGeometry x="100" y="870" width="230" height="50" as="geometry"/>
+                    <mxGeometry x="100" y="810" width="230" height="50" as="geometry"/>
                 </mxCell>
                 <mxCell id="164" value="The item {item} was marked as returned" style="rounded=1;whiteSpace=wrap;html=1;align=left;" parent="1" vertex="1">
-                    <mxGeometry x="362.5" y="870" width="230" height="50" as="geometry"/>
+                    <mxGeometry x="360" y="750" width="230" height="50" as="geometry"/>
                 </mxCell>
             </root>
         </mxGraphModel>
