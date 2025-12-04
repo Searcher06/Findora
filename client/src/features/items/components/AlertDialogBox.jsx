@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { Button } from "@/components/ui/button";
 import {
   AlertDialog,
@@ -93,12 +92,14 @@ export const RequestButton = ({ itemId, itemName, className, status }) => {
       if (status === "lost") {
         await sendFoundRequest(itemId);
         toast.success("Found request sent successfully");
+        console.log(data);
+        navigate(`/verification/questions/${data?._id}`);
       } else if (status === "found") {
         await sendClaimRequest(itemId);
+        console.log(data);
         toast.success("Claim request sent successfully");
+        navigate("/");
       }
-
-      navigate("/");
     } catch (error) {
       if (error.response) {
         // server responded with a non-2xx status
@@ -116,7 +117,7 @@ export const RequestButton = ({ itemId, itemName, className, status }) => {
       setLoading(false);
     }
   };
-
+  console.log(data);
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
