@@ -27,10 +27,11 @@ export const useVerify = () => {
   const sendFoundRequest = async (id) => {
     try {
       setLoading(true);
-      const data = await sendFound(id);
-      setData(data);
+      const response = await sendFound(id);
+      setData(response);
+      console.log(response);
     } catch (error) {
-      setError(error.response?.data?.message || "failed to send claim request");
+      setError(error.response?.data?.message || "failed to send request");
       throw error;
     } finally {
       setLoading(false);
@@ -87,5 +88,6 @@ export const useVerify = () => {
     sendVerificationQuestions,
     sendVerificationAnswers,
     sendVerificationDecision,
+    setData,
   };
 };

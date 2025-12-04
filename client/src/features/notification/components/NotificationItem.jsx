@@ -480,7 +480,6 @@ const NotificationItemTest = ({ notification, currentUserId }) => {
   const config = getNotificationConfig();
   const LucideIcon = Icon[config.icon];
 
-  // Enhanced styling functions
   const getStatusBadgeClass = () => {
     const baseClasses = "text-xs font-semibold px-2 py-1 rounded-full border";
 
@@ -528,7 +527,6 @@ const NotificationItemTest = ({ notification, currentUserId }) => {
     }
   };
 
-  // Calculate time ago
   const getTimeAgo = (dateString) => {
     const date = new Date(dateString);
     const now = new Date();
