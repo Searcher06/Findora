@@ -5,6 +5,7 @@ import { useState, useMemo } from "react";
 import { useNotification } from "../hooks/useNotifications";
 import { useAuthStore } from "@/context/AuthContext";
 import { Skeleton } from "@/components/ui/skeleton";
+import NotificationItem from "../components/NotificationItem";
 const Notification = () => {
   const { notifications: sampleRequests, loading, error } = useNotification();
   const { user } = useAuthStore();
@@ -146,7 +147,7 @@ const Notification = () => {
           </div>
         ) : (
           userNotifications.map((request) => (
-            <NotificationItemTest
+            <NotificationItem
               key={request._id}
               notification={request}
               currentUserId={currentUserId}

@@ -29,7 +29,7 @@ export const useVerify = () => {
       setLoading(true);
       const response = await sendFound(id);
       setData(response);
-      console.log(response);
+      return response;
     } catch (error) {
       setError(error.response?.data?.message || "failed to send request");
       throw error;

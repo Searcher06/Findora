@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import * as Icon from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-const NotificationItemTest = ({ notification, currentUserId }) => {
+const NotificationItem = ({ notification, currentUserId }) => {
   const navigate = useNavigate();
   const requestId = notification._id;
   // Determine if current user is finder or claimer
@@ -593,4 +593,4 @@ const NotificationItemTest = ({ notification, currentUserId }) => {
   );
 };
 
-export default NotificationItemTest;
+export default NotificationItem;
