@@ -81,7 +81,7 @@ export const DeleteItemButton = ({ itemId, itemName, className }) => {
   );
 };
 export const RequestButton = ({ itemId, itemName, className, status }) => {
-  const { sendClaimRequest, loading, data, setLoading, sendFoundRequest } =
+  const { sendClaimRequest, loading, setLoading, sendFoundRequest } =
     useVerify();
 
   const navigate = useNavigate();
@@ -90,13 +90,12 @@ export const RequestButton = ({ itemId, itemName, className, status }) => {
       setLoading(true);
 
       if (status === "lost") {
-        await sendFoundRequest(itemId);
+        const response = await sendFoundRequest(itemId);
         toast.success("Found request sent successfully");
-        console.log(data);
-        navigate(`/verification/questions/${data?._id}`);
+        console.log(response);
+        navigate(`/verification/questions/${response?._id}`);
       } else if (status === "found") {
         await sendClaimRequest(itemId);
-        console.log(data);
         toast.success("Claim request sent successfully");
         navigate("/");
       }
@@ -117,7 +116,6 @@ export const RequestButton = ({ itemId, itemName, className, status }) => {
       setLoading(false);
     }
   };
-  console.log(data);
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
