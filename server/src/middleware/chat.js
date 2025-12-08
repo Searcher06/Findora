@@ -14,7 +14,7 @@ export const chatMiddleware = async (req, res, next) => {
     throw new Error("User not found!");
   }
 
-  // checking the dB for any request in which the request status is accepted,
+  // checking the dB for any request in which the request status is accepted
   // and either the finder is the current user and the claimer is the user to chat
   // or the finder is the user to chat and the claimer is the current user
   const request = await requestModel.findOne({
@@ -29,7 +29,7 @@ export const chatMiddleware = async (req, res, next) => {
   if (!request) {
     res.status(403);
     throw new Error(
-      "You can't chat with this user, you don't have any request case"
+      "You can't chat with this user, you don't have any lost or found item case"
     );
   }
 
