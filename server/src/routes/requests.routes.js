@@ -7,8 +7,14 @@ import {
   sendFoundRequest,
   getRequestsById,
 } from "../controllers/request.controller.js";
-import { basicRequestMiddleware } from "../middleware/request.js";
-import { notOwnerShipMiddleware } from "../middleware/itemOwnership.js";
+import {
+  basicRequestMiddleware,
+  requestDecisionMiddleware,
+} from "../middleware/request.js";
+import {
+  notOwnerShipMiddleware,
+  ownerShipMiddleware,
+} from "../middleware/itemOwnership.js";
 
 const router = express.Router();
 
@@ -29,6 +35,9 @@ router.post("/claim/:id", authMiddleWare, notOwnerShipMiddleware, claimItem);
 // sends a found request with item id
 // prettier-ignore
 router.post("/found/:id",authMiddleWare,notOwnerShipMiddleware,sendFoundRequest);
+
+// prettier-ignore
+router.post("/accept",authMiddleWare,basicRequestMiddleware,requestDecisionMiddleware,)
 
 // Item handling
 router.post("/handle/:requestId", authMiddleWare, handleItem);
