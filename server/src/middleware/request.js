@@ -18,3 +18,13 @@ export const basicRequestMiddleware = async (req, res, next) => {
   req.requestObject = await requestModel.findById(request.id);
   next();
 };
+export const requestDecisionMiddleware = async (req, res, next) => {
+  // checiking if the current user id matches the finder Id
+  // cause only the finder can decide whether to a claim
+  if (request.finderId.toString() != userID.toString()) {
+    res.status(403);
+    throw new Error("Forbidden, not authorized!");
+  }
+  req.requestObject = await requestModel.findById(request.id);
+  next();
+};

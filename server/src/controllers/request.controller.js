@@ -99,7 +99,6 @@ const getAllRequests = async (req, res) => {
 
   res.status(200).json(requests);
 };
-
 const getRequestsById = async (req, res) => {
   const { id: requestId } = req.requestObject;
   const request = await requestModel
@@ -110,7 +109,28 @@ const getRequestsById = async (req, res) => {
 
   res.status(200).json(request);
 };
+const acceptClaim = async (req, res) => {
+  const { id: requestId, itemId } = req.requestObject;
+  const request = await requestModel.findById(requestId);
+  const item = await itemModel.findById(itemId);
+  let finderCode = "";
+  let claimerCode = "";
 
+  item.status = "claimed";
+  request.status = "accepted";
+
+  for (let i = 1; i <= 4; i++) {
+    finderCode += Math.floor(Math.random() * 10);
+    claimerCode += Math.floor(Math.random() * 10);
+  }
+
+  request.finderCode = finderCode;
+  request.claimerCode = claimerCode;
+  await item.save();
+  await request.save();
+  const updatedRequest = await requestModel.findById(requestId);
+  res.status(200).json(updatedRequest);
+};
 const handleItem = async (req, res) => {
   const { requestId } = req.params;
   const { id: userID } = req.user;
@@ -123,6 +143,7 @@ const handleItem = async (req, res) => {
   const request = await requestModel.findOne({
     _id: requestId,
     $or: [{ finderId: userID }, { claimerId: userID }],
+    status: "accepted",
   });
 
   // checking if there's no request
@@ -194,4 +215,5 @@ export {
   getAllRequests,
   handleItem,
   getRequestsById,
+  acceptClaim,
 };
