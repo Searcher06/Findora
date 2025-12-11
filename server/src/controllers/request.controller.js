@@ -1,71 +1,47 @@
-import mongoose from "mongoose";
 import { itemModel } from "../models/item.model.js";
 import { requestModel } from "../models/request.model.js";
 import { validateId } from "../utils/validateID.js";
+import { messageModel } from "../models/message.model.js";
 
 const claimItem = async (req, res) => {
   const { id: userID } = req.user;
-  const { id: itemId } = req.item; // id
+  const { id: itemId } = req.item;
   const item = await itemModel.findById(itemId);
   const finderId = item.reportedBy;
 
-  // checking if there is a found request in which the item id is the current item id
-  // the claimerid is the current user and the requestType is "found"
-  const foundRequest = await requestModel.findOne({
-    itemId, // the current item
-    claimerId: userID, // the current user and also == item.reportedby
-    requestType: "found", // claim
+  const requestExist = await requestModel.findOne({
+    claimerId: userID,
+    finderId: finderId,
+    requestType: "claim",
+    itemId: itemId,
+    status: "pending",
   });
 
-  if (foundRequest) {
-    foundRequest.requestType = "claim";
-    await foundRequest.save();
-    const updatedFoundRequest = await requestModel.findById(foundRequest.id);
-    res.status(200).json(updatedFoundRequest);
-  } else {
-    const requestExists = await requestModel.findOne({
-      itemId,
-      finderId,
-      claimerId: userID,
-      requestType: "claim",
-    });
-
-    const foundRequestExists = await requestModel.findOne({
-      itemId,
-      claimerId: item.reportedBy,
-    });
-
-    if (foundRequestExists) {
-      // checking if the finder who sends a found request initially
-      // is trying to make a claim request of the item they find
-      if (userID == foundRequestExists.finderId.toString()) {
-        res.status(404);
-        throw new Error("Can't claim the item you found!");
-      }
-    }
-
-    // checking if the there is claim request for the same item by the same finder and claimer
-    if (requestExists) {
-      res.status(400);
-      throw new Error("You already sent a claim request for this item!");
-    }
-
-    // checking if the current user id matches the id of who reported the item
-    // in order to prevent the user who posted an item from making a claim request on the item they posted
-    if (userID == item.reportedBy.toString()) {
-      res.status(403);
-      throw new Error("You can't claim an item you posted");
-    }
-
-    const request = await requestModel.create({
-      itemId,
-      finderId,
-      claimerId: userID,
-      requestType: "claim",
-    });
-
-    res.status(201).json(request);
+  console.log(requestExist);
+  if (requestExist) {
+    res.status(400);
+    throw new Error(
+      "You already sent request for this item!\nContact the the person that posted the item\nin the chats page"
+    );
   }
+
+  const message = await messageModel.create({
+    receiverId: finderId,
+    senderId: userID,
+    text: "This is item is mine!",
+  });
+
+  const request = await requestModel.create({
+    requestType: "claim",
+    finderId,
+    claimerId: userID,
+    itemId,
+  });
+
+  res.status(201).json({
+    message,
+    request,
+  });
 };
 const sendFoundRequest = async (req, res) => {
   const { id: userID } = req.user;
@@ -82,13 +58,21 @@ const sendFoundRequest = async (req, res) => {
 
   if (requestExists) {
     res.status(400);
-    throw new Error("You already sent a found request for this item!");
+    throw new Error(
+      "You already sent a request for this item!\nMessage the person that posted the item instead\nin the chat page."
+    );
   }
 
   if (item.status != "lost") {
     res.status(400);
     throw new Error("Can only send a found request to a lost item");
   }
+
+  const message = await messageModel.create({
+    receiverId: claimerId,
+    senderId: userID,
+    text: "I think I found your item!",
+  });
 
   const request = await requestModel.create({
     itemId,
@@ -97,7 +81,10 @@ const sendFoundRequest = async (req, res) => {
     requestType: "found",
   });
 
-  res.status(201).json(request);
+  res.status(201).json({
+    request,
+    message,
+  });
 };
 const getAllRequests = async (req, res) => {
   const { id: userId } = req.user;
@@ -124,122 +111,6 @@ const getRequestsById = async (req, res) => {
   res.status(200).json(request);
 };
 
-const setRequestQuestions = async (req, res) => {
-  // Destructuring the request id from requesObject and changing the name to requestId
-  const { id: requestId } = req.requestObject;
-  // Getting the full request info from
-  const request = await requestModel.findById(requestId);
-  // Destructuring the questions array
-  const { questions } = req.body;
-  // checking the length of question array
-  if (questions.length < 2) {
-    res.status(400);
-    throw new Error("You have to ask atleast two question");
-  }
-  // looping through each question object for validation
-  for (const q of questions) {
-    if (
-      !q.question ||
-      typeof q.question !== "string" ||
-      q.question.trim().length < 5
-    ) {
-      res.status(400);
-      throw new Error("Each question must be atleast 5 characters.");
-    }
-  }
-
-  request.questions.push(...questions);
-  await request.save();
-
-  const updatedRequest = await requestModel.findById(requestId);
-  res.status(200).json(updatedRequest);
-};
-const setRequestAnswers = async (req, res) => {
-  // Destructuring the request id from requesObject and changing the name to requestId
-  const { id: requestId } = req.requestObject;
-
-  // Getting the full request info from
-  const request = await requestModel.findById(requestId);
-
-  // Destructuring the answers array
-  const { answers } = req.body;
-
-  // Getting the questions array from the request document
-  const questions = request.questions;
-
-  // checking if both the questions and answers array have the same length
-  // to make sure all questions are answered
-  if (questions.length != answers.length) {
-    res.status(400);
-    throw new Error("All questions needs to be answered.");
-  }
-
-  for (const a of answers) {
-    if (!a.answer || a.answer.trim().length < 1) {
-      res.status(400);
-      throw new Error(
-        "Answer should not be blank\nAll questions needs to be answered"
-      );
-    }
-  }
-
-  // looping through each answer to find the question that matches the question id
-  answers.forEach(({ _id: questionId, answer }) => {
-    const q = request.questions.id(questionId);
-
-    if (!mongoose.Types.ObjectId.isValid(questionId)) {
-      res.status(400);
-      throw new Error("Invalid question ID");
-    }
-
-    if (!q) {
-      res.status(404);
-      throw new Error("Question not found!");
-    }
-    q.answer = answer;
-  });
-
-  await request.save();
-  const updatedRequest = await requestModel.findById(requestId);
-  res.status(200).json(updatedRequest);
-};
-const setRequestDecision = async (req, res) => {
-  const { id: requestId, itemId } = req.requestObject;
-  // const { itemId } = req.requestObject;
-  let { value: decision } = req.body.decision;
-  let finderCode = "";
-  let claimerCode = "";
-
-  const request = await requestModel.findById(requestId);
-  const item = await itemModel.findById(itemId);
-
-  if (!decision) {
-    res.status(400);
-    throw new Error("Decision can't be blank!");
-  }
-
-  if (decision != "accept" && decision != "reject") {
-    res.status(400);
-    throw new Error("Decision can either be accept or reject");
-  }
-
-  if (decision == "accept") {
-    item.status = "claimed";
-    for (let i = 1; i <= 4; i++) {
-      finderCode += Math.floor(Math.random() * 10);
-      claimerCode += Math.floor(Math.random() * 10);
-    }
-    request.finderCode = finderCode;
-    request.claimerCode = claimerCode;
-    await item.save();
-  }
-
-  decision += "ed";
-  request.status = decision;
-  await request.save();
-  const updatedRequest = await requestModel.findById(requestId);
-  res.status(200).json(updatedRequest);
-};
 const handleItem = async (req, res) => {
   const { requestId } = req.params;
   const { id: userID } = req.user;
@@ -252,7 +123,6 @@ const handleItem = async (req, res) => {
   const request = await requestModel.findOne({
     _id: requestId,
     $or: [{ finderId: userID }, { claimerId: userID }],
-    status: "accepted",
   });
 
   // checking if there's no request
@@ -322,9 +192,6 @@ export {
   claimItem,
   sendFoundRequest,
   getAllRequests,
-  setRequestQuestions,
-  setRequestAnswers,
-  setRequestDecision,
   handleItem,
   getRequestsById,
 };

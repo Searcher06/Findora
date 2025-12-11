@@ -15,11 +15,6 @@ import {
 import upload from "../middleware/upload.js";
 const router = express.Router();
 
-/* 
-router.delete("/:id")
- Delete an item from the DB using its ID when status == "returned"
-*/
-
 router.get("/lost", authMiddleWare, lostItems);
 router.get("/found", authMiddleWare, foundItems);
 router.get("/user/:username", authMiddleWare, getUserPostsByUsername);
