@@ -34,12 +34,13 @@ const sendMessage = async (req, res) => {
 const getAllMessages = async (req, res) => {
   const { id: userToChatId } = req.userToChat;
   const { id: userId } = req.user;
-
+  const { requestId } = req.params;
   const messages = await messageModel.find({
     $or: [
       { senderId: userId, receiverId: userToChatId },
       { senderId: userToChatId, receiverId: userId },
     ],
+    requestId,
   });
 
   res.status(200).json(messages);
