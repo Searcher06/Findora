@@ -6,13 +6,14 @@ const getUsersToChat = async (req, res) => {
     .find({
       $or: [{ finderId: userId }, { claimerId: userId }],
     })
-    .populate("claimerId", "-password")
-    .populate("finderId", "-password");
+    .populate("finderId", "-password")
+    .populate("claimerId", "-password");
   res.status(200).json(users);
 };
 const sendMessage = async (req, res) => {
   const { id: userToChatId } = req.userToChat;
   const { id: userId } = req.user;
+  const { requestId } = req.params;
   let { value: text } = req.body.message;
   text = text.trim();
 
@@ -25,6 +26,7 @@ const sendMessage = async (req, res) => {
     senderId: userId,
     receiverId: userToChatId,
     text,
+    requestId,
   });
 
   res.status(201).json(newMessage);

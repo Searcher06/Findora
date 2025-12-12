@@ -33,7 +33,7 @@ const claimItem = async (req, res) => {
 
   const request = await requestModel.create({
     requestType: "claim",
-    finderId,
+    finderId: item.reportedBy,
     claimerId: userID,
     itemId,
   });

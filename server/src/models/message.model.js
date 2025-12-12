@@ -15,6 +15,11 @@ const schema = new mongoose.Schema(
     text: {
       type: String,
     },
+    requestId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Request",
+      required: true,
+    },
   },
   { timestamps: true }
 );

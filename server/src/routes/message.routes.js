@@ -12,7 +12,7 @@ const router = express.Router();
 router.get("/users", authMiddleWare, getUsersToChat);
 
 router
-  .route("/:username")
+  .route("/:requestId/:username")
   .post(authMiddleWare, chatMiddleware, sendMessage) // send message
   .get(authMiddleWare, chatMiddleware, getAllMessages); // get messages
 

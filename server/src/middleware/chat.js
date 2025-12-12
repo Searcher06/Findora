@@ -1,36 +1,30 @@
 import { userModel } from "../models/user.model.js";
 import { requestModel } from "../models/request.model.js";
-
+import mongoose from "mongoose";
 export const chatMiddleware = async (req, res, next) => {
   // destructuring the username from the req parameter
-  const { username: userToChatUsername } = req.params;
-  const { id: userId } = req.user;
+  const { username: userToChatUsername, requestId } = req.params;
 
+  // getting the user to send message to, using their username
   const userToChat = await userModel.findOne({ username: userToChatUsername });
 
-  // if there no user found throw an error
+  // checking if theres no user with such username, throw an error
   if (!userToChat) {
     res.status(404);
     throw new Error("User not found!");
   }
 
-  // checking the dB for any request in which the request status is accepted
-  // and either the finder is the current user and the claimer is the user to chat
-  // or the finder is the user to chat and the claimer is the current user
-  const request = await requestModel.findOne({
-    status: "accepted",
-    $or: [
-      { finderId: userId, claimerId: userToChat.id },
-      { finderId: userToChat.id, claimerId: userId },
-    ],
-  });
+  // checking if the requestId is valid
+  if (!mongoose.Types.ObjectId.isValid(requestId)) {
+    res.status(400);
+    throw new Error("Invalid request ID, check your url");
+  }
 
-  // If the above request doesn't exist throw an error
-  if (!request) {
-    res.status(403);
-    throw new Error(
-      "You can't chat with this user, you don't have any lost or found item case"
-    );
+  const requestExists = await requestModel.findById(requestId);
+  // checking if there's no request
+  if (!requestExists) {
+    res.status(404);
+    throw new Error("Request not found!, check your url, for incorrect id");
   }
 
   req.userToChat = userToChat;
