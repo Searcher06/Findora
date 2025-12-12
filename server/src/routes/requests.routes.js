@@ -6,6 +6,7 @@ import {
   handleItem,
   sendFoundRequest,
   getRequestsById,
+  acceptClaim,
 } from "../controllers/request.controller.js";
 import {
   basicRequestMiddleware,
@@ -37,7 +38,7 @@ router.post("/claim/:id", authMiddleWare, notOwnerShipMiddleware, claimItem);
 router.post("/found/:id",authMiddleWare,notOwnerShipMiddleware,sendFoundRequest);
 
 // prettier-ignore
-router.post("/accept",authMiddleWare,basicRequestMiddleware,requestDecisionMiddleware,)
+router.post("/accept/:requestId",authMiddleWare,basicRequestMiddleware,requestDecisionMiddleware,acceptClaim)
 
 // Item handling
 router.post("/handle/:requestId", authMiddleWare, handleItem);

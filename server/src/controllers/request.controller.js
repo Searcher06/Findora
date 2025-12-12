@@ -138,7 +138,7 @@ const handleItem = async (req, res) => {
   // checking if the requestId is valid
   if (validateId(requestId)) {
     res.status(400);
-    throw new Error("Invalid request ID");
+    throw new Error("Invalid request ID, or check your url");
   }
   const request = await requestModel.findOne({
     _id: requestId,
@@ -152,17 +152,6 @@ const handleItem = async (req, res) => {
     throw new Error("Request not found!");
   }
 
-  const item = await itemModel.findById(request.itemId);
-  if (!item) {
-    res.status(404);
-    throw new Error("Item not found!");
-  }
-
-  if (request.status == "returned") {
-    res.status(403);
-    throw new Error("Item already returned");
-  }
-
   // checking if the current user is the finder
   if (userID.toString() == request.finderId.toString()) {
     // checking if the finder code is not equal to the claimer code
@@ -173,7 +162,7 @@ const handleItem = async (req, res) => {
 
     if (request.claimerVerified) {
       res.status(400);
-      throw new Error("Claimer already verified!");
+      throw new Error("Claimer already verified!"); //todo:change the grammer later
     }
     // verifying the claimer
     request.claimerVerified = true;
@@ -198,6 +187,7 @@ const handleItem = async (req, res) => {
   const updatedRequest = await requestModel.findById(requestId);
 
   if (updatedRequest.finderVerified && updatedRequest.claimerVerified) {
+    const item = await itemModel.findById(request.itemId);
     updatedRequest.status = "returned";
     item.status = "returned";
     await item.save();
