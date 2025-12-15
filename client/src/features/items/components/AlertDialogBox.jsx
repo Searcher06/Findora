@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { Button } from "@/components/ui/button";
 import {
   AlertDialog,
@@ -95,7 +96,7 @@ export const RequestButton = ({ itemId, itemName, className, status }) => {
         console.log(response);
         navigate(`/verification/questions/${response?._id}`);
       } else if (status === "found") {
-        await sendClaimRequest(itemId);
+        const response = await sendClaimRequest(itemId);
         toast.success("Claim request sent successfully");
         navigate("/");
       }
