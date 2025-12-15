@@ -16,6 +16,7 @@ export const useVerify = () => {
       setLoading(true);
       const data = await sendClaim(id);
       setData(data);
+      return data;
     } catch (error) {
       setError(error.response?.data?.message || "failed to send claim request");
       throw error;

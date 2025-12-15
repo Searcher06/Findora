@@ -35,19 +35,22 @@ function AppRoutes() {
                     <Route path="/report" element={<ReportPage />} />
                     <Route path="/update/:id" element={<UpdateItem />} />
                     <Route path="/notification" element={<Notification />} />
-                    <Route
+                    {/* <Route
                       path="/verification/questions/:requestId"
                       element={<GenerateQuestions />}
                     />
                     <Route
                       path="/verification/answers/:requestId"
                       element={<AnswerQuestions />}
-                    />
+                    /> */}
                     <Route
                       path="/verification/decision/:requestId"
                       element={<VerificationDecision />}
                     />
-                    <Route path="/chat/:requestId" element={<ChatPage />} />
+                    <Route
+                      path="/chat/:requestId/:username"
+                      element={<ChatPage />}
+                    />
                   </Route>
                 </Route>
               </Routes>

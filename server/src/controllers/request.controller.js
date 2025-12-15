@@ -34,6 +34,12 @@ const claimItem = async (req, res) => {
 
   await request.save();
 
+  const populatedRequest = await requestModel
+    .findById(request.id)
+    .populate("finderId")
+    .populate("claimerId")
+    .populate("itemId");
+
   const message = await messageModel.create({
     receiverId: finderId,
     senderId: userID,
@@ -44,7 +50,7 @@ const claimItem = async (req, res) => {
 
   res.status(201).json({
     message,
-    request,
+    populatedRequest,
   });
 };
 const sendFoundRequest = async (req, res) => {
@@ -72,21 +78,30 @@ const sendFoundRequest = async (req, res) => {
     throw new Error("Can only send a found request to a lost item");
   }
 
-  const message = await messageModel.create({
-    receiverId: claimerId,
-    senderId: userID,
-    text: "I think I found your item!",
-  });
-
   const request = await requestModel.create({
     itemId,
     finderId: userID,
     claimerId,
     requestType: "found",
   });
+  await request.save();
+
+  const populatedRequest = await requestModel
+    .findById(request.id)
+    .populate("finderId")
+    .populate("claimerId")
+    .populate("itemId");
+
+  const message = await messageModel.create({
+    receiverId: claimerId,
+    senderId: userID,
+    text: "I think I found your item!",
+    requestId: request.id,
+  });
+  await request.save();
 
   res.status(201).json({
-    request,
+    populatedRequest,
     message,
   });
 };
