@@ -25,18 +25,22 @@ const claimItem = async (req, res) => {
     );
   }
 
-  const message = await messageModel.create({
-    receiverId: finderId,
-    senderId: userID,
-    text: "This is item is mine!",
-  });
-
   const request = await requestModel.create({
     requestType: "claim",
     finderId: item.reportedBy,
     claimerId: userID,
     itemId,
   });
+
+  await request.save();
+
+  const message = await messageModel.create({
+    receiverId: finderId,
+    senderId: userID,
+    text: "This is item is mine!",
+    requestId: request.id,
+  });
+  await message.save();
 
   res.status(201).json({
     message,
