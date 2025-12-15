@@ -15,6 +15,7 @@ import { useItems } from "../hooks/useItems";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useVerify } from "@/features/verification";
+import { useAuthStore } from "@/context/AuthContext";
 export const DeleteItemButton = ({ itemId, itemName, className }) => {
   const {
     deleteAnItem,
@@ -84,21 +85,39 @@ export const DeleteItemButton = ({ itemId, itemName, className }) => {
 export const RequestButton = ({ itemId, itemName, className, status }) => {
   const { sendClaimRequest, loading, setLoading, sendFoundRequest } =
     useVerify();
-
+  const { user } = useAuthStore();
+  const determineUserTochat = (user, request) => {
+    console.log(request);
+    if (user._id == request.finderId._id) {
+      return `${request.claimerId.username}`;
+    } else if (user._id == request.claimerId._id) {
+      return `${request.finderId.username}`;
+    }
+  };
   const navigate = useNavigate();
   const handleRequest = async () => {
     try {
       setLoading(true);
-
       if (status === "lost") {
         const response = await sendFoundRequest(itemId);
         toast.success("Found request sent successfully");
+        navigate(
+          `/chat/${response.populatedRequest._id}/${determineUserTochat(
+            user,
+            response.populatedRequest
+          )}`
+        );
         console.log(response);
-        navigate(`/verification/questions/${response?._id}`);
       } else if (status === "found") {
         const response = await sendClaimRequest(itemId);
         toast.success("Claim request sent successfully");
-        navigate("/");
+        navigate(
+          `/chat/${response.populatedRequest._id}/${determineUserTochat(
+            user,
+            response.populatedRequest
+          )}`
+        );
+        console.log(response);
       }
     } catch (error) {
       if (error.response) {
