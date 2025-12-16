@@ -5,6 +5,7 @@ import AddButton from "./components/AddButton";
 import ReportPage from "./pages/Report";
 import { UpdateItem } from "./pages/UpdateItem";
 import Label from "./components/Label";
+import { ItemStatus } from "./components/ItemStatus";
 export {
   BrowsePage,
   ViewItem,
@@ -13,4 +14,5 @@ export {
   ReportPage,
   UpdateItem,
   Label,
+  ItemStatus,
 };
