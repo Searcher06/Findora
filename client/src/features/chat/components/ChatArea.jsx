@@ -3,7 +3,7 @@ import avatarimage from "../../../constants/avatar2.jpg";
 
 export const ChatArea = () => {
   return (
-    <div className="flex-1 overflow-y-auto p-6 space-y-6 bg-gradient-to-b from-gray-50 to-gray-100">
+    <div className="h-full overflow-y-auto p-6 space-y-6 bg-gradient-to-b from-gray-50 to-gray-100">
       {mockMessages.map((message) => {
         const isMe = message.senderId === CURRENT_USER_ID;
         return (
@@ -65,7 +65,7 @@ export const ChatArea = () => {
                     />
                   )}
                   {message.message && (
-                    <p className="text-sm leading-relaxed">{message.message}</p>
+                    <p className="text-xs leading-relaxed">{message.message}</p>
                   )}
                 </div>
               </div>
