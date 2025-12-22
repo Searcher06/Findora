@@ -13,7 +13,6 @@ export const useGetMessages = (requestId, username) => {
         setLoading(true);
         const response = await getMessages(requestId, username);
         setMessages(response);
-        setLoading(false);
       } catch (error) {
         setError(error.response?.data?.message || "failed to send message");
       } finally {

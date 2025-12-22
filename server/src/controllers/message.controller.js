@@ -35,13 +35,16 @@ const getAllMessages = async (req, res) => {
   const { id: userToChatId } = req.userToChat;
   const { id: userId } = req.user;
   const { requestId } = req.params;
-  const messages = await messageModel.find({
-    $or: [
-      { senderId: userId, receiverId: userToChatId },
-      { senderId: userToChatId, receiverId: userId },
-    ],
-    requestId,
-  });
+  const messages = await messageModel
+    .find({
+      $or: [
+        { senderId: userId, receiverId: userToChatId },
+        { senderId: userToChatId, receiverId: userId },
+      ],
+      requestId,
+    })
+    .populate("senderId", "-password")
+    .populate("receiverId", "-password");
 
   res.status(200).json(messages);
 };
