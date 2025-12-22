@@ -1,14 +1,20 @@
-import { mockMessages, CURRENT_USER_ID } from "../utils/utils";
+// import { mockMessages, CURRENT_USER_ID } from "../utils/utils";
 import avatarimage from "../../../constants/avatar2.jpg";
-
-export const ChatArea = () => {
+import { useAuthStore } from "@/context/AuthContext";
+export const ChatArea = ({ loading, messages, error }) => {
+  const { user } = useAuthStore();
+  if (loading) {
+    return <h2>Loading messages...</h2>;
+  } else if (error) {
+    return <h2>{error}</h2>;
+  }
   return (
     <div className="h-full overflow-y-auto p-6 space-y-6 bg-gradient-to-b from-gray-50 to-gray-100">
-      {mockMessages.map((message) => {
-        const isMe = message.senderId === CURRENT_USER_ID;
+      {messages?.map((message) => {
+        const isMe = message.senderId._id === user._id;
         return (
           <div
-            key={message.id}
+            key={message._id}
             className={`flex ${
               isMe ? "justify-end" : "justify-start"
             } animate-fadeIn`}
@@ -20,7 +26,11 @@ export const ChatArea = () => {
               <div className="flex-shrink-0">
                 <div className="size-10 rounded-full ring-2 ring-white shadow-md overflow-hidden">
                   <img
-                    src={avatarimage}
+                    src={
+                      isMe
+                        ? message.senderId.profilePic || avatarimage
+                        : message.receiverId.profilePic || avatarimage
+                    }
                     alt="Profile Pic"
                     className="w-full h-full object-cover"
                   />
@@ -39,13 +49,13 @@ export const ChatArea = () => {
                     isMe ? "flex-row-reverse" : "flex-row"
                   }`}
                 >
-                  {!isMe && message.senderName && (
+                  {!isMe && message.senderId.firstName && (
                     <span className="font-semibold text-sm text-gray-800">
-                      {message.senderName}
+                      {message.senderId.firstName}
                     </span>
                   )}
                   <time className="text-xs text-gray-500">
-                    {message.timestamp}
+                    {message.updatedAt}
                   </time>
                 </div>
 
@@ -64,8 +74,8 @@ export const ChatArea = () => {
                       alt="Message attachment"
                     />
                   )}
-                  {message.message && (
-                    <p className="text-xs leading-relaxed">{message.message}</p>
+                  {message.text && (
+                    <p className="text-xs leading-relaxed">{message.text}</p>
                   )}
                 </div>
               </div>
