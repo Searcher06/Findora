@@ -43,7 +43,7 @@ const claimItem = async (req, res) => {
   const message = await messageModel.create({
     receiverId: finderId,
     senderId: userID,
-    text: "This is item is mine!",
+    text: "Hello,I think this item is mine!",
     requestId: request.id,
   });
   await message.save();
@@ -124,7 +124,7 @@ const getRequestsById = async (req, res) => {
     .findById(requestId)
     .populate("finderId", "firstName lastName username profilePic") // Populate finder with user details
     .populate("claimerId", "firstName lastName username profilePic") // Populate claimer with user details
-    .populate("itemId", "name image");
+    .populate("itemId");
 
   res.status(200).json(request);
 };

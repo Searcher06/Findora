@@ -1,6 +1,7 @@
 // import { mockMessages, CURRENT_USER_ID } from "../utils/utils";
 import avatarimage from "../../../constants/avatar2.jpg";
 import { useAuthStore } from "@/context/AuthContext";
+import { formatMessageTime } from "@/utils/formatDate";
 export const ChatArea = ({ loading, messages, error }) => {
   const { user } = useAuthStore();
   if (loading) {
@@ -55,7 +56,7 @@ export const ChatArea = ({ loading, messages, error }) => {
                     </span>
                   )}
                   <time className="text-xs text-gray-500">
-                    {message.updatedAt}
+                    {formatMessageTime(message.updatedAt)}
                   </time>
                 </div>
 

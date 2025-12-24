@@ -28,8 +28,13 @@ const sendMessage = async (req, res) => {
     text,
     requestId,
   });
+  await newMessage.save();
+  const populatedMessage = await messageModel
+    .findById(newMessage.id)
+    .populate("senderId", "-password")
+    .populate("receiverId", "-password");
 
-  res.status(201).json(newMessage);
+  res.status(201).json(populatedMessage);
 };
 const getAllMessages = async (req, res) => {
   const { id: userToChatId } = req.userToChat;
