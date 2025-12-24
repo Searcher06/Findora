@@ -7,3 +7,11 @@ export const formatDate = (dateString) => {
   };
   return date.toLocaleDateString("en-US", options);
 };
+
+export const formatMessageTime = (dateString) => {
+  return new Date(dateString).toLocaleTimeString("en-US", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+  });
+};
