@@ -55,7 +55,7 @@ const useSignUp = async (formData, setFormData, navigate, signUp) => {
   }
 
   try {
-    const response = await signUp(formData);
+    const response = await signUp(formData); //todo:change this to the new sign up function from authstore
     toast.success("Account created successfully");
     console.log("Account created:", response);
     navigate("/");
