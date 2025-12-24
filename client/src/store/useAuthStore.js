@@ -1,0 +1,83 @@
+/* eslint-disable no-unused-vars */
+import { create } from "zustand";
+import { io } from "socket.io-client";
+import {
+  getCurrentUser,
+  loginUser,
+  logoutUser,
+  registerUser,
+} from "@/features/authentication";
+import { toast } from "react-toastify";
+const BASE_URL = "http://localhost:8080";
+export const useAuthStore = create((set, get) => ({
+  user: null,
+  isCheckingAuth: false,
+  isSigningUp: false,
+  isLoggingIng: false,
+  isUpdatingProfile: false,
+  socket: null,
+
+  checkAuth: async () => {
+    try {
+      set({ isCheckingAuth: true });
+      const data = await getCurrentUser();
+      set({ user: data });
+    } catch (error) {
+      console.log("Error in checkAuth:", error);
+      set({ user: null });
+    } finally {
+      set({ isCheckingAuth: false });
+    }
+  },
+
+  signUp: async (userInfo) => {
+    try {
+      set({ isSigningUp: true });
+      const data = await registerUser(userInfo);
+      set({ user: data });
+      toast.success("Account created successfully!");
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Sign up Failed");
+      console.log("Error in sign up", error);
+    } finally {
+      set({ isSigningUp: false });
+    }
+  },
+
+  login: async (credentials) => {
+    try {
+      set({ isLoggingIng: true });
+      const data = await loginUser(credentials);
+      set({ user: data });
+      toast.success("Logged in successfully!");
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Failed to login");
+      console.log("Error in login", error);
+    } finally {
+      set({ isLoggingIng: false });
+    }
+  },
+
+  logOut: async () => {
+    try {
+      await logoutUser();
+      set({ user: null });
+      toast.success("Logged out successfully!");
+    } catch (error) {
+      toast.error(error.response.data.message);
+      console.log("Error in logout", error);
+    }
+  },
+
+  connectSocket: () => {
+    const { user } = get();
+    if (!user || get().socket?.connected) return;
+
+    const socket = io(BASE_URL);
+    socket.connect();
+    set({ socket: socket });
+  },
+  disconnectSocket: () => {
+    if (get().socket?.connected) get().socket.disconnect();
+  },
+}));

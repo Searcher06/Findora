@@ -1,9 +1,14 @@
 import { Outlet, Navigate } from "react-router-dom";
-import { useAuthStore } from "@/context/AuthContext";
+import { useAuthStore } from "@/store/useAuthStore";
+// import { useAuthStore } from "@/context/AuthContext"; todo:Delete this later
 import { Loader } from "@/components/Loader";
+import { useEffect } from "react";
 const PrivateRoute = () => {
-  const { user, isLoading } = useAuthStore();
-  if (isLoading) {
+  const { user, isCheckingAuth, checkAuth } = useAuthStore();
+  useEffect(() => {
+    checkAuth();
+  }, [checkAuth]);
+  if (isCheckingAuth) {
     return <Loader />;
   }
 
