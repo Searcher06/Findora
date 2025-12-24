@@ -10,7 +10,8 @@ import cookieParser from "cookie-parser";
 import loggerMiddleware from "./middleware/logger.js";
 import { errorMiddleware } from "./middleware/error.js";
 import cors from "cors";
-const app = express();
+import { app, server } from "./lib/socket.js";
+
 app.use(express.json());
 const PORT = process.env.PORT || 8080;
 const DATABASE_URI =
@@ -51,6 +52,6 @@ app.use(errorMiddleware);
 
 connectDB(DATABASE_URI);
 
-app.listen(PORT, "0.0.0.0", () => {
+server.listen(PORT, "0.0.0.0", () => {
   console.log("Server up and running on port: " + PORT);
 });
