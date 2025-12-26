@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { imagesample } from "..";
 import { ItemInfo } from "./ItemInfo";
-import { useAuthStore } from "@/context/AuthContext";
+import { useAuthStore } from "@/store/useAuthStore";
 import { useNavigate } from "react-router-dom";
 import { DeleteItemButton, RequestButton } from "./AlertDialogBox";
 export const DetailedItemCard = ({ item }) => {

@@ -1,6 +1,5 @@
 import LoginPage from "./pages/Login";
 import { SignUpPage } from "./pages/SignUp";
-import { useAuth } from "./hooks/useAuth";
 import {
   getCurrentUser,
   registerUser,
@@ -10,7 +9,6 @@ import {
 export {
   LoginPage,
   SignUpPage,
-  useAuth,
   getCurrentUser,
   registerUser,
   loginUser,

@@ -11,7 +11,7 @@ import { toast } from "react-toastify";
 const BASE_URL = "http://localhost:8080";
 export const useAuthStore = create((set, get) => ({
   user: null,
-  isCheckingAuth: false,
+  isCheckingAuth: true,
   isSigningUp: false,
   isLoggingIng: false,
   isUpdatingProfile: false,
@@ -24,15 +24,14 @@ export const useAuthStore = create((set, get) => ({
       set({ user: data });
     } catch (error) {
       console.log("Error in checkAuth:", error);
-      set({ user: null });
     } finally {
       set({ isCheckingAuth: false });
     }
   },
 
   signUp: async (userInfo) => {
+    set({ isSigningUp: true });
     try {
-      set({ isSigningUp: true });
       const data = await registerUser(userInfo);
       set({ user: data });
       toast.success("Account created successfully!");
@@ -45,8 +44,8 @@ export const useAuthStore = create((set, get) => ({
   },
 
   login: async (credentials) => {
+    set({ isLoggingIng: true, isCheckingAuth: true });
     try {
-      set({ isLoggingIng: true });
       const data = await loginUser(credentials);
       set({ user: data });
       toast.success("Logged in successfully!");
@@ -54,7 +53,7 @@ export const useAuthStore = create((set, get) => ({
       toast.error(error.response?.data?.message || "Failed to login");
       console.log("Error in login", error);
     } finally {
-      set({ isLoggingIng: false });
+      set({ isLoggingIng: false, isCheckingAuth: false });
     }
   },
 
