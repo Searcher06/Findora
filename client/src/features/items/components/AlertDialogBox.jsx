@@ -15,7 +15,7 @@ import { useItems } from "../hooks/useItems";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useVerify } from "@/features/verification";
-import { useAuthStore } from "@/context/AuthContext";
+import { useAuthStore } from "@/store/useAuthStore";
 export const DeleteItemButton = ({ itemId, itemName, className }) => {
   const {
     deleteAnItem,

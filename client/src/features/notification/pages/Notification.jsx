@@ -3,7 +3,7 @@ import NotificationItemTest from "../components/NotificationItemTest";
 import NotificationSkeleton from "../components/NotificationSkeleton";
 import { useState, useMemo } from "react";
 import { useNotification } from "../hooks/useNotifications";
-import { useAuthStore } from "@/context/AuthContext";
+import { useAuthStore } from "@/store/useAuthStore";
 import { Skeleton } from "@/components/ui/skeleton";
 import NotificationItem from "../components/NotificationItem";
 const Notification = () => {

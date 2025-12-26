@@ -11,7 +11,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { getFinderOrclaimer } from "@/utils/roleIdentifier";
-import { useAuthStore } from "@/context/AuthContext";
+import { useAuthStore } from "@/store/useAuthStore";
 export const DecisionButton = ({ className, request, onClick, type }) => {
   const getbuttonConfig = (type) => {
     switch (type) {

@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { Button } from "@/components/ui/button";
 import { LockKeyholeIcon } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
@@ -10,9 +9,8 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import { validateEmail } from "@/utils/validateEmail";
 import { textValidator } from "@/utils/textValidator";
-import { useAuth } from "../hooks/useAuth";
 import { Spinner } from "@/components/ui/spinner";
-import { useAuthStore } from "@/context/AuthContext";
+import { useAuthStore } from "@/store/useAuthStore";
 export const SignUpPage = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -22,8 +20,7 @@ export const SignUpPage = () => {
     email: "",
     password: "",
   });
-  const { signUp } = useAuth();
-  const { isLoading, error } = useAuthStore();
+  const { isSigningUp, signUp } = useAuthStore();
   const disabledStyle =
     !formData.firstName ||
     !formData.lastName ||
@@ -86,30 +83,15 @@ export const SignUpPage = () => {
       return;
     }
 
-    try {
-      const response = await signUp(formData);
-      toast.success("Account created successfully");
-      console.log("Account created:", response);
-      navigate("/");
-      setFormData({
-        firstName: "",
-        lastName: "",
-        username: "",
-        password: "",
-        email: "",
-      });
-    } catch (error) {
-      if (error.response) {
-        // server responded with a non-2xx status
-        toast.error(error.response.data.message || "Sign up failed");
-      } else if (error.request) {
-        toast.error("No response from server");
-      } else {
-        // something else happended
-        toast.error("An error occured.");
-      }
-      console.error(error);
-    }
+    signUp(formData);
+    navigate("/");
+    setFormData({
+      firstName: "",
+      lastName: "",
+      username: "",
+      password: "",
+      email: "",
+    });
   };
   return (
     <div className="min-h-screen w-full flex justify-center items-center">
@@ -139,7 +121,7 @@ export const SignUpPage = () => {
                     firstName: e.target.value,
                   }));
                 }}
-                disabled={isLoading ? true : false}
+                disabled={isSigningUp ? true : false}
               />
               <InputField
                 icon={"UserIcon"}
@@ -154,7 +136,7 @@ export const SignUpPage = () => {
                     lastName: e.target.value,
                   }));
                 }}
-                disabled={isLoading ? true : false}
+                disabled={isSigningUp ? true : false}
               />
               <InputField
                 icon={"AtSignIcon"}
@@ -169,7 +151,7 @@ export const SignUpPage = () => {
                     username: e.target.value,
                   }));
                 }}
-                disabled={isLoading ? true : false}
+                disabled={isSigningUp ? true : false}
               />
               <InputField
                 icon={"Mail"}
@@ -184,7 +166,7 @@ export const SignUpPage = () => {
                     email: e.target.value,
                   }));
                 }}
-                disabled={isLoading ? true : false}
+                disabled={isSigningUp ? true : false}
               />
               <InputField
                 icon={"Lock"}
@@ -199,7 +181,7 @@ export const SignUpPage = () => {
                     password: e.target.value,
                   }));
                 }}
-                disabled={isLoading ? true : false}
+                disabled={isSigningUp ? true : false}
               />
 
               <Button
@@ -210,12 +192,12 @@ export const SignUpPage = () => {
                   !formData.password ||
                   !formData.email ||
                   !formData.username ||
-                  isLoading
+                  isSigningUp
                 }
                 onClick={handleSignUp}
               >
-                {isLoading ? <Spinner /> : null}
-                {isLoading ? "Creating your account" : "Create Account"}
+                {isSigningUp ? <Spinner /> : null}
+                {isSigningUp ? "Creating your account" : "Create Account"}
               </Button>
             </InputFieldsContainer>
 
