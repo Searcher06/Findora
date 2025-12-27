@@ -2,7 +2,6 @@
 import { RequestDetail } from "../components/RequestDetail";
 import { ChatArea } from "../components/ChatArea";
 import { InputsSection } from "../components/InputsSection";
-import { useGetMessages } from "../hooks/useGetMessages";
 import { useParams } from "react-router-dom";
 import { useFetchRequestById } from "@/features/verification";
 import { useChatStore } from "@/store/useChatStore";

@@ -1,5 +1,6 @@
 import { requestModel } from "../models/request.model.js";
 import { messageModel } from "../models/message.model.js";
+import { getRecieverSocketId, io } from "../lib/socket.js";
 const getUsersToChat = async (req, res) => {
   const { id: userId } = req.user;
   const users = await requestModel
@@ -29,10 +30,16 @@ const sendMessage = async (req, res) => {
     requestId,
   });
   await newMessage.save();
+
   const populatedMessage = await messageModel
     .findById(newMessage.id)
     .populate("senderId", "-password")
     .populate("receiverId", "-password");
+
+  const receiverSocketId = getRecieverSocketId(userToChatId);
+  if (receiverSocketId) {
+    io.to(receiverSocketId).emit("newMessage", populatedMessage);
+  }
 
   res.status(201).json(populatedMessage);
 };

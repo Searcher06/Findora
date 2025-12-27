@@ -38,7 +38,7 @@ export const useAuthStore = create((set, get) => ({
       set({ user: data });
       toast.success("Account created successfully!");
 
-      get().connectSocket();
+      get().connectSocket(); // connect to socket after successful sign up
     } catch (error) {
       toast.error(error.response?.data?.message || "Sign up Failed");
       console.log("Error in sign up", error);
@@ -80,7 +80,9 @@ export const useAuthStore = create((set, get) => ({
     const { user } = get();
     if (!user || get().socket?.connected) return;
 
-    const socket = io(BASE_URL);
+    const socket = io(BASE_URL, {
+      query: user._id,
+    });
     socket.connect();
     set({ socket: socket });
   },
