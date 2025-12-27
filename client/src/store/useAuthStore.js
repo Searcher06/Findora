@@ -22,6 +22,8 @@ export const useAuthStore = create((set, get) => ({
       set({ isCheckingAuth: true });
       const data = await getCurrentUser();
       set({ user: data });
+
+      get().connectSocket();
     } catch (error) {
       console.log("Error in checkAuth:", error);
     } finally {
@@ -35,6 +37,8 @@ export const useAuthStore = create((set, get) => ({
       const data = await registerUser(userInfo);
       set({ user: data });
       toast.success("Account created successfully!");
+
+      get().connectSocket();
     } catch (error) {
       toast.error(error.response?.data?.message || "Sign up Failed");
       console.log("Error in sign up", error);
@@ -49,6 +53,8 @@ export const useAuthStore = create((set, get) => ({
       const data = await loginUser(credentials);
       set({ user: data });
       toast.success("Logged in successfully!");
+
+      get().connectSocket();
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to login");
       console.log("Error in login", error);
@@ -62,6 +68,8 @@ export const useAuthStore = create((set, get) => ({
       await logoutUser();
       set({ user: null });
       toast.success("Logged out successfully!");
+
+      get().disconnectSocket();
     } catch (error) {
       toast.error(error.response.data.message);
       console.log("Error in logout", error);

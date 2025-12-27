@@ -7,7 +7,7 @@ const PrivateRoute = () => {
   const { user, isCheckingAuth, checkAuth } = useAuthStore();
   useEffect(() => {
     checkAuth();
-  }, []);
+  }, [checkAuth]);
 
   if (isCheckingAuth) {
     return <Loader />;
