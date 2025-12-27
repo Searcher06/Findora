@@ -24,7 +24,7 @@ const LoginPage = () => {
       return;
     }
 
-    login(formData);
+    await login(formData);
     setFormData({ email: "", password: "" });
     navigate("/");
   };

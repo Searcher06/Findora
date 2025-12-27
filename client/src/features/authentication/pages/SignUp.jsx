@@ -83,7 +83,7 @@ export const SignUpPage = () => {
       return;
     }
 
-    signUp(formData);
+    await signUp(formData);
     navigate("/");
     setFormData({
       firstName: "",
