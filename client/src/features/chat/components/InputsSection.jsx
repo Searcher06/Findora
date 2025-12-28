@@ -1,9 +1,19 @@
+/* eslint-disable no-unused-vars */
 import { Button } from "@/components/ui/button";
 import { PlusIcon, ArrowUp } from "lucide-react";
 import { useState } from "react";
 import { useChatStore } from "@/store/useChatStore";
+import { useAuthStore } from "@/store/useAuthStore";
 
-export const InputsSection = ({ requestId, username }) => {
+export const InputsSection = ({
+  requestId,
+  username,
+  requestLoading,
+  requestError,
+  request,
+}) => {
+  const { user } = useAuthStore();
+
   const { sendMessage } = useChatStore();
   const [message, setMessage] = useState({
     message: { value: "" },
@@ -30,7 +40,15 @@ export const InputsSection = ({ requestId, username }) => {
   return (
     <div className="border-t border-gray-200 bg-white shadow-lg">
       {/* Accept Claim Button */}
-      <div className="px-3 py-2 border-b border-gray-100">
+      <div
+        className={`px-3 py-2 border-b border-gray-100 ${
+          request?.finderId?._id === user._id &&
+          !requestLoading &&
+          !requestError
+            ? "block"
+            : "hidden"
+        }`}
+      >
         <Button className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-medium py-2 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 text-xs">
           Accept Claim
         </Button>
