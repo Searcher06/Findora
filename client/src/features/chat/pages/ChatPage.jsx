@@ -5,7 +5,7 @@ import { InputsSection } from "../components/InputsSection";
 import { useParams } from "react-router-dom";
 import { useFetchRequestById } from "@/features/verification";
 import { useChatStore } from "@/store/useChatStore";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 // ChatPage.jsx
 export const ChatPage = () => {
   const { requestId, username } = useParams();
@@ -14,13 +14,28 @@ export const ChatPage = () => {
     loading: requestLoading,
     requestError,
   } = useFetchRequestById(requestId);
-  const { messages, isMessagesLoading, getMessages } = useChatStore();
-
+  // prettier-ignore
+  const { messages, isMessagesLoading, getMessages,subscribeToMessages,unsubscribeFromMessage } = useChatStore();
+  const messageEndref = useRef(null);
   useEffect(() => {
     getMessages(requestId, username);
-  }, [requestId, username, getMessages]);
+
+    subscribeToMessages(username);
+
+    return () => unsubscribeFromMessage();
+  }, [
+    requestId,
+    username,
+    getMessages,
+    subscribeToMessages,
+    unsubscribeFromMessage,
+  ]);
   console.log(messages);
 
+  useEffect(() => {
+    if (messageEndref.current && messages)
+      messageEndref.current.scrollIntoView({ behaviour: "smooth" });
+  }, [messages]);
   return (
     <div className="mt-14 flex flex-col h-[calc(100vh-3.5rem)]">
       {/* Request Detail - Fixed at top */}
@@ -38,6 +53,7 @@ export const ChatPage = () => {
           messages={messages}
           loading={isMessagesLoading}
           error={null}
+          messageEndref={messageEndref}
         />
       </div>
 

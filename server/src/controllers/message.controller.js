@@ -12,7 +12,7 @@ const getUsersToChat = async (req, res) => {
   res.status(200).json(users);
 };
 const sendMessage = async (req, res) => {
-  const { id: userToChatId } = req.userToChat;
+  const { id: userToChatId, username: userToChatUsername } = req.userToChat;
   const { id: userId } = req.user;
   const { requestId } = req.params;
   let { value: text } = req.body.message;
@@ -36,7 +36,7 @@ const sendMessage = async (req, res) => {
     .populate("senderId", "-password")
     .populate("receiverId", "-password");
 
-  const receiverSocketId = getRecieverSocketId(userToChatId);
+  const receiverSocketId = getRecieverSocketId(userToChatUsername);
   if (receiverSocketId) {
     io.to(receiverSocketId).emit("newMessage", populatedMessage);
   }

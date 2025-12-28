@@ -12,22 +12,24 @@ const io = new Server(server, {
   },
 });
 
-export const getRecieverSocketId = (userId) => {
-  return userSocketMap(userId);
-};
-
 // used to store online users
 const userSocketMap = {};
+export const getRecieverSocketId = (username) => {
+  return userSocketMap[username];
+};
 
 io.on("connection", (socket) => {
   console.log("A user connected", socket.id);
-  const userId = socket.handshake.query.userId;
 
-  if (userId) {
-    userSocketMap[userId] = socket.id;
+  const currentUser_username = socket.handshake.query.username;
+
+  if (currentUser_username) {
+    userSocketMap[currentUser_username] = socket.id;
+    console.log(currentUser_username);
   }
 
   socket.on("disconnect", () => {
+    delete userSocketMap[currentUser_username];
     console.log("A user disconnected", socket.id);
   });
 });
