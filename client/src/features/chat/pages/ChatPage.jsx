@@ -9,11 +9,8 @@ import { useEffect, useRef } from "react";
 // ChatPage.jsx
 export const ChatPage = () => {
   const { requestId, username } = useParams();
-  const {
-    request,
-    loading: requestLoading,
-    requestError,
-  } = useFetchRequestById(requestId);
+  // prettier-ignore
+  const {request,loading: requestLoading, requestError} = useFetchRequestById(requestId);
   // prettier-ignore
   const { messages, isMessagesLoading, getMessages,subscribeToMessages,unsubscribeFromMessage } = useChatStore();
   const messageEndref = useRef(null);
@@ -59,7 +56,13 @@ export const ChatPage = () => {
 
       {/* Fixed Input Section at bottom */}
       <div className="flex-shrink-0">
-        <InputsSection requestId={requestId} username={username} />
+        <InputsSection
+          requestId={requestId}
+          username={username}
+          request={request}
+          requestLoading={requestLoading}
+          requestError={requestError}
+        />
       </div>
     </div>
   );
