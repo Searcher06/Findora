@@ -2,6 +2,7 @@
 import { create } from "zustand";
 import { getMessages, sendMessage } from "@/features/chat/services/chatApi";
 import { toast } from "react-toastify";
+import { useAuthStore } from "./useAuthStore";
 export const useChatStore = create((set, get) => ({
   messages: [],
   usersToChat: [],
@@ -33,5 +34,21 @@ export const useChatStore = create((set, get) => ({
     } catch (error) {
       toast.error(error.response?.data?.message || "failed to send message");
     }
+  },
+
+  subscribeToMessages: (username) => {
+    if (!username) return;
+    const socket = useAuthStore.getState().socket;
+
+    socket.on("newMessage", (newMessage) => {
+      set({
+        messages: [...get().messages, newMessage],
+      });
+    });
+  },
+
+  unsubscribeFromMessage: () => {
+    const socket = useAuthStore.getState().socket;
+    socket.off("newMessage");
   },
 }));

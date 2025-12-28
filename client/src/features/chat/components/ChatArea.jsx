@@ -2,7 +2,7 @@
 import avatarimage from "../../../constants/avatar2.jpg";
 import { useAuthStore } from "@/store/useAuthStore";
 import { formatMessageTime } from "@/utils/formatDate";
-export const ChatArea = ({ loading, messages, error }) => {
+export const ChatArea = ({ loading, messages, error, messageEndref }) => {
   const { user } = useAuthStore();
   if (loading) {
     return <h2>Loading messages...</h2>;
@@ -19,6 +19,7 @@ export const ChatArea = ({ loading, messages, error }) => {
             className={`flex ${
               isMe ? "justify-end" : "justify-start"
             } animate-fadeIn`}
+            ref={messageEndref}
           >
             <div
               className={`flex gap-3 ${isMe ? "flex-row-reverse" : "flex-row"}`}
