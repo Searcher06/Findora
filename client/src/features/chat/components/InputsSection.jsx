@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { Button } from "@/components/ui/button";
-import { PlusIcon, ArrowUp } from "lucide-react";
-import { useState } from "react";
+import { ImageIcon, ArrowUp, X, Loader2 } from "lucide-react";
+import { useState, useRef } from "react";
 import { useChatStore } from "@/store/useChatStore";
 import { useAuthStore } from "@/store/useAuthStore";
 
@@ -13,20 +13,40 @@ export const InputsSection = ({
   request,
 }) => {
   const { user } = useAuthStore();
-
   const { sendMessage } = useChatStore();
   const [message, setMessage] = useState({
     message: { value: "" },
   });
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef(null);
 
   const handleSend = async () => {
-    if (!message.message.value.trim()) return;
+    if (!message.message.value.trim() && !selectedImage) return;
+
+    setUploading(true);
     try {
-      await sendMessage(requestId, username, message);
-      console.log("Sending message:", message);
+      // Prepare message data with image if exists
+      const messageData = {
+        message: { value: message.message.value },
+        ...(selectedImage && {
+          image: selectedImage,
+          imagePreview: imagePreview,
+        }),
+      };
+
+      await sendMessage(requestId, username, messageData);
+      console.log("Sending message:", messageData);
+
+      // Clear everything after successful send
       setMessage({ message: { value: "" } });
+      setSelectedImage(null);
+      setImagePreview(null);
     } catch (error) {
       console.log("Failed to send message :", error);
+    } finally {
+      setUploading(false);
     }
   };
 
@@ -35,6 +55,44 @@ export const InputsSection = ({
       e.preventDefault();
       handleSend();
     }
+  };
+
+  const handleImageUpload = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileSelect = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      // Validate file type
+      if (!file.type.startsWith("image/")) {
+        alert("Please select an image file");
+        return;
+      }
+
+      // Validate file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        alert("Image size should be less than 5MB");
+        return;
+      }
+
+      setSelectedImage(file);
+
+      // Create preview URL
+      const previewUrl = URL.createObjectURL(file);
+      setImagePreview(previewUrl);
+    }
+
+    // Reset file input
+    e.target.value = "";
+  };
+
+  const handleRemoveImage = () => {
+    if (imagePreview) {
+      URL.revokeObjectURL(imagePreview);
+    }
+    setSelectedImage(null);
+    setImagePreview(null);
   };
 
   return (
@@ -54,16 +112,52 @@ export const InputsSection = ({
         </Button>
       </div>
 
+      {/* Image Preview */}
+      {imagePreview && (
+        <div className="px-3 pt-2 relative">
+          <div className="relative inline-block">
+            <img
+              src={imagePreview}
+              alt="Preview"
+              className="w-32 h-32 object-cover rounded-lg border border-gray-200"
+            />
+            <button
+              onClick={handleRemoveImage}
+              className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition-colors"
+            >
+              <X className="h-3 w-3" />
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Message Input */}
       <div className="px-3 py-2">
         <div className="flex items-center gap-2">
-          {/* Attachment Button */}
+          {/* Hidden file input */}
+          <input
+            type="file"
+            ref={fileInputRef}
+            onChange={handleFileSelect}
+            accept="image/*"
+            className="hidden"
+          />
+
+          {/* Image Upload Button */}
           <Button
             variant="ghost"
             size="sm"
-            className="flex-shrink-0 rounded-full size-8 text-gray-500 hover:text-gray-700 hover:bg-gray-100"
+            className={`flex-shrink-0 rounded-full size-8 ${
+              selectedImage
+                ? "text-blue-500 hover:text-blue-600 hover:bg-blue-50"
+                : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"
+            }`}
+            onClick={handleImageUpload}
+            title="Upload image"
+            type="button"
+            disabled={uploading}
           >
-            <PlusIcon className="h-4 w-4" />
+            <ImageIcon className="h-4 w-4" />
           </Button>
 
           {/* Input Field */}
@@ -75,19 +169,28 @@ export const InputsSection = ({
                 setMessage({ message: { value: e.target.value } })
               }
               onKeyPress={handleKeyPress}
-              placeholder="Type a message..."
-              className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent text-gray-800 placeholder:text-gray-500 text-xs transition-all"
+              placeholder={
+                selectedImage ? "Add a caption..." : "Type a message..."
+              }
+              className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent text-gray-800 placeholder:text-gray-500 text-xs transition-all disabled:opacity-50"
+              disabled={uploading}
             />
           </div>
 
           {/* Send Button */}
           <Button
             onClick={handleSend}
-            disabled={!message.message.value.trim()}
+            disabled={
+              (!message.message.value.trim() && !selectedImage) || uploading
+            }
             size="sm"
             className="flex-shrink-0 size-8 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white shadow-md hover:shadow-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <ArrowUp className="h-4 w-4" />
+            {uploading ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <ArrowUp className="h-4 w-4" />
+            )}
           </Button>
         </div>
       </div>
