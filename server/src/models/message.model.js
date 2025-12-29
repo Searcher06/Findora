@@ -15,6 +15,9 @@ const schema = new mongoose.Schema(
     text: {
       type: String,
     },
+    image: {
+      type: String,
+    },
     requestId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Request",
