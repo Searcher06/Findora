@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { RequestDetail } from "../components/RequestDetail";
 import { ChatArea } from "../components/ChatArea";
 import { InputsSection } from "../components/InputsSection";

@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { create } from "zustand";
 import { getMessages, sendMessage } from "@/features/chat/services/chatApi";
 import { toast } from "react-toastify";
@@ -24,12 +23,12 @@ export const useChatStore = create((set, get) => ({
     }
   },
 
-  sendMessage: async (requestId, username, message) => {
+  sendMessage: async (requestId, username, data) => {
     const { messages } = get();
     if (!requestId || !username) return;
 
     try {
-      const response = await sendMessage(requestId, username, message);
+      const response = await sendMessage(requestId, username, data);
       set({ messages: [...messages, response] });
     } catch (error) {
       toast.error(error.response?.data?.message || "failed to send message");

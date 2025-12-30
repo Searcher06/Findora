@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { Button } from "@/components/ui/button";
 import { ImageIcon, ArrowUp, X, Loader2 } from "lucide-react";
 import { useState, useRef } from "react";
@@ -14,37 +13,39 @@ export const InputsSection = ({
 }) => {
   const { user } = useAuthStore();
   const { sendMessage } = useChatStore();
-  const [message, setMessage] = useState({
-    message: { value: "" },
-  });
+  const [messageText, setMessageText] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef(null);
 
   const handleSend = async () => {
-    if (!message.message.value.trim() && !selectedImage) return;
+    if (!messageText.trim() && !selectedImage) return;
 
     setUploading(true);
     try {
-      // Prepare message data with image if exists
-      const messageData = {
-        message: { value: message.message.value },
-        ...(selectedImage && {
-          image: selectedImage,
-          imagePreview: imagePreview,
-        }),
-      };
+      // Always create FormData
+      const formData = new FormData();
 
-      await sendMessage(requestId, username, messageData);
-      console.log("Sending message:", messageData);
+      // Always append text (even if empty string)
+      formData.append("text", messageText || "");
+
+      // Append image if exists
+      if (selectedImage) {
+        formData.append("image", selectedImage);
+      }
+
+      await sendMessage(requestId, username, formData);
 
       // Clear everything after successful send
-      setMessage({ message: { value: "" } });
+      setMessageText("");
       setSelectedImage(null);
-      setImagePreview(null);
+      if (imagePreview) {
+        URL.revokeObjectURL(imagePreview);
+        setImagePreview(null);
+      }
     } catch (error) {
-      console.log("Failed to send message :", error);
+      console.log("Failed to send message:", error);
     } finally {
       setUploading(false);
     }
@@ -124,6 +125,7 @@ export const InputsSection = ({
             <button
               onClick={handleRemoveImage}
               className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition-colors"
+              type="button"
             >
               <X className="h-3 w-3" />
             </button>
@@ -164,10 +166,8 @@ export const InputsSection = ({
           <div className="flex-1">
             <input
               type="text"
-              value={message.message.value}
-              onChange={(e) =>
-                setMessage({ message: { value: e.target.value } })
-              }
+              value={messageText}
+              onChange={(e) => setMessageText(e.target.value)}
               onKeyPress={handleKeyPress}
               placeholder={
                 selectedImage ? "Add a caption..." : "Type a message..."
@@ -180,9 +180,7 @@ export const InputsSection = ({
           {/* Send Button */}
           <Button
             onClick={handleSend}
-            disabled={
-              (!message.message.value.trim() && !selectedImage) || uploading
-            }
+            disabled={(!messageText.trim() && !selectedImage) || uploading}
             size="sm"
             className="flex-shrink-0 size-8 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white shadow-md hover:shadow-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
           >
