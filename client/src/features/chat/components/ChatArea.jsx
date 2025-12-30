@@ -4,15 +4,18 @@ import { useAuthStore } from "@/store/useAuthStore";
 import { formatMessageTime } from "@/utils/formatDate";
 export const ChatArea = ({ loading, messages, error, messageEndref }) => {
   const { user } = useAuthStore();
+
   if (loading) {
     return <h2>Loading messages...</h2>;
   } else if (error) {
     return <h2>{error}</h2>;
   }
+
   return (
     <div className="h-full overflow-y-auto p-6 space-y-6 bg-gradient-to-b from-gray-50 to-gray-100">
       {messages?.map((message) => {
         const isMe = message.senderId._id === user._id;
+
         return (
           <div
             key={message._id}
@@ -33,7 +36,7 @@ export const ChatArea = ({ loading, messages, error, messageEndref }) => {
                         ? message.senderId.profilePic || avatarimage
                         : message.receiverId.profilePic || avatarimage
                     }
-                    alt="Profile Pic"
+                    alt="Profile"
                     className="w-full h-full object-cover"
                   />
                 </div>
@@ -41,14 +44,14 @@ export const ChatArea = ({ loading, messages, error, messageEndref }) => {
 
               {/* Message Content */}
               <div
-                className={`flex flex-col max-w-xs sm:max-w-sm md:max-w-md ${
+                className={`flex flex-col ${
                   isMe ? "items-end" : "items-start"
                 }`}
               >
                 {/* Header */}
                 <div
                   className={`flex items-center gap-2 mb-1 px-1 ${
-                    isMe ? "flex-row-reverse" : "flex-row"
+                    isMe ? "flex-row-reverse" : ""
                   }`}
                 >
                   {!isMe && message.senderId.firstName && (
@@ -61,23 +64,35 @@ export const ChatArea = ({ loading, messages, error, messageEndref }) => {
                   </time>
                 </div>
 
-                {/* Bubble */}
+                {/* Bubble - Now with fixed width for images */}
                 <div
-                  className={`px-4 py-3 rounded-2xl shadow-md transition-all hover:shadow-lg ${
+                  className={`px-4 py-3 rounded-2xl shadow-md ${
                     isMe
                       ? "bg-gradient-to-br from-blue-600 to-blue-700 text-white rounded-br-sm"
                       : "bg-white text-gray-800 rounded-bl-sm"
+                  } ${
+                    // Different max-width for text vs image messages
+                    message.image
+                      ? "max-w-[280px] sm:max-w-[320px]" // Wider for images
+                      : "max-w-xs sm:max-w-sm" // Normal for text
                   }`}
                 >
+                  {/* Image with fixed dimensions */}
                   {message.image && (
-                    <img
-                      src={message.image}
-                      className="max-w-[240px] rounded-xl mb-2 shadow-sm"
-                      alt="Message attachment"
-                    />
+                    <div className="mb-2 overflow-hidden rounded-xl">
+                      <img
+                        src={message.image}
+                        className="w-full h-auto max-h-[280px] object-cover"
+                        alt="Shared image"
+                      />
+                    </div>
                   )}
+
+                  {/* Text */}
                   {message.text && (
-                    <p className="text-xs leading-relaxed">{message.text}</p>
+                    <p className="text-sm leading-relaxed break-words">
+                      {message.text}
+                    </p>
                   )}
                 </div>
               </div>
