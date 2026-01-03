@@ -12,21 +12,7 @@ export const sendFound = async (itemId) => {
   const { data } = await Api.post(`/request/found/${itemId}`);
   return data;
 };
-export const sendQuestion = async (requestId, questions) => {
-  const { data } = await Api.put(
-    `request/verify/setquestion/${requestId}`,
-    questions
-  );
-  return data;
-};
-export const sendAnswers = async (requestId, questions) => {
-  const { data } = await Api.put(
-    `request/verify/setanswers/${requestId}`,
-    questions
-  );
-  return data;
-};
-export const sendDecision = async (requestId, decision) => {
-  const { data } = await Api.put(`request/verify/${requestId}`, decision);
+export const acceptClaim = async (requestId) => {
+  const { data } = await Api.post(`/request/accept/${requestId}`);
   return data;
 };

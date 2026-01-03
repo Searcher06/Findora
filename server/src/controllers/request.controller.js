@@ -2,6 +2,7 @@ import { itemModel } from "../models/item.model.js";
 import { requestModel } from "../models/request.model.js";
 import { validateId } from "../utils/validateID.js";
 import { messageModel } from "../models/message.model.js";
+import { getRecieverSocketId, io } from "../lib/socket.js";
 
 const claimItem = async (req, res) => {
   const { id: userID } = req.user;
@@ -130,7 +131,7 @@ const getRequestsById = async (req, res) => {
 };
 const acceptClaim = async (req, res) => {
   const { id: requestId, itemId } = req.requestObject;
-  const request = await requestModel.findById(requestId);
+  const request = await requestModel.findById(requestId).populate("claimerId");
   const item = await itemModel.findById(itemId);
   let finderCode = "";
   let claimerCode = "";
@@ -144,10 +145,17 @@ const acceptClaim = async (req, res) => {
   }
 
   request.finderCode = finderCode;
-  request.claimerCode = claimerCode;
+  request.claimerId.claimerCode = claimerCode;
   await item.save();
   await request.save();
   const updatedRequest = await requestModel.findById(requestId);
+
+  // todo:Fix this later
+  // const receiverSocketId = getRecieverSocketId(request.claimerId.username);
+  // if (receiverSocketId) {
+  //   io.to(receiverSocketId).emit("acceptClaim", updatedRequest);
+  // }
+
   res.status(200).json(updatedRequest);
 };
 const handleItem = async (req, res) => {

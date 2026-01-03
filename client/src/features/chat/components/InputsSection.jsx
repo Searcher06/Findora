@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { Button } from "@/components/ui/button";
 import { ImageIcon, ArrowUp, X, Loader2 } from "lucide-react";
 import { useState, useRef } from "react";
@@ -10,6 +11,7 @@ export const InputsSection = ({
   requestLoading,
   requestError,
   request,
+  AcceptClaim,
 }) => {
   const { user } = useAuthStore();
   const { sendMessage } = useChatStore();
@@ -50,18 +52,15 @@ export const InputsSection = ({
       setUploading(false);
     }
   };
-
   const handleKeyPress = (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleSend();
     }
   };
-
   const handleImageUpload = () => {
     fileInputRef.current?.click();
   };
-
   const handleFileSelect = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -87,13 +86,19 @@ export const InputsSection = ({
     // Reset file input
     e.target.value = "";
   };
-
   const handleRemoveImage = () => {
     if (imagePreview) {
       URL.revokeObjectURL(imagePreview);
     }
     setSelectedImage(null);
     setImagePreview(null);
+  };
+  const handleAccept = async () => {
+    try {
+      await AcceptClaim(requestId);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -108,8 +113,11 @@ export const InputsSection = ({
             : "hidden"
         }`}
       >
-        <Button className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-medium py-2 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 text-xs">
-          Accept Claim
+        <Button
+          className="w-full bg-linear-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-medium py-2 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 text-xs"
+          onClick={handleAccept}
+        >
+          {request?.status == "accepted" ? "Handle Item" : "Accept Claim"}
         </Button>
       </div>
 
@@ -149,7 +157,7 @@ export const InputsSection = ({
           <Button
             variant="ghost"
             size="sm"
-            className={`flex-shrink-0 rounded-full size-8 ${
+            className={`shrink-0 rounded-full size-8 ${
               selectedImage
                 ? "text-blue-500 hover:text-blue-600 hover:bg-blue-50"
                 : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"
@@ -182,7 +190,7 @@ export const InputsSection = ({
             onClick={handleSend}
             disabled={(!messageText.trim() && !selectedImage) || uploading}
             size="sm"
-            className="flex-shrink-0 size-8 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white shadow-md hover:shadow-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="shrink-0 size-8 rounded-full bg-linear-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white shadow-md hover:shadow-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {uploading ? (
               <Loader2 className="h-4 w-4 animate-spin" />
