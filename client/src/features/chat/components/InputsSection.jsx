@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { Button } from "@/components/ui/button";
 import { ImageIcon, ArrowUp, X, Loader2 } from "lucide-react";
 import { useState, useRef } from "react";

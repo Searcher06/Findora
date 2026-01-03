@@ -83,15 +83,17 @@ export const SignUpPage = () => {
       return;
     }
 
-    await signUp(formData);
-    navigate("/");
-    setFormData({
-      firstName: "",
-      lastName: "",
-      username: "",
-      password: "",
-      email: "",
-    });
+    const data = await signUp(formData);
+    if (data) {
+      navigate("/");
+      setFormData({
+        firstName: "",
+        lastName: "",
+        username: "",
+        password: "",
+        email: "",
+      });
+    }
   };
   return (
     <div className="min-h-screen w-full flex justify-center items-center">
