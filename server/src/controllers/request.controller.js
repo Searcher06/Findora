@@ -144,17 +144,23 @@ const acceptClaim = async (req, res) => {
     claimerCode += Math.floor(Math.random() * 10);
   }
 
+  // Setting the 4-Digit code for handling of item
   request.finderCode = finderCode;
-  request.claimerId.claimerCode = claimerCode;
+  request.claimerCode = claimerCode;
+  // updating the request and item state
   await item.save();
   await request.save();
-  const updatedRequest = await requestModel.findById(requestId);
 
-  // todo:Fix this later
-  // const receiverSocketId = getRecieverSocketId(request.claimerId.username);
-  // if (receiverSocketId) {
-  //   io.to(receiverSocketId).emit("acceptClaim", updatedRequest);
-  // }
+  const updatedRequest = await requestModel
+    .findById(requestId)
+    .populate("finderId")
+    .populate("claimerId");
+
+  const receiverSocketId = getRecieverSocketId(request.claimerId.username);
+  if (receiverSocketId) {
+    io.to(receiverSocketId).emit("acceptClaim", updatedRequest);
+    console.log("Claim accepted");
+  }
 
   res.status(200).json(updatedRequest);
 };

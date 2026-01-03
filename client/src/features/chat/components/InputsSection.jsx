@@ -94,31 +94,34 @@ export const InputsSection = ({
   };
   const handleAccept = async () => {
     try {
-      await AcceptClaim(requestId);
+      await AcceptClaim(requestId, username);
     } catch (error) {
       console.log(error);
     }
   };
 
+  // Determine button visibility and label based on role and request status
+  const isFinder = request?.finderId?._id === user?._id;
+  const isClaimer = request?.claimerId?._id === user?._id;
+  const isAccepted = request?.status === "accepted";
+  const showActionButton =
+    !requestLoading && !requestError && (isFinder || (isAccepted && isClaimer));
+  const actionLabel =
+    isAccepted && (isFinder || isClaimer) ? "Handle Item" : "Accept Claim";
+
   return (
     <div className="border-t border-gray-200 bg-white shadow-lg">
-      {/* Accept Claim Button */}
-      <div
-        className={`px-3 py-2 border-b border-gray-100 ${
-          request?.finderId?._id === user._id &&
-          !requestLoading &&
-          !requestError
-            ? "block"
-            : "hidden"
-        }`}
-      >
-        <Button
-          className="w-full bg-linear-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-medium py-2 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 text-xs"
-          onClick={handleAccept}
-        >
-          {request?.status == "accepted" ? "Handle Item" : "Accept Claim"}
-        </Button>
-      </div>
+      {/* Action Button (shown to finder before acceptance, and to finder or claimer after acceptance) */}
+      {showActionButton && (
+        <div className="px-3 py-2 border-b border-gray-100">
+          <Button
+            className="w-full bg-linear-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-medium py-2 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 text-xs"
+            onClick={handleAccept}
+          >
+            {actionLabel}
+          </Button>
+        </div>
+      )}
 
       {/* Image Preview */}
       {imagePreview && (
