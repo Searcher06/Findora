@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { getRequestById, acceptClaim } from "../apis/verificationApi";
 import { toast } from "react-toastify";
+import { useAuthStore } from "@/store/useAuthStore";
 export const useFetchRequestById = (requestId) => {
   const [request, setRequest] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -23,12 +24,13 @@ export const useFetchRequestById = (requestId) => {
     fetchFullRequest();
   }, [requestId]);
 
-  const AcceptClaim = async (requestId) => {
+  const AcceptClaim = async (requestId, username) => {
     if (!requestId) return;
     try {
       setLoading(true);
       const response = await acceptClaim(requestId);
       setRequest((prevs) => ({ ...prevs, status: "accepted" }));
+      toast.success("Claim Accepted Successfull");
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to accept claim");
     } finally {
@@ -36,5 +38,26 @@ export const useFetchRequestById = (requestId) => {
     }
   };
 
-  return { request, loading, error, AcceptClaim };
+  const subscribeToAcceptClaim = (requestId, username) => {
+    if (!requestId || !username) return;
+    const socket = useAuthStore.getState().socket;
+
+    socket.on("acceptClaim", (updatedRequest) => {
+      setRequest(updatedRequest);
+      toast.success("Your claim was Accepted");
+    });
+  };
+
+  const unsubscribeToAcceptClaim = () => {
+    const socket = useAuthStore.getState().socket;
+    socket.off("acceptClaim");
+  };
+  return {
+    request,
+    loading,
+    error,
+    AcceptClaim,
+    subscribeToAcceptClaim,
+    unsubscribeToAcceptClaim,
+  };
 };

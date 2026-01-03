@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { RequestDetail } from "../components/RequestDetail";
 import { ChatArea } from "../components/ChatArea";
 import { InputsSection } from "../components/InputsSection";
@@ -9,7 +10,7 @@ import { useEffect, useRef } from "react";
 export const ChatPage = () => {
   const { requestId, username } = useParams();
   // prettier-ignore
-  const {request,loading: requestLoading, requestError,AcceptClaim} = useFetchRequestById(requestId);
+  const {request,loading: requestLoading, requestError,AcceptClaim,subscribeToAcceptClaim,unsubscribeToAcceptClaim} = useFetchRequestById(requestId);
   // prettier-ignore
   const { messages, isMessagesLoading, getMessages,subscribeToMessages,unsubscribeFromMessage } = useChatStore();
   const messageEndref = useRef(null);
@@ -26,7 +27,12 @@ export const ChatPage = () => {
     subscribeToMessages,
     unsubscribeFromMessage,
   ]);
-  console.log(messages);
+
+  useEffect(() => {
+    subscribeToAcceptClaim(requestId, username);
+
+    return () => unsubscribeToAcceptClaim();
+  }, [requestId, username, subscribeToAcceptClaim, unsubscribeToAcceptClaim]);
 
   useEffect(() => {
     if (messageEndref.current && messages)
