@@ -1,9 +1,10 @@
+/* eslint-disable no-unused-vars */
 import { useState, useEffect } from "react";
-import { getRequestById } from "../apis/verificationApi";
+import { getRequestById, acceptClaim } from "../apis/verificationApi";
+import { toast } from "react-toastify";
 export const useFetchRequestById = (requestId) => {
   const [request, setRequest] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [questions, setQuestions] = useState([]);
   const [error, setError] = useState(null);
   useEffect(() => {
     if (!requestId) return;
@@ -12,7 +13,6 @@ export const useFetchRequestById = (requestId) => {
         setLoading(true);
         const response = await getRequestById(requestId);
         setRequest(response);
-        response && setQuestions(response.questions);
       } catch (error) {
         setError(error.response?.data?.message || "failed to get request info");
         setRequest(null);
@@ -23,5 +23,18 @@ export const useFetchRequestById = (requestId) => {
     fetchFullRequest();
   }, [requestId]);
 
-  return { request, questions, setQuestions, loading, error };
+  const AcceptClaim = async (requestId) => {
+    if (!requestId) return;
+    try {
+      setLoading(true);
+      const response = await acceptClaim(requestId);
+      setRequest((prevs) => ({ ...prevs, status: "accepted" }));
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Failed to accept claim");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { request, loading, error, AcceptClaim };
 };

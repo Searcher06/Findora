@@ -111,8 +111,6 @@ const sendMessage = async (req, res) => {
     let imageUrl = null;
 
     if (file) {
-      console.log("Debug - Processing image upload...");
-
       // Validate image
       if (!file.mimetype.startsWith("image/")) {
         return res.status(400).json({
@@ -136,8 +134,6 @@ const sendMessage = async (req, res) => {
         const base64 = file.buffer.toString("base64");
         const dataUri = `data:${file.mimetype};base64,${base64}`;
 
-        console.log("Debug - Uploading to Cloudinary...");
-
         // Add timeout to prevent hanging
         const uploadResult = await Promise.race([
           cloudinary.uploader.upload(dataUri, {
@@ -153,7 +149,6 @@ const sendMessage = async (req, res) => {
         ]);
 
         imageUrl = uploadResult.secure_url;
-        console.log("Debug - Cloudinary upload successful:", imageUrl);
       } catch (uploadError) {
         console.error("Debug - Cloudinary upload failed:", uploadError);
         return res.status(500).json({
@@ -161,8 +156,6 @@ const sendMessage = async (req, res) => {
         });
       }
     }
-
-    console.log("Debug - Creating message in database...");
 
     const newMessage = await messageModel.create({
       senderId: userId,
@@ -184,7 +177,6 @@ const sendMessage = async (req, res) => {
       io.to(receiverSocketId).emit("newMessage", populatedMessage);
     }
 
-    console.log("Debug - Message sent successfully");
     return res.status(201).json(populatedMessage);
   } catch (error) {
     console.error("Debug - Error in sendMessage:", error);

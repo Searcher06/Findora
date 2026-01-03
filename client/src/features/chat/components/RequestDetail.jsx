@@ -29,16 +29,13 @@ export const RequestDetail = ({ requestLoading, requestError, request }) => {
       </div>
       <div className="mt-2 flex justify-between text-gray-600">
         <p className="flex items-center font-sans text-xs line-clamp-1">
-          <MapPin
-            size={17}
-            className="text-white fill-gray-500 flex-shrink-0"
-          />{" "}
+          <MapPin size={17} className="text-white fill-gray-500 shrink-0" />{" "}
           {item.location}
         </p>
         <p className="flex items-center font-sans text-xs">
           <CalendarDays
             size={17}
-            className="text-white fill-gray-500 flex-shrink-0"
+            className="text-white fill-gray-500 shrink-0"
           />
           {"  "}
           {formatDate(item.dateLostOrFound)}

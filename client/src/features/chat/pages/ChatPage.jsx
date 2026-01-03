@@ -9,7 +9,7 @@ import { useEffect, useRef } from "react";
 export const ChatPage = () => {
   const { requestId, username } = useParams();
   // prettier-ignore
-  const {request,loading: requestLoading, requestError} = useFetchRequestById(requestId);
+  const {request,loading: requestLoading, requestError,AcceptClaim} = useFetchRequestById(requestId);
   // prettier-ignore
   const { messages, isMessagesLoading, getMessages,subscribeToMessages,unsubscribeFromMessage } = useChatStore();
   const messageEndref = useRef(null);
@@ -35,7 +35,7 @@ export const ChatPage = () => {
   return (
     <div className="mt-14 flex flex-col h-[calc(100vh-3.5rem)]">
       {/* Request Detail - Fixed at top */}
-      <div className="flex-shrink-0 px-3">
+      <div className="shrink-0 px-3">
         <RequestDetail
           request={request}
           requestLoading={requestLoading}
@@ -54,13 +54,14 @@ export const ChatPage = () => {
       </div>
 
       {/* Fixed Input Section at bottom */}
-      <div className="flex-shrink-0">
+      <div className="shrink-0">
         <InputsSection
           requestId={requestId}
           username={username}
           request={request}
           requestLoading={requestLoading}
           requestError={requestError}
+          AcceptClaim={AcceptClaim}
         />
       </div>
     </div>
