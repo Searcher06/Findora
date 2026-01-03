@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import InputFieldsContainer from "../components/InputFieldsContainer";
 import InputField from "../components/InputField";
 import { Button } from "@/components/ui/button";
@@ -11,7 +10,7 @@ import { toast } from "react-toastify";
 import { Spinner } from "@/components/ui/spinner";
 import { useAuthStore } from "@/store/useAuthStore";
 const LoginPage = () => {
-  const { login, connectSocket, isLoggingIng, user } = useAuthStore();
+  const { login, isLoggingIng } = useAuthStore();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
@@ -24,9 +23,11 @@ const LoginPage = () => {
       return;
     }
 
-    await login(formData);
-    setFormData({ email: "", password: "" });
-    navigate("/");
+    const data = await login(formData);
+    if (data) {
+      navigate("/");
+      setFormData({ email: "", password: "" });
+    }
   };
 
   return (
@@ -92,7 +93,7 @@ const LoginPage = () => {
 
             <ContinueWith />
 
-            <button className="mt-3 h-9  w-full sm:w-65 border-gray-200 border-[1.9px] rounded-[8px] flex items-center justify-center">
+            <button className="mt-3 h-9  w-full sm:w-65 border-gray-200 border-[1.9px] rounded-xl flex items-center justify-center">
               <GoogleIcon className="mr-3 w-5 h-5" />
               <span className="font-sans text-[13px] font-bold text-gray-700">
                 Sign Up with Google
@@ -111,7 +112,7 @@ const LoginPage = () => {
               </span>
             </p>
 
-            <hr className="h-[1px] bg-gray-200 border-0 flex-1 mt-4" />
+            <hr className="h-px bg-gray-200 border-0 flex-1 mt-4" />
             <p className="font-semibold text-gray-500 text-[10px] font-sans flex items-center gap-1.5 mt-4">
               <LockKeyholeIcon size={24} /> Your account's protected by
               Findora's secure verification system
