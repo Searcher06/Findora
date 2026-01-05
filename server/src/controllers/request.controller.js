@@ -139,12 +139,12 @@ const acceptClaim = async (req, res) => {
   item.status = "claimed";
   request.status = "accepted";
 
-  for (let i = 1; i <= 4; i++) {
+  for (let i = 1; i <= 6; i++) {
     finderCode += Math.floor(Math.random() * 10);
     claimerCode += Math.floor(Math.random() * 10);
   }
 
-  // Setting the 4-Digit code for handling of item
+  // Setting the 6-Digit code for handling of item
   request.finderCode = finderCode;
   request.claimerCode = claimerCode;
   // updating the request and item state
@@ -167,7 +167,8 @@ const acceptClaim = async (req, res) => {
 const handleItem = async (req, res) => {
   const { requestId } = req.params;
   const { id: userID } = req.user;
-  const { code } = req.body.verification;
+  const { code } = req.body;
+
   // checking if the requestId is valid
   if (validateId(requestId)) {
     res.status(400);

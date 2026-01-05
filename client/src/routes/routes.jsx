@@ -9,11 +9,7 @@ import { ToastContainer } from "react-toastify";
 import PrivateRoute from "./privateRoute";
 import { ChatPage } from "@/features/chat";
 import { NavProvider } from "@/context/NavContext";
-import {
-  GenerateQuestions,
-  AnswerQuestions,
-  VerificationDecision,
-} from "@/features/verification";
+import { CodeExchangePage } from "@/features/codeExchange";
 function AppRoutes() {
   return (
     <NavProvider>
@@ -33,21 +29,13 @@ function AppRoutes() {
                   <Route path="/report" element={<ReportPage />} />
                   <Route path="/update/:id" element={<UpdateItem />} />
                   <Route path="/notification" element={<Notification />} />
-                  {/* <Route
-                      path="/verification/questions/:requestId"
-                      element={<GenerateQuestions />}
-                    />
-                    <Route
-                      path="/verification/answers/:requestId"
-                      element={<AnswerQuestions />}
-                    /> */}
-                  <Route
-                    path="/verification/decision/:requestId"
-                    element={<VerificationDecision />}
-                  />
                   <Route
                     path="/chat/:requestId/:username"
                     element={<ChatPage />}
+                  />
+                  <Route
+                    path="/handover/:requestId"
+                    element={<CodeExchangePage />}
                   />
                 </Route>
               </Route>
