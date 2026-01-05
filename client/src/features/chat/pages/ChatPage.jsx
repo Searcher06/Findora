@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { RequestDetail } from "../components/RequestDetail";
 import { ChatArea } from "../components/ChatArea";
 import { InputsSection } from "../components/InputsSection";
@@ -6,7 +5,6 @@ import { useParams } from "react-router-dom";
 import { useFetchRequestById } from "@/features/verification";
 import { useChatStore } from "@/store/useChatStore";
 import { useEffect, useRef } from "react";
-// ChatPage.jsx
 export const ChatPage = () => {
   const { requestId, username } = useParams();
   // prettier-ignore
