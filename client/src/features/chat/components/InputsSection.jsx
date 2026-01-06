@@ -3,6 +3,7 @@ import { ImageIcon, ArrowUp, X, Loader2 } from "lucide-react";
 import { useState, useRef } from "react";
 import { useChatStore } from "@/store/useChatStore";
 import { useAuthStore } from "@/store/useAuthStore";
+import { useNavigate } from "react-router-dom";
 
 export const InputsSection = ({
   requestId,
@@ -19,6 +20,7 @@ export const InputsSection = ({
   const [imagePreview, setImagePreview] = useState(null);
   const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef(null);
+  const navigate = useNavigate();
 
   const handleSend = async () => {
     if (!messageText.trim() && !selectedImage) return;
@@ -116,7 +118,13 @@ export const InputsSection = ({
         <div className="px-3 py-2 border-b border-gray-100">
           <Button
             className="w-full bg-linear-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-medium py-2 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 text-xs"
-            onClick={handleAccept}
+            onClick={
+              !isAccepted && isFinder
+                ? handleAccept
+                : () => {
+                    navigate(`/handover/${requestId}`);
+                  }
+            }
           >
             {actionLabel}
           </Button>

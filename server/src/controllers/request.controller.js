@@ -139,7 +139,7 @@ const acceptClaim = async (req, res) => {
   item.status = "claimed";
   request.status = "accepted";
 
-  for (let i = 1; i <= 6; i++) {
+  for (let i = 1; i <= 5; i++) {
     finderCode += Math.floor(Math.random() * 10);
     claimerCode += Math.floor(Math.random() * 10);
   }
@@ -227,6 +227,13 @@ const handleItem = async (req, res) => {
     await item.save();
     await updatedRequest.save();
     const finalRequestDoc = await requestModel.findById(requestId);
+
+    // const receiverSocketId = getRecieverSocketId(request.claimerId.username);
+    // if (receiverSocketId) {
+    //   io.to(receiverSocketId).emit("allVerified", finalRequestDoc);
+    //   console.log("All Verified and Item returned");
+    // }
+
     res.status(200).json(finalRequestDoc);
   } else {
     res.status(200).json(updatedRequest);

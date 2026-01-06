@@ -1,10 +1,25 @@
-import {
-  InputOTP,
-  InputOTPGroup,
-  InputOTPSlot,
-} from "@/components/ui/input-otp";
+// prettier-ignore
+import { InputOTP, InputOTPGroup, InputOTPSlot} from "@/components/ui/input-otp";
+import { useFetchRequestById } from "@/features/verification";
+import { useNavigate, useParams } from "react-router-dom";
+import { useAuthStore } from "@/store/useAuthStore";
 
 export const CodeExchangePage = () => {
+  const navigate = useNavigate();
+  const { requestId } = useParams();
+  const { user } = useAuthStore();
+  const { loading, request, error } = useFetchRequestById(requestId);
+  const isFinder = request?.finderId?._id === user?._id;
+  const isClaimer = request?.claimerId?._id === user?._id;
+
+  if (loading) {
+    return <p className="font-display text-lg">Fetching...</p>;
+  } else if (!loading && request?.status !== "accepted") {
+    navigate("/");
+  } else if (error) {
+    return <p className="font-display text-lg"></p>;
+  }
+
   return (
     <div className="min-h-screen bg-white text-gray-900 p-4 flex flex-col mt-14">
       {/* Header */}
@@ -60,7 +75,9 @@ export const CodeExchangePage = () => {
             </h3>
             <div className="mb-2">
               <p className="text-xl font-bold text-gray-900 font-mono tracking-wider mb-1">
-                84719
+                {isFinder
+                  ? request?.finderCode
+                  : isClaimer && request?.claimerCode}
               </p>
               <div className="space-y-0.5">
                 <p className="text-gray-600 text-xs font-sans">
