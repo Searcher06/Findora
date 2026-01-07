@@ -28,6 +28,12 @@ io.on("connection", (socket) => {
     console.log(currentUser_username);
   }
 
+  socket.on("join:request", ({ requestId }) => {
+    const roomName = `request:${requestId}`;
+    socket.join(roomName);
+    console.log(`Socket ${socket.id} joined ${roomName}`);
+  });
+
   socket.on("disconnect", () => {
     delete userSocketMap[currentUser_username];
     console.log("A user disconnected", socket.id);
