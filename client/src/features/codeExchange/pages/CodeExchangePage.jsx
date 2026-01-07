@@ -1,24 +1,71 @@
 // prettier-ignore
-import { InputOTP, InputOTPGroup, InputOTPSlot} from "@/components/ui/input-otp";
+import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import { useFetchRequestById } from "@/features/verification";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAuthStore } from "@/store/useAuthStore";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
+import { useSendCode } from "../hooks/useSendCode";
 
 export const CodeExchangePage = () => {
   const navigate = useNavigate();
   const { requestId } = useParams();
   const { user } = useAuthStore();
-  const { loading, request, error } = useFetchRequestById(requestId);
+  const { loading, request, error, setRequest } =
+    useFetchRequestById(requestId);
+
+  const [otp, setOtp] = useState("");
+
+  const { sendCode, loading: sending } = useSendCode();
+
   const isFinder = request?.finderId?._id === user?._id;
   const isClaimer = request?.claimerId?._id === user?._id;
 
-  if (loading) {
-    return <p className="font-display text-lg">Fetching...</p>;
-  } else if (!loading && request?.status !== "accepted") {
-    navigate("/");
-  } else if (error) {
-    return <p className="font-display text-lg"></p>;
-  }
+  const socket = useAuthStore.getState().socket;
+
+  // Join request room and listen for real-time verification
+  useEffect(() => {
+    if (!requestId) return;
+
+    socket.emit("join:request", { requestId });
+
+    socket.on("request:verified", (updatedRequest) => {
+      setRequest(updatedRequest);
+
+      // HCI-friendly toast message
+      if (updatedRequest.status === "returned") {
+        toast.success(
+          "Both users have verified. Item has been successfully returned."
+        );
+      } else {
+        toast.info(
+          "Your code has been verified. Waiting for the other user to verify."
+        );
+      }
+    });
+
+    return () => {
+      socket.off("request:verified");
+    };
+  }, [requestId, setRequest, socket]);
+
+  // Handle OTP submission
+  const handleSubmitOtp = async () => {
+    if (otp.length !== 5) {
+      toast.error("Please enter the complete 5-digit code.");
+      return;
+    }
+
+    const data = await sendCode(requestId, otp);
+    if (data) {
+      setRequest(data);
+      setOtp(""); // clear input
+    }
+  };
+
+  if (loading) return <p className="font-display text-lg">Fetching...</p>;
+  if (!loading && request?.status !== "accepted") navigate("/");
+  if (error) return <p className="font-display text-lg"></p>;
 
   return (
     <div className="min-h-screen bg-white text-gray-900 p-4 flex flex-col mt-14">
@@ -102,7 +149,7 @@ export const CodeExchangePage = () => {
 
           {/* Shadcn Input OTP Component */}
           <div className="flex justify-center mb-4">
-            <InputOTP maxLength={5}>
+            <InputOTP maxLength={5} value={otp} onChange={setOtp}>
               <InputOTPGroup>
                 <InputOTPSlot
                   index={0}
@@ -129,8 +176,14 @@ export const CodeExchangePage = () => {
           </div>
 
           {/* Verify Button */}
-          <button className="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 rounded-md text-xs transition-colors duration-200 font-sans">
-            Complete Verification
+          <button
+            onClick={handleSubmitOtp}
+            disabled={
+              sending || otp.length < 5 || request.status === "returned"
+            }
+            className="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 rounded-md text-xs transition-colors duration-200 font-sans"
+          >
+            {sending ? "Verifying..." : "Complete Verification"}
           </button>
         </div>
       </div>
