@@ -4,7 +4,7 @@ import { useFetchRequestById } from "@/features/verification";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useEffect, useState } from "react";
-import { toast } from "sonner";
+import { toast } from "react-toastify";
 import { useSendCode } from "../hooks/useSendCode";
 
 export const CodeExchangePage = () => {
@@ -32,16 +32,18 @@ export const CodeExchangePage = () => {
     socket.on("request:verified", (updatedRequest) => {
       setRequest(updatedRequest);
 
-      // HCI-friendly toast message
-      if (updatedRequest.status === "returned") {
-        toast.success(
-          "Both users have verified. Item has been successfully returned."
-        );
-      } else {
-        toast.info(
-          "Your code has been verified. Waiting for the other user to verify."
-        );
-      }
+      // if (updatedRequest.status === "returned") {
+      //   toast.success(
+      //     "Both users have verified. Item has been successfully returned."
+      //   );
+      // } else {
+      //   toast.info(
+      //     "Your code has been verified. Waiting for the other user to verify."
+      //   );
+      // }
+      toast.success(
+        "Both users have verified. Item has been successfully returned"
+      );
     });
 
     return () => {
@@ -56,7 +58,9 @@ export const CodeExchangePage = () => {
       return;
     }
 
-    const data = await sendCode(requestId, otp);
+    const data = await sendCode(requestId, { code: otp });
+
+    // Update state only on success
     if (data) {
       setRequest(data);
       setOtp(""); // clear input
@@ -64,8 +68,8 @@ export const CodeExchangePage = () => {
   };
 
   if (loading) return <p className="font-display text-lg">Fetching...</p>;
-  if (!loading && request?.status !== "accepted") navigate("/");
-  if (error) return <p className="font-display text-lg"></p>;
+  if (!loading && (request?.status == "pending" || null)) navigate("/");
+  if (error) return <p className="font-display text-lg">{error}</p>;
 
   return (
     <div className="min-h-screen bg-white text-gray-900 p-4 flex flex-col mt-14">
@@ -178,9 +182,7 @@ export const CodeExchangePage = () => {
           {/* Verify Button */}
           <button
             onClick={handleSubmitOtp}
-            disabled={
-              sending || otp.length < 5 || request.status === "returned"
-            }
+            disabled={sending || request?.status === "returned"}
             className="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 rounded-md text-xs transition-colors duration-200 font-sans"
           >
             {sending ? "Verifying..." : "Complete Verification"}

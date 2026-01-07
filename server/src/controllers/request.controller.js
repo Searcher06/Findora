@@ -144,7 +144,7 @@ const acceptClaim = async (req, res) => {
     claimerCode += Math.floor(Math.random() * 10);
   }
 
-  // Setting the 6-Digit code for handling of item
+  // Setting the 6-Digit code for item handover
   request.finderCode = finderCode;
   request.claimerCode = claimerCode;
   // updating the request and item state
@@ -189,7 +189,7 @@ const handleItem = async (req, res) => {
   // checking if the current user is the finder
   if (userID.toString() == request.finderId.toString()) {
     // checking if the finder code is not equal to the claimer code
-    if (code != request.claimerCode) {
+    if (code.toString() !== request.claimerCode.toString()) {
       res.status(400);
       throw new Error("Invalid code,try again.");
     }
@@ -200,8 +200,9 @@ const handleItem = async (req, res) => {
     }
     // verifying the claimer
     request.claimerVerified = true;
+    // Checking if the current user is the claimer
   } else if (userID.toString() == request.claimerId.toString()) {
-    if (code != request.finderCode) {
+    if (code.toString() !== request.finderCode.toString()) {
       res.status(400);
       throw new Error("Invalid code,try again.");
     }

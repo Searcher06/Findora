@@ -27,13 +27,6 @@ const schema = new mongoose.Schema(
       enum: ["pending", "rejected", "accepted", "returned"],
       default: "pending",
     },
-    questions: [
-      {
-        question: { type: String },
-        answer: { type: String },
-      },
-    ],
-
     finderCode: {
       type: String,
     },
