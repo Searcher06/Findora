@@ -54,6 +54,7 @@ export const useFetchRequestById = (requestId) => {
   };
   return {
     request,
+    setRequest,
     loading,
     error,
     AcceptClaim,
