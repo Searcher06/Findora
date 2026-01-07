@@ -228,16 +228,12 @@ const handleItem = async (req, res) => {
     await updatedRequest.save();
     const finalRequestDoc = await requestModel.findById(requestId);
 
-    // const receiverSocketId = getRecieverSocketId(request.claimerId.username);
-    // if (receiverSocketId) {
-    //   io.to(receiverSocketId).emit("allVerified", finalRequestDoc);
-    //   console.log("All Verified and Item returned");
-    // }
+    // emit the event to both users that the item has been handled successfully
+    io.to(`request:${requestId}`).emit("request:verified", finalRequestDoc);
 
     res.status(200).json(finalRequestDoc);
-  } else {
-    res.status(200).json(updatedRequest);
   }
+  res.status(200).json(updatedRequest);
 };
 
 export {
