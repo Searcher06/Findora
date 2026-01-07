@@ -12,10 +12,14 @@ export const useSendCode = () => {
 
     setLoading(true);
     try {
-      const response = await handleItem(requestId, code);
-      return response.data; // assuming handleItem returns axios response
+      const data = await handleItem(requestId, code);
+      toast.success("Code sent successfully!");
+      return data;
     } catch (error) {
-      toast.error(error.response?.data?.message || "Failed to send code");
+      console.log(error);
+      toast.error(
+        error?.response?.data?.message || error?.message || "Error sending code"
+      );
       return null;
     } finally {
       setLoading(false);
