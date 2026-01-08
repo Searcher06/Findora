@@ -219,7 +219,10 @@ const handleItem = async (req, res) => {
   }
 
   await request.save();
-  const updatedRequest = await requestModel.findById(requestId);
+  const updatedRequest = await requestModel
+    .findById(requestId)
+    .populate("finderId")
+    .populate("claimerId");
 
   if (updatedRequest.finderVerified && updatedRequest.claimerVerified) {
     const item = await itemModel.findById(request.itemId);

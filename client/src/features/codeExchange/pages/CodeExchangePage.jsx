@@ -18,9 +18,6 @@ export const CodeExchangePage = () => {
 
   const { sendCode, loading: sending } = useSendCode();
 
-  const isFinder = request?.finderId?._id === user?._id;
-  const isClaimer = request?.claimerId?._id === user?._id;
-
   const socket = useAuthStore.getState().socket;
 
   // Join request room and listen for real-time verification
@@ -66,6 +63,8 @@ export const CodeExchangePage = () => {
       setOtp(""); // clear input
     }
   };
+  const isFinder = request?.finderId?._id === user?._id;
+  const isClaimer = request?.claimerId?._id === user?._id;
 
   if (loading) return <p className="font-display text-lg">Fetching...</p>;
   if (!loading && (request?.status == "pending" || null)) navigate("/");
@@ -128,7 +127,9 @@ export const CodeExchangePage = () => {
               <p className="text-xl font-bold text-gray-900 font-mono tracking-wider mb-1">
                 {isFinder
                   ? request?.finderCode
-                  : isClaimer && request?.claimerCode}
+                  : isClaimer
+                  ? request?.claimerCode
+                  : null}
               </p>
               <div className="space-y-0.5">
                 <p className="text-gray-600 text-xs font-sans">
