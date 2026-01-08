@@ -6,6 +6,7 @@ import { useAuthStore } from "@/store/useAuthStore";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useSendCode } from "../hooks/useSendCode";
+import { CheckCircle } from "lucide-react";
 
 export const CodeExchangePage = () => {
   const navigate = useNavigate();
@@ -28,16 +29,6 @@ export const CodeExchangePage = () => {
 
     socket.on("request:verified", (updatedRequest) => {
       setRequest(updatedRequest);
-
-      // if (updatedRequest.status === "returned") {
-      //   toast.success(
-      //     "Both users have verified. Item has been successfully returned."
-      //   );
-      // } else {
-      //   toast.info(
-      //     "Your code has been verified. Waiting for the other user to verify."
-      //   );
-      // }
       toast.success(
         "Both users have verified. Item has been successfully returned"
       );
@@ -70,6 +61,107 @@ export const CodeExchangePage = () => {
   if (!loading && (request?.status == "pending" || null)) navigate("/");
   if (error) return <p className="font-display text-lg">{error}</p>;
 
+  // Success UI for returned status
+  if (request?.status === "returned") {
+    return (
+      <div className="min-h-screen mt-14 bg-gradient-to-b from-green-50 to-white text-gray-900 p-4 flex flex-col items-center justify-center">
+        {/* Success Animation/Icon */}
+        <div className="mb-5">
+          <div className="relative">
+            <div className="w-20 h-20 bg-gradient-to-br from-green-400 to-green-500 rounded-full flex items-center justify-center">
+              <CheckCircle className="w-10 h-10 text-white" />
+            </div>
+          </div>
+        </div>
+
+        {/* Success Message */}
+        <div className="text-center mb-6 max-w-xs">
+          <h1 className="text-xl font-bold text-gray-900 font-display mb-2">
+            Handover Complete
+          </h1>
+          <p className="text-gray-600 text-sm font-sans mb-3">
+            The item has been successfully returned.
+          </p>
+
+          {/* User Info */}
+          <div className="bg-white rounded-lg p-3 border border-green-200 shadow-xs mb-4">
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-gray-500 text-xs font-sans">Item:</span>
+                <span className="text-gray-800 text-xs font-medium font-sans">
+                  {request?.itemId?.name || "Item Name"}
+                </span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-gray-500 text-xs font-sans">Finder:</span>
+                <span className="text-gray-800 text-xs font-medium font-sans">
+                  {request?.finderId?.firstName || "User"}
+                </span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-gray-500 text-xs font-sans">
+                  Claimer:
+                </span>
+                <span className="text-gray-800 text-xs font-medium font-sans">
+                  {request?.claimerId?.firstName || "User"}
+                </span>
+              </div>
+              <div className="pt-2 border-t border-gray-100">
+                <div className="flex items-center gap-1.5 justify-center">
+                  <div className="w-1.5 h-1.5 rounded-full bg-green-400"></div>
+                  <span className="text-green-600 text-xs font-medium font-sans">
+                    Both parties verified
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Next Steps */}
+          <div className="bg-blue-50 rounded-lg p-3 border border-blue-100">
+            <h3 className="text-xs font-semibold text-gray-800 font-display mb-1.5">
+              What's Next?
+            </h3>
+            <div className="space-y-1.5">
+              <div className="flex items-start gap-1.5">
+                <div className="w-4 h-4 rounded-full bg-blue-100 flex items-center justify-center shrink-0 mt-0.5">
+                  <span className="text-blue-600 text-[10px]">✓</span>
+                </div>
+                <p className="text-gray-600 text-xs font-sans">
+                  Exchange recorded in secure database
+                </p>
+              </div>
+              <div className="flex items-start gap-1.5">
+                <div className="w-4 h-4 rounded-full bg-blue-100 flex items-center justify-center shrink-0 mt-0.5">
+                  <span className="text-blue-600 text-[10px]">✓</span>
+                </div>
+                <p className="text-gray-600 text-xs font-sans">
+                  You can close this or go to Home page
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Action Button */}
+        <button
+          onClick={() => navigate("/")}
+          className="mt-6 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-medium py-2.5 px-6 rounded-lg text-xs transition-all duration-200 font-sans shadow-sm hover:shadow"
+        >
+          Go to Home
+        </button>
+
+        {/* Footer */}
+        <div className="mt-8 pt-4 border-t border-gray-200 text-center">
+          <p className="text-gray-400 text-[10px] font-sans">
+            Transaction securely recorded • Findora Verification • 2026
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  // Original verification UI
   return (
     <div className="min-h-screen bg-white text-gray-900 p-4 flex flex-col mt-14">
       {/* Header */}
@@ -120,11 +212,11 @@ export const CodeExchangePage = () => {
         {/* Your Code Section FIRST (Users need to see their code immediately) */}
         <div className="bg-white rounded-lg p-4 max-w-xs w-full border border-gray-200 shadow-xs">
           <div className="text-center">
-            <h3 className="font-semibold mb-2 text-sm font-display text-gray-800">
+            <h3 className="font-semibold mb-2 text-xs font-display text-gray-800">
               Your 5-digit code
             </h3>
             <div className="mb-2">
-              <p className="text-xl font-bold text-gray-900 font-mono tracking-wider mb-1">
+              <p className="text-lg font-bold text-gray-900 font-mono tracking-wider mb-1">
                 {isFinder
                   ? request?.finderCode
                   : isClaimer
@@ -135,7 +227,7 @@ export const CodeExchangePage = () => {
                 <p className="text-gray-600 text-xs font-sans">
                   Share this with the other person
                 </p>
-                <p className="text-gray-400 text-[11px] font-sans">
+                <p className="text-gray-400 text-[10px] font-sans">
                   Show on screen or read aloud
                 </p>
               </div>
@@ -184,7 +276,7 @@ export const CodeExchangePage = () => {
           <button
             onClick={handleSubmitOtp}
             disabled={sending || request?.status === "returned"}
-            className="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 rounded-md text-xs transition-colors duration-200 font-sans"
+            className="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 rounded text-xs transition-colors duration-200 font-sans"
           >
             {sending ? "Verifying..." : "Complete Verification"}
           </button>
@@ -193,7 +285,7 @@ export const CodeExchangePage = () => {
 
       {/* Footer - Now at bottom */}
       <div className="mt-auto pt-6 text-center">
-        <p className="text-gray-400 text-[11px] font-sans">
+        <p className="text-gray-400 text-[10px] font-sans">
           Findora Verification Protocol • 2026
         </p>
       </div>
