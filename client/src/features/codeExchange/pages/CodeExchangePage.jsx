@@ -28,10 +28,10 @@ export const CodeExchangePage = () => {
     socket.emit("join:request", { requestId });
 
     socket.on("request:verified", (updatedRequest) => {
-      setRequest(updatedRequest);
       toast.success(
         "Both users have verified. Item has been successfully returned"
       );
+      setRequest(updatedRequest);
     });
 
     return () => {
@@ -54,8 +54,17 @@ export const CodeExchangePage = () => {
       setOtp(""); // clear input
     }
   };
+
   const isFinder = request?.finderId?._id === user?._id;
   const isClaimer = request?.claimerId?._id === user?._id;
+
+  // Verification status tracking
+  const isFinderVerified = request?.finderVerified || false;
+  const isClaimerVerified = request?.claimerVerified || false;
+
+  // Determine verification states for current user
+  const isUserVerified = isFinder ? isFinderVerified : isClaimerVerified;
+  const isOtherUserVerified = isFinder ? isClaimerVerified : isFinderVerified;
 
   if (loading) return <p className="font-display text-lg">Fetching...</p>;
   if (!loading && (request?.status == "pending" || null)) navigate("/");
@@ -64,11 +73,11 @@ export const CodeExchangePage = () => {
   // Success UI for returned status
   if (request?.status === "returned") {
     return (
-      <div className="min-h-screen mt-14 bg-gradient-to-b from-green-50 to-white text-gray-900 p-4 flex flex-col items-center justify-center">
+      <div className="min-h-screen mt-14 bg-linear-to-b from-green-50 to-white text-gray-900 p-4 flex flex-col items-center justify-center">
         {/* Success Animation/Icon */}
         <div className="mb-5">
           <div className="relative">
-            <div className="w-20 h-20 bg-gradient-to-br from-green-400 to-green-500 rounded-full flex items-center justify-center">
+            <div className="w-20 h-20 bg-linear-to-br from-green-400 to-green-500 rounded-full flex items-center justify-center">
               <CheckCircle className="w-10 h-10 text-white" />
             </div>
           </div>
@@ -146,7 +155,7 @@ export const CodeExchangePage = () => {
         {/* Action Button */}
         <button
           onClick={() => navigate("/")}
-          className="mt-6 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-medium py-2.5 px-6 rounded-lg text-xs transition-all duration-200 font-sans shadow-sm hover:shadow"
+          className="mt-6 bg-linear-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-medium py-2.5 px-6 rounded-lg text-xs transition-all duration-200 font-sans shadow-sm hover:shadow"
         >
           Go to Home
         </button>
@@ -161,7 +170,7 @@ export const CodeExchangePage = () => {
     );
   }
 
-  // Original verification UI
+  // Original verification UI with enhanced status tracking
   return (
     <div className="min-h-screen bg-white text-gray-900 p-4 flex flex-col mt-14">
       {/* Header */}
@@ -232,6 +241,18 @@ export const CodeExchangePage = () => {
                 </p>
               </div>
             </div>
+
+            {/* Status indicator for your verification */}
+            {isUserVerified && (
+              <div className="mt-2 pt-2 border-t border-gray-100">
+                <div className="flex items-center justify-center gap-1.5">
+                  <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                  <span className="text-green-600 text-xs font-medium font-sans">
+                    ✓ The other user has verified you
+                  </span>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
@@ -246,40 +267,95 @@ export const CodeExchangePage = () => {
 
           {/* Shadcn Input OTP Component */}
           <div className="flex justify-center mb-4">
-            <InputOTP maxLength={5} value={otp} onChange={setOtp}>
+            <InputOTP
+              maxLength={5}
+              value={otp}
+              onChange={setOtp}
+              disabled={isOtherUserVerified}
+            >
               <InputOTPGroup>
                 <InputOTPSlot
                   index={0}
-                  className="w-9 h-11 text-base border-gray-300"
+                  className={`w-9 h-11 text-base ${
+                    isOtherUserVerified
+                      ? "bg-gray-50 border-gray-200"
+                      : "border-gray-300"
+                  }`}
                 />
                 <InputOTPSlot
                   index={1}
-                  className="w-9 h-11 text-base border-gray-300"
+                  className={`w-9 h-11 text-base ${
+                    isOtherUserVerified
+                      ? "bg-gray-50 border-gray-200"
+                      : "border-gray-300"
+                  }`}
                 />
                 <InputOTPSlot
                   index={2}
-                  className="w-9 h-11 text-base border-gray-300"
+                  className={`w-9 h-11 text-base ${
+                    isOtherUserVerified
+                      ? "bg-gray-50 border-gray-200"
+                      : "border-gray-300"
+                  }`}
                 />
                 <InputOTPSlot
                   index={3}
-                  className="w-9 h-11 text-base border-gray-300"
+                  className={`w-9 h-11 text-base ${
+                    isOtherUserVerified
+                      ? "bg-gray-50 border-gray-200"
+                      : "border-gray-300"
+                  }`}
                 />
                 <InputOTPSlot
                   index={4}
-                  className="w-9 h-11 text-base border-gray-300"
+                  className={`w-9 h-11 text-base ${
+                    isOtherUserVerified
+                      ? "bg-gray-50 border-gray-200"
+                      : "border-gray-300"
+                  }`}
                 />
               </InputOTPGroup>
             </InputOTP>
           </div>
 
-          {/* Verify Button */}
+          {/* Verify Button with dynamic states */}
           <button
             onClick={handleSubmitOtp}
-            disabled={sending || request?.status === "returned"}
-            className="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 rounded text-xs transition-colors duration-200 font-sans"
+            disabled={sending || isOtherUserVerified}
+            className={`w-full ${
+              isOtherUserVerified
+                ? "bg-green-500 hover:bg-green-500 cursor-default"
+                : "bg-blue-500 hover:bg-blue-600"
+            } text-white font-medium py-2 rounded text-xs transition-colors duration-200 font-sans`}
           >
-            {sending ? "Verifying..." : "Complete Verification"}
+            {sending
+              ? "Verifying..."
+              : isOtherUserVerified
+              ? "✓ Verification Complete"
+              : "Complete Verification"}
           </button>
+
+          {/* Status messages */}
+          {isOtherUserVerified && (
+            <div className="mt-2 text-center">
+              <p className="text-green-600 text-xs font-sans">
+                You've successfully verified the other user!
+              </p>
+              {!isUserVerified && (
+                <p className="text-gray-500 text-[10px] font-sans mt-0.5">
+                  Waiting for them to verify your code...
+                </p>
+              )}
+            </div>
+          )}
+
+          {!isOtherUserVerified && isUserVerified && (
+            <div className="mt-2 text-center">
+              <p className="text-blue-600 text-xs font-sans">
+                They've verified you! Now enter their code above.
+              </p>
+            </div>
+          )}
         </div>
       </div>
 

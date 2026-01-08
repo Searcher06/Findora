@@ -231,7 +231,11 @@ const handleItem = async (req, res) => {
     item.status = "returned";
     await item.save();
     await updatedRequest.save();
-    const finalRequestDoc = await requestModel.findById(requestId);
+    const finalRequestDoc = await requestModel
+      .findById(requestId)
+      .populate("finderId", "firstName lastName username profilePic")
+      .populate("claimerId", "firstName lastName username profilePic")
+      .populate("itemId", "name image");
 
     // emit the event to both users that the item has been handled successfully
     io.to(`request:${requestId}`).emit("request:verified", finalRequestDoc);
