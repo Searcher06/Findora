@@ -222,7 +222,8 @@ const handleItem = async (req, res) => {
   const updatedRequest = await requestModel
     .findById(requestId)
     .populate("finderId")
-    .populate("claimerId");
+    .populate("claimerId")
+    .populate("itemId");
 
   if (updatedRequest.finderVerified && updatedRequest.claimerVerified) {
     const item = await itemModel.findById(request.itemId);
