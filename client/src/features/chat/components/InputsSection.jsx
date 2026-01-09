@@ -112,6 +112,7 @@ export const InputsSection = ({
     isAccepted && (isFinder || isClaimer) ? "Handle Item" : "Accept Claim";
 
   return (
+    // Todo:Add a dialog box here
     <div className="border-t border-gray-200 bg-white shadow-lg">
       {/* Action Button (shown to finder before acceptance, and to finder or claimer after acceptance) */}
       {showActionButton && (

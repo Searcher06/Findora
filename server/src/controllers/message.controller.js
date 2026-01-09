@@ -89,12 +89,6 @@ const sendMessage = async (req, res) => {
 
     const file = req.file;
 
-    console.log("Debug - Text received:", text);
-    console.log(
-      "Debug - File received:",
-      file ? `Yes (${file.size} bytes)` : "No"
-    );
-
     // Validate: Must have either text OR image
     if (!text && !file) {
       return res.status(400).json({
