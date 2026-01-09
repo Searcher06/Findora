@@ -1,2 +1,3 @@
 import { ChatPage } from "./pages/ChatPage";
-export { ChatPage };
+import { ChatSelectionPage } from "./pages/ChatSelectionPage";
+export { ChatPage, ChatSelectionPage };
