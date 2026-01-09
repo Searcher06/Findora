@@ -11,7 +11,7 @@ const itemSchema = new mongoose.Schema(
       type: String,
       required: [true, "Please provide the item description"],
       maxlength: 200,
-      minlength: 20,
+      minlength: 10,
       trim: true,
     },
     category: {

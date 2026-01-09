@@ -1,16 +1,6 @@
-/* eslint-disable no-unused-vars */
 import { Button } from "@/components/ui/button";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+// prettier-ignore
+import {AlertDialog,AlertDialogAction,AlertDialogCancel,AlertDialogContent,AlertDialogDescription,AlertDialogFooter,AlertDialogHeader,AlertDialogTitle,AlertDialogTrigger} from "@/components/ui/alert-dialog";
 import { useItems } from "../hooks/useItems";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
@@ -159,18 +149,19 @@ export const RequestButton = ({ itemId, itemName, className, status }) => {
             {status == "found" ? (
               <>
                 This action cannot be undone. This will send a claim request to
-                the finder of the item{" "}
-                <span className="font-semibold">"{itemName}"</span>
-                they will then set questions for you to answer in order to
+                the finder of the item, and open a chat window between you and
+                them <span className="font-semibold">"{itemName}"</span>
+                they will then ask you questions for you to answer in order to
                 successfully verify you are the real owner of the item.
               </>
             ) : (
               <>
                 This action cannot be undone. This will alert the owner of the
-                item
-                <span className="font-semibold"> "{itemName}" </span> they will
-                then send a claim request to you in order to start the
-                verification process.
+                item that you found there item
+                <span className="font-semibold"> "{itemName}" </span> This will
+                open a chat window between you and them in order to co ordinate
+                item return, Note:Ask them questions to prove ownership before
+                pressing accept claim button
               </>
             )}
           </AlertDialogDescription>

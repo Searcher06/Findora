@@ -44,7 +44,7 @@ app.use("/api/v1/chat", messageRoute);
 
 // api testing
 app.get("/api/v1/welcome", async (req, res) => {
-  res.status(200).json({ message: "working" });
+  res.status(200).json({ message: "welcome to the server" });
 });
 
 // Error Handler middleware

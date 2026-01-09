@@ -33,9 +33,9 @@ const createItem = async (req, res) => {
     );
   }
 
-  if (itemDescription.length < 20 || itemDescription.length > 200) {
+  if (itemDescription.length < 10 || itemDescription.length > 200) {
     res.status(400);
-    throw new Error("Description must be between 20 to 200 characters");
+    throw new Error("Description must be between 10 to 200 characters");
   }
 
   if (textValidator(itemName)) {
