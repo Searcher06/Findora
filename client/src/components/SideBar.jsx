@@ -32,7 +32,7 @@ export const SideBar = ({ setOpenSidebar }) => {
           <Link to="/" onClick={() => setOpenSidebar(false)}>
             <NavLink Icon={"SearchIcon"} text={"Browse"} />
           </Link>
-          <Link to="/" onClick={() => setOpenSidebar(false)}>
+          <Link to="/chats" onClick={() => setOpenSidebar(false)}>
             <NavLink Icon={"MessageSquare"} text={"Messages"} />
           </Link>
           <Link to={"/notification"} onClick={() => setOpenSidebar(false)}>

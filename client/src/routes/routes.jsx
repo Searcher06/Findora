@@ -7,7 +7,7 @@ import { LoginPage, SignUpPage } from "@/features/authentication";
 import { UploadPhotoProvider } from "@/features/items/context/UploadPhotoContext";
 import { ToastContainer } from "react-toastify";
 import PrivateRoute from "./privateRoute";
-import { ChatPage } from "@/features/chat";
+import { ChatPage, ChatSelectionPage } from "@/features/chat";
 import { NavProvider } from "@/context/NavContext";
 import { CodeExchangePage } from "@/features/codeExchange";
 function AppRoutes() {
@@ -37,6 +37,7 @@ function AppRoutes() {
                     path="/handover/:requestId"
                     element={<CodeExchangePage />}
                   />
+                  <Route path="/chats" element={<ChatSelectionPage />} />
                 </Route>
               </Route>
             </Routes>
