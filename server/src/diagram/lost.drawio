@@ -1,34 +1,34 @@
 <mxfile host="65bd71144e">
     <diagram id="i1hBtsmhHRajQAO7jnXf" name="Page-1">
-        <mxGraphModel dx="870" dy="475" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="540" dy="483" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
-                <mxCell id="188" value="" style="edgeStyle=none;html=1;" edge="1" parent="1" source="186" target="187">
+                <mxCell id="188" value="" style="edgeStyle=none;html=1;" parent="1" source="186" target="187" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="186" value="Foound item" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                <mxCell id="186" value="Foound item" style="whiteSpace=wrap;html=1;" parent="1" vertex="1">
                     <mxGeometry x="80" y="210" width="120" height="60" as="geometry"/>
                 </mxCell>
-                <mxCell id="190" value="" style="edgeStyle=none;html=1;" edge="1" parent="1" source="187" target="189">
+                <mxCell id="190" value="" style="edgeStyle=none;html=1;" parent="1" source="187" target="189" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="187" value="Post" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                <mxCell id="187" value="Post" style="whiteSpace=wrap;html=1;" parent="1" vertex="1">
                     <mxGeometry x="280" y="210" width="120" height="60" as="geometry"/>
                 </mxCell>
-                <mxCell id="192" value="" style="edgeStyle=none;html=1;" edge="1" parent="1" source="189" target="191">
+                <mxCell id="192" value="" style="edgeStyle=none;html=1;" parent="1" source="189" target="191" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="189" value="Claim(it&#39;s mine)&lt;br&gt;chat" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                <mxCell id="189" value="Claim(it&#39;s mine)&lt;br&gt;chat" style="whiteSpace=wrap;html=1;" parent="1" vertex="1">
                     <mxGeometry x="480" y="210" width="120" height="60" as="geometry"/>
                 </mxCell>
-                <mxCell id="194" value="" style="edgeStyle=none;html=1;" edge="1" parent="1" source="191" target="193">
+                <mxCell id="194" value="" style="edgeStyle=none;html=1;" parent="1" source="191" target="193" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="191" value="chat(question,meetup)" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                <mxCell id="191" value="chat(question,meetup)" style="whiteSpace=wrap;html=1;" parent="1" vertex="1">
                     <mxGeometry x="660" y="210" width="140" height="60" as="geometry"/>
                 </mxCell>
-                <mxCell id="193" value="handle item" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                <mxCell id="193" value="handle item" style="whiteSpace=wrap;html=1;" parent="1" vertex="1">
                     <mxGeometry x="670" y="350" width="120" height="60" as="geometry"/>
                 </mxCell>
             </root>
