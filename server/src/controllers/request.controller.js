@@ -196,7 +196,7 @@ const handleItem = async (req, res) => {
 
     if (request.claimerVerified) {
       res.status(400);
-      throw new Error("Claimer already verified!"); //todo:change the grammer later
+      throw new Error("Claimer already verified!"); //todo:change the grammar later
     }
     // verifying the claimer
     request.claimerVerified = true;
