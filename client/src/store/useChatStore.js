@@ -4,8 +4,8 @@ import { toast } from "react-toastify";
 import { useAuthStore } from "./useAuthStore";
 export const useChatStore = create((set, get) => ({
   messages: [],
-  usersToChat: [],
-  onlineUser: [],
+  conversations: [],
+  onlineUsers: [],
   selectedUser: null,
   isUsersLoading: false,
   isMessagesLoading: false,

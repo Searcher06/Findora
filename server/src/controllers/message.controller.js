@@ -7,6 +7,7 @@ const getUsersToChat = async (req, res) => {
   const users = await requestModel
     .find({
       $or: [{ finderId: userId }, { claimerId: userId }],
+      status: "pending" || "accepted",
     })
     .populate("finderId", "-password")
     .populate("claimerId", "-password");
