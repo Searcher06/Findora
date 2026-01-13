@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 
-// Message Schema first
 const messageSchema = new mongoose.Schema(
   {
     senderId: {
@@ -27,7 +26,7 @@ const schema = new mongoose.Schema(
       required: true,
     },
     requestType: {
-      type: String, // Changed "string" to String (Mongoose standard)
+      type: String,
       enum: ["claim", "found"],
       required: true,
     },
@@ -41,26 +40,29 @@ const schema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-
     participants: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
-
     status: {
       type: String,
       enum: ["pending", "accepted", "returned"],
       default: "pending",
     },
 
-    //  Verification Logic
+    // Verification Logic
     finderCode: String,
     claimerCode: String,
     finderVerified: { type: Boolean, default: false },
     claimerVerified: { type: Boolean, default: false },
     decisionAt: Date,
 
-    //  Embedded Chat Logic
+    // Embedded Chat Logic
     conversation: [messageSchema],
 
-    // Last message for quick preview
+    // Tracking unread messages
+    lastSeen: {
+      finder: { type: Date, default: Date.now },
+      claimer: { type: Date, default: Date.now },
+    },
+
     lastMessage: {
       text: String,
       senderId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
@@ -70,10 +72,8 @@ const schema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// Optimized Index for the Inbox
 schema.index({ participants: 1, lastMessageAt: -1 });
 
-// Hook to automatically fill the participants array
 schema.pre("save", function (next) {
   if (this.isNew) {
     this.participants = [this.finderId, this.claimerId];
