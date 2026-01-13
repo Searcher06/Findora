@@ -1,5 +1,24 @@
 import mongoose from "mongoose";
 
+// Message Schema first
+const messageSchema = new mongoose.Schema(
+  {
+    senderId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    receiverId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    text: { type: String, trim: true },
+    image: { type: String },
+  },
+  { timestamps: true }
+);
+
 const schema = new mongoose.Schema(
   {
     itemId: {
@@ -8,7 +27,7 @@ const schema = new mongoose.Schema(
       required: true,
     },
     requestType: {
-      type: "string",
+      type: String, // Changed "string" to String (Mongoose standard)
       enum: ["claim", "found"],
       required: true,
     },
@@ -22,31 +41,44 @@ const schema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
+
+    participants: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+
     status: {
       type: String,
       enum: ["pending", "accepted", "returned"],
       default: "pending",
     },
-    finderCode: {
-      type: String,
-    },
-    claimerCode: {
-      type: String,
-    },
 
-    finderVerified: {
-      type: Boolean,
-      default: false,
+    //  Verification Logic
+    finderCode: String,
+    claimerCode: String,
+    finderVerified: { type: Boolean, default: false },
+    claimerVerified: { type: Boolean, default: false },
+    decisionAt: Date,
+
+    //  Embedded Chat Logic
+    conversation: [messageSchema],
+
+    // Last message for quick preview
+    lastMessage: {
+      text: String,
+      senderId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     },
-    claimerVerified: {
-      type: Boolean,
-      default: false,
-    },
-    decisionAt: {
-      type: Date,
-    },
+    lastMessageAt: { type: Date, default: Date.now },
   },
   { timestamps: true }
 );
+
+// Optimized Index for the Inbox
+schema.index({ participants: 1, lastMessageAt: -1 });
+
+// Hook to automatically fill the participants array
+schema.pre("save", function (next) {
+  if (this.isNew) {
+    this.participants = [this.finderId, this.claimerId];
+  }
+  next();
+});
 
 export const requestModel = mongoose.model("Request", schema);
