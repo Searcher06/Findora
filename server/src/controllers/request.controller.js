@@ -1,7 +1,6 @@
 import { itemModel } from "../models/item.model.js";
 import { requestModel } from "../models/request.model.js";
 import { validateId } from "../utils/validateID.js";
-// import { messageModel } from "../models/message.model.js";
 import { getRecieverSocketId, io } from "../lib/socket.js";
 
 const claimItem = async (req, res) => {
@@ -21,25 +20,30 @@ const claimItem = async (req, res) => {
     throw new Error("You already sent a request for this item!");
   }
 
+  const initialMessage = "Hello, I think this item is mine!";
+
   const request = await requestModel.create({
     requestType: "claim",
     finderId: finderId,
     claimerId: userID,
     itemId: itemId,
-    // Start the conversation right here!
     conversation: [
       {
         senderId: userID,
         receiverId: finderId,
-        text: "Hello, I think this item is mine!",
+        text: initialMessage,
       },
     ],
-    // Update the preview for the Inbox UI
     lastMessage: {
-      text: "Hello, I think this item is mine!",
+      text: initialMessage,
       senderId: userID,
     },
     lastMessageAt: new Date(),
+    // Set lastSeen so receiver gets a notification
+    lastSeen: {
+      claimer: new Date(),
+      finder: new Date(0),
+    },
   });
 
   const populatedRequest = await requestModel
@@ -50,6 +54,7 @@ const claimItem = async (req, res) => {
 
   res.status(201).json(populatedRequest);
 };
+
 const sendFoundRequest = async (req, res) => {
   const { id: userID } = req.user;
   const { id: itemId } = req.item;
@@ -73,7 +78,8 @@ const sendFoundRequest = async (req, res) => {
     throw new Error("Can only send a found request to a lost item");
   }
 
-  // FIXED: Removed messageModel.create and added embedded conversation
+  const initialMessage = "I think I found your item!";
+
   const request = await requestModel.create({
     itemId,
     finderId: userID,
@@ -83,14 +89,18 @@ const sendFoundRequest = async (req, res) => {
       {
         senderId: userID,
         receiverId: claimerId,
-        text: "I think I found your item!",
+        text: initialMessage,
       },
     ],
     lastMessage: {
-      text: "I think I found your item!",
+      text: initialMessage,
       senderId: userID,
     },
     lastMessageAt: new Date(),
+    lastSeen: {
+      finder: new Date(),
+      claimer: new Date(0),
+    },
   });
 
   const populatedRequest = await requestModel
@@ -101,6 +111,7 @@ const sendFoundRequest = async (req, res) => {
 
   res.status(201).json(populatedRequest);
 };
+
 const getAllRequests = async (req, res) => {
   const { id: userId } = req.user;
 
@@ -114,16 +125,18 @@ const getAllRequests = async (req, res) => {
 
   res.status(200).json(requests);
 };
+
 const getRequestsById = async (req, res) => {
   const { id: requestId } = req.requestObject;
   const request = await requestModel
     .findById(requestId)
-    .populate("finderId", "firstName lastName username profilePic") // Populate finder with user details
-    .populate("claimerId", "firstName lastName username profilePic") // Populate claimer with user details
+    .populate("finderId", "firstName lastName username profilePic")
+    .populate("claimerId", "firstName lastName username profilePic")
     .populate("itemId");
 
   res.status(200).json(request);
 };
+
 const acceptClaim = async (req, res) => {
   const { id: requestId, itemId } = req.requestObject;
   const request = await requestModel.findById(requestId).populate("claimerId");
@@ -139,10 +152,12 @@ const acceptClaim = async (req, res) => {
     claimerCode += Math.floor(Math.random() * 10);
   }
 
-  // Setting the 6-Digit code for item handover
   request.finderCode = finderCode;
   request.claimerCode = claimerCode;
-  // updating the request and item state
+
+  // Update lastSeen for the finder since they are active
+  request.lastSeen.finder = new Date();
+
   await item.save();
   await request.save();
 
@@ -159,12 +174,12 @@ const acceptClaim = async (req, res) => {
 
   res.status(200).json(updatedRequest);
 };
+
 const handleItem = async (req, res) => {
   const { requestId } = req.params;
   const { id: userID } = req.user;
   const { code } = req.body;
 
-  // checking if the requestId is valid
   if (validateId(requestId)) {
     res.status(400);
     throw new Error("Invalid request ID, or check your url");
@@ -175,15 +190,12 @@ const handleItem = async (req, res) => {
     status: "accepted",
   });
 
-  // checking if there's no request
   if (!request) {
     res.status(404);
     throw new Error("Request not found!");
   }
 
-  // checking if the current user is the finder
   if (userID.toString() == request.finderId.toString()) {
-    // checking if the finder code is not equal to the claimer code
     if (code.toString() !== request.claimerCode.toString()) {
       res.status(400);
       throw new Error("Invalid code,try again.");
@@ -191,11 +203,10 @@ const handleItem = async (req, res) => {
 
     if (request.claimerVerified) {
       res.status(400);
-      throw new Error("Claimer already verified!"); //todo:change the grammar later
+      throw new Error("Claimer already verified!");
     }
-    // verifying the claimer
     request.claimerVerified = true;
-    // Checking if the current user is the claimer
+    request.lastSeen.finder = new Date();
   } else if (userID.toString() == request.claimerId.toString()) {
     if (code.toString() !== request.finderCode.toString()) {
       res.status(400);
@@ -208,6 +219,7 @@ const handleItem = async (req, res) => {
     }
 
     request.finderVerified = true;
+    request.lastSeen.claimer = new Date();
   } else {
     res.status(403);
     throw new Error("Forbidden, not authorized!");
@@ -232,10 +244,9 @@ const handleItem = async (req, res) => {
       .populate("claimerId", "firstName lastName username profilePic")
       .populate("itemId", "name image");
 
-    // emit the event to both users that the item has been handled successfully
     io.to(`request:${requestId}`).emit("request:verified", finalRequestDoc);
 
-    res.status(200).json(finalRequestDoc);
+    return res.status(200).json(finalRequestDoc);
   }
   res.status(200).json(updatedRequest);
 };
