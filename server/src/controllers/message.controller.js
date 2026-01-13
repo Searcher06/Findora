@@ -2,130 +2,122 @@ import { requestModel } from "../models/request.model.js";
 import { getRecieverSocketId, io } from "../lib/socket.js";
 import cloudinary from "../config/cloudinary.js";
 
+// Function to clear the red dot (mark as read)
+const markAsRead = async (req, res) => {
+  const { requestId } = req.params;
+  const { id: userId } = req.user;
+
+  const request = await requestModel.findById(requestId);
+  if (!request) {
+    res.status(404);
+    throw new Error("Chat not found");
+  }
+
+  // Determine if the user is the finder or claimer to update the correct field
+  const isFinder = request.finderId.toString() === userId;
+  const updateField = isFinder ? "lastSeen.finder" : "lastSeen.claimer";
+
+  await requestModel.findByIdAndUpdate(requestId, {
+    $set: { [updateField]: new Date() },
+  });
+
+  res.status(200).json({ message: "Marked as read" });
+};
+
 const getUsersToChat = async (req, res) => {
   const { id: userId } = req.user;
-  // Using $in to correctly handle multiple statuses
   const users = await requestModel
     .find({
       participants: userId,
       status: { $in: ["pending", "accepted"] },
     })
     .populate("finderId", "-password")
-    .populate("claimerId", "-password");
+    .populate("claimerId", "-password")
+    .sort({ lastMessageAt: -1 });
+
   res.status(200).json(users);
 };
 
 const sendMessage = async (req, res) => {
-  try {
-    const { id: userToChatId, username: userToChatUsername } = req.userToChat;
-    const { id: userId } = req.user;
-    const { requestId } = req.params;
+  const { id: userToChatId, username: userToChatUsername } = req.userToChat;
+  const { id: userId } = req.user;
+  const { requestId } = req.params;
 
-    let { text } = req.body;
-    text = text ? text.trim() : "";
-    const file = req.file;
+  let { text } = req.body;
+  text = text ? text.trim() : "";
+  const file = req.file;
 
-    if (!text && !file) {
-      return res.status(400).json({
-        message: "Message must contain text or an image",
-      });
-    }
+  if (!text && !file) {
+    res.status(400);
+    throw new Error("Message must contain text or an image");
+  }
 
-    if (userToChatId == userId) {
-      return res.status(400).json({
-        message: "Can't send message to yourself",
-      });
-    }
+  let imageUrl = null;
+  if (file) {
+    const base64 = file.buffer.toString("base64");
+    const dataUri = `data:${file.mimetype};base64,${base64}`;
+    const uploadResult = await cloudinary.uploader.upload(dataUri, {
+      folder: "lost_found_items",
+    });
+    imageUrl = uploadResult.secure_url;
+  }
 
-    let imageUrl = null;
-    if (file) {
-      if (!file.mimetype.startsWith("image/")) {
-        return res
-          .status(400)
-          .json({ message: "Uploaded file is not an image" });
-      }
-      if (file.size > 5 * 1024 * 1024) {
-        return res
-          .status(400)
-          .json({ message: "File size must be less than 5MB" });
-      }
+  const requestDoc = await requestModel.findById(requestId);
+  if (!requestDoc) {
+    res.status(404);
+    throw new Error("Request not found");
+  }
 
-      try {
-        const base64 = file.buffer.toString("base64");
-        const dataUri = `data:${file.mimetype};base64,${base64}`;
-        const uploadResult = await cloudinary.uploader.upload(dataUri, {
-          folder: "lost_found_items",
-        });
-        imageUrl = uploadResult.secure_url;
-      } catch (uploadError) {
-        return res
-          .status(500)
-          .json({ message: `Image upload failed: ${uploadError.message}` });
-      }
-    }
+  const isFinder = requestDoc.finderId.toString() === userId;
+  const senderSeenField = isFinder ? "lastSeen.finder" : "lastSeen.claimer";
 
-    // UPDATE: Push to the conversation array in requestModel
-    const updatedRequest = await requestModel
-      .findByIdAndUpdate(
-        requestId,
-        {
-          $push: {
-            conversation: {
-              senderId: userId,
-              receiverId: userToChatId,
-              text: text,
-              image: imageUrl,
-            },
-          },
-          $set: {
-            lastMessage: { text: text || "Sent an image", senderId: userId },
-            lastMessageAt: new Date(),
+  const updatedRequest = await requestModel
+    .findByIdAndUpdate(
+      requestId,
+      {
+        $push: {
+          conversation: {
+            senderId: userId,
+            receiverId: userToChatId,
+            text,
+            image: imageUrl,
           },
         },
-        { new: true }
-      )
-      .populate("conversation.senderId", "-password")
-      .populate("conversation.receiverId", "-password");
+        $set: {
+          lastMessage: { text: text || "Sent an image", senderId: userId },
+          lastMessageAt: new Date(),
+          [senderSeenField]: new Date(),
+        },
+      },
+      { new: true }
+    )
+    .populate("conversation.senderId", "-password");
 
-    if (!updatedRequest) {
-      return res.status(404).json({ message: "Request not found" });
-    }
+  const populatedMessage =
+    updatedRequest.conversation[updatedRequest.conversation.length - 1];
 
-    // Get the last message from the array
-    const populatedMessage =
-      updatedRequest.conversation[updatedRequest.conversation.length - 1];
-
-    const receiverSocketId = getRecieverSocketId(userToChatUsername);
-    if (receiverSocketId) {
-      io.to(receiverSocketId).emit("newMessage", populatedMessage);
-    }
-
-    return res.status(201).json(populatedMessage);
-  } catch (error) {
-    return res.status(error.status || 500).json({
-      message: error.message || "Internal server error",
-    });
+  const receiverSocketId = getRecieverSocketId(userToChatUsername);
+  if (receiverSocketId) {
+    io.to(receiverSocketId).emit("newMessage", populatedMessage);
+    io.to(receiverSocketId).emit("newMessageNotification", { requestId });
   }
+
+  res.status(201).json(populatedMessage);
 };
 
 const getAllMessages = async (req, res) => {
-  try {
-    const { requestId } = req.params;
+  const { requestId } = req.params;
+  const request = await requestModel
+    .findById(requestId)
+    .populate("conversation.senderId", "-password")
+    .populate("conversation.receiverId", "-password");
 
-    // Fetch directly from the Request document
-    const request = await requestModel
-      .findById(requestId)
-      .populate("conversation.senderId", "-password")
-      .populate("conversation.receiverId", "-password");
-
-    if (!request) {
-      return res.status(404).json({ message: "Chat not found" });
-    }
-
-    res.status(200).json(request.conversation);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
+  if (!request) {
+    res.status(404);
+    throw new Error("Chat not found");
   }
+
+  res.status(200).json(request.conversation);
 };
 
-export { getUsersToChat, sendMessage, getAllMessages };
+export { getUsersToChat, sendMessage, getAllMessages, markAsRead };
