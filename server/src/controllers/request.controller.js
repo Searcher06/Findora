@@ -1,7 +1,7 @@
 import { itemModel } from "../models/item.model.js";
 import { requestModel } from "../models/request.model.js";
 import { validateId } from "../utils/validateID.js";
-import { messageModel } from "../models/message.model.js";
+// import { messageModel } from "../models/message.model.js";
 import { getRecieverSocketId, io } from "../lib/socket.js";
 
 const claimItem = async (req, res) => {
@@ -10,49 +10,45 @@ const claimItem = async (req, res) => {
   const item = await itemModel.findById(itemId);
   const finderId = item.reportedBy;
 
+  // Check if request already exists
   const requestExist = await requestModel.findOne({
     claimerId: userID,
-    finderId: finderId,
-    requestType: "claim",
     itemId: itemId,
-    status: "pending",
   });
 
-  console.log(requestExist);
   if (requestExist) {
     res.status(400);
-    throw new Error(
-      "You already sent request for this item!\nContact the the person that posted the item\nin the chats page"
-    );
+    throw new Error("You already sent a request for this item!");
   }
 
   const request = await requestModel.create({
     requestType: "claim",
-    finderId: item.reportedBy,
+    finderId: finderId,
     claimerId: userID,
-    itemId,
+    itemId: itemId,
+    // Start the conversation right here!
+    conversation: [
+      {
+        senderId: userID,
+        receiverId: finderId,
+        text: "Hello, I think this item is mine!",
+      },
+    ],
+    // Update the preview for the Inbox UI
+    lastMessage: {
+      text: "Hello, I think this item is mine!",
+      senderId: userID,
+    },
+    lastMessageAt: new Date(),
   });
-
-  await request.save();
 
   const populatedRequest = await requestModel
     .findById(request.id)
-    .populate("finderId")
-    .populate("claimerId")
+    .populate("finderId", "firstName lastName username profilePic")
+    .populate("claimerId", "firstName lastName username profilePic")
     .populate("itemId");
 
-  const message = await messageModel.create({
-    receiverId: finderId,
-    senderId: userID,
-    text: "Hello,I think this item is mine!",
-    requestId: request.id,
-  });
-  await message.save();
-
-  res.status(201).json({
-    message,
-    populatedRequest,
-  });
+  res.status(201).json(populatedRequest);
 };
 const sendFoundRequest = async (req, res) => {
   const { id: userID } = req.user;
@@ -69,42 +65,41 @@ const sendFoundRequest = async (req, res) => {
 
   if (requestExists) {
     res.status(400);
-    throw new Error(
-      "You already sent a request for this item!\nMessage the person that posted the item instead\nin the chat page."
-    );
+    throw new Error("You already sent a request for this item!");
   }
 
-  if (item.status != "lost") {
+  if (item.status !== "lost") {
     res.status(400);
     throw new Error("Can only send a found request to a lost item");
   }
 
+  // FIXED: Removed messageModel.create and added embedded conversation
   const request = await requestModel.create({
     itemId,
     finderId: userID,
     claimerId,
     requestType: "found",
+    conversation: [
+      {
+        senderId: userID,
+        receiverId: claimerId,
+        text: "I think I found your item!",
+      },
+    ],
+    lastMessage: {
+      text: "I think I found your item!",
+      senderId: userID,
+    },
+    lastMessageAt: new Date(),
   });
-  await request.save();
 
   const populatedRequest = await requestModel
-    .findById(request.id)
-    .populate("finderId")
-    .populate("claimerId")
+    .findById(request._id)
+    .populate("finderId", "firstName lastName username profilePic")
+    .populate("claimerId", "firstName lastName username profilePic")
     .populate("itemId");
 
-  const message = await messageModel.create({
-    receiverId: claimerId,
-    senderId: userID,
-    text: "I think I found your item!",
-    requestId: request.id,
-  });
-  await request.save();
-
-  res.status(201).json({
-    populatedRequest,
-    message,
-  });
+  res.status(201).json(populatedRequest);
 };
 const getAllRequests = async (req, res) => {
   const { id: userId } = req.user;

@@ -1,9 +1,9 @@
 import express from "express";
 import authMiddleWare from "../middleware/auth.js";
 import {
-  getAllMessages,
   getUsersToChat,
   sendMessage,
+  getAllMessages,
 } from "../controllers/message.controller.js";
 import { chatMiddleware } from "../middleware/chat.js";
 import upload from "../middleware/upload.js";
