@@ -110,12 +110,12 @@ const getAllRequests = async (req, res) => {
   const { id: userId } = req.user;
 
   const requests = await requestModel
-    .find({
-      $or: [{ finderId: userId }, { claimerId: userId }],
-    })
-    .populate("finderId", "firstName lastName username profilePic") // Populate finder with user details
-    .populate("claimerId", "firstName lastName username profilePic") // Populate claimer with user details
-    .populate("itemId", "name image");
+    .find({ participants: userId })
+    .populate("finderId", "firstName lastName username profilePic")
+    .populate("claimerId", "firstName lastName username profilePic")
+    .populate("itemId", "name image")
+    .select("-conversation")
+    .sort({ lastMessageAt: -1 });
 
   res.status(200).json(requests);
 };
