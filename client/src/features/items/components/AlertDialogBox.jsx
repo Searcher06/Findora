@@ -97,10 +97,7 @@ export const RequestButton = ({ itemId, itemName, className, status }) => {
         const response = await sendClaimRequest(itemId);
         toast.success("Claim request sent successfully");
         navigate(
-          `/chat/${response.populatedRequest._id}/${determineUserTochat(
-            user,
-            response.populatedRequest
-          )}`
+          `/chat/${response._id}/${determineUserTochat(user, response)}`
         );
         console.log(response);
       }
