@@ -48,8 +48,8 @@ const claimItem = async (req, res) => {
 
   const populatedRequest = await requestModel
     .findById(request.id)
-    .populate("finderId", "firstName lastName username profilePic")
-    .populate("claimerId", "firstName lastName username profilePic")
+    .populate("finderId", "_id firstName lastName username profilePic")
+    .populate("claimerId", "_id firstName lastName username profilePic")
     .populate("itemId");
 
   res.status(201).json(populatedRequest);
