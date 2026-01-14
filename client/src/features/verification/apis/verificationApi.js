@@ -10,6 +10,7 @@ export const sendClaim = async (itemId) => {
 };
 export const sendFound = async (itemId) => {
   const { data } = await Api.post(`/request/found/${itemId}`);
+  console.log(data);
   return data;
 };
 export const acceptClaim = async (requestId) => {

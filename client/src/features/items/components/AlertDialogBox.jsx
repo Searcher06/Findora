@@ -77,11 +77,10 @@ export const RequestButton = ({ itemId, itemName, className, status }) => {
     useVerify();
   const { user } = useAuthStore();
   const determineUserTochat = (user, request) => {
-    console.log(request);
-    if (user._id == request.finderId._id) {
-      return `${request.claimerId.username}`;
-    } else if (user._id == request.claimerId._id) {
-      return `${request.finderId.username}`;
+    if (user._id == request?.finderId?._id) {
+      return `${request?.claimerId?.username}`;
+    } else if (user._id == request?.claimerId?._id) {
+      return `${request?.finderId?.username}`;
     }
   };
   const navigate = useNavigate();
@@ -92,12 +91,8 @@ export const RequestButton = ({ itemId, itemName, className, status }) => {
         const response = await sendFoundRequest(itemId);
         toast.success("Found request sent successfully");
         navigate(
-          `/chat/${response.populatedRequest._id}/${determineUserTochat(
-            user,
-            response.populatedRequest
-          )}`
+          `/chat/${response?._id}/${determineUserTochat(user, response)}`
         );
-        console.log(response);
       } else if (status === "found") {
         const response = await sendClaimRequest(itemId);
         toast.success("Claim request sent successfully");
