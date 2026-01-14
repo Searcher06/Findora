@@ -12,10 +12,7 @@ import {
   basicRequestMiddleware,
   requestDecisionMiddleware,
 } from "../middleware/request.js";
-import {
-  notOwnerShipMiddleware,
-  ownerShipMiddleware,
-} from "../middleware/itemOwnership.js";
+import { notOwnerShipMiddleware } from "../middleware/itemOwnership.js";
 
 const router = express.Router();
 
