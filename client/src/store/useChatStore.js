@@ -1,15 +1,20 @@
+/* eslint-disable no-unused-vars */
 import { create } from "zustand";
-import { getMessages, sendMessage } from "@/features/chat/services/chatApi";
+import {
+  getMessages,
+  sendMessage,
+  getUsersToChat,
+} from "@/features/chat/services/chatApi";
 import { toast } from "react-toastify";
 import { useAuthStore } from "./useAuthStore";
 export const useChatStore = create((set, get) => ({
   messages: [],
   conversations: [],
   onlineUsers: [],
+  usersToChat: [],
   selectedUser: null,
   isUsersLoading: false,
   isMessagesLoading: false,
-
   getMessages: async (requestId, username) => {
     if (!requestId || !username) return;
     try {
@@ -49,5 +54,19 @@ export const useChatStore = create((set, get) => ({
   unsubscribeFromMessage: () => {
     const socket = useAuthStore.getState().socket;
     socket.off("newMessage");
+  },
+
+  fetchUsersToChat: async () => {
+    try {
+      const response = await getUsersToChat();
+      console.log("step 1", response);
+      set({ usersToChat: [...response] });
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message || "failed to fetch conversations"
+      );
+    } finally {
+      set({ isUsersLoading: false });
+    }
   },
 }));
