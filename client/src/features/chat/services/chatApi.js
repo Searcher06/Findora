@@ -1,6 +1,7 @@
 import { Api, Api2 } from "@/lib/axios";
 export const getUsersToChat = async () => {
-  const { data } = await Api.get("/chat/users");
+  const { data } = await Api.get("/request");
+  console.log("step 0", data);
   return data;
 };
 

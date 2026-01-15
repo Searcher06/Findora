@@ -24,7 +24,7 @@ export const useFetchRequestById = (requestId) => {
     fetchFullRequest();
   }, [requestId]);
 
-  const AcceptClaim = async (requestId, username) => {
+  const AcceptClaim = async (requestId) => {
     if (!requestId) return;
     try {
       setLoading(true);

@@ -20,11 +20,16 @@ export const basicRequestMiddleware = async (req, res, next) => {
 };
 export const requestDecisionMiddleware = async (req, res, next) => {
   const { requestObject: request, user } = req;
-  // checiking if the current user id matches the finder Id
-  // cause only the finder can decide whether to a claim
+  // checking if the current user id matches the finder Id
+  // cause only the finder can decide whether to accept claim
   if (request.finderId.toString() != user.id.toString()) {
     res.status(403);
     throw new Error("Forbidden, not authorized!");
+  }
+
+  if (request.status == "returned") {
+    res.status(400);
+    throw new Error("Item Already returned!");
   }
   req.requestObject = await requestModel.findById(request.id);
   next();

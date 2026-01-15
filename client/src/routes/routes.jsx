@@ -1,6 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { BrowsePage, ReportPage, ViewItem, UpdateItem } from "@/features/items";
-import { Notification } from "@/features/notification";
 import { AppLayout } from "@/layouts/AppLayout";
 import { ItemTypeProvider } from "@/features/items/context/ItemTypeContext";
 import { LoginPage, SignUpPage } from "@/features/authentication";
