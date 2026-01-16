@@ -15,7 +15,15 @@ const markAsRead = async (req, res) => {
 
   // Determine if the user is the finder or claimer to update the correct field
   const isFinder = request.finderId.toString() === userId;
-  const updateField = isFinder ? "lastSeen.finder" : "lastSeen.claimer";
+  const isClaimer = request.claimerId.toString() === userId;
+
+  if (!isFinder && !isClaimer) {
+    res.status(304);
+    throw new Error("Not Authorized");
+  }
+
+  // prettier-ignore
+  const updateField = isFinder ? "lastSeen.finder" : isClaimer && "lastSeen.claimer"
 
   await requestModel.findByIdAndUpdate(requestId, {
     $set: { [updateField]: new Date() },

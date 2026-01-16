@@ -4,6 +4,7 @@ import {
   getMessages,
   sendMessage,
   getUsersToChat,
+  markAsRead,
 } from "@/features/chat/services/chatApi";
 import { toast } from "react-toastify";
 import { useAuthStore } from "./useAuthStore";
@@ -59,7 +60,6 @@ export const useChatStore = create((set, get) => ({
   fetchUsersToChat: async () => {
     try {
       const response = await getUsersToChat();
-      console.log("step 1", response);
       set({ usersToChat: [...response] });
     } catch (error) {
       toast.error(
@@ -67,6 +67,14 @@ export const useChatStore = create((set, get) => ({
       );
     } finally {
       set({ isUsersLoading: false });
+    }
+  },
+  markMessagesAsRead: async (requestId) => {
+    if (!requestId) return;
+    try {
+      const response = await markAsRead(requestId);
+    } catch (error) {
+      toast.error(error.response?.data?.message);
     }
   },
 }));
