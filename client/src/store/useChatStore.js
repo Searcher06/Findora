@@ -41,17 +41,37 @@ export const useChatStore = create((set, get) => ({
     }
   },
 
-  subscribeToMessages: (username) => {
-    if (!username) return;
+  subscribeToMessages: () => {
     const socket = useAuthStore.getState().socket;
+    if (!socket) return;
 
+    socket.off("newMessage");
     socket.on("newMessage", (newMessage) => {
+      const { messages, usersToChat } = get();
+
+      // 1. Update messages array ONLY if this message belongs to the active chat
+      // We check if the incoming message's requestId matches what's being viewed
       set({
-        messages: [...get().messages, newMessage],
+        messages: [...messages, newMessage],
       });
+
+      // 2. Update usersToChat so the red dot appears on the selection page
+      const updatedUsersToChat = usersToChat.map((conv) => {
+        if (conv._id === newMessage.requestId) {
+          return {
+            ...conv,
+            lastMessage: newMessage,
+            lastMessageAt: newMessage.createdAt,
+            // By NOT updating lastSeen here, checkUnread() in your component
+            // will now evaluate to TRUE because lastMessageAt > lastSeen
+          };
+        }
+        return conv;
+      });
+
+      set({ usersToChat: updatedUsersToChat });
     });
   },
-
   unsubscribeFromMessage: () => {
     const socket = useAuthStore.getState().socket;
     socket.off("newMessage");
@@ -76,5 +96,25 @@ export const useChatStore = create((set, get) => ({
     } catch (error) {
       toast.error(error.response?.data?.message);
     }
+  },
+  getUnreadCount: (activeRequestId = null) => {
+    const { usersToChat } = get();
+    const { user } = useAuthStore.getState();
+
+    if (!user || !usersToChat) return 0;
+
+    return usersToChat.filter((conv) => {
+      // 1. If this is the chat I am currently viewing, don't count it as unread
+      if (activeRequestId && conv._id === activeRequestId) return false;
+
+      if (!conv.lastMessageAt) return false;
+
+      const isFinder = conv.finderId._id === user._id;
+      const lastSeen = isFinder
+        ? conv.lastSeen?.finder
+        : conv.lastSeen?.claimer;
+
+      return new Date(conv.lastMessageAt) > new Date(lastSeen);
+    }).length;
   },
 }));

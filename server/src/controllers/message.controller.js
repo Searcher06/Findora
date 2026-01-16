@@ -101,18 +101,25 @@ const sendMessage = async (req, res) => {
     )
     .populate("conversation.senderId", "-password");
 
+  // 1. Get the last message from the updated conversation array
   const populatedMessage =
     updatedRequest.conversation[updatedRequest.conversation.length - 1];
 
+  // 2. Attach the requestId so the frontend Zustand store knows which conversation to update
+  const messageWithRequestId = {
+    ...populatedMessage.toObject(),
+    requestId: requestId,
+  };
+
   const receiverSocketId = getRecieverSocketId(userToChatUsername);
   if (receiverSocketId) {
-    io.to(receiverSocketId).emit("newMessage", populatedMessage);
+    // 3. Emit the enriched object
+    io.to(receiverSocketId).emit("newMessage", messageWithRequestId);
     io.to(receiverSocketId).emit("newMessageNotification", { requestId });
   }
 
-  res.status(201).json(populatedMessage);
+  res.status(201).json(messageWithRequestId);
 };
-
 const getAllMessages = async (req, res) => {
   const { requestId } = req.params;
   const request = await requestModel
