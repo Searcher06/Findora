@@ -27,6 +27,10 @@ export const ChatPage = () => {
   ]);
 
   useEffect(() => {
+    useChatStore.getState().markMessagesAsRead(requestId);
+  }, [requestId]);
+
+  useEffect(() => {
     subscribeToAcceptClaim(requestId, username);
 
     return () => unsubscribeToAcceptClaim();
