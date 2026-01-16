@@ -10,21 +10,11 @@ export const ChatPage = () => {
   // prettier-ignore
   const {request,loading: requestLoading, requestError,AcceptClaim,subscribeToAcceptClaim,unsubscribeToAcceptClaim} = useFetchRequestById(requestId);
   // prettier-ignore
-  const { messages, isMessagesLoading, getMessages,subscribeToMessages,unsubscribeFromMessage } = useChatStore();
+  const { messages, isMessagesLoading, getMessages } = useChatStore();
   const messageEndref = useRef(null);
   useEffect(() => {
     getMessages(requestId, username);
-
-    subscribeToMessages(username);
-
-    return () => unsubscribeFromMessage();
-  }, [
-    requestId,
-    username,
-    getMessages,
-    subscribeToMessages,
-    unsubscribeFromMessage,
-  ]);
+  }, [requestId, username, getMessages]);
 
   useEffect(() => {
     useChatStore.getState().markMessagesAsRead(requestId);

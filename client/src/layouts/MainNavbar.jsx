@@ -3,13 +3,39 @@ import { UserAvatar } from "@/components/userAvatar";
 import { SideBar } from "@/components/SideBar";
 import { useNavContext } from "@/context/NavContext";
 import { Overlay } from "./Overlay";
+import { useChatStore } from "@/store/useChatStore";
+import { useLocation } from "react-router-dom";
+
 export const MainNavbar = () => {
   const { handleSidebar, openSidebar, setOpenSidebar } = useNavContext();
+  const location = useLocation();
+
+  // Extract requestId from path: /chat/:requestId/:username
+  const pathParts = location.pathname.split("/");
+  const currentChatId = location.pathname.startsWith("/chat/")
+    ? pathParts[2]
+    : null;
+
+  // Pass currentChatId to ignore the active chat count
+  const unreadCount = useChatStore((state) =>
+    state.getUnreadCount(currentChatId)
+  );
 
   return (
     <>
       <nav className="fixed bg-white h-14 w-full border-b-2 border-gray-200 flex pl-2 pr-2 items-center justify-between z-10">
-        <Menu onclickEvent={handleSidebar} />
+        <div className="relative">
+          <Menu onclickEvent={handleSidebar} />
+
+          {/* Subtle Notification Dot on the Menu Icon */}
+          {unreadCount > 0 && (
+            <span className="absolute -top-1 -right-1 flex h-3 w-3">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-3 w-3 bg-blue-600 border-2 border-white"></span>
+            </span>
+          )}
+        </div>
+
         <UserAvatar />
       </nav>
       {openSidebar && (
