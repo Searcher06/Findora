@@ -20,8 +20,7 @@ const claimItem = async (req, res) => {
     throw new Error("You already sent a request for this item!");
   }
 
-  const initialMessage = "Hello, I think this item is mine!";
-
+  const initialMessage = `[SYSTEM]: New Claim Request for "${item.name}". I believe this item belongs to me and would like to verify.`;
   const request = await requestModel.create({
     requestType: "claim",
     finderId: finderId,
@@ -52,6 +51,13 @@ const claimItem = async (req, res) => {
     .populate("claimerId", "_id firstName lastName username profilePic")
     .populate("itemId");
 
+  const receiverUsername = populatedRequest.finderId.username;
+  const receiverSocketId = getRecieverSocketId(receiverUsername);
+
+  if (receiverSocketId) {
+    io.to(receiverSocketId).emit("newChatRequest", populatedRequest);
+  }
+
   res.status(201).json(populatedRequest);
 };
 
@@ -78,7 +84,7 @@ const sendFoundRequest = async (req, res) => {
     throw new Error("Can only send a found request to a lost item");
   }
 
-  const initialMessage = "I think I found your item!";
+  const initialMessage = `[SYSTEM]: I've started a conversation regarding the "${item.name}" you lost. I believe I have found it!`;
 
   const request = await requestModel.create({
     itemId,
@@ -108,6 +114,13 @@ const sendFoundRequest = async (req, res) => {
     .populate("finderId", "_id firstName lastName username profilePic")
     .populate("claimerId", "_id firstName lastName username profilePic")
     .populate("itemId");
+
+  const receiverUsername = populatedRequest.claimerId.username;
+  const receiverSocketId = getRecieverSocketId(receiverUsername);
+
+  if (receiverSocketId) {
+    io.to(receiverSocketId).emit("newChatRequest", populatedRequest);
+  }
 
   res.status(201).json(populatedRequest);
 };

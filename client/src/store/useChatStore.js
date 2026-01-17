@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { create } from "zustand";
 import {
   getMessages,
@@ -8,6 +7,19 @@ import {
 } from "@/features/chat/services/chatApi";
 import { toast } from "react-toastify";
 import { useAuthStore } from "./useAuthStore";
+import sound from "../../public/notification.mp3";
+
+const playNotificationSound = () => {
+  try {
+    const audio = new Audio(sound);
+    audio.volume = 0.5;
+    audio.play();
+  } catch (error) {
+    // Fail silently to avoid breaking the UI if browser blocks autoplay
+    console.warn("Audio playback failed:", error);
+  }
+};
+
 export const useChatStore = create((set, get) => ({
   messages: [],
   conversations: [],
@@ -16,6 +28,7 @@ export const useChatStore = create((set, get) => ({
   selectedUser: null,
   isUsersLoading: false,
   isMessagesLoading: false,
+
   getMessages: async (requestId, username) => {
     if (!requestId || !username) return;
     try {
@@ -23,7 +36,7 @@ export const useChatStore = create((set, get) => ({
       const response = await getMessages(requestId, username);
       set({ messages: response });
     } catch (error) {
-      toast.error(error.response?.data?.message || "failed to send message");
+      toast.error(error.response?.data?.message || "failed to fetch messages");
     } finally {
       set({ isMessagesLoading: false });
     }
@@ -46,41 +59,97 @@ export const useChatStore = create((set, get) => ({
     if (!socket) return;
 
     socket.off("newMessage");
+    socket.off("newChatRequest");
+
+    // --- LISTEN FOR NEW MESSAGES ---
     socket.on("newMessage", (newMessage) => {
+      const { user } = useAuthStore.getState();
       const { messages, usersToChat } = get();
 
-      // 1. Update messages array ONLY if this message belongs to the active chat
-      // We check if the incoming message's requestId matches what's being viewed
-      set({
-        messages: [...messages, newMessage],
-      });
+      // HCI: Trigger sound only if the message is from someone else
+      if (newMessage.senderId._id !== user._id) {
+        playNotificationSound();
+      }
 
-      // 2. Update usersToChat so the red dot appears on the selection page
-      const updatedUsersToChat = usersToChat.map((conv) => {
-        if (conv._id === newMessage.requestId) {
-          return {
-            ...conv,
-            lastMessage: newMessage,
-            lastMessageAt: newMessage.createdAt,
-            // By NOT updating lastSeen here, checkUnread() in your component
-            // will now evaluate to TRUE because lastMessageAt > lastSeen
-          };
-        }
-        return conv;
-      });
+      const currentPath = window.location.pathname;
+      const pathParts = currentPath.split("/");
+      const activeChatId = currentPath.startsWith("/chat/")
+        ? pathParts[2]
+        : null;
+
+      // 1. Update active message thread
+      set({ messages: [...messages, newMessage] });
+
+      // 2. Update conversation list + sorting
+      const updatedUsersToChat = usersToChat
+        .map((conv) => {
+          if (conv._id === newMessage.requestId) {
+            const isFinder = conv.finderId._id === user._id;
+            const isCurrentlyViewing = activeChatId === conv._id;
+
+            return {
+              ...conv,
+              lastMessage: newMessage,
+              lastMessageAt: newMessage.createdAt,
+              lastSeen: isCurrentlyViewing
+                ? {
+                    ...conv.lastSeen,
+                    [isFinder ? "finder" : "claimer"]: new Date().toISOString(),
+                  }
+                : conv.lastSeen,
+            };
+          }
+          return conv;
+        })
+        .sort((a, b) => new Date(b.lastMessageAt) - new Date(a.lastMessageAt));
 
       set({ usersToChat: updatedUsersToChat });
+
+      if (activeChatId === newMessage.requestId) {
+        get().markMessagesAsRead(newMessage.requestId);
+      }
+    });
+
+    // --- LISTEN FOR NEW CHAT REQUESTS ---
+    socket.on("newChatRequest", (newChat) => {
+      // Play sound for every new request incoming
+      playNotificationSound();
+
+      set((state) => {
+        const exists = state.usersToChat.some((c) => c._id === newChat._id);
+        if (exists) return state;
+
+        const newList = [newChat, ...state.usersToChat].sort(
+          (a, b) => new Date(b.lastMessageAt) - new Date(a.lastMessageAt)
+        );
+
+        return {
+          usersToChat: newList,
+        };
+      });
+
+      toast.info(
+        `New request received for ${newChat.itemId?.name || "an item"}`
+      );
     });
   },
+
   unsubscribeFromMessage: () => {
     const socket = useAuthStore.getState().socket;
-    socket.off("newMessage");
+    if (socket) {
+      socket.off("newMessage");
+      socket.off("newChatRequest");
+    }
   },
 
   fetchUsersToChat: async () => {
     try {
+      set({ isUsersLoading: true });
       const response = await getUsersToChat();
-      set({ usersToChat: [...response] });
+      const sortedResponse = response.sort(
+        (a, b) => new Date(b.lastMessageAt) - new Date(a.lastMessageAt)
+      );
+      set({ usersToChat: sortedResponse });
     } catch (error) {
       toast.error(
         error.response?.data?.message || "failed to fetch conversations"
@@ -89,14 +158,36 @@ export const useChatStore = create((set, get) => ({
       set({ isUsersLoading: false });
     }
   },
+
   markMessagesAsRead: async (requestId) => {
     if (!requestId) return;
+
+    const { usersToChat } = get();
+    const { user } = useAuthStore.getState();
+
+    const updatedUsersToChat = usersToChat.map((conv) => {
+      if (conv._id === requestId) {
+        const isFinder = conv.finderId._id === user?._id;
+        return {
+          ...conv,
+          lastSeen: {
+            ...conv.lastSeen,
+            [isFinder ? "finder" : "claimer"]: new Date().toISOString(),
+          },
+        };
+      }
+      return conv;
+    });
+
+    set({ usersToChat: updatedUsersToChat });
+
     try {
-      const response = await markAsRead(requestId);
+      await markAsRead(requestId);
     } catch (error) {
-      toast.error(error.response?.data?.message);
+      console.error("Failed to sync read status:", error);
     }
   },
+
   getUnreadCount: (activeRequestId = null) => {
     const { usersToChat } = get();
     const { user } = useAuthStore.getState();
@@ -104,9 +195,7 @@ export const useChatStore = create((set, get) => ({
     if (!user || !usersToChat) return 0;
 
     return usersToChat.filter((conv) => {
-      // 1. If this is the chat I am currently viewing, don't count it as unread
       if (activeRequestId && conv._id === activeRequestId) return false;
-
       if (!conv.lastMessageAt) return false;
 
       const isFinder = conv.finderId._id === user._id;
