@@ -9,6 +9,7 @@ const BrowsePage = () => {
     category: "all",
     date: "latest",
   });
+  const [searchQuery, setSearchQuery] = useState("");
 
   const handleCategoryChange = (category) => {
     setFilters((prev) => ({ ...prev, category }));
@@ -17,13 +18,17 @@ const BrowsePage = () => {
   const handleDateChange = (date) => {
     setFilters((prev) => ({ ...prev, date }));
   };
+
+  const handleSearchChange = (query) => {
+    setSearchQuery(query);
+  };
   return (
     <div className="flex flex-col items-center mt-14">
       <Header className={"text-[26px] font-medium pl-4 pr-4 leading-7 mt-1"}>
         Browse Lost and found Items
       </Header>
       <div className="mt-3 bg-[linear-gradient(90deg,#A8C5FF_0%,#F3D9FF_100%)] h-14 w-[97%] flex items-center justify-center rounded-[3px]">
-        <SearchBar />
+        <SearchBar onChange={handleSearchChange} value={searchQuery} />
       </div>
       <TabsBar
         className={`mt-3`}
@@ -32,7 +37,11 @@ const BrowsePage = () => {
         dateValue={filters.date}
         categoryValue={filters.category}
       />
-      <ItemsContainer className={"mt-3"} filters={filters} />
+      <ItemsContainer
+        className={"mt-3"}
+        filters={filters}
+        searchQuery={searchQuery}
+      />
       <ReportButton />
     </div>
   );
