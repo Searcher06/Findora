@@ -7,8 +7,31 @@ import {
   BookOpen,
   Shield,
 } from "lucide-react";
-
+import { useAuthStore } from "@/store/useAuthStore";
 export const ProfilePage = () => {
+  const user = useAuthStore((state) => state.user);
+  const isCheckingAuth = useAuthStore((state) => state.isCheckingAuth);
+
+  if (isCheckingAuth) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Loader2 className="w-12 h-12 animate-spin text-blue-500" />
+      </div>
+    );
+  }
+
+  if (!user) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <User className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+          <h2 className="text-xl font-semibold text-gray-700">No User Found</h2>
+          <p className="text-gray-500 mt-2">Please log in to continue</p>
+        </div>
+      </div>
+    );
+  }
+  console.log(user);
   return (
     <div className="mt-14 px-6 max-w-5xl mx-auto">
       {/* Header with subtle gradient */}
@@ -39,10 +62,10 @@ export const ProfilePage = () => {
           </div>
           <div className="flex-1">
             <h2 className="text-xl font-semibold text-gray-900 sans display">
-              Alex Thompson
+              {`${user.firstName} ${user.lastName}`}
             </h2>
             <p className="text-gray-500 text-sm sans font-medium">
-              @athompson_99
+              {`@${user.displayUsername}`}
             </p>
           </div>
           <div className="hidden sm:block text-xs font-medium text-blue-600 bg-blue-50 px-3 py-1.5 rounded-full sans">
