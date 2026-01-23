@@ -64,7 +64,7 @@ const createUser = async (req, res) => {
   if (textValidator(firstName) || textValidator(lastName)) {
     res.status(400);
     throw new Error(
-      "Use of special characters is not allowed for Firstname and Lastname"
+      "Use of special characters is not allowed for Firstname and Lastname",
     );
   }
 
@@ -149,12 +149,12 @@ const updateProfile = async (req, res) => {
 
   if (firstName) {
     if (textValidator(firstName)) {
-      res.status(401);
+      res.status(400);
       throw new Error("Firstname can not contain special characters");
     }
 
     if (firstName.length < 3) {
-      res.status(401);
+      res.status(400);
       throw new Error("Firstname must be atlease 4 characters length");
     } else if (firstName.length > 20) {
       res.status(401);
@@ -166,15 +166,15 @@ const updateProfile = async (req, res) => {
 
   if (lastName) {
     if (textValidator(lastName)) {
-      res.status(401);
+      res.status(400);
       throw new Error("lastname can not contain special characters");
     }
 
     if (lastName.length < 3) {
-      res.status(401);
+      res.status(400);
       throw new Error("lastname must be atlease 4 characters length");
     } else if (lastName.length > 20) {
-      res.status(401);
+      res.status(400);
       throw new Error("lastname is 20 characters max");
     }
 
