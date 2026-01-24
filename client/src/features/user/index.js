@@ -1,2 +1,3 @@
 import { ProfilePage } from "./pages/profilePage";
-export { ProfilePage };
+import { EditProfilePage } from "./pages/editProfilePage";
+export { ProfilePage, EditProfilePage };

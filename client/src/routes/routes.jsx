@@ -9,7 +9,7 @@ import PrivateRoute from "./privateRoute";
 import { ChatPage, ChatSelectionPage } from "@/features/chat";
 import { NavProvider } from "@/context/NavContext";
 import { CodeExchangePage } from "@/features/codeExchange";
-import { ProfilePage } from "@/features/user";
+import { EditProfilePage, ProfilePage } from "@/features/user";
 function AppRoutes() {
   return (
     <NavProvider>
@@ -39,6 +39,7 @@ function AppRoutes() {
                   />
                   <Route path="/chats" element={<ChatSelectionPage />} />
                   <Route path="/profile" element={<ProfilePage />} />
+                  <Route path="/profile/edit" element={<EditProfilePage />} />
                 </Route>
               </Route>
             </Routes>
