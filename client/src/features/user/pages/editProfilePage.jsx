@@ -1,0 +1,441 @@
+import React, { useState, useEffect } from "react";
+import {
+  User,
+  GraduationCap,
+  BookOpen,
+  Save,
+  X,
+  ArrowLeft,
+  AlertCircle,
+  CheckCircle,
+  School,
+  Camera,
+  Upload,
+} from "lucide-react";
+import { useAuthStore } from "@/store/useAuthStore";
+
+export const EditProfilePage = () => {
+  const user = useAuthStore((state) => state.user);
+  const [formData, setFormData] = useState({
+    department: "",
+    foculty: "",
+    profilePic: "",
+  });
+  const [previewImage, setPreviewImage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [error, setError] = useState("");
+
+  // Initialize form data with user data
+  useEffect(() => {
+    if (user) {
+      setFormData({
+        department: user.department || "",
+        foculty: user.foculty || "",
+        profilePic: user.profilePic || "",
+      });
+      setPreviewImage(user.profilePic || "");
+    }
+  }, [user]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+    setError("");
+  };
+
+  const [imageFile, setImageFile] = useState(null);
+
+  const handleImageChange = (e) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      // Validate file type
+      if (!file.type.startsWith("image/")) {
+        setError("Please select a valid image file");
+        return;
+      }
+
+      // Validate file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        setError("Image size should be less than 5MB");
+        return;
+      }
+
+      // Store the actual file for upload
+      setImageFile(file);
+
+      // Create preview
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreviewImage(reader.result);
+        setFormData((prev) => ({
+          ...prev,
+          profilePic: reader.result,
+        }));
+        setError("");
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleRemoveImage = () => {
+    setPreviewImage("");
+    setImageFile(null);
+    setFormData((prev) => ({
+      ...prev,
+      profilePic: "",
+    }));
+  };
+
+  const handleSubmit = async () => {
+    if (!user) return;
+
+    setIsSubmitting(true);
+    setError("");
+
+    try {
+      // Create FormData object for multipart/form-data
+      const formDataToSend = new FormData();
+
+      // Append text fields
+      formDataToSend.append("department", formData.department);
+      formDataToSend.append("foculty", formData.foculty);
+
+      // Append image file if a new one was selected
+      if (imageFile) {
+        formDataToSend.append("image", imageFile);
+      }
+
+      // Send to your API endpoint
+      const response = await fetch("/api/user/profile", {
+        method: "POST",
+        body: formDataToSend,
+        // Don't set Content-Type header - browser will set it automatically with boundary
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update profile");
+      }
+
+      const updatedUser = await response.json();
+
+      // Update your Zustand store with the updated user data
+      // useAuthStore.setState({ user: updatedUser });
+
+      // Show success message
+      setShowSuccess(true);
+      setTimeout(() => {
+        setShowSuccess(false);
+        window.history.back();
+      }, 2000);
+    } catch (err) {
+      setError(err.message || "Failed to update profile. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleCancel = () => {
+    window.history.back();
+  };
+
+  const hasChanges =
+    formData.department !== (user?.department || "") ||
+    formData.foculty !== (user?.foculty || "") ||
+    formData.profilePic !== (user?.profilePic || "");
+
+  if (!user) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <User className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+          <h2 className="text-xl font-semibold text-gray-700">No User Found</h2>
+          <p className="text-gray-500 mt-2">Please log in to continue</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="mt-14 px-6 max-w-3xl mx-auto pb-8">
+      {/* Header */}
+      <div className="mb-8">
+        <button
+          onClick={handleCancel}
+          className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-4 transition-colors sans"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          <span className="text-sm font-medium">Back to Profile</span>
+        </button>
+
+        <div className="inline-flex items-center gap-2 mb-2">
+          <div className="w-8 h-1 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full"></div>
+          <h1 className="text-2xl font-bold text-gray-900 sans display tracking-tight">
+            Edit Profile
+          </h1>
+        </div>
+        <p className="text-gray-500 text-sm sans">
+          Update your profile photo and academic information
+        </p>
+      </div>
+
+      {/* Success Message */}
+      {showSuccess && (
+        <div className="mb-6 bg-green-50 border border-green-200 rounded-xl p-4 flex items-center gap-3">
+          <div className="p-2 bg-green-100 rounded-full">
+            <CheckCircle className="w-5 h-5 text-green-600" />
+          </div>
+          <div className="flex-1">
+            <p className="text-sm font-semibold text-green-900 sans">
+              Profile updated successfully!
+            </p>
+            <p className="text-xs text-green-700 sans mt-0.5">
+              Redirecting back to profile...
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* Error Message */}
+      {error && (
+        <div className="mb-6 bg-red-50 border border-red-200 rounded-xl p-4 flex items-center gap-3">
+          <div className="p-2 bg-red-100 rounded-full">
+            <AlertCircle className="w-5 h-5 text-red-600" />
+          </div>
+          <div className="flex-1">
+            <p className="text-sm font-semibold text-red-900 sans">{error}</p>
+          </div>
+          <button
+            onClick={() => setError("")}
+            className="text-red-400 hover:text-red-600 transition-colors"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+      )}
+
+      {/* Edit Form */}
+      <div className="space-y-6">
+        {/* Profile Photo Section */}
+        <div className="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="p-2.5 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl shadow-sm">
+              <Camera className="w-5 h-5 text-white" />
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold text-gray-900 sans">
+                Profile Photo
+              </h3>
+              <p className="text-gray-400 text-xs sans mt-0.5">
+                Upload a new profile picture
+              </p>
+            </div>
+          </div>
+
+          <div className="flex flex-col sm:flex-row items-center gap-4">
+            {/* Profile Picture Preview */}
+            <div className="relative">
+              <div className="w-20 h-20 rounded-full bg-gradient-to-br from-blue-500 to-indigo-500 p-0.5">
+                <div className="w-full h-full rounded-full bg-white flex items-center justify-center overflow-hidden">
+                  {previewImage ? (
+                    <img
+                      src={previewImage}
+                      alt="Profile preview"
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <User className="w-8 h-8 text-indigo-600" />
+                  )}
+                </div>
+              </div>
+              {previewImage && (
+                <button
+                  onClick={handleRemoveImage}
+                  className="absolute -top-1 -right-1 p-1 bg-red-500 rounded-full text-white hover:bg-red-600 transition-colors shadow-md"
+                  title="Remove photo"
+                >
+                  <X className="w-3 h-3" />
+                </button>
+              )}
+            </div>
+
+            {/* Upload Button */}
+            <div className="flex-1 w-full">
+              <label
+                htmlFor="profilePic"
+                className="group cursor-pointer block w-full"
+              >
+                <div className="border-2 border-dashed border-gray-300 rounded-xl p-4 text-center hover:border-blue-400 hover:bg-blue-50/30 transition-all">
+                  <Upload className="w-6 h-6 text-gray-400 mx-auto mb-1.5 group-hover:text-blue-500 transition-colors" />
+                  <p className="text-sm font-semibold text-gray-700 sans mb-0.5">
+                    Click to upload
+                  </p>
+                  <p className="text-xs text-gray-500 sans">
+                    PNG, JPG or WEBP (max. 5MB)
+                  </p>
+                </div>
+                <input
+                  type="file"
+                  id="profilePic"
+                  name="profilePic"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  className="hidden"
+                />
+              </label>
+            </div>
+          </div>
+        </div>
+
+        {/* Academic Information Card */}
+        <div className="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="p-2.5 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl shadow-sm">
+              <GraduationCap className="w-5 h-5 text-white" />
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold text-gray-900 sans">
+                Academic Information
+              </h3>
+              <p className="text-gray-400 text-xs sans mt-0.5">
+                Update your department and faculty
+              </p>
+            </div>
+          </div>
+
+          <div className="space-y-5">
+            {/* Department Field */}
+            <div>
+              <label
+                htmlFor="department"
+                className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2 sans"
+              >
+                <BookOpen className="w-4 h-4 text-blue-600" />
+                Department
+              </label>
+              <input
+                type="text"
+                id="department"
+                name="department"
+                value={formData.department}
+                onChange={handleChange}
+                placeholder="e.g., Computer Science & AI"
+                className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all sans text-sm"
+              />
+              <p className="text-xs text-gray-500 mt-1.5 ml-1 sans">
+                {user.department
+                  ? "Current department shown above"
+                  : "Enter your department name"}
+              </p>
+            </div>
+
+            {/* Faculty Field */}
+            <div>
+              <label
+                htmlFor="foculty"
+                className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2 sans"
+              >
+                <School className="w-4 h-4 text-green-600" />
+                Faculty
+              </label>
+              <input
+                type="text"
+                id="foculty"
+                name="foculty"
+                value={formData.foculty}
+                onChange={handleChange}
+                placeholder="e.g., Engineering"
+                className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all sans text-sm"
+              />
+              <p className="text-xs text-gray-500 mt-1.5 ml-1 sans">
+                {user.foculty
+                  ? "Current faculty shown above"
+                  : "Enter your faculty name"}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* User Info Reference */}
+        <div className="bg-gray-50 border border-gray-200 rounded-xl p-4">
+          <div className="flex items-center gap-3">
+            <User className="w-5 h-5 text-gray-400" />
+            <div className="flex-1">
+              <p className="text-sm font-semibold text-gray-900 sans">
+                {`${user.firstName} ${user.lastName}`}
+              </p>
+              <p className="text-xs text-gray-500 sans mt-0.5">{user.email}</p>
+            </div>
+            <div className="text-xs font-medium text-blue-600 bg-blue-50 px-3 py-1.5 rounded-full sans capitalize">
+              {user.role}
+            </div>
+          </div>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="flex flex-col sm:flex-row gap-3 pt-2">
+          <button
+            type="button"
+            onClick={handleCancel}
+            disabled={isSubmitting}
+            className="flex-1 px-4 py-2.5 bg-white border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 hover:border-gray-400 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed sans text-sm"
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            onClick={handleSubmit}
+            disabled={isSubmitting || !hasChanges}
+            className="flex-1 group relative overflow-hidden bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-medium py-2.5 px-4 rounded-lg hover:shadow-md transition-all duration-300 hover:from-blue-700 hover:to-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-none sans text-sm"
+          >
+            <span className="relative z-10 flex items-center justify-center gap-2">
+              {isSubmitting ? (
+                <>
+                  <svg
+                    className="animate-spin h-4 w-4 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
+                  </svg>
+                  Saving...
+                </>
+              ) : (
+                <>
+                  <Save className="w-4 h-4" />
+                  Save Changes
+                </>
+              )}
+            </span>
+            {!isSubmitting && (
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-700 to-indigo-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            )}
+          </button>
+        </div>
+
+        {/* Change Indicator */}
+        {hasChanges && !isSubmitting && (
+          <p className="text-center text-xs text-amber-600 font-medium sans">
+            You have unsaved changes
+          </p>
+        )}
+      </div>
+    </div>
+  );
+};
