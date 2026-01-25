@@ -16,7 +16,7 @@ export const SideBar = ({ setOpenSidebar }) => {
     : null;
 
   const unreadCount = useChatStore((state) =>
-    state.getUnreadCount(currentChatId)
+    state.getUnreadCount(currentChatId),
   );
 
   useEffect(() => {
@@ -37,9 +37,9 @@ export const SideBar = ({ setOpenSidebar }) => {
       </div>
       <div className="pl-2 pr-2">
         <div className="font-normal text-[13px] text-gray-700 flex-col flex gap-7">
-          <Link to="/" onClick={() => setOpenSidebar(false)}>
+          {/* <Link to="/" onClick={() => setOpenSidebar(false)}>
             <NavLink Icon={"LayoutDashboard"} text={`Dashboard`} />
-          </Link>
+          </Link> */}
           <Link to="/" onClick={() => setOpenSidebar(false)}>
             <NavLink Icon={"SearchIcon"} text={"Browse"} />
           </Link>
@@ -58,8 +58,8 @@ export const SideBar = ({ setOpenSidebar }) => {
             )}
           </Link>
 
-          <Link to={"/notification"} onClick={() => setOpenSidebar(false)}>
-            <NavLink Icon={"Bell"} text={"Notifications"} />
+          <Link to={"/profile"} onClick={() => setOpenSidebar(false)}>
+            <NavLink Icon={"User"} text={"Profile"} />
           </Link>
         </div>
       </div>
