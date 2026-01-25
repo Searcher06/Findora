@@ -6,11 +6,13 @@ import {
   logoutUser,
   registerUser,
 } from "@/features/authentication";
+import { updateProfile } from "@/features/user/services/api";
 import { toast } from "react-toastify";
 const BASE_URL = "http://localhost:8080";
 export const useAuthStore = create((set, get) => ({
   user: null,
   isCheckingAuth: true,
+  isUpdating: false,
   isSigningUp: false,
   isLoggingIng: false,
   isUpdatingProfile: false,
@@ -27,6 +29,23 @@ export const useAuthStore = create((set, get) => ({
       console.log("Error in checkAuth:", error);
     } finally {
       set({ isCheckingAuth: false });
+    }
+  },
+
+  UpdateProfile: async (datafields) => {
+    try {
+      set({ isUpdating: true });
+      const response = await updateProfile(datafields);
+      set({ user: response });
+      toast.success("Updated Successfully");
+      console.log("Debug 1:", response);
+      return response;
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Failed to update profile");
+      console.log("Error in updating profile", error);
+      return null;
+    } finally {
+      set({ isUpdating: false });
     }
   },
 

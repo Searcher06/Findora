@@ -11,23 +11,13 @@ import {
   Edit2,
   Plus,
 } from "lucide-react";
+import { useAuthStore } from "@/store/useAuthStore";
 import { useNavigate } from "react-router-dom";
-
-const mockUser = {
-  _id: "69583626349568ab085513b9",
-  firstName: "Ahmad",
-  lastName: "Ibrahim",
-  username: "searcher06",
-  displayUsername: "searcher06",
-  email: "ahmad@gmail.com",
-  role: "student",
-  createdAt: "2026-01-02T21:17:37.159Z",
-  // department and foculty are undefined - they'll show "Add" cards
-};
 
 export function ProfilePage() {
   const navigate = useNavigate();
-  const [user] = useState(mockUser);
+  const user = useAuthStore((state) => state.user);
+  const isCheckingAuth = useAuthStore((state) => state.isCheckingAuth);
   const [isEditing, setIsEditing] = useState(false);
 
   const formatDate = (dateString) => {
@@ -51,9 +41,16 @@ export function ProfilePage() {
 
   const handleEditClick = () => {
     setIsEditing(true);
-    console.log("Navigate to edit page or open modal here");
     navigate("/profile/edit");
   };
+
+  if (isCheckingAuth) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <Loader2 className="w-12 h-12 animate-spin text-blue-500" />
+      </div>
+    );
+  }
 
   const InfoCard = ({
     icon: Icon,
@@ -152,12 +149,12 @@ export function ProfilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 mt-11">
+    <div className="min-h-screen bg-gray-50 py-8 mt-12">
       <div className="px-6 max-w-5xl mx-auto">
         {/* Header */}
         <div className="mb-8">
           <div className="inline-flex items-center gap-2 mb-2">
-            <div className="w-8 h-1 bg-linear-to-r from-blue-500 to-indigo-500 rounded-full"></div>
+            <div className="w-8 h-1 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full"></div>
             <h1 className="text-2xl font-bold text-gray-900 tracking-tight">
               Profile
             </h1>
@@ -168,10 +165,10 @@ export function ProfilePage() {
         </div>
 
         {/* User Card */}
-        <div className="mb-8 bg-linear-to-br from-white to-gray-50 rounded-2xl border border-gray-100 p-6 shadow-sm">
+        <div className="mb-8 bg-gradient-to-br from-white to-gray-50 rounded-2xl border border-gray-100 p-6 shadow-sm">
           <div className="flex items-center gap-4">
             <div className="relative">
-              <div className="w-16 h-16 rounded-full bg-linear-to-br from-blue-500 to-indigo-500 p-0.5">
+              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-indigo-500 p-0.5">
                 <div className="w-full h-full rounded-full bg-white flex items-center justify-center">
                   {user.profilePic ? (
                     <img
@@ -207,7 +204,7 @@ export function ProfilePage() {
           {/* ACADEMIC INFO Section */}
           <div className="space-y-5">
             <div className="flex items-center gap-3 px-1">
-              <div className="p-2.5 bg-linear-to-br from-blue-500 to-blue-600 rounded-xl shadow-sm">
+              <div className="p-2.5 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl shadow-sm">
                 <GraduationCap className="w-5 h-5 text-white" />
               </div>
               <div>
@@ -225,9 +222,9 @@ export function ProfilePage() {
                 icon={BookOpen}
                 title="Department"
                 value={user.department}
-                subtitle="Department of Computing"
+                subtitle="Department Information"
                 color="blue"
-                isEmpty={!user.department}
+                isEmpty={!user.department || user.department === ""}
                 onAdd={handleEditClick}
               />
 
@@ -237,7 +234,7 @@ export function ProfilePage() {
                 value={user.foculty}
                 subtitle="Faculty Information"
                 color="green"
-                isEmpty={!user.foculty}
+                isEmpty={!user.foculty || user.foculty === ""}
                 onAdd={handleEditClick}
               />
 
@@ -255,7 +252,7 @@ export function ProfilePage() {
           {/* ACCOUNT DETAILS Section */}
           <div className="space-y-5">
             <div className="flex items-center gap-3 px-1">
-              <div className="p-2.5 bg-linear-to-br from-gray-700 to-gray-900 rounded-xl shadow-sm">
+              <div className="p-2.5 bg-gradient-to-br from-gray-700 to-gray-900 rounded-xl shadow-sm">
                 <User className="w-5 h-5 text-white" />
               </div>
               <div>
@@ -271,13 +268,13 @@ export function ProfilePage() {
             <div className="space-y-4">
               <div className="group bg-white rounded-xl border border-gray-200 p-5 hover:shadow-md transition-all duration-200 hover:border-gray-300">
                 <div className="flex items-center gap-2 mb-3">
-                  <div className="w-2 h-2 rounded-full bg-linear-to-r from-gray-600 to-gray-800"></div>
+                  <div className="w-2 h-2 rounded-full bg-gradient-to-r from-gray-600 to-gray-800"></div>
                   <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
                     Email
                   </h4>
                 </div>
                 <div className="flex items-center gap-4">
-                  <div className="p-2.5 bg-linear-to-br from-gray-50 to-gray-100 rounded-lg shadow-sm">
+                  <div className="p-2.5 bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg shadow-sm">
                     <Mail className="w-4 h-4 text-gray-600" />
                   </div>
                   <div className="flex-1 min-w-0">
@@ -293,13 +290,13 @@ export function ProfilePage() {
 
               <div className="group bg-white rounded-xl border border-gray-200 p-5 hover:shadow-md transition-all duration-200 hover:border-orange-200">
                 <div className="flex items-center gap-2 mb-3">
-                  <div className="w-2 h-2 rounded-full bg-linear-to-r from-orange-500 to-amber-500"></div>
+                  <div className="w-2 h-2 rounded-full bg-gradient-to-r from-orange-500 to-amber-500"></div>
                   <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
                     Member Since
                   </h4>
                 </div>
                 <div className="flex items-center gap-4">
-                  <div className="p-2.5 bg-linear-to-br from-orange-50 to-amber-100 rounded-lg shadow-sm">
+                  <div className="p-2.5 bg-gradient-to-br from-orange-50 to-amber-100 rounded-lg shadow-sm">
                     <Calendar className="w-4 h-4 text-orange-600" />
                   </div>
                   <div>
@@ -318,7 +315,7 @@ export function ProfilePage() {
             <div className="pt-4">
               <button
                 onClick={handleEditClick}
-                className="w-full group relative overflow-hidden bg-linear-to-r from-blue-600 to-indigo-600 text-white text-sm font-semibold py-3 px-4 rounded-xl hover:shadow-lg transition-all duration-300 hover:from-blue-700 hover:to-indigo-700"
+                className="w-full group relative overflow-hidden bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-semibold py-3 px-4 rounded-xl hover:shadow-lg transition-all duration-300 hover:from-blue-700 hover:to-indigo-700"
               >
                 <span className="relative z-10 flex items-center justify-center gap-2">
                   <Edit2 className="w-4 h-4" />
@@ -337,7 +334,7 @@ export function ProfilePage() {
                     />
                   </svg>
                 </span>
-                <div className="absolute inset-0 bg-linear-to-r from-blue-700 to-indigo-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-700 to-indigo-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </button>
             </div>
           </div>

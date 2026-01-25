@@ -10,10 +10,12 @@ import { ChatPage, ChatSelectionPage } from "@/features/chat";
 import { NavProvider } from "@/context/NavContext";
 import { CodeExchangePage } from "@/features/codeExchange";
 import { EditProfilePage, ProfilePage } from "@/features/user";
+import { ScrollToTop } from "@/utils/scrollToTop";
 function AppRoutes() {
   return (
     <NavProvider>
       <BrowserRouter>
+        <ScrollToTop />
         <ItemTypeProvider>
           <UploadPhotoProvider>
             <Routes>

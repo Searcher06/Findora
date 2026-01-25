@@ -126,17 +126,20 @@ const updateProfile = async (req, res) => {
     department,
     foculty,
   } = req.body;
+
+  // Check if there are any changes including file upload
   const condition =
     !firstName &&
     !lastName &&
     !email &&
     !oldPassword &&
     !newPassword &&
-    !department &&
-    !foculty;
+    department === undefined && // Changed from !department
+    foculty === undefined && // Changed from !foculty
+    !req.file; // Also check for file upload
 
   if (condition) {
-    res.status(200).json({ message: "No changes made" });
+    return res.status(200).json({ message: "No changes made" });
   }
 
   const user = await userModel.findById(req.user._id);
@@ -216,12 +219,14 @@ const updateProfile = async (req, res) => {
     user.password = await bcrypt.hash(newPassword, 12);
   }
 
-  if (department) {
-    user.department = department;
+  // Check if department is defined (can be empty string to clear)
+  if (department !== undefined) {
+    user.department = department; // This allows empty string to clear the field
   }
 
-  if (foculty) {
-    user.foculty = foculty;
+  // Check if foculty is defined (can be empty string to clear)
+  if (foculty !== undefined) {
+    user.foculty = foculty; // This allows empty string to clear the field
   }
 
   const file = req.file;
