@@ -6,25 +6,26 @@ import {
   Save,
   X,
   ArrowLeft,
-  AlertCircle,
-  CheckCircle,
   School,
   Camera,
   Upload,
 } from "lucide-react";
 import { useAuthStore } from "@/store/useAuthStore";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export const EditProfilePage = () => {
+  const navigate = useNavigate();
   const user = useAuthStore((state) => state.user);
+  const isUpdating = useAuthStore((state) => state.isUpdating);
+  const { UpdateProfile } = useAuthStore();
+
   const [formData, setFormData] = useState({
     department: "",
     foculty: "",
     profilePic: "",
   });
   const [previewImage, setPreviewImage] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showSuccess, setShowSuccess] = useState(false);
-  const [error, setError] = useState("");
 
   // Initialize form data with user data
   useEffect(() => {
@@ -44,7 +45,6 @@ export const EditProfilePage = () => {
       ...prev,
       [name]: value,
     }));
-    setError("");
   };
 
   const [imageFile, setImageFile] = useState(null);
@@ -54,13 +54,13 @@ export const EditProfilePage = () => {
     if (file) {
       // Validate file type
       if (!file.type.startsWith("image/")) {
-        setError("Please select a valid image file");
+        toast.error("Please select a valid image file");
         return;
       }
 
       // Validate file size (max 5MB)
       if (file.size > 5 * 1024 * 1024) {
-        setError("Image size should be less than 5MB");
+        toast.error("Image size should be less than 5MB");
         return;
       }
 
@@ -75,7 +75,6 @@ export const EditProfilePage = () => {
           ...prev,
           profilePic: reader.result,
         }));
-        setError("");
       };
       reader.readAsDataURL(file);
     }
@@ -93,11 +92,7 @@ export const EditProfilePage = () => {
   const handleSubmit = async () => {
     if (!user) return;
 
-    setIsSubmitting(true);
-    setError("");
-
     try {
-      // Create FormData object for multipart/form-data
       const formDataToSend = new FormData();
 
       // Append text fields
@@ -110,31 +105,13 @@ export const EditProfilePage = () => {
       }
 
       // Send to your API endpoint
-      const response = await fetch("/api/user/profile", {
-        method: "POST",
-        body: formDataToSend,
-        // Don't set Content-Type header - browser will set it automatically with boundary
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to update profile");
+      const response = await UpdateProfile(formDataToSend);
+      if (response) {
+        setTimeout(() => navigate("/profile"), 1000);
       }
-
-      const updatedUser = await response.json();
-
-      // Update your Zustand store with the updated user data
-      // useAuthStore.setState({ user: updatedUser });
-
-      // Show success message
-      setShowSuccess(true);
-      setTimeout(() => {
-        setShowSuccess(false);
-        window.history.back();
-      }, 2000);
+      console.log(response);
     } catch (err) {
-      setError(err.message || "Failed to update profile. Please try again.");
-    } finally {
-      setIsSubmitting(false);
+      console.log(err);
     }
   };
 
@@ -149,7 +126,7 @@ export const EditProfilePage = () => {
 
   if (!user) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center mt-14">
         <div className="text-center">
           <User className="w-16 h-16 text-gray-400 mx-auto mb-4" />
           <h2 className="text-xl font-semibold text-gray-700">No User Found</h2>
@@ -172,7 +149,7 @@ export const EditProfilePage = () => {
         </button>
 
         <div className="inline-flex items-center gap-2 mb-2">
-          <div className="w-8 h-1 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full"></div>
+          <div className="w-8 h-1 bg-linear-to-r from-blue-500 to-indigo-500 rounded-full"></div>
           <h1 className="text-2xl font-bold text-gray-900 sans display tracking-tight">
             Edit Profile
           </h1>
@@ -182,47 +159,12 @@ export const EditProfilePage = () => {
         </p>
       </div>
 
-      {/* Success Message */}
-      {showSuccess && (
-        <div className="mb-6 bg-green-50 border border-green-200 rounded-xl p-4 flex items-center gap-3">
-          <div className="p-2 bg-green-100 rounded-full">
-            <CheckCircle className="w-5 h-5 text-green-600" />
-          </div>
-          <div className="flex-1">
-            <p className="text-sm font-semibold text-green-900 sans">
-              Profile updated successfully!
-            </p>
-            <p className="text-xs text-green-700 sans mt-0.5">
-              Redirecting back to profile...
-            </p>
-          </div>
-        </div>
-      )}
-
-      {/* Error Message */}
-      {error && (
-        <div className="mb-6 bg-red-50 border border-red-200 rounded-xl p-4 flex items-center gap-3">
-          <div className="p-2 bg-red-100 rounded-full">
-            <AlertCircle className="w-5 h-5 text-red-600" />
-          </div>
-          <div className="flex-1">
-            <p className="text-sm font-semibold text-red-900 sans">{error}</p>
-          </div>
-          <button
-            onClick={() => setError("")}
-            className="text-red-400 hover:text-red-600 transition-colors"
-          >
-            <X className="w-4 h-4" />
-          </button>
-        </div>
-      )}
-
       {/* Edit Form */}
       <div className="space-y-6">
         {/* Profile Photo Section */}
         <div className="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm">
           <div className="flex items-center gap-3 mb-6">
-            <div className="p-2.5 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl shadow-sm">
+            <div className="p-2.5 bg-linear-to-br from-purple-500 to-purple-600 rounded-xl shadow-sm">
               <Camera className="w-5 h-5 text-white" />
             </div>
             <div>
@@ -238,7 +180,7 @@ export const EditProfilePage = () => {
           <div className="flex flex-col sm:flex-row items-center gap-4">
             {/* Profile Picture Preview */}
             <div className="relative">
-              <div className="w-20 h-20 rounded-full bg-gradient-to-br from-blue-500 to-indigo-500 p-0.5">
+              <div className="w-20 h-20 rounded-full bg-linear-to-br from-blue-500 to-indigo-500 p-0.5">
                 <div className="w-full h-full rounded-full bg-white flex items-center justify-center overflow-hidden">
                   {previewImage ? (
                     <img
@@ -293,7 +235,7 @@ export const EditProfilePage = () => {
         {/* Academic Information Card */}
         <div className="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm">
           <div className="flex items-center gap-3 mb-6">
-            <div className="p-2.5 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl shadow-sm">
+            <div className="p-2.5 bg-linear-to-br from-blue-500 to-blue-600 rounded-xl shadow-sm">
               <GraduationCap className="w-5 h-5 text-white" />
             </div>
             <div>
@@ -380,7 +322,7 @@ export const EditProfilePage = () => {
           <button
             type="button"
             onClick={handleCancel}
-            disabled={isSubmitting}
+            disabled={isUpdating}
             className="flex-1 px-4 py-2.5 bg-white border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 hover:border-gray-400 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed sans text-sm"
           >
             Cancel
@@ -388,11 +330,11 @@ export const EditProfilePage = () => {
           <button
             type="button"
             onClick={handleSubmit}
-            disabled={isSubmitting || !hasChanges}
-            className="flex-1 group relative overflow-hidden bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-medium py-2.5 px-4 rounded-lg hover:shadow-md transition-all duration-300 hover:from-blue-700 hover:to-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-none sans text-sm"
+            disabled={isUpdating || !hasChanges}
+            className="flex-1 group relative overflow-hidden bg-linear-to-r from-blue-600 to-indigo-600 text-white font-medium py-2.5 px-4 rounded-lg hover:shadow-md transition-all duration-300 hover:from-blue-700 hover:to-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-none sans text-sm"
           >
             <span className="relative z-10 flex items-center justify-center gap-2">
-              {isSubmitting ? (
+              {isUpdating ? (
                 <>
                   <svg
                     className="animate-spin h-4 w-4 text-white"
@@ -423,14 +365,14 @@ export const EditProfilePage = () => {
                 </>
               )}
             </span>
-            {!isSubmitting && (
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-700 to-indigo-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            {!isUpdating && (
+              <div className="absolute inset-0 bg-linear-to-r from-blue-700 to-indigo-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             )}
           </button>
         </div>
 
         {/* Change Indicator */}
-        {hasChanges && !isSubmitting && (
+        {hasChanges && !isUpdating && (
           <p className="text-center text-xs text-amber-600 font-medium sans">
             You have unsaved changes
           </p>
