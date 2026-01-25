@@ -38,7 +38,6 @@ export const useAuthStore = create((set, get) => ({
       const response = await updateProfile(datafields);
       set({ user: response });
       toast.success("Updated Successfully");
-      console.log("Debug 1:", response);
       return response;
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to update profile");

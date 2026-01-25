@@ -109,7 +109,6 @@ export const EditProfilePage = () => {
       if (response) {
         setTimeout(() => navigate("/profile"), 1000);
       }
-      console.log(response);
     } catch (err) {
       console.log(err);
     }

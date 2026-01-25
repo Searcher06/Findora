@@ -30,7 +30,6 @@ function AppRoutes() {
                   <Route path="/items/:id" element={<ViewItem />} />
                   <Route path="/report" element={<ReportPage />} />
                   <Route path="/update/:id" element={<UpdateItem />} />
-                  <Route path="/notification" element={<Notification />} />
                   <Route
                     path="/chat/:requestId/:username"
                     element={<ChatPage />}
