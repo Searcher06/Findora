@@ -65,16 +65,16 @@ export function ProfilePage() {
       return (
         <div
           onClick={onAdd}
-          className="group bg-white rounded-xl border-2 border-dashed border-gray-300 p-5 hover:border-blue-400 hover:bg-blue-50/30 transition-all duration-200 cursor-pointer"
+          className="group bg-white rounded-xl border-2 border-dashed border-gray-300 p-4 sm:p-5 hover:border-blue-400 hover:bg-blue-50/30 transition-all duration-200 cursor-pointer"
         >
-          <div className="flex items-center gap-2 mb-3">
+          <div className="flex items-center gap-2 mb-2 sm:mb-3">
             <div className="w-2 h-2 rounded-full bg-gray-300"></div>
             <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
               {title}
             </h4>
           </div>
-          <div className="flex items-center gap-4">
-            <div className="p-2.5 bg-gray-100 rounded-lg">
+          <div className="flex items-center gap-3 sm:gap-4">
+            <div className="p-2 sm:p-2.5 bg-gray-100 rounded-lg shrink-0">
               <Plus className="w-4 h-4 text-gray-400" />
             </div>
             <div>
@@ -113,20 +113,24 @@ export function ProfilePage() {
 
     return (
       <div
-        className={`group bg-white rounded-xl border border-gray-200 p-5 hover:shadow-md transition-all duration-200 hover:${colors.border}`}
+        className={`group bg-white rounded-xl border border-gray-200 p-4 sm:p-5 hover:shadow-md transition-all duration-200 hover:${colors.border}`}
       >
-        <div className="flex items-center gap-2 mb-3">
+        <div className="flex items-center gap-2 mb-2 sm:mb-3">
           <div className={`w-2 h-2 rounded-full ${colors.dot}`}></div>
           <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
             {title}
           </h4>
         </div>
-        <div className="flex items-center gap-4">
-          <div className={`p-2.5 ${colors.bg} rounded-lg shadow-sm`}>
+        <div className="flex items-center gap-3 sm:gap-4">
+          <div
+            className={`p-2 sm:p-2.5 ${colors.bg} rounded-lg shadow-sm shrink-0`}
+          >
             <Icon className={`w-4 h-4 ${colors.icon}`} />
           </div>
-          <div>
-            <p className="text-sm font-semibold text-gray-900">{value}</p>
+          <div className="min-w-0 flex-1">
+            <p className="text-sm font-semibold text-gray-900 truncate">
+              {value}
+            </p>
             {subtitle && (
               <p className="text-gray-400 text-xs mt-0.5">{subtitle}</p>
             )}
@@ -149,27 +153,27 @@ export function ProfilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 mt-12">
-      <div className="px-6 max-w-5xl mx-auto">
+    <div className="min-h-screen bg-gray-50 py-4 sm:py-8 mt-12">
+      <div className="px-4 sm:px-6 max-w-5xl mx-auto">
         {/* Header */}
-        <div className="mb-8">
+        <div className="mb-6 sm:mb-8">
           <div className="inline-flex items-center gap-2 mb-2">
-            <div className="w-8 h-1 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full"></div>
-            <h1 className="text-2xl font-bold text-gray-900 tracking-tight">
+            <div className="w-6 sm:w-8 h-1 bg-linear-to-r from-blue-500 to-indigo-500 rounded-full"></div>
+            <h1 className="text-xl sm:text-2xl font-bold text-gray-900 tracking-tight">
               Profile
             </h1>
           </div>
-          <p className="text-gray-500 text-sm">
+          <p className="text-gray-500 text-xs sm:text-sm">
             Personal information and academic details
           </p>
         </div>
 
         {/* User Card */}
-        <div className="mb-8 bg-gradient-to-br from-white to-gray-50 rounded-2xl border border-gray-100 p-6 shadow-sm">
-          <div className="flex items-center gap-4">
+        <div className="mb-6 sm:mb-8 bg-linear-to-br from-white to-gray-50 rounded-xl sm:rounded-2xl border border-gray-100 p-4 sm:p-6 shadow-sm">
+          <div className="flex items-center gap-3 sm:gap-4">
             <div className="relative">
-              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-indigo-500 p-0.5">
-                <div className="w-full h-full rounded-full bg-white flex items-center justify-center">
+              <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-linear-to-br from-blue-500 to-indigo-500 p-0.5">
+                <div className="w-full h-full rounded-full bg-white flex items-center justify-center overflow-hidden">
                   {user.profilePic ? (
                     <img
                       src={user.profilePic}
@@ -177,38 +181,44 @@ export function ProfilePage() {
                       className="w-full h-full rounded-full object-cover"
                     />
                   ) : (
-                    <User className="w-7 h-7 text-indigo-600" />
+                    <User className="w-6 h-6 sm:w-7 sm:h-7 text-indigo-600" />
                   )}
                 </div>
               </div>
-              <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-blue-500 rounded-full border-2 border-white flex items-center justify-center">
-                <div className="w-2 h-2 bg-white rounded-full"></div>
+              <div className="absolute -bottom-1 -right-1 w-5 h-5 sm:w-6 sm:h-6 bg-blue-500 rounded-full border-2 border-white flex items-center justify-center">
+                <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-white rounded-full"></div>
               </div>
             </div>
-            <div className="flex-1">
-              <h2 className="text-xl font-semibold text-gray-900">
+            <div className="flex-1 min-w-0">
+              <h2 className="text-lg sm:text-xl font-semibold text-gray-900 truncate">
                 {`${user.firstName} ${user.lastName}`}
               </h2>
-              <p className="text-gray-500 text-sm font-medium">
+              <p className="text-gray-500 text-xs sm:text-sm font-medium truncate">
                 {`@${user.displayUsername}`}
               </p>
             </div>
-            <div className="hidden sm:block text-xs font-medium text-blue-600 bg-blue-50 px-3 py-1.5 rounded-full capitalize">
+            <div className="hidden sm:block text-xs font-medium text-blue-600 bg-blue-50 px-3 py-1.5 rounded-full capitalize shrink-0">
+              {user.role} Account
+            </div>
+          </div>
+          {/* Mobile role badge */}
+          <div className="sm:hidden mt-3 pt-3 border-t border-gray-100">
+            <div className="inline-block text-xs font-medium text-blue-600 bg-blue-50 px-3 py-1.5 rounded-full capitalize">
               {user.role} Account
             </div>
           </div>
         </div>
 
         {/* Info Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
           {/* ACADEMIC INFO Section */}
-          <div className="space-y-5">
-            <div className="flex items-center gap-3 px-1">
-              <div className="p-2.5 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl shadow-sm">
-                <GraduationCap className="w-5 h-5 text-white" />
+          <div className="space-y-4 sm:space-y-5">
+            <div className="flex items-center gap-2 sm:gap-3 px-1">
+              <div className="p-2 sm:p-2.5 bg-linear-to-br from-blue-500 to-blue-600 rounded-lg sm:rounded-xl shadow-sm">
+                <GraduationCap className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-gray-900">
+                <h3 className="text-base sm:text-lg font-semibold text-gray-900">
                   Academic Info
                 </h3>
                 <p className="text-gray-400 text-xs mt-0.5">
@@ -217,7 +227,7 @@ export function ProfilePage() {
               </div>
             </div>
 
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               <InfoCard
                 icon={BookOpen}
                 title="Department"
@@ -250,13 +260,13 @@ export function ProfilePage() {
           </div>
 
           {/* ACCOUNT DETAILS Section */}
-          <div className="space-y-5">
-            <div className="flex items-center gap-3 px-1">
-              <div className="p-2.5 bg-gradient-to-br from-gray-700 to-gray-900 rounded-xl shadow-sm">
-                <User className="w-5 h-5 text-white" />
+          <div className="space-y-4 sm:space-y-5">
+            <div className="flex items-center gap-2 sm:gap-3 px-1">
+              <div className="p-2 sm:p-2.5 bg-linear-to-br from-gray-700 to-gray-900 rounded-lg sm:rounded-xl shadow-sm">
+                <User className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-gray-900">
+                <h3 className="text-base sm:text-lg font-semibold text-gray-900">
                   Account Details
                 </h3>
                 <p className="text-gray-400 text-xs mt-0.5">
@@ -265,16 +275,16 @@ export function ProfilePage() {
               </div>
             </div>
 
-            <div className="space-y-4">
-              <div className="group bg-white rounded-xl border border-gray-200 p-5 hover:shadow-md transition-all duration-200 hover:border-gray-300">
-                <div className="flex items-center gap-2 mb-3">
-                  <div className="w-2 h-2 rounded-full bg-gradient-to-r from-gray-600 to-gray-800"></div>
+            <div className="space-y-3 sm:space-y-4">
+              <div className="group bg-white rounded-xl border border-gray-200 p-4 sm:p-5 hover:shadow-md transition-all duration-200 hover:border-gray-300">
+                <div className="flex items-center gap-2 mb-2 sm:mb-3">
+                  <div className="w-2 h-2 rounded-full bg-linear-to-r from-gray-600 to-gray-800"></div>
                   <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
                     Email
                   </h4>
                 </div>
-                <div className="flex items-center gap-4">
-                  <div className="p-2.5 bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg shadow-sm">
+                <div className="flex items-center gap-3 sm:gap-4">
+                  <div className="p-2 sm:p-2.5 bg-linear-to-br from-gray-50 to-gray-100 rounded-lg shadow-sm shrink-0">
                     <Mail className="w-4 h-4 text-gray-600" />
                   </div>
                   <div className="flex-1 min-w-0">
@@ -288,15 +298,15 @@ export function ProfilePage() {
                 </div>
               </div>
 
-              <div className="group bg-white rounded-xl border border-gray-200 p-5 hover:shadow-md transition-all duration-200 hover:border-orange-200">
-                <div className="flex items-center gap-2 mb-3">
-                  <div className="w-2 h-2 rounded-full bg-gradient-to-r from-orange-500 to-amber-500"></div>
+              <div className="group bg-white rounded-xl border border-gray-200 p-4 sm:p-5 hover:shadow-md transition-all duration-200 hover:border-orange-200">
+                <div className="flex items-center gap-2 mb-2 sm:mb-3">
+                  <div className="w-2 h-2 rounded-full bg-linear-to-r from-orange-500 to-amber-500"></div>
                   <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
                     Member Since
                   </h4>
                 </div>
-                <div className="flex items-center gap-4">
-                  <div className="p-2.5 bg-gradient-to-br from-orange-50 to-amber-100 rounded-lg shadow-sm">
+                <div className="flex items-center gap-3 sm:gap-4">
+                  <div className="p-2 sm:p-2.5 bg-linear-to-br from-orange-50 to-amber-100 rounded-lg shadow-sm shrink-0">
                     <Calendar className="w-4 h-4 text-orange-600" />
                   </div>
                   <div>
@@ -312,10 +322,10 @@ export function ProfilePage() {
             </div>
 
             {/* Edit button */}
-            <div className="pt-4">
+            <div className="pt-2 sm:pt-4">
               <button
                 onClick={handleEditClick}
-                className="w-full group relative overflow-hidden bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-semibold py-3 px-4 rounded-xl hover:shadow-lg transition-all duration-300 hover:from-blue-700 hover:to-indigo-700"
+                className="w-full group relative overflow-hidden bg-linear-to-r from-blue-600 to-indigo-600 text-white text-sm font-semibold py-2.5 sm:py-3 px-4 rounded-lg sm:rounded-xl hover:shadow-lg transition-all duration-300 hover:from-blue-700 hover:to-indigo-700"
               >
                 <span className="relative z-10 flex items-center justify-center gap-2">
                   <Edit2 className="w-4 h-4" />
@@ -334,7 +344,7 @@ export function ProfilePage() {
                     />
                   </svg>
                 </span>
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-700 to-indigo-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="absolute inset-0 bg-linear-to-r from-blue-700 to-indigo-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </button>
             </div>
           </div>
