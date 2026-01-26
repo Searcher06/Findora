@@ -1,7 +1,7 @@
 import avatarimage from "../../../constants/avatar2.jpg";
 import { useAuthStore } from "@/store/useAuthStore";
 import { formatMessageTime } from "@/utils/formatDate";
-import { Handshake, Info, CheckCheck } from "lucide-react"; // SaaS-style icons
+import { Handshake, Info, CheckCheck } from "lucide-react";
 
 export const ChatArea = ({ loading, messages, error, messageEndref }) => {
   const { user } = useAuthStore();
@@ -52,7 +52,7 @@ export const ChatArea = ({ loading, messages, error, messageEndref }) => {
             const isMe = message.senderId._id === user._id;
             const isSystem = message.text?.startsWith("[SYSTEM]");
 
-            // --- SYSTEM MESSAGE RENDER (SaaS HCI Style) ---
+            // --- SYSTEM MESSAGE RENDER ---
             if (isSystem) {
               return (
                 <div
@@ -61,22 +61,17 @@ export const ChatArea = ({ loading, messages, error, messageEndref }) => {
                   ref={messageEndref}
                 >
                   <div className="max-w-[90%] w-full sm:w-auto bg-white border border-blue-100 rounded-xl p-5 shadow-sm text-center relative overflow-hidden">
-                    {/* Top Accent Line */}
                     <div className="absolute top-0 left-0 w-full h-1 bg-blue-500" />
-
                     <div className="inline-flex items-center justify-center size-10 bg-blue-50 text-blue-600 rounded-full mb-3">
                       <Handshake size={20} strokeWidth={2.5} />
                     </div>
-
                     <h4 className="text-[10px] font-bold text-blue-600 uppercase tracking-[0.2em] mb-1 flex items-center justify-center gap-1.5">
                       <Info size={12} strokeWidth={3} />
                       Official Request
                     </h4>
-
                     <p className="text-sm text-gray-700 leading-relaxed font-medium px-2 italic">
                       {message.text.replace("[SYSTEM]: ", "")}
                     </p>
-
                     <div className="mt-4 pt-3 border-t border-gray-50 flex items-center justify-center gap-3">
                       <time className="text-[10px] text-gray-400 font-bold uppercase tracking-tight">
                         {formatMessageTime(message.updatedAt)}
@@ -101,16 +96,19 @@ export const ChatArea = ({ loading, messages, error, messageEndref }) => {
                     isMe ? "flex-row-reverse" : "flex-row"
                   } max-w-[85%]`}
                 >
-                  {/* Avatar */}
-                  <div className="flex-shrink-0 relative">
+                  {/* Avatar - FIXED LOGIC */}
+                  <div className="shrink-0 relative">
                     <div className="size-10 rounded-full ring-2 ring-white shadow-md overflow-hidden bg-gray-100">
                       <img
                         src={
-                          isMe
-                            ? message.senderId.profilePic || avatarimage
-                            : message.receiverId.profilePic || avatarimage
+                          // Always show the sender's avatar (message.senderId)
+                          message.senderId.profilePic || avatarimage
                         }
-                        alt="Profile"
+                        alt={
+                          isMe
+                            ? "Your profile"
+                            : `${message.senderId.firstName}'s profile`
+                        }
                         className="w-full h-full object-cover"
                       />
                     </div>
@@ -155,7 +153,7 @@ export const ChatArea = ({ loading, messages, error, messageEndref }) => {
                         <div className="relative overflow-hidden">
                           <img
                             src={message.image}
-                            className="w-full h-auto max-h-[300px] object-cover"
+                            className="w-full h-auto max-h-75 object-cover"
                             alt="Shared image"
                             loading="lazy"
                           />
@@ -172,7 +170,7 @@ export const ChatArea = ({ loading, messages, error, messageEndref }) => {
 
                       {message.text && (
                         <div className="p-4">
-                          <p className="text-sm leading-relaxed break-words">
+                          <p className="text-sm leading-relaxed wrap-break-word">
                             {message.text}
                           </p>
                         </div>
