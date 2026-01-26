@@ -5,10 +5,12 @@ import { useNavContext } from "@/context/NavContext";
 import { Overlay } from "./Overlay";
 import { useChatStore } from "@/store/useChatStore";
 import { useLocation } from "react-router-dom";
+import { useAuthStore } from "@/store/useAuthStore"; // Import the auth store
 
 export const MainNavbar = () => {
   const { handleSidebar, openSidebar, setOpenSidebar } = useNavContext();
   const location = useLocation();
+  const user = useAuthStore((state) => state.user); // Get the user from auth store
 
   // Extract requestId from path: /chat/:requestId/:username
   const pathParts = location.pathname.split("/");
@@ -18,7 +20,7 @@ export const MainNavbar = () => {
 
   // Pass currentChatId to ignore the active chat count
   const unreadCount = useChatStore((state) =>
-    state.getUnreadCount(currentChatId)
+    state.getUnreadCount(currentChatId),
   );
 
   return (
@@ -36,7 +38,8 @@ export const MainNavbar = () => {
           )}
         </div>
 
-        <UserAvatar />
+        {/* Pass the user's profile picture */}
+        <UserAvatar profilePic={user?.profilePic} />
       </nav>
       {openSidebar && (
         <>
