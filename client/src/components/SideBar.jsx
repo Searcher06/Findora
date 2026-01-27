@@ -26,10 +26,10 @@ export const SideBar = ({ setOpenSidebar }) => {
   }, [location.pathname, setOpenSidebar]);
 
   return (
-    <div className="h-full fixed w-[80%] bg-white transition duration-300 ease-in-out z-10 border-r border-gray-100 shadow-xl md:hidden">
+    <div className="h-full fixed w-[85%] bg-white transition duration-300 ease-in-out z-10 border-r border-gray-100 shadow-xl md:hidden">
       {/* Mobile Sidebar Header */}
       <div className="h-14 w-full border-b-2 border-gray-200 mb-2.5 flex justify-between items-center pr-2">
-        <Logo className="h-12 w-auto -ml-4" />
+        <Logo className="h-14 w-auto -ml-5" />
         <X
           onClick={() => setOpenSidebar(false)}
           className="text-gray-900 cursor-pointer hover:bg-gray-100 rounded p-1"
