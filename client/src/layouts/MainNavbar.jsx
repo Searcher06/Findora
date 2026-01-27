@@ -47,7 +47,7 @@ export const MainNavbar = () => {
           </div>
 
           {/* Logo - Hidden on mobile, visible on tablet and desktop */}
-          <Logo className="hidden md:block h-12 w-auto" />
+          <Logo className="hidden md:block h-15 w-auto -ml-9" />
 
           {/* Desktop Navigation Links - Hidden on mobile, visible on tablet and desktop */}
           <div className="hidden md:flex items-center gap-1">
