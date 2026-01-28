@@ -25,7 +25,7 @@ export const TabsBar = ({
           <button
             type="button"
             onClick={() => setBar("lost")}
-            className={`text-sm  px-1 py-1 whitespace-nowrap ${
+            className={`text-sm md:text-base px-1 py-1 whitespace-nowrap ${
               bar === "lost" ? "text-black" : "text-gray-600"
             }`}
           >
@@ -38,7 +38,7 @@ export const TabsBar = ({
           <button
             type="button"
             onClick={() => setBar("found")}
-            className={`text-sm  px-1 py-1 whitespace-nowrap ${
+            className={`text-sm md:text-base px-1 py-1 whitespace-nowrap ${
               bar === "found" ? "text-black" : "text-gray-600"
             }`}
           >
@@ -54,7 +54,7 @@ export const TabsBar = ({
           >
             <SelectTrigger
               aria-label="Category"
-              className="h-8 px-2 text-sm flex items-center justify-center gap-1 bg-transparent border-0 shadow-none max-w-full"
+              className="h-8 md:h-9 px-2 text-sm md:text-base flex items-center justify-center gap-1 bg-transparent border-0 shadow-none max-w-full"
             >
               <SelectValue placeholder="Category" className="truncate" />
             </SelectTrigger>
@@ -90,7 +90,7 @@ export const TabsBar = ({
           >
             <SelectTrigger
               aria-label="Date"
-              className="h-8 px-2 text-sm flex items-center justify-center gap-1 bg-transparent border-0 shadow-none max-w-full"
+              className="h-8 md:h-9 px-2 text-sm md:text-base flex items-center justify-center gap-1 bg-transparent border-0 shadow-none max-w-full"
             >
               <SelectValue placeholder="Date" className="truncate" />
             </SelectTrigger>
