@@ -7,10 +7,18 @@ import { useChatStore } from "@/store/useChatStore";
 import { useLocation, Link } from "react-router-dom";
 import { useAuthStore } from "@/store/useAuthStore";
 import { Logo } from "../components/logo";
-import { SearchIcon, MessageSquare, User } from "lucide-react";
+import {
+  SearchIcon,
+  MessageSquare,
+  User,
+  CheckCircle,
+  LayoutGrid,
+} from "lucide-react";
+import { useItemType } from "@/features/items/context/ItemTypeContext";
 
 export const MainNavbar = () => {
   const { handleSidebar, openSidebar, setOpenSidebar } = useNavContext();
+  const { setPostType } = useItemType();
   const location = useLocation();
   const user = useAuthStore((state) => state.user);
 
@@ -51,6 +59,7 @@ export const MainNavbar = () => {
 
           {/* Desktop Navigation Links - Hidden on mobile, visible on tablet and desktop */}
           <div className="hidden md:flex items-center gap-1">
+            {/* Browse */}
             <Link
               to="/"
               className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${
@@ -59,10 +68,39 @@ export const MainNavbar = () => {
                   : "text-gray-700 hover:bg-gray-100"
               }`}
             >
-              <SearchIcon className="w-4 h-4" />
-              <span className="text-sm">Browse</span>
+              <LayoutGrid className="w-4 h-4" />
+              <span className="text-sm">View Items</span>
             </Link>
 
+            {/* Report Lost */}
+            <Link
+              to="/report"
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${
+                isActive("/report-lost")
+                  ? "bg-blue-50 text-blue-600 font-semibold"
+                  : "text-gray-700 hover:bg-gray-100"
+              }`}
+              onClick={() => setPostType("lost")}
+            >
+              <SearchIcon className="w-4 h-4" />
+              <span className="text-sm">Report Lost</span>
+            </Link>
+
+            {/* Report Found */}
+            <Link
+              to="/report"
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${
+                isActive("/report-found")
+                  ? "bg-blue-50 text-blue-600 font-semibold"
+                  : "text-gray-700 hover:bg-gray-100"
+              }`}
+              onClick={() => setPostType("found")}
+            >
+              <CheckCircle className="w-4 h-4" />
+              <span className="text-sm">Report Found</span>
+            </Link>
+
+            {/* Messages */}
             <Link
               to="/chats"
               className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all relative ${
@@ -80,6 +118,7 @@ export const MainNavbar = () => {
               )}
             </Link>
 
+            {/* Profile */}
             <Link
               to="/profile"
               className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${
