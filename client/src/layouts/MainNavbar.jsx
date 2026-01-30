@@ -13,6 +13,7 @@ import {
   User,
   CheckCircle,
   LayoutGrid,
+  PlusIcon,
 } from "lucide-react";
 import { useItemType } from "@/features/items/context/ItemTypeContext";
 
@@ -76,28 +77,14 @@ export const MainNavbar = () => {
             <Link
               to="/report"
               className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${
-                isActive("/report-lost")
+                isActive("/report")
                   ? "bg-blue-50 text-blue-600 font-semibold"
                   : "text-gray-700 hover:bg-gray-100"
               }`}
               onClick={() => setPostType("lost")}
             >
-              <SearchIcon className="w-4 h-4" />
-              <span className="text-sm">Report Lost</span>
-            </Link>
-
-            {/* Report Found */}
-            <Link
-              to="/report"
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${
-                isActive("/report-found")
-                  ? "bg-blue-50 text-blue-600 font-semibold"
-                  : "text-gray-700 hover:bg-gray-100"
-              }`}
-              onClick={() => setPostType("found")}
-            >
-              <CheckCircle className="w-4 h-4" />
-              <span className="text-sm">Report Found</span>
+              <PlusIcon className="w-4 h-4" />
+              <span className="text-sm">Report Item</span>
             </Link>
 
             {/* Messages */}
