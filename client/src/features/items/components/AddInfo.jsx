@@ -17,9 +17,8 @@ const AddInfo = ({
   preview,
 }) => {
   const location = useLocation();
-  // Check if current route is an update route
   const isUpdateRoute = location.pathname.startsWith("/update/");
-  // Determine button text based on route
+
   const getButtonText = () => {
     if (loading) {
       return isUpdateRoute ? "Updating item..." : "Posting item...";
@@ -29,11 +28,11 @@ const AddInfo = ({
 
   return (
     <form
-      className={`w-full border rounded-lg border-gray-200 p-4 ${className}`}
+      className={`w-full border rounded-lg border-gray-200 p-4 overflow-visible ${className}`}
       onSubmit={(event) => event.preventDefault()}
     >
       <Label text={"Item Type"} htmlFor={"status"} />
-      <div className="mb-3 flex flex-col sm:flex-row gap-2 sm:gap-2 w-full sm:p-1.5 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl border border-gray-200">
+      <div className="mb-3 flex flex-col sm:flex-row gap-2 sm:gap-2 w-full sm:p-1.5 bg-linear-to-br from-gray-50 to-gray-100 rounded-xl border border-gray-200">
         <button
           type="button"
           name="status"
@@ -47,13 +46,12 @@ const AddInfo = ({
           }`}
         >
           <div
-            className={`p-1 sm:p-1.5 rounded-md flex-shrink-0 ${
+            className={`p-1 sm:p-1.5 rounded-md shrink-0 ${
               itemData.status === "lost" ? "bg-blue-100" : "bg-gray-200"
             }`}
           >
             <SearchX className="w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4" />
           </div>
-          {/* Full text always shown with responsive sizing */}
           <span className="whitespace-nowrap text-xs sm:text-sm md:text-base">
             I Lost an Item
           </span>
@@ -71,20 +69,18 @@ const AddInfo = ({
           }`}
         >
           <div
-            className={`p-1 sm:p-1.5 rounded-md flex-shrink-0 ${
+            className={`p-1 sm:p-1.5 rounded-md shrink-0 ${
               itemData.status === "found" ? "bg-green-100" : "bg-gray-200"
             }`}
           >
             <CheckCircle2 className="w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4" />
           </div>
-          {/* Full text always shown with responsive sizing */}
           <span className="whitespace-nowrap text-xs sm:text-sm md:text-base">
             I Found an Item
           </span>
         </button>
       </div>
 
-      {/* Rest of your code remains the same */}
       <Label text={"Item Name"} htmlFor={"itemName"} />
       <input
         id="itemName"
@@ -101,7 +97,7 @@ const AddInfo = ({
         name="category"
         id="category"
         value={itemData.category}
-        className="mb-2 font-sans w-full text-xs sm:text-sm h-8 block p-1 border border-gray-300 rounded-lg focus:outline-none"
+        className="mb-2 font-sans w-full text-xs sm:text-sm block p-1 border border-gray-300 rounded-lg focus:outline-none"
         onChange={handleInputChange}
       >
         <option value="" disabled>
@@ -136,7 +132,7 @@ const AddInfo = ({
       />
 
       <Label
-        text={`${itemData.status == "lost" ? "Date Lost" : "Date Found"}`}
+        text={`${itemData.status === "lost" ? "Date Lost" : "Date Found"}`}
         htmlFor={"dateLostOrFound"}
       />
       <input
