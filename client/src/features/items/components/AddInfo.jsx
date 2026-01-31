@@ -28,33 +28,32 @@ const AddInfo = ({
 
   return (
     <form
-      className={`w-full border rounded-lg border-gray-200 p-4 overflow-visible ${className}`}
+      className={`w-full border rounded-lg sm:rounded-xl border-gray-200 p-4 sm:p-5 md:p-6 overflow-visible ${className}`}
       onSubmit={(event) => event.preventDefault()}
     >
-      <Label text={"Item Type"} htmlFor={"status"} />
-      <div className="mb-3 flex flex-col sm:flex-row gap-2 sm:gap-2 w-full sm:p-1.5 bg-linear-to-br from-gray-50 to-gray-100 rounded-xl border border-gray-200">
+      {/* Item Type Selector - Stacks vertically on mobile */}
+      <Label text="Item Type" htmlFor="status" />
+      <div className="mb-3 sm:mb-4 flex flex-col sm:flex-row gap-2 w-full sm:p-1.5 bg-linear-to-br from-gray-50 to-gray-100 rounded-xl border border-gray-200">
         <button
           type="button"
           name="status"
           onClick={() =>
             handleInputChange({ target: { name: "status", value: "lost" } })
           }
-          className={`flex-1 h-10 sm:h-11 md:h-12 px-2 sm:px-3 md:px-4 py-2 text-xs sm:text-sm md:text-base font-semibold rounded-lg transition-all duration-200 flex items-center justify-center gap-1.5 sm:gap-2 md:gap-2.5 ${
+          className={`flex-1 h-11 sm:h-12 px-3 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm font-semibold rounded-lg transition-all duration-200 flex items-center justify-center gap-2 sm:gap-2.5 ${
             itemData.status === "lost"
               ? "bg-white text-blue-700 shadow-md shadow-blue-100 ring-1 ring-blue-500 scale-[1.02]"
               : "bg-transparent text-gray-600 hover:text-gray-900 hover:bg-white/50"
           }`}
         >
           <div
-            className={`p-1 sm:p-1.5 rounded-md shrink-0 ${
+            className={`p-1.5 rounded-md ${
               itemData.status === "lost" ? "bg-blue-100" : "bg-gray-200"
             }`}
           >
-            <SearchX className="w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4" />
+            <SearchX className="w-4 h-4" />
           </div>
-          <span className="whitespace-nowrap text-xs sm:text-sm md:text-base">
-            I Lost an Item
-          </span>
+          <span className="whitespace-nowrap">I Lost an Item</span>
         </button>
         <button
           type="button"
@@ -62,42 +61,42 @@ const AddInfo = ({
           onClick={() =>
             handleInputChange({ target: { name: "status", value: "found" } })
           }
-          className={`flex-1 h-10 sm:h-11 md:h-12 px-2 sm:px-3 md:px-4 py-2 text-xs sm:text-sm md:text-base font-semibold rounded-lg transition-all duration-200 flex items-center justify-center gap-1.5 sm:gap-2 md:gap-2.5 ${
+          className={`flex-1 h-11 sm:h-12 px-3 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm font-semibold rounded-lg transition-all duration-200 flex items-center justify-center gap-2 sm:gap-2.5 ${
             itemData.status === "found"
               ? "bg-white text-green-700 shadow-md shadow-green-100 ring-1 ring-green-500 scale-[1.02]"
               : "bg-transparent text-gray-600 hover:text-gray-900 hover:bg-white/50"
           }`}
         >
           <div
-            className={`p-1 sm:p-1.5 rounded-md shrink-0 ${
+            className={`p-1.5 rounded-md ${
               itemData.status === "found" ? "bg-green-100" : "bg-gray-200"
             }`}
           >
-            <CheckCircle2 className="w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4" />
+            <CheckCircle2 className="w-4 h-4" />
           </div>
-          <span className="whitespace-nowrap text-xs sm:text-sm md:text-base">
-            I Found an Item
-          </span>
+          <span className="whitespace-nowrap">I Found an Item</span>
         </button>
       </div>
 
-      <Label text={"Item Name"} htmlFor={"itemName"} />
+      {/* Item Name - Responsive */}
+      <Label text="Item Name" htmlFor="itemName" />
       <input
         id="itemName"
         type="text"
         name="itemName"
         placeholder="e.g. Samsung Galaxy S5"
-        className="mb-2 p-2 border border-gray-300 outline-0 text-xs sm:text-sm w-full h-8 rounded-sm"
+        className="mb-2 sm:mb-3 p-2 sm:p-2.5 border border-gray-300 outline-0 text-xs sm:text-sm w-full h-8 sm:h-9 rounded-sm focus:ring-2 focus:ring-blue-500 transition-all"
         value={itemData.itemName}
         onChange={handleInputChange}
       />
 
-      <Label text={"Category"} htmlFor={"category"} />
+      {/* Category - Responsive */}
+      <Label text="Category" htmlFor="category" />
       <select
         name="category"
         id="category"
         value={itemData.category}
-        className="mb-2 font-sans w-full text-xs sm:text-sm block p-1 border border-gray-300 rounded-lg focus:outline-none"
+        className="mb-2 sm:mb-3 font-sans w-full text-xs sm:text-sm h-8 sm:h-9 block px-2 py-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
         onChange={handleInputChange}
       >
         <option value="" disabled>
@@ -109,18 +108,20 @@ const AddInfo = ({
         <option value="Clothing & Wearables">Clothing & Wearables</option>
       </select>
 
-      <Label text={"Description"} htmlFor={"itemDescription"} />
+      {/* Description - Responsive */}
+      <Label text="Description" htmlFor="itemDescription" />
       <textarea
         name="itemDescription"
         id="itemDescription"
         value={itemData.itemDescription}
         onChange={handleInputChange}
         rows={4}
-        placeholder="A Dark colored samsung phone left in the library..."
-        className="mb-2 block outline-0 text-xs sm:text-sm font-sans p-2 border border-gray-300 rounded-lg resize-none w-full"
+        placeholder="A dark colored Samsung phone left in the library..."
+        className="mb-2 sm:mb-3 block outline-0 text-xs sm:text-sm font-sans p-2 sm:p-2.5 border border-gray-300 rounded-lg resize-none w-full focus:ring-2 focus:ring-blue-500 transition-all"
       ></textarea>
 
-      <Label text={"Location"} htmlFor={"location"} />
+      {/* Location - Responsive */}
+      <Label text="Location" htmlFor="location" />
       <input
         type="text"
         id="location"
@@ -128,12 +129,13 @@ const AddInfo = ({
         value={itemData.location}
         onChange={handleInputChange}
         placeholder="e.g. Main library"
-        className="mb-2 p-2 border border-gray-300 outline-0 text-xs sm:text-sm w-full h-8 rounded-sm"
+        className="mb-2 sm:mb-3 p-2 sm:p-2.5 border border-gray-300 outline-0 text-xs sm:text-sm w-full h-8 sm:h-9 rounded-sm focus:ring-2 focus:ring-blue-500 transition-all"
       />
 
+      {/* Date - Responsive */}
       <Label
         text={`${itemData.status === "lost" ? "Date Lost" : "Date Found"}`}
-        htmlFor={"dateLostOrFound"}
+        htmlFor="dateLostOrFound"
       />
       <input
         type="date"
@@ -141,11 +143,12 @@ const AddInfo = ({
         value={itemData.dateLostOrFound}
         onChange={handleInputChange}
         id="dateLostOrFound"
-        className="mb-3 block p-2 border border-gray-300 rounded-lg focus:outline-0 text-xs sm:text-sm w-full"
+        className="mb-3 sm:mb-4 block p-2 sm:p-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs sm:text-sm w-full transition-all"
       />
 
-      <div className="w-full flex justify-between">
-        <Label text={"Upload Photo"} htmlFor={"photo"} />
+      {/* Photo Upload Section */}
+      <div className="w-full flex justify-between items-center mb-2">
+        <Label text="Upload Photo" htmlFor="photo" />
         <ToggleImage />
       </div>
 
@@ -155,8 +158,9 @@ const AddInfo = ({
         preview={preview}
       />
 
+      {/* Submit Button - Responsive */}
       <Button
-        className={"text-xs sm:text-sm md:text-base mt-3 font-sans mb-3 w-full"}
+        className="text-xs sm:text-sm md:text-base mt-3 sm:mt-4 font-sans mb-2 w-full h-10 sm:h-11"
         onClick={handleSubmit}
       >
         {loading ? <Spinner /> : null}
