@@ -67,8 +67,6 @@ const ReportPage = () => {
     }
   };
 
-  console.log("Item Data", itemData);
-
   return (
     <div className="mt-14 md:mt-16 flex flex-col px-4 sm:px-6 md:px-8 lg:px-12 max-w-4xl mx-auto pb-8">
       {/* Header - Responsive */}
