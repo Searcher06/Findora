@@ -22,5 +22,4 @@ export const ViewItem = () => {
   );
 };
 
-
 // continue from here tomorrow
