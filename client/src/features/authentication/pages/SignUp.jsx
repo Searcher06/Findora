@@ -9,6 +9,7 @@ import { validateEmail } from "@/utils/validateEmail";
 import { textValidator } from "@/utils/textValidator";
 import { Spinner } from "@/components/ui/spinner";
 import { useAuthStore } from "@/store/useAuthStore";
+import { Logo } from "../../../components/logo";
 
 export const SignUpPage = () => {
   const navigate = useNavigate();
@@ -94,127 +95,287 @@ export const SignUpPage = () => {
       });
     }
   };
+
   return (
-    <div className="min-h-screen w-full flex justify-center items-center">
-      <div className="flex border w-75 shadow-lg rounded-lg">
-        <div id="left" className="hidden">
-          Left
+    <div className="min-h-screen w-full bg-white flex justify-center items-center py-8 sm:py-12">
+      {/* Mobile & Tablet Layout (< lg) */}
+      <div className="lg:hidden w-full max-w-xs sm:max-w-sm px-4 sm:px-6">
+        {/* Logo */}
+        <div className="mb-8">
+          <Logo className="h-26 w-auto" />
         </div>
-        <div id="right" className="w-full">
-          <form
-            className="w-full p-6"
-            onSubmit={(e) => {
-              e.preventDefault();
-            }}
-          >
-            <h1 className="font-bold text-2xl font-display mb-3">Sign Up</h1>
-            <InputFieldsContainer>
-              <InputField
-                icon={"UserIcon"}
-                type={"text"}
-                placeholder={"Firstname"}
-                value={formData.firstName}
-                change={"firstName"}
-                setFormData={setFormData}
-                onChange={(e) => {
-                  setFormData((prevState) => ({
-                    ...prevState,
-                    firstName: e.target.value,
-                  }));
-                }}
-                disabled={isSigningUp ? true : false}
-              />
-              <InputField
-                icon={"UserIcon"}
-                type={"text"}
-                placeholder={"Lastname"}
-                value={formData.lastName}
-                change={"lastName"}
-                setFormData={setFormData}
-                onChange={(e) => {
-                  setFormData((prevState) => ({
-                    ...prevState,
-                    lastName: e.target.value,
-                  }));
-                }}
-                disabled={isSigningUp ? true : false}
-              />
-              <InputField
-                icon={"AtSignIcon"}
-                type={"text"}
-                placeholder={"Username"}
-                change={"username"}
-                value={formData.username}
-                setFormData={setFormData}
-                onChange={(e) => {
-                  setFormData((prevState) => ({
-                    ...prevState,
-                    username: e.target.value,
-                  }));
-                }}
-                disabled={isSigningUp ? true : false}
-              />
-              <InputField
-                icon={"Mail"}
-                type={"email"}
-                placeholder={"Email"}
-                value={formData.email}
-                change={"email"}
-                setFormData={setFormData}
-                onChange={(e) => {
-                  setFormData((prevState) => ({
-                    ...prevState,
-                    email: e.target.value,
-                  }));
-                }}
-                disabled={isSigningUp ? true : false}
-              />
-              <InputField
-                icon={"Lock"}
-                type={"password"}
-                placeholder={"Password"}
-                value={formData.password}
-                change={"password"}
-                setFormData={setFormData}
-                onChange={(e) => {
-                  setFormData((prevState) => ({
-                    ...prevState,
-                    password: e.target.value,
-                  }));
-                }}
-                disabled={isSigningUp ? true : false}
-              />
 
-              <Button
-                className={`text-[13px] active:scale-95 active:bg-black/90 ${disabledStyle}`}
-                disabled={
-                  !formData.firstName ||
-                  !formData.lastName ||
-                  !formData.password ||
-                  !formData.email ||
-                  !formData.username ||
-                  isSigningUp
-                }
-                onClick={handleSignUp}
-              >
-                {isSigningUp ? <Spinner /> : null}
-                {isSigningUp ? "Creating your account" : "Create Account"}
-              </Button>
-            </InputFieldsContainer>
+        {/* Title */}
+        <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-8">
+          Sign Up
+        </h1>
 
-            <p className="mt-6 text-gray-600 font-sans text-xs w-full flex justify-center">
-              Already have an account?
-              <Link className="text-blue-600 pl-1 cursor-pointer" to={"/login"}>
-                Log in
-              </Link>
-            </p>
+        {/* Form */}
+        <form
+          className="w-full"
+          onSubmit={(e) => {
+            e.preventDefault();
+          }}
+        >
+          <InputFieldsContainer>
+            <InputField
+              icon={"UserIcon"}
+              type={"text"}
+              placeholder={"First Name"}
+              value={formData.firstName}
+              change={"firstName"}
+              setFormData={setFormData}
+              onChange={(e) => {
+                setFormData((prevState) => ({
+                  ...prevState,
+                  firstName: e.target.value,
+                }));
+              }}
+              disabled={isSigningUp ? true : false}
+            />
+            <InputField
+              icon={"UserIcon"}
+              type={"text"}
+              placeholder={"Last Name"}
+              value={formData.lastName}
+              change={"lastName"}
+              setFormData={setFormData}
+              onChange={(e) => {
+                setFormData((prevState) => ({
+                  ...prevState,
+                  lastName: e.target.value,
+                }));
+              }}
+              disabled={isSigningUp ? true : false}
+            />
+            <InputField
+              icon={"AtSignIcon"}
+              type={"text"}
+              placeholder={"Username"}
+              change={"username"}
+              value={formData.username}
+              setFormData={setFormData}
+              onChange={(e) => {
+                setFormData((prevState) => ({
+                  ...prevState,
+                  username: e.target.value,
+                }));
+              }}
+              disabled={isSigningUp ? true : false}
+            />
+            <InputField
+              icon={"Mail"}
+              type={"email"}
+              placeholder={"Email"}
+              value={formData.email}
+              change={"email"}
+              setFormData={setFormData}
+              onChange={(e) => {
+                setFormData((prevState) => ({
+                  ...prevState,
+                  email: e.target.value,
+                }));
+              }}
+              disabled={isSigningUp ? true : false}
+            />
+            <InputField
+              icon={"Lock"}
+              type={"password"}
+              placeholder={"Password"}
+              value={formData.password}
+              change={"password"}
+              setFormData={setFormData}
+              onChange={(e) => {
+                setFormData((prevState) => ({
+                  ...prevState,
+                  password: e.target.value,
+                }));
+              }}
+              disabled={isSigningUp ? true : false}
+            />
 
-            <hr className="h-px bg-gray-200 border-0 flex-1 mt-4" />
-            <p className="font-semibold text-gray-500 text-[11px] font-sans flex items-center gap-1.5 mt-4">
-              <LockKeyholeIcon size={16} /> Protected by Findora's security
-              system
-            </p>
-          </form>
+            <Button
+              className={`w-full h-10 sm:h-11 text-sm sm:text-[15px] font-semibold active:scale-95 transition-transform ${disabledStyle}`}
+              disabled={
+                !formData.firstName ||
+                !formData.lastName ||
+                !formData.password ||
+                !formData.email ||
+                !formData.username ||
+                isSigningUp
+              }
+              onClick={handleSignUp}
+            >
+              {isSigningUp ? <Spinner /> : null}
+              {isSigningUp ? "Creating your account" : "Create Account"}
+            </Button>
+          </InputFieldsContainer>
+
+          <p className="mt-6 text-gray-600 font-sans text-xs sm:text-sm w-full flex justify-center gap-1">
+            Already have an account?
+            <Link
+              className="text-blue-600 font-semibold cursor-pointer hover:underline"
+              to={"/login"}
+            >
+              Log in
+            </Link>
+          </p>
+
+          <hr className="h-[1px] bg-gray-200 border-0 mt-6 mb-4" />
+          <p className="font-medium text-gray-500 text-xs font-sans flex items-center justify-center gap-2">
+            <LockKeyholeIcon size={16} /> Protected by Findora's security system
+          </p>
+        </form>
+      </div>
+
+      {/* Desktop Layout (≥ lg) - Centered Container with 50/50 Split */}
+      <div className="hidden lg:flex w-full max-w-6xl h-auto mx-auto rounded-xl overflow-hidden shadow-lg">
+        {/* Left Side - Branding & Message */}
+        <div className="flex-1 bg-blue-100 flex flex-col justify-center items-center p-8 xl:p-12">
+          <div className="max-w-md w-full">
+            {/* Logo */}
+            <div className="mb-12">
+              <Logo className="h-16 w-auto -ml-5" />
+            </div>
+
+            {/* Tagline */}
+            <div>
+              <h2 className="text-4xl xl:text-5xl font-bold text-gray-900 mb-6 leading-tight">
+                Reuniting lost items faster than ever
+              </h2>
+              <p className="text-base xl:text-lg text-gray-700">
+                Reuniting lost items faster than ever
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Right Side - Form */}
+        <div className="flex-1 bg-white flex flex-col justify-center items-center p-8 xl:p-12">
+          <div className="w-full max-w-xs">
+            {/* Title */}
+            <h1 className="text-4xl xl:text-5xl font-bold text-gray-900 mb-8">
+              Sign Up
+            </h1>
+
+            {/* Form */}
+            <form
+              className="w-full"
+              onSubmit={(e) => {
+                e.preventDefault();
+              }}
+            >
+              <InputFieldsContainer>
+                <InputField
+                  icon={"UserIcon"}
+                  type={"text"}
+                  placeholder={"First Name"}
+                  value={formData.firstName}
+                  change={"firstName"}
+                  setFormData={setFormData}
+                  onChange={(e) => {
+                    setFormData((prevState) => ({
+                      ...prevState,
+                      firstName: e.target.value,
+                    }));
+                  }}
+                  disabled={isSigningUp ? true : false}
+                />
+                <InputField
+                  icon={"UserIcon"}
+                  type={"text"}
+                  placeholder={"Last Name"}
+                  value={formData.lastName}
+                  change={"lastName"}
+                  setFormData={setFormData}
+                  onChange={(e) => {
+                    setFormData((prevState) => ({
+                      ...prevState,
+                      lastName: e.target.value,
+                    }));
+                  }}
+                  disabled={isSigningUp ? true : false}
+                />
+                <InputField
+                  icon={"AtSignIcon"}
+                  type={"text"}
+                  placeholder={"Username"}
+                  change={"username"}
+                  value={formData.username}
+                  setFormData={setFormData}
+                  onChange={(e) => {
+                    setFormData((prevState) => ({
+                      ...prevState,
+                      username: e.target.value,
+                    }));
+                  }}
+                  disabled={isSigningUp ? true : false}
+                />
+                <InputField
+                  icon={"Mail"}
+                  type={"email"}
+                  placeholder={"Email"}
+                  value={formData.email}
+                  change={"email"}
+                  setFormData={setFormData}
+                  onChange={(e) => {
+                    setFormData((prevState) => ({
+                      ...prevState,
+                      email: e.target.value,
+                    }));
+                  }}
+                  disabled={isSigningUp ? true : false}
+                />
+                <InputField
+                  icon={"Lock"}
+                  type={"password"}
+                  placeholder={"Password"}
+                  value={formData.password}
+                  change={"password"}
+                  setFormData={setFormData}
+                  onChange={(e) => {
+                    setFormData((prevState) => ({
+                      ...prevState,
+                      password: e.target.value,
+                    }));
+                  }}
+                  disabled={isSigningUp ? true : false}
+                />
+
+                <Button
+                  className={`w-full h-11 text-[15px] font-semibold active:scale-95 transition-transform ${disabledStyle}`}
+                  disabled={
+                    !formData.firstName ||
+                    !formData.lastName ||
+                    !formData.password ||
+                    !formData.email ||
+                    !formData.username ||
+                    isSigningUp
+                  }
+                  onClick={handleSignUp}
+                >
+                  {isSigningUp ? <Spinner /> : null}
+                  {isSigningUp ? "Creating your account" : "Create Account"}
+                </Button>
+              </InputFieldsContainer>
+
+              <p className="mt-8 text-gray-600 font-sans text-sm w-full flex justify-center gap-1">
+                Already have an account?
+                <Link
+                  className="text-blue-600 font-semibold cursor-pointer hover:underline"
+                  to={"/login"}
+                >
+                  Log in
+                </Link>
+              </p>
+
+              <hr className="h-px bg-gray-200 border-0 mt-8 mb-4" />
+              <p className="font-medium text-gray-500 text-xs font-sans flex items-center justify-center gap-2">
+                <LockKeyholeIcon size={16} /> Protected by Findora's security
+                system
+              </p>
+            </form>
+          </div>
         </div>
       </div>
     </div>
