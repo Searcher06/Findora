@@ -1,14 +1,13 @@
 import InputFieldsContainer from "../components/InputFieldsContainer";
 import InputField from "../components/InputField";
 import { Button } from "@/components/ui/button";
-import ContinueWith from "../components/ContinueWith";
-import GoogleIcon from "../components/icons/Google";
 import { useNavigate } from "react-router-dom";
 import { LockKeyholeIcon } from "lucide-react";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { Spinner } from "@/components/ui/spinner";
 import { useAuthStore } from "@/store/useAuthStore";
+
 const LoginPage = () => {
   const { login, isLoggingIng } = useAuthStore();
   const navigate = useNavigate();
@@ -32,7 +31,7 @@ const LoginPage = () => {
 
   return (
     <div className="min-h-screen w-full flex justify-center items-center">
-      <div className="flex border w-74  shadow-lg rounded-lg">
+      <div className="flex border w-74 shadow-lg rounded-lg">
         <div id="left" className="hidden">
           Left
         </div>
@@ -91,16 +90,7 @@ const LoginPage = () => {
               </Button>
             </InputFieldsContainer>
 
-            <ContinueWith />
-
-            <button className="mt-3 h-9  w-full sm:w-65 border-gray-200 border-[1.9px] rounded-xl flex items-center justify-center">
-              <GoogleIcon className="mr-3 w-5 h-5" />
-              <span className="font-sans text-[13px] font-bold text-gray-700">
-                Sign Up with Google
-              </span>
-            </button>
-
-            <p className="mt-4 text-gray-600 font-sans text-xs w-full flex justify-center">
+            <p className="mt-6 text-gray-600 font-sans text-xs w-full flex justify-center">
               Don't have an account
               <span
                 className="text-blue-600 pl-1 cursor-pointer"

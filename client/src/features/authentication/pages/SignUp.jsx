@@ -1,16 +1,15 @@
 import { Button } from "@/components/ui/button";
 import { LockKeyholeIcon } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import GoogleIcon from "../components/icons/Google";
 import InputField from "../components/InputField";
 import InputFieldsContainer from "../components/InputFieldsContainer";
-import ContinueWith from "../components/ContinueWith";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { validateEmail } from "@/utils/validateEmail";
 import { textValidator } from "@/utils/textValidator";
 import { Spinner } from "@/components/ui/spinner";
 import { useAuthStore } from "@/store/useAuthStore";
+
 export const SignUpPage = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -203,23 +202,14 @@ export const SignUpPage = () => {
               </Button>
             </InputFieldsContainer>
 
-            <ContinueWith />
-
-            <button className="mt-3 h-9  w-full sm:w-65 border-gray-200 border-[1.9px] rounded-[8px] flex items-center justify-center">
-              <GoogleIcon className="mr-3 w-5 h-5" />
-              <span className="font-sans text-[13px] font-bold text-gray-700">
-                Sign Up with Google
-              </span>
-            </button>
-
-            <p className="mt-4 text-gray-600 font-sans text-xs w-full flex justify-center">
+            <p className="mt-6 text-gray-600 font-sans text-xs w-full flex justify-center">
               Already have an account?
               <Link className="text-blue-600 pl-1 cursor-pointer" to={"/login"}>
                 Log in
               </Link>
             </p>
 
-            <hr className="h-[1px] bg-gray-200 border-0 flex-1 mt-4" />
+            <hr className="h-px bg-gray-200 border-0 flex-1 mt-4" />
             <p className="font-semibold text-gray-500 text-[11px] font-sans flex items-center gap-1.5 mt-4">
               <LockKeyholeIcon size={16} /> Protected by Findora's security
               system
