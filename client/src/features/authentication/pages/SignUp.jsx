@@ -9,7 +9,6 @@ import { validateEmail } from "@/utils/validateEmail";
 import { textValidator } from "@/utils/textValidator";
 import { Spinner } from "@/components/ui/spinner";
 import { useAuthStore } from "@/store/useAuthStore";
-import { Logo } from "../../../components/logo";
 
 export const SignUpPage = () => {
   const navigate = useNavigate();
@@ -100,13 +99,15 @@ export const SignUpPage = () => {
     <div className="min-h-screen w-full bg-white flex justify-center items-center py-8 sm:py-12">
       {/* Mobile & Tablet Layout (< lg) */}
       <div className="lg:hidden w-full max-w-xs sm:max-w-sm px-4 sm:px-6">
-        {/* Logo */}
-        <div className="mb-8">
-          <Logo className="h-26 w-auto" />
+        {/* Logo Text - At Top */}
+        <div className="mb-4">
+          <h2 className="text-lg sm:text-xl font-display font-bold text-gray-900">
+            Findora
+          </h2>
         </div>
 
         {/* Title */}
-        <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-8">
+        <h1 className="text-2xl sm:text-3xl font-display font-bold text-gray-900 mb-8">
           Sign Up
         </h1>
 
@@ -233,16 +234,18 @@ export const SignUpPage = () => {
         {/* Left Side - Branding & Message */}
         <div className="flex-1 bg-blue-100 flex flex-col justify-center items-center p-8 xl:p-12">
           <div className="max-w-md w-full">
-            {/* Logo */}
-            <div className="mb-12">
-              <Logo className="h-16 w-auto -ml-5" />
+            {/* Logo Text - At Top */}
+            <div className="mb-8">
+              <h2 className="text-2xl xl:text-3xl font-display font-bold text-gray-900">
+                Findora
+              </h2>
             </div>
 
             {/* Tagline */}
             <div>
-              <h2 className="text-4xl xl:text-5xl font-bold text-gray-900 mb-6 leading-tight">
+              <h3 className="text-3xl xl:text-4xl font-display font-bold text-gray-900 mb-6 leading-tight">
                 Reuniting lost items faster than ever
-              </h2>
+              </h3>
               <p className="text-base xl:text-lg text-gray-700">
                 Reuniting lost items faster than ever
               </p>
@@ -254,7 +257,7 @@ export const SignUpPage = () => {
         <div className="flex-1 bg-white flex flex-col justify-center items-center p-8 xl:p-12">
           <div className="w-full max-w-xs">
             {/* Title */}
-            <h1 className="text-4xl xl:text-5xl font-bold text-gray-900 mb-8">
+            <h1 className="text-3xl xl:text-4xl font-display font-bold text-gray-900 mb-8">
               Sign Up
             </h1>
 
