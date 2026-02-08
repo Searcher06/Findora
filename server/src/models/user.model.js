@@ -38,6 +38,16 @@ const schema = new mongoose.Schema({
     required: [true, "Password is required"],
     minlength: 6,
   },
+  isVerified: {
+    type: Boolean,
+    default: false,
+  },
+  emailVerificationToken: {
+    type: String,
+  },
+  emailVerificationExpires: {
+    type: Date,
+  },
   role: {
     type: String,
     default: "student",
