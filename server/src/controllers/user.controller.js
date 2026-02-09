@@ -5,6 +5,7 @@ import { clearCookie } from "../utils/clearCookies.js";
 import { textValidator } from "../utils/symbolchecker.js";
 import { validateEmail } from "../utils/emailValidator.js";
 import cloudinary from "../config/cloudinary.js";
+import crypto from "crypto";
 
 const createUser = async (req, res) => {
   let { firstName, lastName, email, password, username } = req.body;
@@ -71,6 +72,12 @@ const createUser = async (req, res) => {
   const salt = await bcrypt.genSalt(12);
   const hashedpwd = await bcrypt.hash(password, salt);
 
+  const rawEmailtoken = crypto.randomBytes(32).toString("hex");
+  const hashedEmailToken = crypto
+    .createHash("sha256")
+    .update(rawEmailtoken)
+    .digest("hex");
+
   let user = await userModel.create({
     firstName,
     lastName,
@@ -78,7 +85,11 @@ const createUser = async (req, res) => {
     username: lowercasedUsername,
     displayUsername: username,
     password: hashedpwd,
+    emailVerificationToken: hashedEmailToken,
+    emailVerificationExpires: Date.now() + 24 * 60 * 60 * 1000,
   });
+
+  // todo:send email
 
   if (user) {
     generateToken(user, res);
@@ -276,6 +287,8 @@ const getUserByUsername = async (req, res) => {
 
   res.status(200).json(user);
 };
+const verifyEmail = async (req, res) => {};
+const resendEmail = async (req, res) => {};
 
 export {
   createUser,
@@ -284,6 +297,8 @@ export {
   signOut,
   getUser,
   getUserByUsername,
+  verifyEmail,
+  resendEmail,
 };
 
 // todo:implement oauth 2.0

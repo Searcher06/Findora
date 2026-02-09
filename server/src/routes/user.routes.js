@@ -7,6 +7,8 @@ import {
   signOut,
   getUser,
   getUserByUsername,
+  verifyEmail,
+  resendEmail,
 } from "../controllers/user.controller.js";
 import upload from "../middleware/upload.js";
 
@@ -17,6 +19,10 @@ router.post("/sign-up", createUser);
 router.post("/login", login);
 
 router.post("/sign-out", signOut);
+
+router.post("/verify-email", verifyEmail);
+
+router.post("/resend-email", resendEmail);
 
 router.get("/", authMiddleWare, getUser);
 
