@@ -6,6 +6,7 @@ import { textValidator } from "../utils/symbolchecker.js";
 import { validateEmail } from "../utils/emailValidator.js";
 import cloudinary from "../config/cloudinary.js";
 import crypto from "crypto";
+import { sendVerifyEmail } from "../utils/mailer.js";
 
 const createUser = async (req, res) => {
   let { firstName, lastName, email, password, username } = req.body;
@@ -89,7 +90,7 @@ const createUser = async (req, res) => {
     emailVerificationExpires: Date.now() + 24 * 60 * 60 * 1000,
   });
 
-  // todo:send email
+  await sendVerifyEmail(email, rawEmailtoken);
 
   if (user) {
     generateToken(user, res);
