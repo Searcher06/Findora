@@ -1,4 +1,6 @@
 import { MailerSend, Sender, Recipient, EmailParams } from "mailersend";
+import dotenv from "dotenv";
+dotenv.config();
 
 const mailerSend = new MailerSend({
   apiKey: process.env.MAILERSEND_API_KEY,
@@ -6,7 +8,10 @@ const mailerSend = new MailerSend({
 export default mailerSend;
 
 export const sendVerifyEmail = async (email, token) => {
-  const sentFrom = new Sender("no-reply@Findora.com", "Findora");
+  const sentFrom = new Sender(
+    process.env.MAIL_FROM_EMAIL,
+    process.env.MAIL_FROM_NAME,
+  );
 
   const recipients = [new Recipient(email)];
 
@@ -22,5 +27,6 @@ export const sendVerifyEmail = async (email, token) => {
       <p>This link expires in 24 hours.</p>
     `);
 
-  await mailerSend.email.send(emailParams);
+  const response = await mailerSend.email.send(emailParams);
+  console.log(response);
 };
