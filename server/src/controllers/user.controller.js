@@ -6,7 +6,8 @@ import { textValidator } from "../utils/symbolchecker.js";
 import { validateEmail } from "../utils/emailValidator.js";
 import cloudinary from "../config/cloudinary.js";
 import crypto from "crypto";
-import { sendVerifyEmail } from "../utils/mailer.js";
+import { sendEmail } from "../utils/sendEmail.js";
+import { verifyEmailTemplate } from "../utils/emailTemplates.js";
 
 const createUser = async (req, res) => {
   let { firstName, lastName, email, password, username } = req.body;
@@ -90,7 +91,15 @@ const createUser = async (req, res) => {
     emailVerificationExpires: Date.now() + 24 * 60 * 60 * 1000,
   });
 
-  await sendVerifyEmail(email, rawEmailtoken);
+  const verifyUrl = `${process.env.FRONTEND_URL}/verify-email/${rawEmailtoken}`;
+
+  const html = verifyEmailTemplate(firstName, verifyUrl);
+
+  await sendEmail({
+    to: email,
+    subject: "Verify Your Findora Account",
+    html,
+  });
 
   if (user) {
     generateToken(user, res);
