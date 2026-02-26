@@ -1,17 +1,16 @@
-import { resend } from "../config/resend.js";
+import axios from "axios";
 
 export const sendEmail = async ({ to, subject, html }) => {
   try {
-    const send = await resend.emails.send({
-      from: "Findora Support <onboarding@resend.dev>",
+    const response = await axios.post(process.env.EMAIL_SERVICE_URL, {
       to,
       subject,
       html,
     });
-    console.log(send);
-    return send;
+    console.log("Email sent successfully:", response.data);
+    return response.data;
   } catch (err) {
-    console.error("Email failed:", err);
+    console.error("Email failed:", err.response?.data || err.message);
     throw err;
   }
 };

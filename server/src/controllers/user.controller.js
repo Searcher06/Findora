@@ -91,7 +91,7 @@ const createUser = async (req, res) => {
     emailVerificationExpires: Date.now() + 24 * 60 * 60 * 1000,
   });
 
-  const verifyUrl = `${process.env.FRONTEND_URL}/verify-email/${rawEmailtoken}`;
+  const verifyUrl = `${process.env.APP_URL}/verify-email?token=${rawEmailtoken}`;
 
   const html = verifyEmailTemplate(firstName, verifyUrl);
 
@@ -297,8 +297,74 @@ const getUserByUsername = async (req, res) => {
 
   res.status(200).json(user);
 };
-const verifyEmail = async (req, res) => {};
-const resendEmail = async (req, res) => {};
+const verifyEmail = async (req, res) => {
+  const { token } = req.query; //todo: change from req.query to req.body when sending from frontend
+
+  if (!token) {
+    res.status(400);
+    throw new Error("Invalid or expired token");
+  }
+
+  const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
+
+  const user = await userModel.findOne({
+    emailVerificationToken: hashedToken,
+    emailVerificationExpires: { $gt: Date.now() },
+  });
+
+  if (!user) {
+    res.status(400);
+    throw new Error("Invalid or expired token");
+  }
+
+  user.isVerified = true;
+  user.emailVerificationToken = undefined;
+  user.emailVerificationExpires = undefined;
+
+  await user.save();
+
+  res.status(200).json({ message: "Email verified successfully" });
+};
+const resendEmail = async (req, res) => {
+  const { email } = req.body;
+
+  if (!email) {
+    res.status(400);
+    throw new Error("Please provide an email");
+  }
+
+  const user = await userModel.findOne({ email });
+
+  if (!user) {
+    res.status(404);
+    throw new Error("User not found");
+  }
+
+  if (user.isVerified) {
+    res.status(400);
+    throw new Error("Email is already verified");
+  }
+
+  const rawEmailtoken = crypto.randomBytes(32).toString("hex");
+  const hashedEmailToken = crypto
+    .createHash("sha256")
+    .update(rawEmailtoken)
+    .digest("hex");
+
+  user.emailVerificationToken = hashedEmailToken;
+  user.emailVerificationExpires = Date.now() + 24 * 60 * 60 * 1000;
+  await user.save();
+
+  const verifyUrl = `${process.env.APP_URL}/verify-email?token=${rawEmailtoken}`;
+  const html = verifyEmailTemplate(user.firstName, verifyUrl);
+  await sendEmail({
+    to: user.email,
+    subject: "Verify your email",
+    html: html,
+  });
+
+  res.status(200).json({ message: "Verification email sent" });
+};
 
 export {
   createUser,
@@ -310,5 +376,3 @@ export {
   verifyEmail,
   resendEmail,
 };
-
-// todo:implement oauth 2.0
