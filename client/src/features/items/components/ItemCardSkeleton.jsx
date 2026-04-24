@@ -3,32 +3,32 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export const ItemCardSkeleton = () => {
   return (
-    <Card className="w-60 shadow-gray-300 pb-3">
-      <div className="w-full pr-4 pl-4 pt-0 flex flex-col gap-2">
+    <Card className="w-full max-w-[340px] overflow-hidden rounded-2xl border border-slate-200/90">
+      <div className="flex flex-col gap-3 p-4">
         {/* Image placeholder */}
-        <Skeleton className="w-full h-36 rounded-md" />
+        <Skeleton className="h-44 w-full rounded-xl" />
 
         {/* Name */}
-        <Skeleton className="h-4 w-3/4" />
+        <Skeleton className="h-5 w-3/4" />
 
         {/* Description */}
-        <Skeleton className="h-3 w-full" />
-        <Skeleton className="h-3 w-5/6" />
+        <Skeleton className="h-3.5 w-full" />
+        <Skeleton className="h-3.5 w-5/6" />
 
         {/* Location */}
         <div className="flex items-center gap-2">
-          <Skeleton className="h-3 w-3" /> {/* icon */}
-          <Skeleton className="h-3 w-1/2" />
+          <Skeleton className="h-4 w-4 rounded-full" />
+          <Skeleton className="h-3.5 w-1/2" />
         </div>
 
         {/* Date */}
         <div className="flex items-center gap-2">
-          <Skeleton className="h-3 w-3" /> {/* icon */}
-          <Skeleton className="h-3 w-1/3" />
+          <Skeleton className="h-4 w-4 rounded-full" />
+          <Skeleton className="h-3.5 w-1/3" />
         </div>
 
         {/* Button */}
-        <Skeleton className="h-9 w-full rounded-md mt-1" />
+        <Skeleton className="mt-2 h-10 w-full rounded-xl" />
       </div>
     </Card>
   );

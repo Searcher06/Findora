@@ -1,53 +1,58 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { formatDate } from "@/utils/formatDate";
-import { MapPin, CalendarDays } from "lucide-react";
+import { MapPin, CalendarDays, ArrowRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-export const ItemCard = ({ image, name, description, location, date, id }) => {
+export const ItemCard = ({ image, name, description, location, date, id, status }) => {
   const dateReported = formatDate(date);
   const navigate = useNavigate();
+  const isLost = status === "lost";
 
   return (
-    <Card className={`w-60 shadow-gray-300 pb-3 flex flex-col`}>
-      <div className="w-full pr-4 pl-4 pt-0 flex flex-col gap-2 flex-1">
-        {/* Image section */}
-        <img src={image} alt={name} className="w-full" />
+    <Card className="group flex w-full max-w-[340px] flex-col overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-[0_18px_50px_-35px_rgba(15,23,42,0.58)] transition hover:-translate-y-1 hover:shadow-[0_22px_65px_-35px_rgba(14,116,144,0.6)]">
+      <div className="relative">
+        <img src={image} alt={name} className="h-44 w-full object-cover" />
+        <span
+          className={`absolute left-3 top-3 rounded-full px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide ${
+            isLost
+              ? "bg-rose-100 text-rose-700"
+              : "bg-emerald-100 text-emerald-700"
+          }`}
+        >
+          {isLost ? "Lost" : "Found"}
+        </span>
+      </div>
 
-        {/* Content section with fixed minimum height */}
-        <div className="flex flex-col flex-1 min-h-[120px]">
-          <h1 className="font-display font-semibold line-clamp-1 mb-1">
+      <div className="flex flex-1 flex-col gap-3 p-4">
+        <div className="min-h-[80px]">
+          <h1 className="mb-1 line-clamp-1 font-display text-lg font-bold text-slate-900">
             {name}
           </h1>
+          <p className="line-clamp-2 text-sm leading-relaxed text-slate-600">
+            {description}
+          </p>
+        </div>
 
-          {/* Description with consistent height */}
-          <div className="min-h-[40px] mb-2">
-            <p className="text-[13px] font-sans line-clamp-2 leading-tight">
-              {description}
-            </p>
+        <div className="space-y-2 rounded-xl bg-slate-50 p-3">
+          <div className="flex items-center gap-2 text-[13px] text-slate-600">
+            <MapPin className="h-4 w-4 shrink-0 text-slate-500" />
+            <p className="line-clamp-1">{location}</p>
           </div>
-
-          {/* Location and date info */}
-          <div className="space-y-1">
-            <div className="text-[13px] flex items-center">
-              <MapPin className="text-[13px] text-white fill-gray-700 flex-shrink-0" />
-              <p className="line-clamp-1 pl-1 flex-1">{location}</p>
-            </div>
-            <div className="text-[13px] flex items-center">
-              <CalendarDays className="text-[13px] text-gray-700 flex-shrink-0" />
-              <p className="pl-1 flex-1">{dateReported}</p>
-            </div>
+          <div className="flex items-center gap-2 text-[13px] text-slate-600">
+            <CalendarDays className="h-4 w-4 shrink-0 text-slate-500" />
+            <p>{dateReported}</p>
           </div>
         </div>
 
-        {/* Button at consistent position */}
         <Button
           onClick={() => {
             navigate(`items/${id}`);
           }}
-          className="mt-auto"
+          className="mt-auto h-10 rounded-xl bg-slate-900 text-sm font-semibold text-white transition group-hover:bg-cyan-700"
         >
-          view more
+          View Details
+          <ArrowRight className="h-4 w-4" />
         </Button>
       </div>
     </Card>

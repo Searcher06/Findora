@@ -22,9 +22,9 @@ export const AppLayout = () => {
   }, [user, fetchUsersToChat, subscribeToMessages, unsubscribeFromMessage]);
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen bg-slate-50 lg:pl-72">
       <MainNavbar />
-      <main>
+      <main className="min-h-screen bg-slate-50 flow-root">
         <Outlet />
       </main>
     </div>
