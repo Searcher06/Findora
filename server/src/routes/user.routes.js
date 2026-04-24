@@ -18,7 +18,7 @@ router.post("/sign-up", createUser);
 
 router.post("/login", login);
 
-router.post("/sign-out", signOut);
+router.post("/sign-out", authMiddleWare, signOut);
 
 router.get("/verify-email", verifyEmail);
 

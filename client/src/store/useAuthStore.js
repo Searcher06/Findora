@@ -1,11 +1,6 @@
 import { create } from "zustand";
 import { io } from "socket.io-client";
-import {
-  getCurrentUser,
-  loginUser,
-  logoutUser,
-  registerUser,
-} from "@/features/authentication";
+import { getCurrentUser, loginUser, logoutUser, registerUser } from "@/features/authentication";
 import { updateProfile } from "@/features/user/services/api";
 import { toast } from "react-toastify";
 const BASE_URL = "http://localhost:8080";
@@ -92,7 +87,8 @@ export const useAuthStore = create((set, get) => ({
 
       get().disconnectSocket();
     } catch (error) {
-      toast.error(error.response.data.message);
+      const errorMessage = error.response?.data?.message || "Failed to logout";
+      toast.error(errorMessage);
       console.log("Error in logout", error);
     }
   },
