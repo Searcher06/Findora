@@ -7,7 +7,30 @@ import { validateEmail } from "../utils/emailValidator.js";
 import cloudinary from "../config/cloudinary.js";
 import crypto from "crypto";
 import { sendEmail } from "../utils/sendEmail.js";
-import { verifyEmailTemplate } from "../utils/emailTemplates.js";
+import { verifyEmailTemplate, resetPasswordTemplate } from "../utils/emailTemplates.js";
+
+const hashPassword = async (password) => {
+  const salt = await bcrypt.genSalt(12);
+  return bcrypt.hash(password, salt);
+};
+
+const applyNewPassword = async (user, newPassword) => {
+  user.password = await hashPassword(newPassword);
+  user.passwordChangedAt = new Date();
+  user.tokenVersion = (user.tokenVersion || 0) + 1;
+};
+
+const sanitizeUser = (user) => {
+  if (!user) return user;
+  const obj = user.toObject ? user.toObject() : { ...user };
+  delete obj.password;
+  delete obj.emailVerificationToken;
+  delete obj.emailVerificationExpires;
+  delete obj.passwordResetToken;
+  delete obj.passwordResetExpires;
+  delete obj.__v;
+  return obj;
+};
 
 const createUser = async (req, res) => {
   let { firstName, lastName, email, password, username } = req.body;
@@ -69,8 +92,7 @@ const createUser = async (req, res) => {
     throw new Error("Use of special characters is not allowed for Firstname and Lastname");
   }
 
-  const salt = await bcrypt.genSalt(12);
-  const hashedpwd = await bcrypt.hash(password, salt);
+  const hashedpwd = await hashPassword(password);
 
   const rawEmailtoken = crypto.randomBytes(32).toString("hex");
   const hashedEmailToken = crypto.createHash("sha256").update(rawEmailtoken).digest("hex");
@@ -98,7 +120,7 @@ const createUser = async (req, res) => {
 
   if (user) {
     generateToken(user, res);
-    res.status(201).json({ ...user._doc, password: "" });
+    res.status(201).json(sanitizeUser(user));
   } else {
     res.status(400);
     throw new Error("Invalid user data");
@@ -115,7 +137,7 @@ const login = async (req, res) => {
   let user = await userModel.findOne({ email });
   if (user && (await bcrypt.compare(password, user.password))) {
     generateToken(user, res);
-    res.status(200).json({ ...user._doc, password: "" });
+    res.status(200).json(sanitizeUser(user));
   } else {
     res.status(400);
     throw new Error("Invalid user credentials");
@@ -129,8 +151,8 @@ const signOut = async (req, res) => {
   res.status(200).json({ message: "Logged out successfully" });
 };
 const getUser = async (req, res) => {
-  const user = await userModel.findById(req.user._id).select("-password");
-  res.status(200).json(user);
+  const user = await userModel.findById(req.user._id);
+  res.status(200).json(sanitizeUser(user));
 };
 const updateProfile = async (req, res) => {
   const { firstName, lastName, email, oldPassword, newPassword, department, foculty } = req.body;
@@ -208,6 +230,8 @@ const updateProfile = async (req, res) => {
     user.email = email;
   }
 
+  let passwordUpdated = false;
+
   if (oldPassword) {
     if (!newPassword) {
       res.status(400);
@@ -224,7 +248,8 @@ const updateProfile = async (req, res) => {
       throw new Error("New password must be atleast 6 characters long");
     }
 
-    user.password = await bcrypt.hash(newPassword, 12);
+    await applyNewPassword(user, newPassword);
+    passwordUpdated = true;
   }
 
   // Check if department is defined (can be empty string to clear)
@@ -264,15 +289,20 @@ const updateProfile = async (req, res) => {
   }
 
   await user.save();
-  const updatedUser = await userModel.findById(user._id).select("-password");
-  res.status(200).json(updatedUser);
+
+  if (passwordUpdated) {
+    generateToken(user, res);
+  }
+
+  const updatedUser = await userModel.findById(user._id);
+  res.status(200).json(sanitizeUser(updatedUser));
 };
 const getUserByUsername = async (req, res) => {
   // Getting the username from the request parameter
   const { username } = req.params;
 
   // Getting the full user info from the username provided
-  const user = await userModel.findOne({ username: username }).select("-password");
+  const user = await userModel.findOne({ username: username });
 
   // checking if user does not exist
   if (!user) {
@@ -280,7 +310,7 @@ const getUserByUsername = async (req, res) => {
     throw new Error("User not found");
   }
 
-  res.status(200).json(user);
+  res.status(200).json(sanitizeUser(user));
 };
 const verifyEmail = async (req, res) => {
   const { token } = req.body;
@@ -348,4 +378,110 @@ const resendEmail = async (req, res) => {
   res.status(200).json({ message: "Verification email sent" });
 };
 
-export { createUser, login, updateProfile, signOut, getUser, getUserByUsername, verifyEmail, resendEmail };
+const forgotPassword = async (req, res) => {
+  const { email } = req.body;
+
+  if (!email) {
+    res.status(400);
+    throw new Error("Please provide an email");
+  }
+
+  const user = await userModel.findOne({ email: email.trim().toLowerCase() });
+  const genericMessage = "If that email exists, a password reset link has been sent";
+
+  if (!user) {
+    return res.status(200).json({ message: genericMessage });
+  }
+
+  const rawResetToken = crypto.randomBytes(32).toString("hex");
+  const hashedResetToken = crypto.createHash("sha256").update(rawResetToken).digest("hex");
+
+  user.passwordResetToken = hashedResetToken;
+  user.passwordResetExpires = Date.now() + 30 * 60 * 1000;
+  await user.save();
+
+  const resetUrl = `${process.env.FRONTEND_URL}/reset-password?token=${rawResetToken}`;
+  const html = resetPasswordTemplate(user.firstName, resetUrl);
+
+  await sendEmail({
+    to: user.email,
+    subject: "Reset your Findora password",
+    html,
+  });
+
+  res.status(200).json({ message: genericMessage });
+};
+
+const resetPassword = async (req, res) => {
+  const { token, password } = req.body;
+
+  if (!token || !password) {
+    res.status(400);
+    throw new Error("Token and password are required");
+  }
+
+  if (password.length < 6) {
+    res.status(400);
+    throw new Error("Password must be atleast 6 characters long");
+  }
+
+  const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
+
+  const user = await userModel.findOne({
+    passwordResetToken: hashedToken,
+    passwordResetExpires: { $gt: Date.now() },
+  });
+
+  if (!user) {
+    res.status(400);
+    throw new Error("Invalid or expired reset token");
+  }
+
+  await applyNewPassword(user, password);
+  user.passwordResetToken = undefined;
+  user.passwordResetExpires = undefined;
+  await user.save();
+
+  res.status(200).json({ message: "Password reset successful. Please login with your new password" });
+};
+
+const changePassword = async (req, res) => {
+  const { currentPassword, newPassword } = req.body;
+
+  if (!currentPassword || !newPassword) {
+    res.status(400);
+    throw new Error("Current password and new password are required");
+  }
+
+  if (newPassword.length < 6) {
+    res.status(400);
+    throw new Error("New password must be atleast 6 characters long");
+  }
+
+  const user = await userModel.findById(req.user._id);
+
+  if (!user) {
+    res.status(404);
+    throw new Error("User not found");
+  }
+
+  const isCurrentPasswordValid = await bcrypt.compare(currentPassword, user.password);
+
+  if (!isCurrentPasswordValid) {
+    res.status(400);
+    throw new Error("Current password is incorrect");
+  }
+
+  if (await bcrypt.compare(newPassword, user.password)) {
+    res.status(400);
+    throw new Error("New password must be different from current password");
+  }
+
+  await applyNewPassword(user, newPassword);
+  await user.save();
+  generateToken(user, res);
+
+  res.status(200).json({ message: "Password changed successfully" });
+};
+
+export { createUser, login, updateProfile, signOut, getUser, getUserByUsername, verifyEmail, resendEmail, forgotPassword, resetPassword, changePassword };

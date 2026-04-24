@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { BrowsePage, ReportPage, ViewItem, UpdateItem } from "@/features/items";
 import { AppLayout } from "@/layouts/AppLayout";
 import { ItemTypeProvider } from "@/features/items/context/ItemTypeContext";
-import { LoginPage, ResendEmail, SignUpPage, EmailVerify } from "@/features/authentication";
+import { LoginPage, ResendEmail, SignUpPage, EmailVerify, ForgotPasswordPage, ResetPasswordPage, ChangePasswordPage } from "@/features/authentication";
 import { UploadPhotoProvider } from "@/features/items/context/UploadPhotoContext";
 import { ToastContainer } from "react-toastify";
 import PrivateRoute from "./privateRoute";
@@ -24,9 +24,12 @@ function AppRoutes() {
               <Route path="/signup" element={<SignUpPage />} />
               <Route path="/verify-email" element={<EmailVerify />} />
               <Route path="/resend-email" element={<ResendEmail />} />
+              <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+              <Route path="/reset-password" element={<ResetPasswordPage />} />
 
               {/* Protected routes - require authentication */}
               <Route element={<PrivateRoute />}>
+                <Route path="/change-password" element={<ChangePasswordPage />} />
                 <Route element={<AppLayout />}>
                   <Route path="/" element={<BrowsePage />} />
                   <Route path="/items/:id" element={<ViewItem />} />

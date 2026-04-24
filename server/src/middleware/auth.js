@@ -19,7 +19,19 @@ export const authMiddleWare = async (req, res, next) => {
       throw new Error("Invalid token, no user ID");
     }
 
-    req.user = await userModel.findById(decodedToken.id).select("-password");
+    const user = await userModel.findById(decodedToken.id).select("-password");
+
+    if (!user) {
+      res.status(401);
+      throw new Error("Not authorized, user not found");
+    }
+
+    if ((decodedToken.tokenVersion || 0) !== (user.tokenVersion || 0)) {
+      res.status(401);
+      throw new Error("Session expired. Please login again");
+    }
+
+    req.user = user;
 
     next();
   } catch (error) {

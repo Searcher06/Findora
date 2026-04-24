@@ -28,3 +28,18 @@ export const resendVerificationEmail = async (email) => {
   const { data } = await Api.post("/user/resend-email", { email });
   return data;
 };
+
+export const forgotPassword = async (email) => {
+  const { data } = await Api.post("/user/forgot-password", { email });
+  return data;
+};
+
+export const resetPassword = async (token, password) => {
+  const { data } = await Api.post("/user/reset-password", { token, password });
+  return data;
+};
+
+export const changePassword = async (passwordData) => {
+  const { data } = await Api.post("/user/change-password", passwordData);
+  return data;
+};

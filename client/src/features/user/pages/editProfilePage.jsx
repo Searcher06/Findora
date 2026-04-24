@@ -9,9 +9,10 @@ import {
   School,
   Camera,
   Upload,
+  KeyRound,
 } from "lucide-react";
 import { useAuthStore } from "@/store/useAuthStore";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 export const EditProfilePage = () => {
@@ -163,6 +164,13 @@ export const EditProfilePage = () => {
           <p className="text-gray-500 text-sm sm:text-base sans">
             Update your profile photo and academic information
           </p>
+          <Link
+            to="/change-password"
+            className="mt-3 inline-flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-700 transition hover:border-blue-300 hover:text-blue-700"
+          >
+            <KeyRound className="h-4 w-4" />
+            Change Password
+          </Link>
         </div>
       </div>
 

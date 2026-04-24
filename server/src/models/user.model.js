@@ -38,6 +38,13 @@ const schema = new mongoose.Schema({
     required: [true, "Password is required"],
     minlength: 6,
   },
+  tokenVersion: {
+    type: Number,
+    default: 0,
+  },
+  passwordChangedAt: {
+    type: Date,
+  },
   isVerified: {
     type: Boolean,
     default: false,
@@ -46,6 +53,12 @@ const schema = new mongoose.Schema({
     type: String,
   },
   emailVerificationExpires: {
+    type: Date,
+  },
+  passwordResetToken: {
+    type: String,
+  },
+  passwordResetExpires: {
     type: Date,
   },
   role: {

@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { io } from "socket.io-client";
-import { getCurrentUser, loginUser, logoutUser, registerUser } from "@/features/authentication";
+import { changePassword, getCurrentUser, loginUser, logoutUser, registerUser } from "@/features/authentication";
 import { updateProfile } from "@/features/user/services/api";
 import { toast } from "react-toastify";
 const BASE_URL = "http://localhost:8080";
@@ -10,6 +10,7 @@ export const useAuthStore = create((set, get) => ({
   isUpdating: false,
   isSigningUp: false,
   isLoggingIng: false,
+  isChangingPassword: false,
   isUpdatingProfile: false,
   socket: null,
 
@@ -90,6 +91,21 @@ export const useAuthStore = create((set, get) => ({
       const errorMessage = error.response?.data?.message || "Failed to logout";
       toast.error(errorMessage);
       console.log("Error in logout", error);
+    }
+  },
+
+  changePassword: async (payload) => {
+    set({ isChangingPassword: true });
+    try {
+      const data = await changePassword(payload);
+      toast.success(data.message || "Password changed successfully");
+      return data;
+    } catch (error) {
+      const errorMessage = error.response?.data?.message || "Failed to change password";
+      toast.error(errorMessage);
+      return null;
+    } finally {
+      set({ isChangingPassword: false });
     }
   },
 

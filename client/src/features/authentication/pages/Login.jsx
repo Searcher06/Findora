@@ -74,9 +74,14 @@ const LoginPage = () => {
             />
             Remember me
           </label>
-          <Link to="/resend-email" className="text-sm font-semibold text-cyan-700 transition hover:text-cyan-800">
-            Need verification?
-          </Link>
+          <div className="flex items-center gap-3 text-sm">
+            <Link to="/forgot-password" className="font-semibold text-cyan-700 transition hover:text-cyan-800">
+              Forgot password?
+            </Link>
+            <Link to="/resend-email" className="font-semibold text-cyan-700 transition hover:text-cyan-800">
+              Verify email
+            </Link>
+          </div>
         </div>
 
         <button
