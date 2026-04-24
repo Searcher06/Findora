@@ -1,20 +1,24 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useSearchParams, Link } from "react-router-dom";
-import { CheckCircle, XCircle, Loader2, Mail } from "lucide-react";
-import { verifyEmail, resendVerificationEmail } from "../services/authApi";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { Mail, Loader2, CheckCircle2, XCircle } from "lucide-react";
 import { toast } from "react-toastify";
+import { verifyEmail, resendVerificationEmail } from "../services/authApi";
+import { AuthShell } from "../components/AuthShell";
+import { AuthInput } from "../components/AuthInput";
 
 export const EmailVerify = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const token = searchParams.get("token");
 
-  const [status, setStatus] = useState("verifying"); // verifying, success, error
+  const [status, setStatus] = useState("verifying");
   const [errorMessage, setErrorMessage] = useState("");
   const [email, setEmail] = useState("");
   const [isResending, setIsResending] = useState(false);
 
   useEffect(() => {
+    let redirectTimer;
+
     const verifyTokenEmail = async () => {
       if (!token) {
         setStatus("error");
@@ -28,8 +32,7 @@ export const EmailVerify = () => {
         setStatus("success");
         toast.success("Email verified successfully!");
 
-        // Redirect to home after 3 seconds
-        setTimeout(() => {
+        redirectTimer = setTimeout(() => {
           navigate("/");
         }, 3000);
       } catch (error) {
@@ -41,19 +44,25 @@ export const EmailVerify = () => {
     };
 
     verifyTokenEmail();
+
+    return () => {
+      if (redirectTimer) {
+        clearTimeout(redirectTimer);
+      }
+    };
   }, [token, navigate]);
 
-  const handleResendEmail = async (e) => {
-    e.preventDefault();
+  const handleResendEmail = async (event) => {
+    event.preventDefault();
 
-    if (!email) {
+    if (!email.trim()) {
       toast.error("Please enter your email address");
       return;
     }
 
     setIsResending(true);
     try {
-      await resendVerificationEmail(email);
+      await resendVerificationEmail(email.trim());
       toast.success("Verification email sent! Check your inbox.");
       setEmail("");
     } catch (error) {
@@ -64,107 +73,87 @@ export const EmailVerify = () => {
     }
   };
 
+  const titleMap = {
+    verifying: "Verifying Email",
+    success: "Email Verified",
+    error: "Verification Failed",
+  };
+
+  const subtitleMap = {
+    verifying: "Please wait while we confirm your verification link.",
+    success: "Your account is verified and ready.",
+    error: "This verification link is invalid or expired.",
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
-        {/* Verifying State */}
-        {status === "verifying" && (
-          <div className="bg-white rounded-xl shadow-lg p-8 text-center">
-            <Loader2 className="w-16 h-16 text-blue-600 mx-auto mb-6 animate-spin" />
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">Verifying Email</h2>
-            <p className="text-gray-600 mb-4">Please wait while we verify your email address...</p>
-            <div className="flex gap-2 justify-center">
-              <div className="w-2 h-2 bg-blue-600 rounded-full animate-bounce"></div>
-              <div className="w-2 h-2 bg-blue-600 rounded-full animate-bounce" style={{ animationDelay: "0.1s" }}></div>
-              <div className="w-2 h-2 bg-blue-600 rounded-full animate-bounce" style={{ animationDelay: "0.2s" }}></div>
-            </div>
-          </div>
-        )}
-
-        {/* Success State */}
-        {status === "success" && (
-          <div className="bg-white rounded-xl shadow-lg p-8 text-center">
-            <div className="bg-green-100 w-16 h-16 rounded-full mx-auto mb-6 flex items-center justify-center">
-              <CheckCircle className="w-10 h-10 text-green-600" />
-            </div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">Email Verified!</h2>
-            <p className="text-gray-600 mb-6">Your email has been verified successfully.</p>
-            <div className="space-y-3">
-              <p className="text-sm text-gray-500">Redirecting to home in a few seconds...</p>
-              <Link
-                to="/"
-                className="inline-block w-full bg-blue-600 text-white font-semibold py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors"
-              >
-                Go to Home
-              </Link>
-            </div>
-          </div>
-        )}
-
-        {/* Error State */}
-        {status === "error" && (
-          <div className="bg-white rounded-xl shadow-lg p-8">
-            <div className="bg-red-100 w-16 h-16 rounded-full mx-auto mb-6 flex items-center justify-center">
-              <XCircle className="w-10 h-10 text-red-600" />
-            </div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-2 text-center">Verification Failed</h2>
-            <p className="text-gray-600 mb-6 text-center">{errorMessage}</p>
-
-            {/* Resend Email Form */}
-            <form onSubmit={handleResendEmail} className="space-y-4 mb-6">
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                  Email Address
-                </label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
-                  <input
-                    type="email"
-                    id="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Enter your email"
-                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
-                    disabled={isResending}
-                  />
-                </div>
-              </div>
-              <button
-                type="submit"
-                disabled={isResending}
-                className="w-full bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-              >
-                {isResending ? (
-                  <>
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                    Sending...
-                  </>
-                ) : (
-                  "Resend Verification Email"
-                )}
-              </button>
-            </form>
-
-            {/* Back to Login */}
-            <div className="text-center">
-              <p className="text-gray-600 mb-2">Already have an account?</p>
-              <Link to="/login" className="text-blue-600 font-semibold hover:text-blue-700 transition-colors">
-                Back to Login
-              </Link>
-            </div>
-          </div>
-        )}
-
-        {/* Additional Help */}
-        <div className="mt-6 bg-white rounded-lg shadow p-4 text-center text-sm text-gray-600">
-          <p>
-            Didn't receive the email?{" "}
-            <Link to="/resend-email" className="text-blue-600 font-semibold hover:text-blue-700">
-              Resend it here
-            </Link>
-          </p>
+    <AuthShell title={titleMap[status]} subtitle={subtitleMap[status]}>
+      {status === "verifying" ? (
+        <div className="rounded-2xl border border-slate-200 bg-slate-50 p-8 text-center">
+          <Loader2 className="mx-auto h-12 w-12 animate-spin text-cyan-700" />
+          <p className="mt-4 text-sm text-slate-600">This should only take a moment.</p>
         </div>
+      ) : null}
+
+      {status === "success" ? (
+        <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-8 text-center">
+          <CheckCircle2 className="mx-auto h-12 w-12 text-emerald-700" />
+          <p className="mt-4 text-sm text-emerald-800">Redirecting to home in a few seconds.</p>
+          <Link
+            to="/"
+            className="mt-5 inline-flex h-11 w-full items-center justify-center rounded-xl bg-emerald-700 px-4 text-sm font-semibold text-white transition hover:bg-emerald-800"
+          >
+            Go to Home
+          </Link>
+        </div>
+      ) : null}
+
+      {status === "error" ? (
+        <div className="space-y-5">
+          <div className="rounded-2xl border border-rose-200 bg-rose-50 p-5 text-rose-800">
+            <div className="flex items-start gap-3">
+              <XCircle className="mt-0.5 h-5 w-5 shrink-0" />
+              <p className="text-sm">{errorMessage}</p>
+            </div>
+          </div>
+
+          <form onSubmit={handleResendEmail} className="space-y-4">
+            <AuthInput
+              id="resend-email"
+              label="Email Address"
+              type="email"
+              placeholder="you@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              icon={Mail}
+              autoComplete="email"
+              disabled={isResending}
+            />
+
+            <button
+              type="submit"
+              disabled={isResending}
+              className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-slate-900 px-4 text-sm font-semibold text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              {isResending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Mail className="h-4 w-4" />}
+              {isResending ? "Sending..." : "Resend Verification Email"}
+            </button>
+          </form>
+
+          <div className="text-center text-sm text-slate-600">
+            Already verified?{" "}
+            <Link to="/login" className="font-semibold text-cyan-700 hover:text-cyan-800">
+              Go to Login
+            </Link>
+          </div>
+        </div>
+      ) : null}
+
+      <div className="mt-6 text-center text-sm text-slate-600">
+        Need another link?{" "}
+        <Link to="/resend-email" className="font-semibold text-cyan-700 hover:text-cyan-800">
+          Resend from here
+        </Link>
       </div>
-    </div>
+    </AuthShell>
   );
 };

@@ -1,25 +1,26 @@
-import InputFieldsContainer from "../components/InputFieldsContainer";
-import InputField from "../components/InputField";
-import { Button } from "@/components/ui/button";
-import { useNavigate, Link } from "react-router-dom";
-import { LockKeyholeIcon } from "lucide-react";
 import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Mail, Lock, ShieldCheck } from "lucide-react";
 import { toast } from "react-toastify";
 import { Spinner } from "@/components/ui/spinner";
 import { useAuthStore } from "@/store/useAuthStore";
+import { AuthShell } from "../components/AuthShell";
+import { AuthInput } from "../components/AuthInput";
 
 const LoginPage = () => {
   const { login, isLoggingIng } = useAuthStore();
   const navigate = useNavigate();
+  const [rememberMe, setRememberMe] = useState(true);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
 
-  const disabledStyle =
-    !formData.email || !formData.password ? "bg-gray-900" : null;
+  const isDisabled = !formData.email || !formData.password || isLoggingIng;
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
     if (!formData.email || !formData.password) {
       toast.error("Please add all fields");
       return;
@@ -33,193 +34,75 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen w-full bg-white flex justify-center items-center py-8 sm:py-12">
-      {/* Mobile & Tablet Layout (< lg) */}
-      <div className="lg:hidden w-full max-w-xs sm:max-w-sm px-4 sm:px-6 flex flex-col">
-        {/* Logo Text - At Very Top */}
-        <h2 className="text-3xl sm:text-4xl font-display font-bold text-gray-900 mb-12">
-          Findora
-        </h2>
+    <AuthShell
+      title="Welcome Back"
+      subtitle="Sign in to manage reports, chats, and secure handovers."
+      bottomNote="Findora protects every step with secure account verification."
+    >
+      <form onSubmit={handleSubmit} className="space-y-5">
+        <AuthInput
+          id="email"
+          type="email"
+          label="Email"
+          placeholder="you@example.com"
+          value={formData.email}
+          onChange={(e) => setFormData((prev) => ({ ...prev, email: e.target.value }))}
+          icon={Mail}
+          autoComplete="email"
+          disabled={isLoggingIng}
+        />
 
-        {/* Title */}
-        <h1 className="text-xl sm:text-2xl font-display font-bold text-gray-900 mb-8">
-          Login
-        </h1>
+        <AuthInput
+          id="password"
+          type="password"
+          label="Password"
+          placeholder="Enter your password"
+          value={formData.password}
+          onChange={(e) => setFormData((prev) => ({ ...prev, password: e.target.value }))}
+          icon={Lock}
+          autoComplete="current-password"
+          disabled={isLoggingIng}
+        />
 
-        {/* Form */}
-        <form className="w-full" onSubmit={(event) => event.preventDefault()}>
-          <InputFieldsContainer>
-            <InputField
-              icon={"Mail"}
-              type={"email"}
-              placeholder={"Email"}
-              value={formData.email}
-              change={"email"}
-              setFormData={setFormData}
-              onChange={(e) => {
-                setFormData((prevState) => ({
-                  ...prevState,
-                  email: e.target.value,
-                }));
-              }}
-              disabled={isLoggingIng ? true : false}
+        <div className="flex items-center justify-between gap-3">
+          <label className="inline-flex cursor-pointer items-center gap-2 text-sm text-slate-600">
+            <input
+              type="checkbox"
+              checked={rememberMe}
+              onChange={(e) => setRememberMe(e.target.checked)}
+              className="h-4 w-4 rounded border-slate-300 text-cyan-600 focus:ring-cyan-500"
             />
-
-            <InputField
-              icon={"Lock"}
-              type={"password"}
-              placeholder={"Password"}
-              value={formData.password}
-              change={"password"}
-              setFormData={setFormData}
-              onChange={(e) => {
-                setFormData((prevState) => ({
-                  ...prevState,
-                  password: e.target.value,
-                }));
-              }}
-              disabled={isLoggingIng ? true : false}
-            />
-
-            <div className="text-[12.5px] font-sans text-gray-700 flex gap-2">
-              <input type="checkbox" />
-              <p>Remember me</p>
-            </div>
-
-            <Button
-              className={`w-full h-10 sm:h-11 text-sm sm:text-[15px] font-semibold active:scale-95 transition-transform ${disabledStyle}`}
-              onClick={handleSubmit}
-              disabled={isLoggingIng}
-            >
-              {isLoggingIng ? <Spinner /> : null}
-              {isLoggingIng ? "Signing you in..." : "Login"}
-            </Button>
-          </InputFieldsContainer>
-
-          <p className="mt-6 text-gray-600 font-sans text-xs sm:text-sm w-full flex justify-center gap-1">
-            Don't have an account?
-            <span
-              className="text-blue-600 font-semibold cursor-pointer hover:underline"
-              onClick={() => {
-                navigate("/signup");
-              }}
-            >
-              Create one
-            </span>
-          </p>
-
-          <hr className="h-[1px] bg-gray-200 border-0 mt-6 mb-4" />
-          <p className="font-medium text-gray-500 text-xs font-sans flex items-center justify-center gap-2">
-            <LockKeyholeIcon size={16} /> Protected by Findora's security system
-          </p>
-        </form>
-      </div>
-
-      {/* Desktop Layout (≥ lg) - Centered Container with 50/50 Split */}
-      <div className="hidden lg:flex w-full max-w-6xl h-auto mx-auto rounded-xl overflow-hidden shadow-lg">
-        {/* Left Side - Branding & Message */}
-        <div className="flex-1 bg-blue-100 flex flex-col justify-start pt-12 xl:pt-16 items-center p-8 xl:p-12">
-          <div className="max-w-md w-full">
-            {/* Logo Text - At Very Top */}
-            <h2 className="text-5xl xl:text-6xl font-display font-bold text-gray-900 mb-16">
-              Findora
-            </h2>
-
-            {/* Tagline */}
-            <div>
-              <h3 className="text-3xl xl:text-4xl font-display font-bold text-gray-900 mb-6 leading-tight">
-                Reuniting lost items faster than ever
-              </h3>
-              <p className="text-base xl:text-lg text-gray-700">
-                Reuniting lost items faster than ever
-              </p>
-            </div>
-          </div>
+            Remember me
+          </label>
+          <Link to="/resend-email" className="text-sm font-semibold text-cyan-700 transition hover:text-cyan-800">
+            Need verification?
+          </Link>
         </div>
 
-        {/* Right Side - Form */}
-        <div className="flex-1 bg-white flex flex-col justify-center items-center p-8 xl:p-12">
-          <div className="w-full max-w-xs">
-            {/* Title */}
-            <h1 className="text-2xl xl:text-3xl font-display font-bold text-gray-900 mb-8">
-              Login
-            </h1>
+        <button
+          type="submit"
+          disabled={isDisabled}
+          className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-slate-900 px-4 text-sm font-semibold text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          {isLoggingIng ? <Spinner /> : null}
+          {isLoggingIng ? "Signing you in..." : "Sign In"}
+        </button>
+      </form>
 
-            {/* Form */}
-            <form
-              className="w-full"
-              onSubmit={(event) => event.preventDefault()}
-            >
-              <InputFieldsContainer>
-                <InputField
-                  icon={"Mail"}
-                  type={"email"}
-                  placeholder={"Email"}
-                  value={formData.email}
-                  change={"email"}
-                  setFormData={setFormData}
-                  onChange={(e) => {
-                    setFormData((prevState) => ({
-                      ...prevState,
-                      email: e.target.value,
-                    }));
-                  }}
-                  disabled={isLoggingIng ? true : false}
-                />
+      <div className="mt-6 space-y-4">
+        <p className="text-center text-sm text-slate-600">
+          New to Findora?{" "}
+          <Link to="/signup" className="font-semibold text-cyan-700 hover:text-cyan-800">
+            Create your account
+          </Link>
+        </p>
 
-                <InputField
-                  icon={"Lock"}
-                  type={"password"}
-                  placeholder={"Password"}
-                  value={formData.password}
-                  change={"password"}
-                  setFormData={setFormData}
-                  onChange={(e) => {
-                    setFormData((prevState) => ({
-                      ...prevState,
-                      password: e.target.value,
-                    }));
-                  }}
-                  disabled={isLoggingIng ? true : false}
-                />
-
-                <div className="text-[12.5px] font-sans text-gray-700 flex gap-2">
-                  <input type="checkbox" />
-                  <p>Remember me</p>
-                </div>
-
-                <Button
-                  className={`w-full h-11 text-[15px] font-semibold active:scale-95 transition-transform ${disabledStyle}`}
-                  onClick={handleSubmit}
-                  disabled={isLoggingIng}
-                >
-                  {isLoggingIng ? <Spinner /> : null}
-                  {isLoggingIng ? "Signing you in..." : "Login"}
-                </Button>
-              </InputFieldsContainer>
-
-              <p className="mt-8 text-gray-600 font-sans text-sm w-full flex justify-center gap-1">
-                Don't have an account?
-                <span
-                  className="text-blue-600 font-semibold cursor-pointer hover:underline"
-                  onClick={() => {
-                    navigate("/signup");
-                  }}
-                >
-                  Create one
-                </span>
-              </p>
-
-              <hr className="h-px bg-gray-200 border-0 mt-8 mb-4" />
-              <p className="font-medium text-gray-500 text-xs font-sans flex items-center justify-center gap-2">
-                <LockKeyholeIcon size={16} /> Protected by Findora's security
-                system
-              </p>
-            </form>
-          </div>
+        <div className="flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-600">
+          <ShieldCheck className="h-4 w-4 text-slate-700" />
+          Protected by Findora's secure verification system
         </div>
       </div>
-    </div>
+    </AuthShell>
   );
 };
 

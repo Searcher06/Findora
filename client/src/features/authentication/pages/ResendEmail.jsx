@@ -1,40 +1,41 @@
 import { useState, useEffect } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
-import { Mail, Loader2, CheckCircle, ArrowLeft, AlertCircle } from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
+import { Mail, Loader2, CheckCircle2, AlertCircle } from "lucide-react";
 import { resendVerificationEmail } from "../services/authApi";
 import { toast } from "react-toastify";
+import { AuthShell } from "../components/AuthShell";
+import { AuthInput } from "../components/AuthInput";
 
 export const ResendEmail = () => {
-  const navigate = useNavigate();
   const location = useLocation();
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const isSignUp = location.state?.isSignUp || false;
 
-  // Pre-fill email if coming from signup
   useEffect(() => {
     if (location.state?.email) {
       setEmail(location.state.email);
-      // Show success state immediately if coming from signup
+
       if (isSignUp) {
         setIsSuccess(true);
-        setTimeout(() => {
+        const timer = setTimeout(() => {
           setIsSuccess(false);
         }, 5000);
+
+        return () => clearTimeout(timer);
       }
     }
   }, [location.state, isSignUp]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
 
-    if (!email) {
+    if (!email.trim()) {
       toast.error("Please enter your email address");
       return;
     }
 
-    // Basic email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       toast.error("Please enter a valid email address");
@@ -43,11 +44,10 @@ export const ResendEmail = () => {
 
     setIsLoading(true);
     try {
-      await resendVerificationEmail(email);
+      await resendVerificationEmail(email.trim());
       setIsSuccess(true);
       toast.success("Verification email sent successfully!");
 
-      // Reset form after 3 seconds
       setTimeout(() => {
         setEmail("");
         setIsSuccess(false);
@@ -55,141 +55,86 @@ export const ResendEmail = () => {
     } catch (error) {
       const errorMsg = error.response?.data?.message || "Failed to resend email";
       toast.error(errorMsg);
-      console.log("Error resending email:", error);
     } finally {
       setIsLoading(false);
     }
   };
 
+  const title = isSignUp ? "Verify Your Email" : "Resend Verification";
+  const subtitle = isSignUp
+    ? "We sent a link already. If it didn't arrive, request a fresh one here."
+    : "Enter your account email and we will send a new verification link.";
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
-        <div className="bg-white rounded-xl shadow-lg p-8">
-          {/* Header */}
-          <div className="flex items-center justify-between mb-8">
-            <h2 className="text-2xl font-bold text-gray-900">{isSignUp ? "Verify Your Email" : "Resend Verification Email"}</h2>
-            {!isSignUp && (
-              <button onClick={() => navigate(-1)} className="text-gray-400 hover:text-gray-600 transition-colors" aria-label="Go back">
-                <ArrowLeft className="w-5 h-5" />
-              </button>
-            )}
+    <AuthShell title={title} subtitle={subtitle}>
+      {isSuccess ? (
+        <div className="space-y-5 rounded-2xl border border-emerald-200 bg-emerald-50 p-6">
+          <div className="text-center">
+            <CheckCircle2 className="mx-auto h-12 w-12 text-emerald-700" />
+            <h3 className="mt-4 text-xl font-display font-bold text-emerald-900">{isSignUp ? "Account Created" : "Email Sent"}</h3>
+            <p className="mt-2 text-sm text-emerald-800">
+              We've sent a verification link to <span className="font-semibold">{email || location.state?.email}</span>.
+            </p>
           </div>
 
-          {isSuccess ? (
-            <>
-              {/* Success State */}
-              <div className="text-center">
-                <div className="bg-green-100 w-16 h-16 rounded-full mx-auto mb-6 flex items-center justify-center">
-                  <CheckCircle className="w-10 h-10 text-green-600" />
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">{isSignUp ? "Account Created!" : "Email Sent!"}</h3>
-                <p className="text-gray-600 mb-6">
-                  We've sent a verification email to <span className="font-semibold text-gray-900">{email}</span>. Please check your inbox
-                  and click the verification link.
-                </p>
-                <p className="text-sm text-gray-500 mb-6">The link will expire in 24 hours.</p>
+          <div className="rounded-xl border border-emerald-200 bg-white/60 p-4 text-sm text-emerald-900">
+            <div className="flex items-start gap-2">
+              <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
+              <p>The verification link expires in 24 hours. Check spam/promotions if it doesn't appear.</p>
+            </div>
+          </div>
 
-                {isSignUp && (
-                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-                    <div className="flex gap-3 text-left">
-                      <AlertCircle className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
-                      <div className="text-sm text-blue-800">
-                        <p className="font-semibold mb-1">What's next?</p>
-                        <p>Check your email for a verification link and click it to complete your registration.</p>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                <div className="space-y-3">
-                  <button
-                    onClick={() => {
-                      setEmail("");
-                      setIsSuccess(false);
-                    }}
-                    className="w-full bg-blue-600 text-white font-semibold py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors"
-                  >
-                    Send Another Email
-                  </button>
-                  <Link to="/login" className="block text-center text-blue-600 font-semibold hover:text-blue-700 transition-colors py-2">
-                    Back to Login
-                  </Link>
-                </div>
-              </div>
-            </>
-          ) : (
-            <>
-              {/* Form */}
-              <p className="text-gray-600 mb-6">
-                {isSignUp
-                  ? "We've sent a verification email to your inbox. Didn't receive it? Request a new one below."
-                  : "Enter your email address and we'll send you a new verification link."}
-              </p>
-
-              <form onSubmit={handleSubmit} className="space-y-4">
-                {/* Email Input */}
-                <div>
-                  <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-2">
-                    Email Address
-                  </label>
-                  <div className="relative">
-                    <Mail className="absolute left-3 top-3 w-5 h-5 text-gray-400 pointer-events-none" />
-                    <input
-                      type="email"
-                      id="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="you@example.com"
-                      disabled={isLoading}
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition disabled:opacity-50 disabled:cursor-not-allowed"
-                    />
-                  </div>
-                  <p className="text-xs text-gray-500 mt-1.5">Use the email address associated with your Findora account.</p>
-                </div>
-
-                {/* Submit Button */}
-                <button
-                  type="submit"
-                  disabled={isLoading || !email}
-                  className="w-full bg-blue-600 text-white font-semibold py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 mt-6"
-                >
-                  {isLoading ? (
-                    <>
-                      <Loader2 className="w-5 h-5 animate-spin" />
-                      Sending...
-                    </>
-                  ) : (
-                    <>
-                      <Mail className="w-5 h-5" />
-                      {isSignUp ? "Send Verification Email Again" : "Send Verification Email"}
-                    </>
-                  )}
-                </button>
-              </form>
-
-              {/* Footer Links */}
-              <div className="mt-6 pt-6 border-t border-gray-200 text-center">
-                <p className="text-gray-600 text-sm mb-3">{isSignUp ? "Already verified your email?" : "Already have an account?"}</p>
-                <Link to="/login" className="text-blue-600 font-semibold hover:text-blue-700 transition-colors">
-                  Go to Login
-                </Link>
-              </div>
-            </>
-          )}
+          <button
+            onClick={() => {
+              setEmail("");
+              setIsSuccess(false);
+            }}
+            className="inline-flex h-11 w-full items-center justify-center rounded-xl bg-emerald-700 px-4 text-sm font-semibold text-white transition hover:bg-emerald-800"
+          >
+            Send Another Email
+          </button>
         </div>
+      ) : (
+        <form onSubmit={handleSubmit} className="space-y-5">
+          <AuthInput
+            id="email"
+            label="Email Address"
+            type="email"
+            placeholder="you@example.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            icon={Mail}
+            autoComplete="email"
+            disabled={isLoading}
+          />
 
-        {/* Help Text */}
-        <div className="mt-6 text-center">
-          {!isSignUp && (
-            <p className="text-gray-600 text-sm">
-              Don't have an account?{" "}
-              <Link to="/signup" className="text-blue-600 font-semibold hover:text-blue-700">
-                Sign up here
-              </Link>
-            </p>
-          )}
-        </div>
+          <button
+            type="submit"
+            disabled={isLoading || !email.trim()}
+            className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-slate-900 px-4 text-sm font-semibold text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            {isLoading ? <Loader2 className="h-5 w-5 animate-spin" /> : <Mail className="h-5 w-5" />}
+            {isLoading ? "Sending..." : "Send Verification Email"}
+          </button>
+        </form>
+      )}
+
+      <div className="mt-6 text-center text-sm text-slate-600">
+        <p>
+          Already have an account?{" "}
+          <Link to="/login" className="font-semibold text-cyan-700 hover:text-cyan-800">
+            Go to Login
+          </Link>
+        </p>
+        {!isSignUp ? (
+          <p className="mt-2">
+            Need an account?{" "}
+            <Link to="/signup" className="font-semibold text-cyan-700 hover:text-cyan-800">
+              Create one
+            </Link>
+          </p>
+        ) : null}
       </div>
-    </div>
+    </AuthShell>
   );
 };
