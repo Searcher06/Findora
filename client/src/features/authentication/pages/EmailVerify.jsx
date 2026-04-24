@@ -28,9 +28,9 @@ export const EmailVerify = () => {
         setStatus("success");
         toast.success("Email verified successfully!");
 
-        // Redirect to login after 3 seconds
+        // Redirect to home after 3 seconds
         setTimeout(() => {
-          navigate("/login");
+          navigate("/");
         }, 3000);
       } catch (error) {
         setStatus("error");
@@ -88,14 +88,14 @@ export const EmailVerify = () => {
               <CheckCircle className="w-10 h-10 text-green-600" />
             </div>
             <h2 className="text-2xl font-bold text-gray-900 mb-2">Email Verified!</h2>
-            <p className="text-gray-600 mb-6">Your email has been verified successfully. You can now log in to your account.</p>
+            <p className="text-gray-600 mb-6">Your email has been verified successfully.</p>
             <div className="space-y-3">
-              <p className="text-sm text-gray-500">Redirecting to login in a few seconds...</p>
+              <p className="text-sm text-gray-500">Redirecting to home in a few seconds...</p>
               <Link
-                to="/login"
+                to="/"
                 className="inline-block w-full bg-blue-600 text-white font-semibold py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors"
               >
-                Go to Login
+                Go to Home
               </Link>
             </div>
           </div>
