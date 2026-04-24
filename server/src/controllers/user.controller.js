@@ -66,19 +66,14 @@ const createUser = async (req, res) => {
 
   if (textValidator(firstName) || textValidator(lastName)) {
     res.status(400);
-    throw new Error(
-      "Use of special characters is not allowed for Firstname and Lastname",
-    );
+    throw new Error("Use of special characters is not allowed for Firstname and Lastname");
   }
 
   const salt = await bcrypt.genSalt(12);
   const hashedpwd = await bcrypt.hash(password, salt);
 
   const rawEmailtoken = crypto.randomBytes(32).toString("hex");
-  const hashedEmailToken = crypto
-    .createHash("sha256")
-    .update(rawEmailtoken)
-    .digest("hex");
+  const hashedEmailToken = crypto.createHash("sha256").update(rawEmailtoken).digest("hex");
 
   let user = await userModel.create({
     firstName,
@@ -91,7 +86,7 @@ const createUser = async (req, res) => {
     emailVerificationExpires: Date.now() + 24 * 60 * 60 * 1000,
   });
 
-  const verifyUrl = `${process.env.APP_URL}/verify-email?token=${rawEmailtoken}`;
+  const verifyUrl = `${process.env.FRONTEND_URL}/verify-email?token=${rawEmailtoken}`;
 
   const html = verifyEmailTemplate(firstName, verifyUrl);
 
@@ -138,15 +133,7 @@ const getUser = async (req, res) => {
   res.status(200).json(user);
 };
 const updateProfile = async (req, res) => {
-  const {
-    firstName,
-    lastName,
-    email,
-    oldPassword,
-    newPassword,
-    department,
-    foculty,
-  } = req.body;
+  const { firstName, lastName, email, oldPassword, newPassword, department, foculty } = req.body;
 
   // Check if there are any changes including file upload
   const condition =
@@ -285,9 +272,7 @@ const getUserByUsername = async (req, res) => {
   const { username } = req.params;
 
   // Getting the full user info from the username provided
-  const user = await userModel
-    .findOne({ username: username })
-    .select("-password");
+  const user = await userModel.findOne({ username: username }).select("-password");
 
   // checking if user does not exist
   if (!user) {
@@ -298,7 +283,7 @@ const getUserByUsername = async (req, res) => {
   res.status(200).json(user);
 };
 const verifyEmail = async (req, res) => {
-  const { token } = req.query; //todo: change from req.query to req.body when sending from frontend
+  const { token } = req.body;
 
   if (!token) {
     res.status(400);
@@ -346,10 +331,7 @@ const resendEmail = async (req, res) => {
   }
 
   const rawEmailtoken = crypto.randomBytes(32).toString("hex");
-  const hashedEmailToken = crypto
-    .createHash("sha256")
-    .update(rawEmailtoken)
-    .digest("hex");
+  const hashedEmailToken = crypto.createHash("sha256").update(rawEmailtoken).digest("hex");
 
   user.emailVerificationToken = hashedEmailToken;
   user.emailVerificationExpires = Date.now() + 24 * 60 * 60 * 1000;

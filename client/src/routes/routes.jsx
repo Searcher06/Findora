@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { BrowsePage, ReportPage, ViewItem, UpdateItem } from "@/features/items";
 import { AppLayout } from "@/layouts/AppLayout";
 import { ItemTypeProvider } from "@/features/items/context/ItemTypeContext";
-import { LoginPage, SignUpPage } from "@/features/authentication";
+import { LoginPage, ResendEmail, SignUpPage, EmailVerify } from "@/features/authentication";
 import { UploadPhotoProvider } from "@/features/items/context/UploadPhotoContext";
 import { ToastContainer } from "react-toastify";
 import PrivateRoute from "./privateRoute";
@@ -30,17 +30,13 @@ function AppRoutes() {
                   <Route path="/items/:id" element={<ViewItem />} />
                   <Route path="/report" element={<ReportPage />} />
                   <Route path="/update/:id" element={<UpdateItem />} />
-                  <Route
-                    path="/chat/:requestId/:username"
-                    element={<ChatPage />}
-                  />
-                  <Route
-                    path="/handover/:requestId"
-                    element={<CodeExchangePage />}
-                  />
+                  <Route path="/chat/:requestId/:username" element={<ChatPage />} />
+                  <Route path="/handover/:requestId" element={<CodeExchangePage />} />
                   <Route path="/chats" element={<ChatSelectionPage />} />
                   <Route path="/profile" element={<ProfilePage />} />
                   <Route path="/profile/edit" element={<EditProfilePage />} />
+                  <Route path="/verify-email" element={<EmailVerify />} />
+                  <Route path="/resend-email" element={<ResendEmail />} />
                 </Route>
               </Route>
             </Routes>
