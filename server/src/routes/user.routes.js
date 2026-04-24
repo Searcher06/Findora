@@ -20,7 +20,7 @@ router.post("/login", login);
 
 router.post("/sign-out", authMiddleWare, signOut);
 
-router.get("/verify-email", verifyEmail);
+router.post("/verify-email", verifyEmail);
 
 router.post("/resend-email", resendEmail);
 

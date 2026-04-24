@@ -21,13 +21,7 @@ export const SignUpPage = () => {
   });
   const { isSigningUp, signUp } = useAuthStore();
   const disabledStyle =
-    !formData.firstName ||
-    !formData.lastName ||
-    !formData.password ||
-    !formData.email ||
-    !formData.username
-      ? "bg-gray-900"
-      : null;
+    !formData.firstName || !formData.lastName || !formData.password || !formData.email || !formData.username ? "bg-gray-900" : null;
 
   const handleSignUp = async () => {
     console.log(formData);
@@ -37,13 +31,7 @@ export const SignUpPage = () => {
     formData.email = formData.email.trim();
     formData.username = formData.username.trim();
     // checking all the fields
-    if (
-      !formData.firstName ||
-      !formData.lastName ||
-      !formData.email ||
-      !formData.password ||
-      !formData.username
-    ) {
+    if (!formData.firstName || !formData.lastName || !formData.email || !formData.password || !formData.username) {
       toast.error("Please add all fields");
       return;
     }
@@ -84,7 +72,7 @@ export const SignUpPage = () => {
 
     const data = await signUp(formData);
     if (data) {
-      navigate("/");
+      navigate("/resend-email", { state: { email: formData.email, isSignUp: true } });
       setFormData({
         firstName: "",
         lastName: "",
@@ -101,15 +89,11 @@ export const SignUpPage = () => {
       <div className="lg:hidden w-full max-w-xs sm:max-w-sm px-4 sm:px-6">
         {/* Logo Text - At Top */}
         <div className="mb-4">
-          <h2 className="text-lg sm:text-xl font-display font-bold text-gray-900">
-            Findora
-          </h2>
+          <h2 className="text-lg sm:text-xl font-display font-bold text-gray-900">Findora</h2>
         </div>
 
         {/* Title */}
-        <h1 className="text-2xl sm:text-3xl font-display font-bold text-gray-900 mb-8">
-          Sign Up
-        </h1>
+        <h1 className="text-2xl sm:text-3xl font-display font-bold text-gray-900 mb-8">Sign Up</h1>
 
         {/* Form */}
         <form
@@ -198,12 +182,7 @@ export const SignUpPage = () => {
             <Button
               className={`w-full h-10 sm:h-11 text-sm sm:text-[15px] font-semibold active:scale-95 transition-transform ${disabledStyle}`}
               disabled={
-                !formData.firstName ||
-                !formData.lastName ||
-                !formData.password ||
-                !formData.email ||
-                !formData.username ||
-                isSigningUp
+                !formData.firstName || !formData.lastName || !formData.password || !formData.email || !formData.username || isSigningUp
               }
               onClick={handleSignUp}
             >
@@ -214,10 +193,7 @@ export const SignUpPage = () => {
 
           <p className="mt-6 text-gray-600 font-sans text-xs sm:text-sm w-full flex justify-center gap-1">
             Already have an account?
-            <Link
-              className="text-blue-600 font-semibold cursor-pointer hover:underline"
-              to={"/login"}
-            >
+            <Link className="text-blue-600 font-semibold cursor-pointer hover:underline" to={"/login"}>
               Log in
             </Link>
           </p>
@@ -236,9 +212,7 @@ export const SignUpPage = () => {
           <div className="max-w-md w-full">
             {/* Logo Text - At Top */}
             <div className="mb-8">
-              <h2 className="text-2xl xl:text-3xl font-display font-bold text-gray-900">
-                Findora
-              </h2>
+              <h2 className="text-2xl xl:text-3xl font-display font-bold text-gray-900">Findora</h2>
             </div>
 
             {/* Tagline */}
@@ -246,9 +220,7 @@ export const SignUpPage = () => {
               <h3 className="text-3xl xl:text-4xl font-display font-bold text-gray-900 mb-6 leading-tight">
                 Reuniting lost items faster than ever
               </h3>
-              <p className="text-base xl:text-lg text-gray-700">
-                Reuniting lost items faster than ever
-              </p>
+              <p className="text-base xl:text-lg text-gray-700">Reuniting lost items faster than ever</p>
             </div>
           </div>
         </div>
@@ -257,9 +229,7 @@ export const SignUpPage = () => {
         <div className="flex-1 bg-white flex flex-col justify-center items-center p-8 xl:p-12">
           <div className="w-full max-w-xs">
             {/* Title */}
-            <h1 className="text-3xl xl:text-4xl font-display font-bold text-gray-900 mb-8">
-              Sign Up
-            </h1>
+            <h1 className="text-3xl xl:text-4xl font-display font-bold text-gray-900 mb-8">Sign Up</h1>
 
             {/* Form */}
             <form
@@ -348,12 +318,7 @@ export const SignUpPage = () => {
                 <Button
                   className={`w-full h-11 text-[15px] font-semibold active:scale-95 transition-transform ${disabledStyle}`}
                   disabled={
-                    !formData.firstName ||
-                    !formData.lastName ||
-                    !formData.password ||
-                    !formData.email ||
-                    !formData.username ||
-                    isSigningUp
+                    !formData.firstName || !formData.lastName || !formData.password || !formData.email || !formData.username || isSigningUp
                   }
                   onClick={handleSignUp}
                 >
@@ -364,18 +329,14 @@ export const SignUpPage = () => {
 
               <p className="mt-8 text-gray-600 font-sans text-sm w-full flex justify-center gap-1">
                 Already have an account?
-                <Link
-                  className="text-blue-600 font-semibold cursor-pointer hover:underline"
-                  to={"/login"}
-                >
+                <Link className="text-blue-600 font-semibold cursor-pointer hover:underline" to={"/login"}>
                   Log in
                 </Link>
               </p>
 
               <hr className="h-px bg-gray-200 border-0 mt-8 mb-4" />
               <p className="font-medium text-gray-500 text-xs font-sans flex items-center justify-center gap-2">
-                <LockKeyholeIcon size={16} /> Protected by Findora's security
-                system
+                <LockKeyholeIcon size={16} /> Protected by Findora's security system
               </p>
             </form>
           </div>

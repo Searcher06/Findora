@@ -22,6 +22,8 @@ function AppRoutes() {
               {/* Public routes - no authentication required */}
               <Route path="/login" element={<LoginPage />} />
               <Route path="/signup" element={<SignUpPage />} />
+              <Route path="/verify-email" element={<EmailVerify />} />
+              <Route path="/resend-email" element={<ResendEmail />} />
 
               {/* Protected routes - require authentication */}
               <Route element={<PrivateRoute />}>
@@ -35,19 +37,10 @@ function AppRoutes() {
                   <Route path="/chats" element={<ChatSelectionPage />} />
                   <Route path="/profile" element={<ProfilePage />} />
                   <Route path="/profile/edit" element={<EditProfilePage />} />
-                  <Route path="/verify-email" element={<EmailVerify />} />
-                  <Route path="/resend-email" element={<ResendEmail />} />
                 </Route>
               </Route>
             </Routes>
-            <ToastContainer
-              position="top-right"
-              autoClose={3000}
-              hideProgressBar={false}
-              closeOnClick
-              pauseOnHover
-              theme="light"
-            />
+            <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} closeOnClick pauseOnHover theme="light" />
           </UploadPhotoProvider>
         </ItemTypeProvider>
       </BrowserRouter>

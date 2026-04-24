@@ -337,7 +337,7 @@ const resendEmail = async (req, res) => {
   user.emailVerificationExpires = Date.now() + 24 * 60 * 60 * 1000;
   await user.save();
 
-  const verifyUrl = `${process.env.APP_URL}/verify-email?token=${rawEmailtoken}`;
+  const verifyUrl = `${process.env.FRONTEND_URL}/verify-email?token=${rawEmailtoken}`;
   const html = verifyEmailTemplate(user.firstName, verifyUrl);
   await sendEmail({
     to: user.email,
@@ -348,13 +348,4 @@ const resendEmail = async (req, res) => {
   res.status(200).json({ message: "Verification email sent" });
 };
 
-export {
-  createUser,
-  login,
-  updateProfile,
-  signOut,
-  getUser,
-  getUserByUsername,
-  verifyEmail,
-  resendEmail,
-};
+export { createUser, login, updateProfile, signOut, getUser, getUserByUsername, verifyEmail, resendEmail };

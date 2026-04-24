@@ -18,3 +18,13 @@ export const getCurrentUser = async () => {
   const { data } = await Api.get("/user");
   return data;
 };
+
+export const verifyEmail = async (token) => {
+  const { data } = await Api.post("/user/verify-email", { token });
+  return data;
+};
+
+export const resendVerificationEmail = async (email) => {
+  const { data } = await Api.post("/user/resend-email", { email });
+  return data;
+};
