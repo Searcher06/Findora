@@ -46,17 +46,17 @@ export const ItemInfo = ({ item, layoutMode = "default" }) => {
   // Detailed layout for desktop right column
   if (layoutMode === "detailed") {
     return (
-      <div className="flex flex-col gap-6 md:gap-8">
-        {/* Item Name - Large & Bold */}
+      <div className="flex flex-col gap-5 xl:gap-6">
+        {/* Item Name */}
         <div>
-          <div className="flex items-baseline justify-between gap-3 sm:gap-4 mb-2">
-            <h1 className="font-display font-bold text-3xl sm:text-4xl md:text-5xl text-gray-900 leading-tight">{name}</h1>
+          <div className="flex items-start justify-between gap-3 sm:gap-4 mb-1.5">
+            <h1 className="font-display font-bold text-2xl xl:text-3xl text-gray-900 leading-snug">{name}</h1>
             <ItemStatus status={status} />
           </div>
         </div>
 
         {/* Item Details Grid */}
-        <div className="space-y-4 sm:space-y-5">
+        <div className="space-y-3.5 xl:space-y-4">
           <div className="border-l-4 border-blue-500 pl-4 sm:pl-5">
             <SpecificInfo infotype="Category" value={category} size="lg" />
           </div>
@@ -72,9 +72,9 @@ export const ItemInfo = ({ item, layoutMode = "default" }) => {
         </div>
 
         {/* Description */}
-        <div className="rounded-2xl sm:rounded-3xl bg-gradient-to-br from-blue-50 to-sky-50/50 p-5 sm:p-6 md:p-8 border border-sky-100 shadow-sm">
-          <h3 className="font-display font-bold text-gray-900 text-sm sm:text-base uppercase tracking-[0.1em] mb-3 sm:mb-4">Description</h3>
-          <p className="text-gray-800 text-base sm:text-lg leading-relaxed">{description}</p>
+        <div className="rounded-2xl bg-gradient-to-br from-blue-50 to-sky-50/50 p-4 xl:p-5 border border-sky-100 shadow-sm">
+          <h3 className="font-display font-bold text-gray-900 text-xs xl:text-sm uppercase tracking-[0.1em] mb-2.5 xl:mb-3">Description</h3>
+          <p className="text-gray-800 text-sm xl:text-base leading-relaxed">{description}</p>
         </div>
       </div>
     );
