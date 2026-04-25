@@ -13,15 +13,15 @@ export const EnterCodeSection = ({
   sending,
   buttonText = "Complete Verification",
 }) => (
-  <div className="bg-white rounded-lg p-4 max-w-xs w-full border border-gray-200 shadow-xs">
-    <h2 className="text-sm font-semibold mb-1.5 text-center font-display text-gray-800">
+  <div className="rounded-2xl sm:rounded-3xl border border-slate-200 bg-white/90 backdrop-blur-sm p-4 sm:p-5 md:p-6 max-w-xs w-full shadow-[0_30px_90px_-75px_rgba(15,23,42,0.8)]">
+    <h2 className="text-xs sm:text-sm md:text-base font-semibold mb-1 sm:mb-1.5 text-center font-display text-gray-900">
       Enter their 5-digit code
     </h2>
-    <p className="text-gray-500 text-xs mb-3 text-center font-sans">
+    <p className="text-gray-600 text-[10px] sm:text-xs md:text-sm mb-3 sm:mb-4 text-center font-sans">
       Type the code they shared with you
     </p>
 
-    <div className="flex justify-center mb-4">
+    <div className="flex justify-center mb-4 sm:mb-5 bg-gradient-to-b from-blue-50 to-sky-50/50 p-2.5 sm:p-3 md:p-4 rounded-xl sm:rounded-2xl border border-sky-100">
       <InputOTP
         maxLength={5}
         value={otp}
@@ -33,10 +33,10 @@ export const EnterCodeSection = ({
             <InputOTPSlot
               key={index}
               index={index}
-              className={`w-9 h-11 text-base ${
+              className={`w-8 h-10 sm:w-9 md:w-11 sm:h-12 md:h-14 text-base sm:text-lg md:text-xl font-bold rounded-lg border-2 transition-all ${
                 isOtherUserVerified
-                  ? "bg-gray-50 border-gray-200"
-                  : "border-gray-300"
+                  ? "bg-gray-50 border-gray-200 text-gray-400"
+                  : "border-sky-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
               }`}
             />
           ))}
@@ -47,11 +47,11 @@ export const EnterCodeSection = ({
     <button
       onClick={handleSubmitOtp}
       disabled={sending || isOtherUserVerified}
-      className={`w-full ${
+      className={`w-full font-medium py-2 sm:py-2.5 md:py-3 rounded-lg sm:rounded-xl text-xs sm:text-sm md:text-base transition-all duration-200 font-sans ${
         isOtherUserVerified
-          ? "bg-green-500 hover:bg-green-500 cursor-default"
-          : "bg-blue-500 hover:bg-blue-600"
-      } text-white font-medium py-2 rounded text-xs transition-colors duration-200 font-sans`}
+          ? "bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white cursor-default shadow-md"
+          : "bg-gradient-to-r from-blue-500 to-sky-500 hover:from-blue-600 hover:to-sky-600 text-white shadow-md hover:shadow-lg"
+      }`}
     >
       {sending
         ? "Verifying..."
@@ -61,12 +61,12 @@ export const EnterCodeSection = ({
     </button>
 
     {isOtherUserVerified && (
-      <div className="mt-2 text-center">
-        <p className="text-green-600 text-xs font-sans">
+      <div className="mt-3 sm:mt-4 p-2.5 sm:p-3 md:p-3 rounded-lg sm:rounded-xl bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 text-center">
+        <p className="text-green-700 text-xs sm:text-sm md:text-base font-medium font-sans">
           You've successfully verified the other user!
         </p>
         {!isUserVerified && (
-          <p className="text-gray-500 text-[10px] font-sans mt-0.5">
+          <p className="text-gray-600 text-[10px] sm:text-xs md:text-sm font-sans mt-1">
             Waiting for them to verify your code...
           </p>
         )}
@@ -74,8 +74,8 @@ export const EnterCodeSection = ({
     )}
 
     {!isOtherUserVerified && isUserVerified && (
-      <div className="mt-2 text-center">
-        <p className="text-blue-600 text-xs font-sans">
+      <div className="mt-3 sm:mt-4 p-2.5 sm:p-3 md:p-3 rounded-lg sm:rounded-xl bg-gradient-to-r from-blue-50 to-sky-50 border border-blue-200 text-center">
+        <p className="text-blue-700 text-xs sm:text-sm md:text-base font-medium font-sans">
           They've verified you! Now enter their code above.
         </p>
       </div>

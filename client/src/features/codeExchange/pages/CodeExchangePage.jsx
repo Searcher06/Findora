@@ -86,25 +86,32 @@ export const CodeExchangePage = () => {
 
   // Original verification UI with enhanced status tracking
   return (
-    <div className="min-h-screen bg-white text-gray-900 p-4 flex flex-col">
-      <VerificationHeader
-        title="Verify Handover"
-        subtitle="Confirm in-person exchange"
-      />
+    <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-sky-50 via-blue-50/35 to-white px-3 sm:px-4 md:px-6 py-4 sm:py-6 flex flex-col">
+      {/* Decorative blur circles */}
+      <div className="pointer-events-none absolute -left-20 top-16 h-56 w-56 rounded-full bg-sky-300/20 blur-3xl" />
+      <div className="pointer-events-none absolute right-0 top-10 h-72 w-72 rounded-full bg-indigo-200/20 blur-3xl" />
 
-      <QuickGuide />
-
-      <div className="flex flex-col items-center space-y-4">
-        <YourCodeSection userCode={userCode} isUserVerified={isUserVerified} />
-
-        <EnterCodeSection
-          otp={otp}
-          setOtp={setOtp}
-          isOtherUserVerified={isOtherUserVerified}
-          isUserVerified={isUserVerified}
-          handleSubmitOtp={handleSubmitOtp}
-          sending={sending}
+      {/* Content */}
+      <div className="relative z-10 flex flex-col">
+        <VerificationHeader
+          title="Verify Handover"
+          subtitle="Confirm in-person exchange"
         />
+
+        <QuickGuide />
+
+        <div className="flex flex-col items-center space-y-3 sm:space-y-4 md:space-y-5 py-2 sm:py-4">
+          <YourCodeSection userCode={userCode} isUserVerified={isUserVerified} />
+
+          <EnterCodeSection
+            otp={otp}
+            setOtp={setOtp}
+            isOtherUserVerified={isOtherUserVerified}
+            isUserVerified={isUserVerified}
+            handleSubmitOtp={handleSubmitOtp}
+            sending={sending}
+          />
+        </div>
       </div>
 
       <VerificationFooter />
