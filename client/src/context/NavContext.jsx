@@ -5,12 +5,31 @@ const NavContext = createContext();
 
 const NavProvider = ({ children }) => {
   const [openSidebar, setOpenSidebar] = useState(false);
-  // This is for the menu button it does not have is
+  const [sidebarMode, setSidebarMode] = useState("full");
+
   function handleSidebar() {
     setOpenSidebar((prevs) => !prevs);
   }
+
+  function cycleSidebarMode() {
+    setSidebarMode((prev) => {
+      if (prev === "full") return "icons";
+      if (prev === "icons") return "hidden";
+      return "full";
+    });
+  }
+
   return (
-    <NavContext.Provider value={{ openSidebar, setOpenSidebar, handleSidebar }}>
+    <NavContext.Provider
+      value={{
+        openSidebar,
+        setOpenSidebar,
+        handleSidebar,
+        sidebarMode,
+        setSidebarMode,
+        cycleSidebarMode,
+      }}
+    >
       {children}
     </NavContext.Provider>
   );

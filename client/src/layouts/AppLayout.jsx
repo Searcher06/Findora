@@ -3,11 +3,13 @@ import { MainNavbar } from "./MainNavbar";
 import { useEffect } from "react";
 import { useChatStore } from "@/store/useChatStore";
 import { useAuthStore } from "@/store/useAuthStore";
+import { useNavContext } from "@/context/NavContext";
 
 export const AppLayout = () => {
   const { subscribeToMessages, unsubscribeFromMessage, fetchUsersToChat } =
     useChatStore();
   const { user } = useAuthStore();
+  const { sidebarMode } = useNavContext();
 
   useEffect(() => {
     if (user) {
@@ -21,8 +23,15 @@ export const AppLayout = () => {
     return () => unsubscribeFromMessage();
   }, [user, fetchUsersToChat, subscribeToMessages, unsubscribeFromMessage]);
 
+  const desktopPaddingClass =
+    sidebarMode === "full"
+      ? "lg:pl-72"
+      : sidebarMode === "icons"
+      ? "lg:pl-20"
+      : "lg:pl-0";
+
   return (
-    <div className="min-h-screen bg-slate-50 lg:pl-72">
+    <div className={`min-h-screen bg-slate-50 ${desktopPaddingClass}`}>
       <MainNavbar />
       <main className="min-h-screen bg-slate-50 flow-root pt-14 md:pt-16 lg:pt-0">
         <Outlet />
