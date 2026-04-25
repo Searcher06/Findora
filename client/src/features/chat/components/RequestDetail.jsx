@@ -17,7 +17,7 @@ export const RequestDetail = ({
       <div
         className={`flex items-center justify-center ${isDesktopSidebar ? "py-8" : "py-4"}`}
       >
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-blue-600"></div>
       </div>
     );
   }
@@ -41,20 +41,18 @@ export const RequestDetail = ({
   // Desktop Sidebar Layout
   if (isDesktopSidebar) {
     return (
-      <div className="space-y-4">
-        {/* Header */}
+      <div className="space-y-5">
         <div>
-          <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">
+          <h2 className="mb-2 text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">
             Item Details
           </h2>
-          <h1 className="font-semibold font-display text-xl text-gray-900 mb-2">
+          <h1 className="mb-2 font-display text-xl font-bold text-slate-900">
             {item.name}
           </h1>
           <ItemStatus status={item.status} className="inline-block" />
         </div>
 
-        {/* Image */}
-        <div className="relative w-full aspect-square rounded-lg overflow-hidden bg-gray-100 border border-gray-200">
+        <div className="relative aspect-square w-full overflow-hidden rounded-2xl border border-slate-200 bg-slate-100">
           <img
             src={item.image || image}
             alt={item.name}
@@ -62,38 +60,37 @@ export const RequestDetail = ({
           />
         </div>
 
-        {/* Details */}
-        <div className="space-y-3 pt-2">
-          <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
-            <MapPin className="w-5 h-5 text-gray-400 shrink-0 mt-0.5" />
+        <div className="space-y-3">
+          <div className="flex items-start gap-3 rounded-xl border border-slate-200 bg-slate-50 p-3">
+            <MapPin className="mt-0.5 h-5 w-5 shrink-0 text-slate-400" />
             <div className="flex-1">
-              <p className="text-xs font-semibold text-gray-500 uppercase mb-1">
+              <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-slate-500">
                 Location
               </p>
-              <p className="text-sm font-medium text-gray-900 font-sans">
+              <p className="font-sans text-sm font-medium text-slate-900">
                 {item.location}
               </p>
             </div>
           </div>
 
-          <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
-            <CalendarDays className="w-5 h-5 text-gray-400 shrink-0 mt-0.5" />
+          <div className="flex items-start gap-3 rounded-xl border border-slate-200 bg-slate-50 p-3">
+            <CalendarDays className="mt-0.5 h-5 w-5 shrink-0 text-slate-400" />
             <div className="flex-1">
-              <p className="text-xs font-semibold text-gray-500 uppercase mb-1">
+              <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-slate-500">
                 Date {item.status === "lost" ? "Lost" : "Found"}
               </p>
-              <p className="text-sm font-medium text-gray-900 font-sans">
+              <p className="font-sans text-sm font-medium text-slate-900">
                 {formatDate(item.dateLostOrFound)}
               </p>
             </div>
           </div>
 
           {item.description && (
-            <div className="pt-2">
-              <p className="text-xs font-semibold text-gray-500 uppercase mb-2">
+            <div className="rounded-xl border border-slate-200 bg-white p-3">
+              <p className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-slate-500">
                 Description
               </p>
-              <p className="text-sm text-gray-700 font-sans leading-relaxed">
+              <p className="font-sans text-sm leading-relaxed text-slate-700">
                 {item.description}
               </p>
             </div>
@@ -105,10 +102,10 @@ export const RequestDetail = ({
 
   // Mobile/Tablet Layout (Original)
   return (
-    <div className="mt-2 pb-3 sm:pb-3.5 border-b">
-      <div className="flex justify-between items-center">
-        <div className="flex-1 min-w-0 pr-3">
-          <h1 className="font-medium font-display text-sm sm:text-[15px] truncate">
+    <div className="rounded-2xl border border-slate-200 bg-white/90 p-3 shadow-sm">
+      <div className="flex items-center justify-between">
+        <div className="min-w-0 flex-1 pr-3">
+          <h1 className="truncate font-display text-sm font-semibold text-slate-900 sm:text-[15px]">
             {item.name}
           </h1>
           <ItemStatus status={item.status} className="" />
@@ -117,22 +114,22 @@ export const RequestDetail = ({
           <img
             src={item.image || image}
             alt="Item Image"
-            className="h-14 w-16 sm:h-15 sm:w-17 rounded object-cover"
+            className="h-14 w-16 rounded-lg border border-slate-200 object-cover sm:h-16 sm:w-[74px]"
           />
         </div>
       </div>
-      <div className="mt-2 flex justify-between gap-2 text-gray-600">
-        <p className="flex items-center font-sans text-[11px] sm:text-xs line-clamp-1">
+      <div className="mt-2 grid grid-cols-2 gap-2 text-slate-600">
+        <p className="line-clamp-1 flex items-center rounded-lg bg-slate-50 px-2 py-1 font-sans text-[11px] sm:text-xs">
           <MapPin
             size={16}
-            className="text-white fill-gray-500 shrink-0 mr-1"
+            className="mr-1 shrink-0 fill-slate-500 text-white"
           />
           {item.location}
         </p>
-        <p className="flex items-center font-sans text-[11px] sm:text-xs shrink-0">
+        <p className="flex items-center rounded-lg bg-slate-50 px-2 py-1 font-sans text-[11px] sm:text-xs">
           <CalendarDays
             size={16}
-            className="text-white fill-gray-500 shrink-0 mr-1"
+            className="mr-1 shrink-0 fill-slate-500 text-white"
           />
           {formatDate(item.dateLostOrFound)}
         </p>
