@@ -1,4 +1,5 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { useEffect } from "react";
 import { BrowsePage, ReportPage, ViewItem, UpdateItem } from "@/features/items";
 import { AppLayout } from "@/layouts/AppLayout";
 import { ItemTypeProvider } from "@/features/items/context/ItemTypeContext";
@@ -11,10 +12,43 @@ import { NavProvider } from "@/context/NavContext";
 import { CodeExchangePage } from "@/features/codeExchange";
 import { EditProfilePage, ProfilePage } from "@/features/user";
 import { ScrollToTop } from "@/utils/scrollToTop";
+
+const getPageTitle = (pathname) => {
+  if (pathname === "/") return "Browse Items | Findora";
+  if (pathname === "/login") return "Login | Findora";
+  if (pathname === "/signup") return "Sign Up | Findora";
+  if (pathname === "/verify-email") return "Verify Email | Findora";
+  if (pathname === "/resend-email") return "Resend Verification | Findora";
+  if (pathname === "/forgot-password") return "Forgot Password | Findora";
+  if (pathname === "/reset-password") return "Reset Password | Findora";
+  if (pathname === "/change-password") return "Change Password | Findora";
+  if (pathname === "/report") return "Report Item | Findora";
+  if (pathname === "/chats") return "Conversations | Findora";
+  if (pathname === "/profile") return "Profile | Findora";
+  if (pathname === "/profile/edit") return "Edit Profile | Findora";
+  if (pathname.startsWith("/items/")) return "Item Details | Findora";
+  if (pathname.startsWith("/update/")) return "Update Item | Findora";
+  if (pathname.startsWith("/chat/")) return "Chat | Findora";
+  if (pathname.startsWith("/handover/")) return "Verify Handover | Findora";
+
+  return "Findora";
+};
+
+const PageTitleManager = () => {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    document.title = getPageTitle(pathname);
+  }, [pathname]);
+
+  return null;
+};
+
 function AppRoutes() {
   return (
     <NavProvider>
       <BrowserRouter>
+        <PageTitleManager />
         <ScrollToTop />
         <ItemTypeProvider>
           <UploadPhotoProvider>
