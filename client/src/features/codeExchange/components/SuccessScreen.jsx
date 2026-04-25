@@ -15,9 +15,7 @@ export const SuccessScreen = ({ request, navigate }) => (
     </div>
 
     <div className="relative z-10 text-center mb-4 sm:mb-5 md:mb-6 max-w-md">
-      <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 font-display mb-1.5 sm:mb-2 md:mb-3">
-        Handover Complete
-      </h1>
+      <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 font-display mb-1.5 sm:mb-2 md:mb-3">Handover Complete</h1>
       <p className="text-gray-600 text-xs sm:text-sm md:text-base font-sans mb-3 sm:mb-4 md:mb-5">
         The item has been successfully returned and recorded securely.
       </p>
@@ -26,51 +24,37 @@ export const SuccessScreen = ({ request, navigate }) => (
         <div className="space-y-2 sm:space-y-2.5 md:space-y-3">
           <div className="flex items-center justify-between pb-2 sm:pb-2.5 md:pb-3 border-b border-slate-100">
             <span className="text-gray-500 text-xs sm:text-sm font-sans">Item</span>
-            <span className="text-gray-900 text-xs sm:text-sm font-bold font-sans">
-              {request?.itemId?.name || "Item Name"}
-            </span>
+            <span className="text-gray-900 text-xs sm:text-sm font-bold font-sans">{request?.itemId?.name || "Item Name"}</span>
           </div>
           <div className="flex items-center justify-between pb-2 sm:pb-2.5 md:pb-3 border-b border-slate-100">
             <span className="text-gray-500 text-xs sm:text-sm font-sans">Finder</span>
-            <span className="text-gray-900 text-xs sm:text-sm font-bold font-sans">
-              {request?.finderId?.firstName || "User"}
-            </span>
+            <span className="text-gray-900 text-xs sm:text-sm font-bold font-sans">{request?.finderId?.firstName || "User"}</span>
           </div>
           <div className="flex items-center justify-between pb-2 sm:pb-2.5 md:pb-3 border-b border-slate-100">
             <span className="text-gray-500 text-xs sm:text-sm font-sans">Claimer</span>
-            <span className="text-gray-900 text-xs sm:text-sm font-bold font-sans">
-              {request?.claimerId?.firstName || "User"}
-            </span>
+            <span className="text-gray-900 text-xs sm:text-sm font-bold font-sans">{request?.claimerId?.firstName || "User"}</span>
           </div>
           <div className="pt-2 sm:pt-2.5 md:pt-3 bg-gradient-to-r from-green-50 to-emerald-50 -m-4 sm:-m-5 md:-m-6 mt-2 sm:mt-2.5 md:mt-3 p-3 sm:p-4 rounded-b-2xl sm:rounded-b-3xl flex items-center gap-1.5 sm:gap-2 justify-center">
             <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
-            <span className="text-green-700 text-xs sm:text-sm md:text-base font-bold font-sans">
-              Both parties verified
-            </span>
+            <span className="text-green-700 text-xs sm:text-sm md:text-base font-bold font-sans">Both parties verified</span>
           </div>
         </div>
       </div>
 
       <div className="rounded-2xl sm:rounded-2xl border border-sky-100 bg-[linear-gradient(135deg,#f8fbff_0%,#eef5ff_54%,#f7f9ff_100%)] p-3 sm:p-3.5 md:p-4">
-        <h3 className="text-xs sm:text-sm md:text-base font-bold text-gray-900 font-display mb-2 sm:mb-2.5 md:mb-3">
-          What's Next?
-        </h3>
+        <h3 className="text-xs sm:text-sm md:text-base font-bold text-gray-900 font-display mb-2 sm:mb-2.5 md:mb-3">What's Next?</h3>
         <div className="space-y-1.5 sm:space-y-2">
           <div className="flex items-start gap-1.5 sm:gap-2">
             <div className="w-4 sm:w-5 h-4 sm:h-5 rounded-full bg-blue-500 text-white flex items-center justify-center shrink-0 mt-0.5 text-[10px] sm:text-xs font-bold">
               ✓
             </div>
-            <p className="text-gray-700 text-xs sm:text-sm md:text-base font-sans">
-              Exchange recorded in secure database
-            </p>
+            <p className="text-gray-700 text-xs sm:text-sm md:text-base font-sans">Exchange recorded in secure database</p>
           </div>
           <div className="flex items-start gap-1.5 sm:gap-2">
             <div className="w-4 sm:w-5 h-4 sm:h-5 rounded-full bg-blue-500 text-white flex items-center justify-center shrink-0 mt-0.5 text-[10px] sm:text-xs font-bold">
               ✓
             </div>
-            <p className="text-gray-700 text-xs sm:text-sm md:text-base font-sans">
-              You can close this or go to Home page
-            </p>
+            <p className="text-gray-700 text-xs sm:text-sm md:text-base font-sans">You can close this or go to Home page</p>
           </div>
         </div>
       </div>

@@ -16,8 +16,7 @@ export const CodeExchangePage = () => {
   const navigate = useNavigate();
   const { requestId } = useParams();
   const { user } = useAuthStore();
-  const { loading, request, error, setRequest } =
-    useFetchRequestById(requestId);
+  const { loading, request, error, setRequest } = useFetchRequestById(requestId);
 
   const [otp, setOtp] = useState("");
 
@@ -32,9 +31,7 @@ export const CodeExchangePage = () => {
     socket.emit("join:request", { requestId });
 
     socket.on("request:verified", (updatedRequest) => {
-      toast.success(
-        "Both users have verified. Item has been successfully returned"
-      );
+      toast.success("Both users have verified. Item has been successfully returned");
       setRequest(updatedRequest);
     });
 
@@ -69,11 +66,7 @@ export const CodeExchangePage = () => {
   const isOtherUserVerified = isFinder ? isClaimerVerified : isFinderVerified;
 
   // Get user's code
-  const userCode = isFinder
-    ? request?.finderCode
-    : isClaimer
-    ? request?.claimerCode
-    : null;
+  const userCode = isFinder ? request?.finderCode : isClaimer ? request?.claimerCode : null;
 
   if (loading) return <p className="font-display text-lg">Fetching...</p>;
   if (!loading && (request?.status == "pending" || null)) navigate("/");
@@ -93,10 +86,7 @@ export const CodeExchangePage = () => {
 
       {/* Content */}
       <div className="relative z-10 flex flex-col">
-        <VerificationHeader
-          title="Verify Handover"
-          subtitle="Confirm in-person exchange"
-        />
+        <VerificationHeader title="Verify Handover" subtitle="Confirm in-person exchange" />
 
         <QuickGuide />
 

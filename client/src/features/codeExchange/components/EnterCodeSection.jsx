@@ -1,8 +1,4 @@
-import {
-  InputOTP,
-  InputOTPGroup,
-  InputOTPSlot,
-} from "@/components/ui/input-otp";
+import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 
 export const EnterCodeSection = ({
   otp,
@@ -17,17 +13,10 @@ export const EnterCodeSection = ({
     <h2 className="text-xs sm:text-sm md:text-base font-semibold mb-1 sm:mb-1.5 text-center font-display text-gray-900">
       Enter their 5-digit code
     </h2>
-    <p className="text-gray-600 text-[10px] sm:text-xs md:text-sm mb-3 sm:mb-4 text-center font-sans">
-      Type the code they shared with you
-    </p>
+    <p className="text-gray-600 text-[10px] sm:text-xs md:text-sm mb-3 sm:mb-4 text-center font-sans">Type the code they shared with you</p>
 
     <div className="flex justify-center mb-4 sm:mb-5 bg-gradient-to-b from-blue-50 to-sky-50/50 p-2.5 sm:p-3 md:p-4 rounded-xl sm:rounded-2xl border border-sky-100">
-      <InputOTP
-        maxLength={5}
-        value={otp}
-        onChange={setOtp}
-        disabled={isOtherUserVerified}
-      >
+      <InputOTP maxLength={5} value={otp} onChange={setOtp} disabled={isOtherUserVerified}>
         <InputOTPGroup>
           {[0, 1, 2, 3, 4].map((index) => (
             <InputOTPSlot
@@ -53,22 +42,14 @@ export const EnterCodeSection = ({
           : "bg-gradient-to-r from-blue-500 to-sky-500 hover:from-blue-600 hover:to-sky-600 text-white shadow-md hover:shadow-lg"
       }`}
     >
-      {sending
-        ? "Verifying..."
-        : isOtherUserVerified
-        ? "✓ Verification Complete"
-        : buttonText}
+      {sending ? "Verifying..." : isOtherUserVerified ? "✓ Verification Complete" : buttonText}
     </button>
 
     {isOtherUserVerified && (
       <div className="mt-3 sm:mt-4 p-2.5 sm:p-3 md:p-3 rounded-lg sm:rounded-xl bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 text-center">
-        <p className="text-green-700 text-xs sm:text-sm md:text-base font-medium font-sans">
-          You've successfully verified the other user!
-        </p>
+        <p className="text-green-700 text-xs sm:text-sm md:text-base font-medium font-sans">You've successfully verified the other user!</p>
         {!isUserVerified && (
-          <p className="text-gray-600 text-[10px] sm:text-xs md:text-sm font-sans mt-1">
-            Waiting for them to verify your code...
-          </p>
+          <p className="text-gray-600 text-[10px] sm:text-xs md:text-sm font-sans mt-1">Waiting for them to verify your code...</p>
         )}
       </div>
     )}

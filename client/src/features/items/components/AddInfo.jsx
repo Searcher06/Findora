@@ -30,26 +30,26 @@ const AddInfo = ({
 
   return (
     <form
-      className={`w-full overflow-visible rounded-3xl border border-sky-100 bg-white/95 p-4 shadow-[0_30px_90px_-65px_rgba(59,130,246,0.7)] backdrop-blur sm:p-6 md:p-8 ${className}`}
+      className={`w-full overflow-visible rounded-2xl sm:rounded-3xl border border-slate-200 bg-white/90 p-4 sm:p-6 md:p-8 shadow-[0_30px_90px_-75px_rgba(15,23,42,0.8)] backdrop-blur ${className}`}
       onSubmit={(event) => event.preventDefault()}
     >
-      <div className="rounded-2xl border border-sky-100 bg-sky-50/70 p-4 sm:p-5">
-        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-sky-700">Report Details</p>
-        <p className="mt-1 text-sm text-slate-600">
+      <div className="rounded-2xl border border-sky-100 bg-gradient-to-br from-sky-50 to-blue-50/50 p-3.5 sm:p-4 md:p-5">
+        <p className="text-[10px] sm:text-xs md:text-xs font-bold uppercase tracking-[0.18em] text-sky-700">Report Details</p>
+        <p className="mt-1.5 sm:mt-2 text-xs sm:text-sm md:text-base text-slate-700 leading-relaxed">
           Fill in the key details so people can quickly identify the item.
         </p>
       </div>
 
-      <div className="mt-5">
+      <div className="mt-4 sm:mt-5 md:mt-6">
         <Label text="Item Type" htmlFor="status" />
-        <div className="mt-2 grid gap-2 sm:grid-cols-2">
+        <div className="mt-2.5 sm:mt-3 grid gap-2.5 sm:grid-cols-2">
           <button
             type="button"
             name="status"
             onClick={() =>
               handleInputChange({ target: { name: "status", value: "lost" } })
             }
-            className={`flex min-h-12 items-center justify-center gap-2 rounded-xl border px-3 py-2 text-sm font-semibold transition ${
+            className={`flex min-h-11 sm:min-h-12 items-center justify-center gap-2 rounded-xl border px-3 py-2 text-xs sm:text-sm font-semibold transition-all ${
               itemData.status === "lost"
                 ? "border-blue-300 bg-blue-50 text-blue-700 shadow-sm"
                 : "border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50"
@@ -64,7 +64,7 @@ const AddInfo = ({
             onClick={() =>
               handleInputChange({ target: { name: "status", value: "found" } })
             }
-            className={`flex min-h-12 items-center justify-center gap-2 rounded-xl border px-3 py-2 text-sm font-semibold transition ${
+            className={`flex min-h-11 sm:min-h-12 items-center justify-center gap-2 rounded-xl border px-3 py-2 text-xs sm:text-sm font-semibold transition-all ${
               itemData.status === "found"
                 ? "border-emerald-300 bg-emerald-50 text-emerald-700 shadow-sm"
                 : "border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50"
@@ -76,17 +76,17 @@ const AddInfo = ({
         </div>
       </div>
 
-      <div className="mt-5 grid gap-4 sm:gap-5 md:grid-cols-2">
+      <div className="mt-4 sm:mt-5 md:mt-6 grid gap-3 sm:gap-4 md:gap-5 md:grid-cols-2">
         <div className="md:col-span-2">
           <Label text="Item Name" htmlFor="itemName" />
-          <div className="relative mt-2">
+          <div className="relative mt-2.5 sm:mt-3">
             <ClipboardList className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
             <input
               id="itemName"
               type="text"
               name="itemName"
               placeholder="e.g. Samsung Galaxy S5"
-              className="h-11 w-full rounded-xl border border-slate-300 bg-white pl-10 pr-3 text-sm text-slate-800 outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-100"
+              className="h-10 sm:h-11 w-full rounded-lg sm:rounded-xl border border-slate-300 bg-white pl-10 pr-3 text-xs sm:text-sm text-slate-800 outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-100"
               value={itemData.itemName}
               onChange={handleInputChange}
             />
@@ -99,7 +99,7 @@ const AddInfo = ({
             name="category"
             id="category"
             value={itemData.category}
-            className="mt-2 block h-11 w-full rounded-xl border border-slate-300 bg-white px-3 text-sm text-slate-800 outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-100"
+            className="mt-2.5 sm:mt-3 block h-10 sm:h-11 w-full rounded-lg sm:rounded-xl border border-slate-300 bg-white px-3 text-xs sm:text-sm text-slate-800 outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-100"
             onChange={handleInputChange}
           >
             <option value="" disabled>
@@ -123,7 +123,7 @@ const AddInfo = ({
             text={`${itemData.status === "lost" ? "Date Lost" : "Date Found"}`}
             htmlFor="dateLostOrFound"
           />
-          <div className="relative mt-2">
+          <div className="relative mt-2.5 sm:mt-3">
             <Calendar className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
             <input
               type="date"
@@ -132,7 +132,7 @@ const AddInfo = ({
               onChange={handleInputChange}
               id="dateLostOrFound"
               max={maxDate}
-              className="block h-11 w-full rounded-xl border border-slate-300 bg-white pl-10 pr-3 text-sm text-slate-800 outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-100"
+              className="block h-10 sm:h-11 w-full rounded-lg sm:rounded-xl border border-slate-300 bg-white pl-10 pr-3 text-xs sm:text-sm text-slate-800 outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-100"
             />
           </div>
         </div>
@@ -146,13 +146,13 @@ const AddInfo = ({
             onChange={handleInputChange}
             rows={4}
             placeholder="A dark colored Samsung phone left in the library..."
-            className="mt-2 block w-full resize-none rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-800 outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-100"
+            className="mt-2.5 sm:mt-3 block w-full resize-none rounded-lg sm:rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-xs sm:text-sm text-slate-800 outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-100"
           ></textarea>
         </div>
 
         <div className="md:col-span-2">
           <Label text="Location" htmlFor="location" />
-          <div className="relative mt-2">
+          <div className="relative mt-2.5 sm:mt-3">
             <MapPin className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
             <input
               type="text"
@@ -161,13 +161,13 @@ const AddInfo = ({
               value={itemData.location}
               onChange={handleInputChange}
               placeholder="e.g. Main library"
-              className="h-11 w-full rounded-xl border border-slate-300 bg-white pl-10 pr-3 text-sm text-slate-800 outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-100"
+              className="h-10 sm:h-11 w-full rounded-lg sm:rounded-xl border border-slate-300 bg-white pl-10 pr-3 text-xs sm:text-sm text-slate-800 outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-100"
             />
           </div>
         </div>
       </div>
 
-      <div className="mt-5 flex items-center justify-between gap-2 rounded-2xl border border-slate-200 bg-slate-50/70 px-3 py-2.5 sm:px-4">
+      <div className="mt-4 sm:mt-5 md:mt-6 flex items-center justify-between gap-2 rounded-lg sm:rounded-2xl border border-slate-200 bg-slate-50/70 px-3 sm:px-4 py-2 sm:py-2.5">
         <Label text="Upload Photo" htmlFor="photo-upload" className="mb-0" />
         <ToggleImage />
       </div>
@@ -179,7 +179,7 @@ const AddInfo = ({
       />
 
       <Button
-        className="mt-5 h-11 w-full rounded-xl bg-slate-900 text-sm font-semibold text-white transition hover:bg-slate-800 sm:h-12 sm:text-base"
+        className="mt-4 sm:mt-5 md:mt-6 h-10 sm:h-11 md:h-12 w-full rounded-lg sm:rounded-xl bg-blue-600 hover:bg-blue-700 text-xs sm:text-sm md:text-base font-bold text-white transition-all shadow-sm hover:shadow-md active:scale-95"
         onClick={handleSubmit}
       >
         {loading ? <Spinner /> : null}

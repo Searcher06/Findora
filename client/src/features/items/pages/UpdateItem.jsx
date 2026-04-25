@@ -109,28 +109,37 @@ export const UpdateItem = () => {
   };
 
   return (
-    <div className="flex flex-col px-4 sm:px-6 md:px-8 lg:px-12 max-w-4xl mx-auto pb-8">
-      {/* Header - Responsive */}
-      <h1 className="text-xl sm:text-2xl md:text-[26px] lg:text-3xl font-medium leading-tight font-display mt-3 sm:mt-4 md:mt-5 capitalize">
-        Update {itemData?.status} Item
-      </h1>
-      <p className="text-xs sm:text-sm md:text-base font-sans mt-1 sm:mt-2 text-gray-700 leading-relaxed">
-        {itemData.status === "lost"
-          ? "Enhance item details to improve search accuracy and recovery potential."
-          : "Refine item information to facilitate owner identification and swift return."}
-      </p>
+    <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-sky-50 via-blue-50/35 to-white px-3 sm:px-4 md:px-6 py-4 sm:py-6">
+      {/* Decorative blur circles */}
+      <div className="pointer-events-none absolute -left-20 top-20 h-60 w-60 rounded-full bg-sky-300/20 blur-3xl" />
+      <div className="pointer-events-none absolute right-0 top-1/3 h-72 w-72 rounded-full bg-indigo-200/20 blur-3xl" />
 
-      {/* Form - Responsive (uses already responsive AddInfo) */}
-      <AddInfo
-        className="mt-4 sm:mt-5 md:mt-6"
-        itemData={itemData}
-        handleInputChange={handleInputChange}
-        setItemData={setItemData}
-        handleSubmit={handleSubmit}
-        loading={loading}
-        handlePhotoChange={handlePhotoChange}
-        preview={preview}
-      />
+      {/* Content */}
+      <div className="relative z-10 flex flex-col lg:px-12 max-w-4xl mx-auto pb-8">
+        {/* Header - Responsive */}
+        <div className="mb-4 sm:mb-5 md:mb-6">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 font-display capitalize tracking-tight">
+            Update {itemData?.status} Item
+          </h1>
+          <p className="text-xs sm:text-sm md:text-base font-sans mt-2 sm:mt-3 text-gray-600 leading-relaxed">
+            {itemData.status === "lost"
+              ? "Enhance item details to improve search accuracy and recovery potential."
+              : "Refine item information to facilitate owner identification and swift return."}
+          </p>
+        </div>
+
+        {/* Form - Responsive (uses already responsive AddInfo) */}
+        <AddInfo
+          className="mt-3 sm:mt-4 md:mt-5"
+          itemData={itemData}
+          handleInputChange={handleInputChange}
+          setItemData={setItemData}
+          handleSubmit={handleSubmit}
+          loading={loading}
+          handlePhotoChange={handlePhotoChange}
+          preview={preview}
+        />
+      </div>
     </div>
   );
 };
