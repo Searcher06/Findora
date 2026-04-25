@@ -6,16 +6,7 @@ import Label from "./Label";
 import ToggleImage from "./ToggleImage";
 import PhotoDisplay from "./PhotoDisplay";
 
-const AddInfo = ({
-  className,
-  itemData,
-  handleInputChange,
-  handleSubmit,
-  loading,
-  setItemData,
-  handlePhotoChange,
-  preview,
-}) => {
+const AddInfo = ({ className, itemData, handleInputChange, handleSubmit, loading, setItemData, handlePhotoChange, preview }) => {
   const location = useLocation();
   const isUpdateRoute = location.pathname.startsWith("/update/");
 
@@ -46,32 +37,26 @@ const AddInfo = ({
           <button
             type="button"
             name="status"
-            onClick={() =>
-              handleInputChange({ target: { name: "status", value: "lost" } })
-            }
+            onClick={() => handleInputChange({ target: { name: "status", value: "lost" } })}
             className={`flex min-h-11 sm:min-h-12 items-center justify-center gap-2 rounded-xl border px-3 py-2 text-xs sm:text-sm font-semibold transition-all ${
               itemData.status === "lost"
                 ? "border-blue-300 bg-blue-50 text-blue-700 shadow-sm"
                 : "border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50"
             }`}
           >
-            <SearchX className="h-4 w-4" />
-            I Lost an Item
+            <SearchX className="h-4 w-4" />I Lost an Item
           </button>
           <button
             type="button"
             name="status"
-            onClick={() =>
-              handleInputChange({ target: { name: "status", value: "found" } })
-            }
+            onClick={() => handleInputChange({ target: { name: "status", value: "found" } })}
             className={`flex min-h-11 sm:min-h-12 items-center justify-center gap-2 rounded-xl border px-3 py-2 text-xs sm:text-sm font-semibold transition-all ${
               itemData.status === "found"
                 ? "border-emerald-300 bg-emerald-50 text-emerald-700 shadow-sm"
                 : "border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50"
             }`}
           >
-            <CheckCircle2 className="h-4 w-4" />
-            I Found an Item
+            <CheckCircle2 className="h-4 w-4" />I Found an Item
           </button>
         </div>
       </div>
@@ -119,10 +104,7 @@ const AddInfo = ({
         </div>
 
         <div>
-          <Label
-            text={`${itemData.status === "lost" ? "Date Lost" : "Date Found"}`}
-            htmlFor="dateLostOrFound"
-          />
+          <Label text={`${itemData.status === "lost" ? "Date Lost" : "Date Found"}`} htmlFor="dateLostOrFound" />
           <div className="relative mt-2.5 sm:mt-3">
             <Calendar className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
             <input
@@ -172,11 +154,7 @@ const AddInfo = ({
         <ToggleImage />
       </div>
 
-      <PhotoDisplay
-        setItemData={setItemData}
-        handlePhotoChange={handlePhotoChange}
-        preview={preview}
-      />
+      <PhotoDisplay setItemData={setItemData} handlePhotoChange={handlePhotoChange} preview={preview} />
 
       <Button
         className="mt-4 sm:mt-5 md:mt-6 h-10 sm:h-11 md:h-12 w-full rounded-lg sm:rounded-xl bg-blue-600 hover:bg-blue-700 text-xs sm:text-sm md:text-base font-bold text-white transition-all shadow-sm hover:shadow-md active:scale-95"

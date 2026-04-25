@@ -4,16 +4,7 @@ import { ReporterInfo } from "./ReporterInfo";
 import { SpecificInfo } from "./SpecificInfo";
 
 export const ItemInfo = ({ item, layoutMode = "default" }) => {
-  const {
-    name,
-    status,
-    location,
-    description,
-    category,
-    dateLostOrFound,
-    dateReported,
-    reportedBy,
-  } = item;
+  const { name, status, location, description, category, dateLostOrFound, dateReported, reportedBy } = item;
 
   const dateLostOrFoundFormatted = formatDate(dateLostOrFound);
   const dateReportedFormatted = formatDate(dateReported);
@@ -29,9 +20,7 @@ export const ItemInfo = ({ item, layoutMode = "default" }) => {
       <div className="flex flex-col w-full gap-3 sm:gap-4 md:gap-5">
         {/* Item Name & Status */}
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 sm:gap-3">
-          <h1 className="font-display font-bold text-xl sm:text-2xl md:text-3xl text-gray-900">
-            {name}
-          </h1>
+          <h1 className="font-display font-bold text-xl sm:text-2xl md:text-3xl text-gray-900">{name}</h1>
           <div className="sm:ml-auto">
             <ItemStatus status={status} />
           </div>
@@ -41,10 +30,7 @@ export const ItemInfo = ({ item, layoutMode = "default" }) => {
         <div className="flex flex-col gap-2.5 sm:gap-3 md:gap-3.5">
           <SpecificInfo infotype="Category" value={category} />
           <SpecificInfo infotype="Location" value={location} />
-          <SpecificInfo
-            infotype={status === "lost" ? "Date Lost" : "Date Found"}
-            value={dateLostOrFoundFormatted}
-          />
+          <SpecificInfo infotype={status === "lost" ? "Date Lost" : "Date Found"} value={dateLostOrFoundFormatted} />
           <SpecificInfo infotype="Date Posted" value={dateReportedFormatted} />
           <SpecificInfo infotype="Description" value={description} />
         </div>
@@ -64,9 +50,7 @@ export const ItemInfo = ({ item, layoutMode = "default" }) => {
         {/* Item Name - Large & Bold */}
         <div>
           <div className="flex items-baseline justify-between gap-3 sm:gap-4 mb-2">
-            <h1 className="font-display font-bold text-3xl sm:text-4xl md:text-5xl text-gray-900 leading-tight">
-              {name}
-            </h1>
+            <h1 className="font-display font-bold text-3xl sm:text-4xl md:text-5xl text-gray-900 leading-tight">{name}</h1>
             <ItemStatus status={status} />
           </div>
         </div>
@@ -80,29 +64,17 @@ export const ItemInfo = ({ item, layoutMode = "default" }) => {
             <SpecificInfo infotype="Location" value={location} size="lg" />
           </div>
           <div>
-            <SpecificInfo
-              infotype={status === "lost" ? "Date Lost" : "Date Found"}
-              value={dateLostOrFoundFormatted}
-              size="lg"
-            />
+            <SpecificInfo infotype={status === "lost" ? "Date Lost" : "Date Found"} value={dateLostOrFoundFormatted} size="lg" />
           </div>
           <div>
-            <SpecificInfo
-              infotype="Date Posted"
-              value={dateReportedFormatted}
-              size="lg"
-            />
+            <SpecificInfo infotype="Date Posted" value={dateReportedFormatted} size="lg" />
           </div>
         </div>
 
         {/* Description */}
         <div className="rounded-2xl sm:rounded-3xl bg-gradient-to-br from-blue-50 to-sky-50/50 p-5 sm:p-6 md:p-8 border border-sky-100 shadow-sm">
-          <h3 className="font-display font-bold text-gray-900 text-sm sm:text-base uppercase tracking-[0.1em] mb-3 sm:mb-4">
-            Description
-          </h3>
-          <p className="text-gray-800 text-base sm:text-lg leading-relaxed">
-            {description}
-          </p>
+          <h3 className="font-display font-bold text-gray-900 text-sm sm:text-base uppercase tracking-[0.1em] mb-3 sm:mb-4">Description</h3>
+          <p className="text-gray-800 text-base sm:text-lg leading-relaxed">{description}</p>
         </div>
       </div>
     );

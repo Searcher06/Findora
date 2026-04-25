@@ -55,9 +55,7 @@ export const DetailedItemCard = ({ item }) => {
         </div>
 
         {/* Disclaimer Text */}
-        <p className="font-sans text-xs sm:text-sm text-gray-600 text-center px-4">
-          Request must be verified before chat access
-        </p>
+        <p className="font-sans text-xs sm:text-sm text-gray-600 text-center px-4">Request must be verified before chat access</p>
       </div>
 
       {/* Desktop Layout (30/70 split) */}
@@ -104,9 +102,7 @@ export const DetailedItemCard = ({ item }) => {
             )}
           </div>
 
-          <p className="font-sans text-xs text-gray-600 text-center">
-            Request must be verified before chat access
-          </p>
+          <p className="font-sans text-xs text-gray-600 text-center">Request must be verified before chat access</p>
         </div>
 
         {/* Right Column (70%) - Item Details */}
