@@ -1,59 +1,43 @@
 import { ItemCard } from "./ItemCard";
 import itemImage from "../item.png";
-import { useItemType } from "../context/ItemTypeContext";
 import { useItems } from "../hooks/useItems";
 import { ItemCardSkeleton } from "./ItemCardSkeleton";
-import { useEffect, useMemo } from "react";
-import { Inbox } from "lucide-react";
+import { useEffect } from "react";
+import { Inbox, ChevronLeft, ChevronRight } from "lucide-react";
 
 export const ItemsContainer = ({
   className,
   filters = {},
-  searchQuery = "",
   onMetaChange,
+  onPageChange,
 }) => {
-  const { bar } = useItemType();
-  const { items, loading, error } = useItems(filters);
-
-  const filterItemsBySearch = (itemsList = []) => {
-    const q = String(searchQuery || "")
-      .trim()
-      .toLowerCase();
-    if (!q) return itemsList;
-    return itemsList.filter((item) => {
-      return (
-        String(item.name || "")
-          .toLowerCase()
-          .includes(q) ||
-        String(item.description || "")
-          .toLowerCase()
-          .includes(q) ||
-        String(item.location || "")
-          .toLowerCase()
-          .includes(q) ||
-        String(item.category || "")
-          .toLowerCase()
-          .includes(q)
-      );
-    });
-  };
-
-  const filteredItems = useMemo(() => {
-    const list = filterItemsBySearch(items || []);
-    if (bar === "lost") {
-      return list?.filter((current) => current.status === "lost");
-    }
-    return list?.filter((current) => current.status === bar);
-  }, [items, searchQuery, bar]);
+  const { items, loading, error, pagination } = useItems(filters);
 
   useEffect(() => {
     onMetaChange?.({
-      total: filteredItems?.length || 0,
+      total: pagination?.total || 0,
       loading,
       error: Boolean(error),
-      view: bar,
+      view: filters?.status || "lost",
+      page: pagination?.page || 1,
+      totalPages: pagination?.totalPages || 1,
     });
-  }, [filteredItems, loading, error, bar, onMetaChange]);
+  }, [pagination, loading, error, filters?.status, onMetaChange]);
+
+  const currentPage = pagination?.page || 1;
+  const totalPages = pagination?.totalPages || 1;
+
+  const handlePrev = () => {
+    if (pagination?.hasPrevPage) {
+      onPageChange?.(currentPage - 1);
+    }
+  };
+
+  const handleNext = () => {
+    if (pagination?.hasNextPage) {
+      onPageChange?.(currentPage + 1);
+    }
+  };
 
   return (
     <div className={`${className} w-full`}>
@@ -66,8 +50,8 @@ export const ItemsContainer = ({
                 {error}
               </div>
             )
-            : filteredItems?.length
-              ? filteredItems.map((current) => (
+            : items?.length
+              ? items.map((current) => (
                 <ItemCard
                   name={current.name}
                   location={current.location}
@@ -87,6 +71,32 @@ export const ItemsContainer = ({
                 </div>
               )}
       </div>
+
+      {!loading && !error && totalPages > 1 ? (
+        <div className="mt-7 flex items-center justify-center gap-2">
+          <button
+            type="button"
+            onClick={handlePrev}
+            disabled={!pagination?.hasPrevPage}
+            className="inline-flex h-10 items-center gap-1 rounded-xl border border-slate-200 bg-white px-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-45"
+          >
+            <ChevronLeft className="h-4 w-4" />
+            Prev
+          </button>
+          <div className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700">
+            Page {currentPage} of {totalPages}
+          </div>
+          <button
+            type="button"
+            onClick={handleNext}
+            disabled={!pagination?.hasNextPage}
+            className="inline-flex h-10 items-center gap-1 rounded-xl border border-slate-200 bg-white px-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-45"
+          >
+            Next
+            <ChevronRight className="h-4 w-4" />
+          </button>
+        </div>
+      ) : null}
     </div>
   );
 };

@@ -232,19 +232,32 @@ const deleteItem = async (req, res) => {
   }
 };
 const allItems = async (req, res) => {
-  const { category, date } = req.query;
+  const { category, date, search, status } = req.query;
   const query = {};
   const now = new Date();
   let sortOption = { dateReported: -1 }; // Default to latest
+  const page = Math.max(parseInt(req.query.page, 10) || 1, 1);
+  const limit = Math.min(Math.max(parseInt(req.query.limit, 10) || 12, 1), 50);
+  const skip = (page - 1) * limit;
 
-  // console.log("Received query params:", { category, date }); // Debug log
-
-  // Category filter - ONLY apply if category exists and is not "all"
   if (category && category !== "all") {
     query.category = category;
   }
 
-  // Date handling
+  if (status && ["lost", "found", "returned", "claimed"].includes(status)) {
+    query.status = status;
+  }
+
+  if (search && String(search).trim()) {
+    const q = String(search).trim();
+    query.$or = [
+      { name: { $regex: q, $options: "i" } },
+      { location: { $regex: q, $options: "i" } },
+      { description: { $regex: q, $options: "i" } },
+      { category: { $regex: q, $options: "i" } },
+    ];
+  }
+
   if (date === "last7") {
     const sevenDaysAgo = new Date(now);
     sevenDaysAgo.setDate(now.getDate() - 7);
@@ -256,15 +269,25 @@ const allItems = async (req, res) => {
   } else if (date === "oldest") {
     sortOption = { dateReported: 1 };
   }
-  // 'latest' uses default sort (-1)
 
-  // console.log("Final query:", query); // Debug log
-  // console.log("Sort option:", sortOption); // Debug log
+  const [items, total] = await Promise.all([
+    itemModel.find(query).sort(sortOption).skip(skip).limit(limit),
+    itemModel.countDocuments(query),
+  ]);
 
-  const items = await itemModel.find(query).sort(sortOption);
-  // console.log("Found items:", items.length); // Debug log
+  const totalPages = Math.max(Math.ceil(total / limit), 1);
 
-  res.status(200).json(items);
+  res.status(200).json({
+    items,
+    pagination: {
+      page,
+      limit,
+      total,
+      totalPages,
+      hasNextPage: page < totalPages,
+      hasPrevPage: page > 1,
+    },
+  });
 };
 const lostItems = async (req, res) => {
   const items = await itemModel.find({ status: "lost" });

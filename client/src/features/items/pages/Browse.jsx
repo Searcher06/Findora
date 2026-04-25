@@ -3,7 +3,7 @@ import { SearchBar } from "../components/SearchBar";
 import { TabsBar } from "../components/TabsBar";
 import { ItemsContainer } from "../components/ItemsContainer";
 import ReportButton from "../components/ReportButton.";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Sparkles, SlidersHorizontal } from "lucide-react";
 import { useItemType } from "../context/ItemTypeContext";
 
@@ -14,24 +14,54 @@ const BrowsePage = () => {
     date: "latest",
   });
   const [searchQuery, setSearchQuery] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [page, setPage] = useState(1);
   const [itemsMeta, setItemsMeta] = useState({
     total: 0,
     loading: false,
     error: false,
     view: bar,
+    page: 1,
+    totalPages: 1,
   });
 
   const handleCategoryChange = (category) => {
     setFilters((prev) => ({ ...prev, category }));
+    setPage(1);
   };
 
   const handleDateChange = (date) => {
     setFilters((prev) => ({ ...prev, date }));
+    setPage(1);
   };
 
   const handleSearchChange = (query) => {
     setSearchQuery(query);
+    setPage(1);
   };
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(searchQuery.trim());
+    }, 350);
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
+
+  useEffect(() => {
+    setPage(1);
+  }, [bar]);
+
+  const apiFilters = useMemo(
+    () => ({
+      category: filters.category,
+      date: filters.date,
+      search: debouncedSearch,
+      status: bar,
+      page,
+      limit: 12,
+    }),
+    [filters.category, filters.date, debouncedSearch, bar, page]
+  );
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-sky-50 via-blue-50/40 to-white px-3 pb-12 pt-16 md:px-6 md:pt-20 lg:pt-6">
@@ -90,7 +120,7 @@ const BrowsePage = () => {
             <p className="text-sm text-slate-600">
               {itemsMeta.loading
                 ? "Loading reports..."
-                : `${itemsMeta.total} ${itemsMeta.total === 1 ? "item" : "items"} shown`}
+                : `${itemsMeta.total} ${itemsMeta.total === 1 ? "item" : "items"} found • Page ${itemsMeta.page} of ${itemsMeta.totalPages}`}
             </p>
           </div>
         </div>
@@ -98,9 +128,9 @@ const BrowsePage = () => {
         <div className="mt-4">
           <ItemsContainer
             className=""
-            filters={filters}
-            searchQuery={searchQuery}
+            filters={apiFilters}
             onMetaChange={setItemsMeta}
+            onPageChange={setPage}
           />
         </div>
       </div>

@@ -12,7 +12,15 @@ import {
 } from "../api/itemApi";
 
 export const useItems = (filters = null) => {
-  const [items, setItems] = useState(null);
+  const [items, setItems] = useState([]);
+  const [pagination, setPagination] = useState({
+    page: 1,
+    limit: 12,
+    total: 0,
+    totalPages: 1,
+    hasNextPage: false,
+    hasPrevPage: false,
+  });
   const [item, setItem] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -21,26 +29,50 @@ export const useItems = (filters = null) => {
     const loadItems = async () => {
       try {
         setLoading(true);
-        let data;
-
         if (filters) {
-          // Use filtered items if filters are provided
-          data = await getFilteredItems(filters);
+          const data = await getFilteredItems(filters);
+          setItems(data?.items || []);
+          setPagination(
+            data?.pagination || {
+              page: 1,
+              limit: 12,
+              total: 0,
+              totalPages: 1,
+              hasNextPage: false,
+              hasPrevPage: false,
+            }
+          );
         } else {
-          // Use regular getAllItems if no filters
-          data = await getAllItems();
+          const data = await getAllItems();
+          setItems(data?.items || data || []);
+          setPagination(
+            data?.pagination || {
+              page: 1,
+              limit: 12,
+              total: Array.isArray(data) ? data.length : 0,
+              totalPages: 1,
+              hasNextPage: false,
+              hasPrevPage: false,
+            }
+          );
         }
-
-        setItems(data);
       } catch (error) {
         setError(error.response?.data?.message || "failed to load items");
-        setItems(null);
+        setItems([]);
+        setPagination({
+          page: 1,
+          limit: 12,
+          total: 0,
+          totalPages: 1,
+          hasNextPage: false,
+          hasPrevPage: false,
+        });
       } finally {
         setLoading(false);
       }
     };
     loadItems();
-  }, [filters]);
+  }, [JSON.stringify(filters)]);
 
   const createAnItem = async (itemData) => {
     try {
@@ -132,5 +164,6 @@ export const useItems = (filters = null) => {
     getAll_LostItems,
     getFullItemInfo,
     item,
+    pagination,
   };
 };

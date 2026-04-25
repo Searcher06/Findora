@@ -46,6 +46,22 @@ export const getFilteredItems = async (filters = {}) => {
     params.append("date", filters.date);
   }
 
+  if (filters.search && String(filters.search).trim()) {
+    params.append("search", String(filters.search).trim());
+  }
+
+  if (filters.status) {
+    params.append("status", filters.status);
+  }
+
+  if (filters.page) {
+    params.append("page", String(filters.page));
+  }
+
+  if (filters.limit) {
+    params.append("limit", String(filters.limit));
+  }
+
   const queryString = params.toString();
   const url = queryString ? `/items?${queryString}` : "/items";
 
