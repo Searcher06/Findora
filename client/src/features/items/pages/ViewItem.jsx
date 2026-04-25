@@ -16,7 +16,7 @@ export const ViewItem = () => {
   }
   console.log(item);
   return (
-    <div className="mt-14 flex flex-col">
+    <div className="flex flex-col">
       <DetailedItemCard item={item} />
     </div>
   );

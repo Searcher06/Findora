@@ -126,7 +126,7 @@ export const EditProfilePage = () => {
 
   if (!user) {
     return (
-      <div className="min-h-screen flex items-center justify-center mt-14">
+      <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <User className="w-16 h-16 text-gray-400 mx-auto mb-4" />
           <h2 className="text-xl font-semibold text-gray-700">No User Found</h2>
@@ -137,7 +137,7 @@ export const EditProfilePage = () => {
   }
 
   return (
-    <div className="mt-14 px-4 sm:px-6 max-w-3xl mx-auto pb-8">
+    <div className="px-4 sm:px-6 max-w-3xl mx-auto pb-8">
       {/* Fixed Header with Back Button */}
       <div className="mb-6 sm:mb-8">
         {/* Back button should align properly with content below */}

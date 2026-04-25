@@ -42,7 +42,7 @@ export const UpdateItem = () => {
 
   if (error) {
     return (
-      <div className="mt-14 md:mt-16 flex items-center justify-center min-h-[50vh]">
+      <div className="flex items-center justify-center min-h-[50vh]">
         <div className="text-center px-4">
           <p className="text-red-600 text-sm sm:text-base">Error: {error}</p>
         </div>
@@ -52,7 +52,7 @@ export const UpdateItem = () => {
 
   if (!item) {
     return (
-      <div className="mt-14 md:mt-16 flex items-center justify-center min-h-[50vh]">
+      <div className="flex items-center justify-center min-h-[50vh]">
         <div className="text-center px-4">
           <p className="text-gray-600 text-sm sm:text-base">Item not found</p>
         </div>
@@ -109,7 +109,7 @@ export const UpdateItem = () => {
   };
 
   return (
-    <div className="mt-14 md:mt-16 flex flex-col px-4 sm:px-6 md:px-8 lg:px-12 max-w-4xl mx-auto pb-8">
+    <div className="flex flex-col px-4 sm:px-6 md:px-8 lg:px-12 max-w-4xl mx-auto pb-8">
       {/* Header - Responsive */}
       <h1 className="text-xl sm:text-2xl md:text-[26px] lg:text-3xl font-medium leading-tight font-display mt-3 sm:mt-4 md:mt-5 capitalize">
         Update {itemData?.status} Item

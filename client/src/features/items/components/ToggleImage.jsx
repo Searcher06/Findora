@@ -3,19 +3,21 @@ import { useUploadPhoto } from "../context/UploadPhotoContext";
 const ToggleImage = () => {
   const { on, setOn } = useUploadPhoto();
   return (
-    <div className="flex gap-1.5 items-center">
-      <p className="text-xs font-sans text-gray-500">{on ? "Off" : "On"}</p>
+    <div className="flex items-center gap-2">
+      <p className="text-xs font-semibold text-slate-600">{on ? "On" : "Off"}</p>
       <button
         id="photo"
         name="photo"
-        className={`h-6 w-10  rounded-lg p-1 flex items-center ${
-          on ? "justify-end bg-green-500/40" : "justify-start bg-gray-300"
+        type="button"
+        aria-pressed={on}
+        className={`flex h-7 w-12 items-center rounded-full p-1 transition ${
+          on ? "justify-end bg-emerald-500/60" : "justify-start bg-slate-300"
         }`}
         onClick={() => {
           setOn((prevState) => !prevState);
         }}
       >
-        <div className={`w-[50%] bg-white rounded-full h-full`}></div>
+        <div className="h-full w-1/2 rounded-full bg-white shadow-sm"></div>
       </button>
     </div>
   );

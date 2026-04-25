@@ -5,14 +5,20 @@ const PhotoDisplay = ({ handlePhotoChange, preview }) => {
   // const { preview, handlePhotoChange } = usePhotoUpload(setItemData);
   return (
     on && (
-      <div>
+      <div className="mt-3">
         <div
-          className={`w-full h-42 mt-3 mb-2 flex bg-center bg-cover rounded-md`}
+          className={`mb-3 flex h-48 w-full items-center justify-center overflow-hidden rounded-2xl border border-dashed border-slate-300 bg-slate-100 bg-center bg-cover sm:h-56`}
           style={{
             backgroundImage: `url(${preview ? preview : null})`,
           }}
-        ></div>
-        <label id="photo-upload">
+        >
+          {!preview ? (
+            <p className="px-6 text-center text-sm text-slate-500">
+              Add a clear photo to improve item identification.
+            </p>
+          ) : null}
+        </div>
+        <label htmlFor="photo-upload">
           <input
             type="file"
             accept="image/*"
@@ -20,10 +26,7 @@ const PhotoDisplay = ({ handlePhotoChange, preview }) => {
             id="photo-upload"
             onChange={handlePhotoChange}
           />
-          <span
-            htmlFor="photo-upload"
-            className="text-xs font-sans cursor-pointer border border-gray-300 px-4 py-1  rounded-md font-medium text-gray-700 hover:bg-gray-100 active:scale-95 inline-block"
-          >
+          <span className="inline-flex min-h-10 cursor-pointer items-center rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50">
             Upload new photo
           </span>
         </label>

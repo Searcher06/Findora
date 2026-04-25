@@ -104,7 +104,7 @@ export const ChatSelectionPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 md:bg-white">
-      <div className="w-full bg-white mt-14 md:mt-16">
+      <div className="w-full bg-white">
         {/* Header - Responsive */}
         <div className="flex items-center justify-between px-4 sm:px-5 md:px-6 lg:px-8 pt-2 sm:pt-3 pb-2">
           <button

@@ -16,7 +16,7 @@ const AnswerQuestions = () => {
   } = useFetchRequestById(requestId);
   console.log(questions);
   return (
-    <div className="mt-14 w-full px-4">
+    <div className="w-full px-4">
       <Header className={"text-xl pt-1 text-center line-clamp-1"}>
         Answer Questions
       </Header>

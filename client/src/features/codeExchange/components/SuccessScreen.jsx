@@ -1,7 +1,7 @@
 import { CheckCircle } from "lucide-react";
 
 export const SuccessScreen = ({ request, navigate }) => (
-  <div className="min-h-screen mt-14 bg-linear-to-b from-green-50 to-white text-gray-900 p-4 flex flex-col items-center justify-center">
+  <div className="min-h-screen bg-linear-to-b from-green-50 to-white text-gray-900 p-4 flex flex-col items-center justify-center">
     <div className="mb-5">
       <div className="relative">
         <div className="w-20 h-20 bg-linear-to-br from-green-400 to-green-500 rounded-full flex items-center justify-center">

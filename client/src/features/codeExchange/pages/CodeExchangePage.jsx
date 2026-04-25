@@ -86,7 +86,7 @@ export const CodeExchangePage = () => {
 
   // Original verification UI with enhanced status tracking
   return (
-    <div className="min-h-screen bg-white text-gray-900 p-4 flex flex-col mt-14">
+    <div className="min-h-screen bg-white text-gray-900 p-4 flex flex-col">
       <VerificationHeader
         title="Verify Handover"
         subtitle="Confirm in-person exchange"

@@ -64,7 +64,7 @@ const BrowsePage = () => {
   );
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-sky-50 via-blue-50/40 to-white px-3 pb-12 pt-16 md:px-6 md:pt-20 lg:pt-6">
+    <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-sky-50 via-blue-50/40 to-white px-3 pb-12 pt-3 md:px-6 md:pt-4 lg:pt-6">
       <div className="pointer-events-none absolute -left-24 top-20 h-56 w-56 rounded-full bg-sky-300/25 blur-3xl" />
       <div className="pointer-events-none absolute right-0 top-0 h-72 w-72 rounded-full bg-indigo-300/15 blur-3xl" />
 

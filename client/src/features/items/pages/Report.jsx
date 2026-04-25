@@ -68,30 +68,38 @@ const ReportPage = () => {
   };
 
   return (
-    <div className="mt-14 md:mt-16 flex flex-col px-4 sm:px-6 md:px-8 lg:px-12 max-w-4xl mx-auto pb-8">
-      {/* Header - Responsive */}
-      <h1 className="text-xl sm:text-2xl md:text-[26px] lg:text-3xl font-medium leading-tight font-display mt-3 sm:mt-4 md:mt-5">
-        Report {itemData.status === "lost" ? "Lost" : "Found"} Item
-      </h1>
-      <p className="text-xs sm:text-sm md:text-base font-sans mt-1 sm:mt-2 text-gray-700 leading-relaxed">
-        Provide details to help others identify and{" "}
-        {itemData.status === "lost"
-          ? "return your item safely"
-          : "get their items safely"}
-      </p>
+    <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-sky-50 via-blue-50/40 to-white px-3 pb-10 pt-3 sm:px-5 md:px-8">
+      <div className="pointer-events-none absolute -left-20 top-10 h-52 w-52 rounded-full bg-cyan-300/25 blur-3xl" />
+      <div className="pointer-events-none absolute right-0 top-0 h-64 w-64 rounded-full bg-blue-300/20 blur-3xl" />
 
-      {/* Form - Responsive */}
-      <AddInfo
-        className="mt-4 sm:mt-5 md:mt-6"
-        itemData={itemData}
-        handleInputChange={handleInputChange}
-        setItemData={setItemData}
-        handleSubmit={handleSubmit}
-        loading={loading}
-        postType={postType}
-        handlePhotoChange={handlePhotoChange}
-        preview={preview}
-      />
+      <div className="relative mx-auto w-full max-w-5xl">
+        <section className="rounded-3xl border border-sky-100 bg-[linear-gradient(135deg,#f6fbff_0%,#e9f4ff_52%,#f7f9ff_100%)] px-5 py-7 shadow-[0_35px_90px_-65px_rgba(37,99,235,0.6)] sm:px-8 sm:py-9">
+          <p className="inline-flex items-center rounded-full border border-sky-200 bg-white px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-sky-700">
+            Findora Reporting
+          </p>
+          <h1 className="mt-3 font-display text-2xl font-bold leading-tight text-slate-900 sm:text-3xl md:text-4xl">
+            Report {itemData.status === "lost" ? "Lost" : "Found"} Item
+          </h1>
+          <p className="mt-2 max-w-2xl text-sm text-slate-600 sm:text-base">
+            Provide accurate details so the community can match reports faster and help
+            {itemData.status === "lost"
+              ? " return your item safely."
+              : " connect owners with their property quickly."}
+          </p>
+        </section>
+
+        <AddInfo
+          className="mt-5 sm:mt-6"
+          itemData={itemData}
+          handleInputChange={handleInputChange}
+          setItemData={setItemData}
+          handleSubmit={handleSubmit}
+          loading={loading}
+          postType={postType}
+          handlePhotoChange={handlePhotoChange}
+          preview={preview}
+        />
+      </div>
     </div>
   );
 };

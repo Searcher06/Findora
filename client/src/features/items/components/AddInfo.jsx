@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { useLocation } from "react-router-dom";
-import { SearchX, CheckCircle2 } from "lucide-react";
+import { SearchX, CheckCircle2, MapPin, ClipboardList, Calendar } from "lucide-react";
 import Label from "./Label";
 import ToggleImage from "./ToggleImage";
 import PhotoDisplay from "./PhotoDisplay";
@@ -26,129 +26,149 @@ const AddInfo = ({
     return isUpdateRoute ? "Update Item" : "Post Item";
   };
 
+  const maxDate = new Date().toISOString().split("T")[0];
+
   return (
     <form
-      className={`w-full border rounded-lg sm:rounded-xl border-gray-200 p-4 sm:p-5 md:p-6 overflow-visible ${className}`}
+      className={`w-full overflow-visible rounded-3xl border border-sky-100 bg-white/95 p-4 shadow-[0_30px_90px_-65px_rgba(59,130,246,0.7)] backdrop-blur sm:p-6 md:p-8 ${className}`}
       onSubmit={(event) => event.preventDefault()}
     >
-      {/* Item Type Selector - Stacks vertically on mobile */}
-      <Label text="Item Type" htmlFor="status" />
-      <div className="mb-3 sm:mb-4 flex flex-col sm:flex-row gap-2 w-full sm:p-1.5 bg-linear-to-br from-gray-50 to-gray-100 rounded-xl border border-gray-200">
-        <button
-          type="button"
-          name="status"
-          onClick={() =>
-            handleInputChange({ target: { name: "status", value: "lost" } })
-          }
-          className={`flex-1 h-11 sm:h-12 px-3 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm font-semibold rounded-lg transition-all duration-200 flex items-center justify-center gap-2 sm:gap-2.5 ${
-            itemData.status === "lost"
-              ? "bg-white text-blue-700 shadow-md shadow-blue-100 ring-1 ring-blue-500 scale-[1.02]"
-              : "bg-transparent text-gray-600 hover:text-gray-900 hover:bg-white/50"
-          }`}
-        >
-          <div
-            className={`p-1.5 rounded-md ${
-              itemData.status === "lost" ? "bg-blue-100" : "bg-gray-200"
-            }`}
-          >
-            <SearchX className="w-4 h-4" />
-          </div>
-          <span className="whitespace-nowrap">I Lost an Item</span>
-        </button>
-        <button
-          type="button"
-          name="status"
-          onClick={() =>
-            handleInputChange({ target: { name: "status", value: "found" } })
-          }
-          className={`flex-1 h-11 sm:h-12 px-3 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm font-semibold rounded-lg transition-all duration-200 flex items-center justify-center gap-2 sm:gap-2.5 ${
-            itemData.status === "found"
-              ? "bg-white text-green-700 shadow-md shadow-green-100 ring-1 ring-green-500 scale-[1.02]"
-              : "bg-transparent text-gray-600 hover:text-gray-900 hover:bg-white/50"
-          }`}
-        >
-          <div
-            className={`p-1.5 rounded-md ${
-              itemData.status === "found" ? "bg-green-100" : "bg-gray-200"
-            }`}
-          >
-            <CheckCircle2 className="w-4 h-4" />
-          </div>
-          <span className="whitespace-nowrap">I Found an Item</span>
-        </button>
+      <div className="rounded-2xl border border-sky-100 bg-sky-50/70 p-4 sm:p-5">
+        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-sky-700">Report Details</p>
+        <p className="mt-1 text-sm text-slate-600">
+          Fill in the key details so people can quickly identify the item.
+        </p>
       </div>
 
-      {/* Item Name - Responsive */}
-      <Label text="Item Name" htmlFor="itemName" />
-      <input
-        id="itemName"
-        type="text"
-        name="itemName"
-        placeholder="e.g. Samsung Galaxy S5"
-        className="mb-2 sm:mb-3 p-2 sm:p-2.5 border border-gray-300 outline-0 text-xs sm:text-sm w-full h-8 sm:h-9 rounded-sm focus:ring-2 focus:ring-blue-500 transition-all"
-        value={itemData.itemName}
-        onChange={handleInputChange}
-      />
+      <div className="mt-5">
+        <Label text="Item Type" htmlFor="status" />
+        <div className="mt-2 grid gap-2 sm:grid-cols-2">
+          <button
+            type="button"
+            name="status"
+            onClick={() =>
+              handleInputChange({ target: { name: "status", value: "lost" } })
+            }
+            className={`flex min-h-12 items-center justify-center gap-2 rounded-xl border px-3 py-2 text-sm font-semibold transition ${
+              itemData.status === "lost"
+                ? "border-blue-300 bg-blue-50 text-blue-700 shadow-sm"
+                : "border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50"
+            }`}
+          >
+            <SearchX className="h-4 w-4" />
+            I Lost an Item
+          </button>
+          <button
+            type="button"
+            name="status"
+            onClick={() =>
+              handleInputChange({ target: { name: "status", value: "found" } })
+            }
+            className={`flex min-h-12 items-center justify-center gap-2 rounded-xl border px-3 py-2 text-sm font-semibold transition ${
+              itemData.status === "found"
+                ? "border-emerald-300 bg-emerald-50 text-emerald-700 shadow-sm"
+                : "border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50"
+            }`}
+          >
+            <CheckCircle2 className="h-4 w-4" />
+            I Found an Item
+          </button>
+        </div>
+      </div>
 
-      {/* Category - Responsive */}
-      <Label text="Category" htmlFor="category" />
-      <select
-        name="category"
-        id="category"
-        value={itemData.category}
-        className="mb-2 sm:mb-3 font-sans w-full text-xs sm:text-sm h-8 sm:h-9 block px-2 py-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-        onChange={handleInputChange}
-      >
-        <option value="" disabled>
-          Select category
-        </option>
-        <option value="Electronics">Electronics</option>
-        <option value="Books & Stationary">Books & Stationary</option>
-        <option value="Bags & Accessories">Bags & Accessories</option>
-        <option value="Clothing & Wearables">Clothing & Wearables</option>
-      </select>
+      <div className="mt-5 grid gap-4 sm:gap-5 md:grid-cols-2">
+        <div className="md:col-span-2">
+          <Label text="Item Name" htmlFor="itemName" />
+          <div className="relative mt-2">
+            <ClipboardList className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+            <input
+              id="itemName"
+              type="text"
+              name="itemName"
+              placeholder="e.g. Samsung Galaxy S5"
+              className="h-11 w-full rounded-xl border border-slate-300 bg-white pl-10 pr-3 text-sm text-slate-800 outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-100"
+              value={itemData.itemName}
+              onChange={handleInputChange}
+            />
+          </div>
+        </div>
 
-      {/* Description - Responsive */}
-      <Label text="Description" htmlFor="itemDescription" />
-      <textarea
-        name="itemDescription"
-        id="itemDescription"
-        value={itemData.itemDescription}
-        onChange={handleInputChange}
-        rows={4}
-        placeholder="A dark colored Samsung phone left in the library..."
-        className="mb-2 sm:mb-3 block outline-0 text-xs sm:text-sm font-sans p-2 sm:p-2.5 border border-gray-300 rounded-lg resize-none w-full focus:ring-2 focus:ring-blue-500 transition-all"
-      ></textarea>
+        <div>
+          <Label text="Category" htmlFor="category" />
+          <select
+            name="category"
+            id="category"
+            value={itemData.category}
+            className="mt-2 block h-11 w-full rounded-xl border border-slate-300 bg-white px-3 text-sm text-slate-800 outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-100"
+            onChange={handleInputChange}
+          >
+            <option value="" disabled>
+              Select category
+            </option>
+            <option value="Electronics">Electronics</option>
+            <option value="Books & Stationary">Books & Stationary</option>
+            <option value="Bags & Accessories">Bags & Accessories</option>
+            <option value="Clothing & Wearables">Clothing & Wearables</option>
+            <option value="ID & Cards">ID & Cards</option>
+            <option value="Keys & Locks">Keys & Locks</option>
+            <option value="Documents">Documents</option>
+            <option value="Personal Items">Personal Items</option>
+            <option value="Sports & Equipment">Sports & Equipment</option>
+            <option value="Others">Others</option>
+          </select>
+        </div>
 
-      {/* Location - Responsive */}
-      <Label text="Location" htmlFor="location" />
-      <input
-        type="text"
-        id="location"
-        name="location"
-        value={itemData.location}
-        onChange={handleInputChange}
-        placeholder="e.g. Main library"
-        className="mb-2 sm:mb-3 p-2 sm:p-2.5 border border-gray-300 outline-0 text-xs sm:text-sm w-full h-8 sm:h-9 rounded-sm focus:ring-2 focus:ring-blue-500 transition-all"
-      />
+        <div>
+          <Label
+            text={`${itemData.status === "lost" ? "Date Lost" : "Date Found"}`}
+            htmlFor="dateLostOrFound"
+          />
+          <div className="relative mt-2">
+            <Calendar className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+            <input
+              type="date"
+              name="dateLostOrFound"
+              value={itemData.dateLostOrFound}
+              onChange={handleInputChange}
+              id="dateLostOrFound"
+              max={maxDate}
+              className="block h-11 w-full rounded-xl border border-slate-300 bg-white pl-10 pr-3 text-sm text-slate-800 outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-100"
+            />
+          </div>
+        </div>
 
-      {/* Date - Responsive */}
-      <Label
-        text={`${itemData.status === "lost" ? "Date Lost" : "Date Found"}`}
-        htmlFor="dateLostOrFound"
-      />
-      <input
-        type="date"
-        name="dateLostOrFound"
-        value={itemData.dateLostOrFound}
-        onChange={handleInputChange}
-        id="dateLostOrFound"
-        className="mb-3 sm:mb-4 block p-2 sm:p-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs sm:text-sm w-full transition-all"
-      />
+        <div className="md:col-span-2">
+          <Label text="Description" htmlFor="itemDescription" />
+          <textarea
+            name="itemDescription"
+            id="itemDescription"
+            value={itemData.itemDescription}
+            onChange={handleInputChange}
+            rows={4}
+            placeholder="A dark colored Samsung phone left in the library..."
+            className="mt-2 block w-full resize-none rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-800 outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-100"
+          ></textarea>
+        </div>
 
-      {/* Photo Upload Section */}
-      <div className="w-full flex justify-between items-center mb-2">
-        <Label text="Upload Photo" htmlFor="photo" />
+        <div className="md:col-span-2">
+          <Label text="Location" htmlFor="location" />
+          <div className="relative mt-2">
+            <MapPin className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+            <input
+              type="text"
+              id="location"
+              name="location"
+              value={itemData.location}
+              onChange={handleInputChange}
+              placeholder="e.g. Main library"
+              className="h-11 w-full rounded-xl border border-slate-300 bg-white pl-10 pr-3 text-sm text-slate-800 outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-100"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-5 flex items-center justify-between gap-2 rounded-2xl border border-slate-200 bg-slate-50/70 px-3 py-2.5 sm:px-4">
+        <Label text="Upload Photo" htmlFor="photo-upload" className="mb-0" />
         <ToggleImage />
       </div>
 
@@ -158,9 +178,8 @@ const AddInfo = ({
         preview={preview}
       />
 
-      {/* Submit Button - Responsive */}
       <Button
-        className="text-xs sm:text-sm md:text-base mt-3 sm:mt-4 font-sans mb-2 w-full h-10 sm:h-11"
+        className="mt-5 h-11 w-full rounded-xl bg-slate-900 text-sm font-semibold text-white transition hover:bg-slate-800 sm:h-12 sm:text-base"
         onClick={handleSubmit}
       >
         {loading ? <Spinner /> : null}

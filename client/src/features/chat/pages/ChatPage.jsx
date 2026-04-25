@@ -41,7 +41,7 @@ export const ChatPage = () => {
   return (
     <>
       {/* Mobile & Tablet View (< lg) - Stacked Layout */}
-      <div className="lg:hidden mt-14 flex flex-col h-[calc(100vh-3.5rem)]">
+      <div className="lg:hidden flex flex-col h-[calc(100vh-3.5rem)]">
         {/* Request Detail - Fixed at top */}
         <div className="shrink-0 px-3 sm:px-4">
           <RequestDetail
@@ -75,7 +75,7 @@ export const ChatPage = () => {
       </div>
 
       {/* Desktop View (≥ lg) - Side-by-side Layout */}
-      <div className="hidden lg:flex mt-14 md:mt-16 h-[calc(100vh-4rem)] gap-4 px-4 py-4 bg-gray-50">
+      <div className="hidden lg:flex h-[calc(100vh-4rem)] gap-4 px-4 py-4 bg-gray-50">
         {/* Main Chat Section - Left Side (70%) */}
         <div className="flex-1 flex flex-col bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
           {/* Chat Area */}

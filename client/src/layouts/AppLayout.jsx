@@ -24,7 +24,7 @@ export const AppLayout = () => {
   return (
     <div className="min-h-screen bg-slate-50 lg:pl-72">
       <MainNavbar />
-      <main className="min-h-screen bg-slate-50 flow-root">
+      <main className="min-h-screen bg-slate-50 flow-root pt-14 md:pt-16 lg:pt-0">
         <Outlet />
       </main>
     </div>
