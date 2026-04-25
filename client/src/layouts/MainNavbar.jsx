@@ -5,6 +5,7 @@ import { useChatStore } from "@/store/useChatStore";
 import { useLocation, Link } from "react-router-dom";
 import { useAuthStore } from "@/store/useAuthStore";
 import { Logo } from "../components/logo";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import {
   Menu,
   MessageSquare,
@@ -192,9 +193,14 @@ export const MainNavbar = () => {
                 to="/profile"
                 className={`flex items-center ${isCompactDesktop ? "justify-center" : "gap-3"}`}
               >
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-sky-500 to-blue-600 text-sm font-bold uppercase text-white">
-                  {getDisplayName().slice(0, 1)}
-                </div>
+                <Avatar className="h-10 w-10">
+                  {user?.profilePic ? (
+                    <AvatarImage src={user.profilePic} alt={getDisplayName()} />
+                  ) : null}
+                  <AvatarFallback className="bg-gradient-to-br from-sky-500 to-blue-600 text-sm font-bold uppercase text-white">
+                    {getDisplayName().slice(0, 1)}
+                  </AvatarFallback>
+                </Avatar>
                 {!isCompactDesktop ? (
                   <div className="min-w-0">
                     <p className="truncate text-sm font-semibold">{getDisplayName()}</p>
