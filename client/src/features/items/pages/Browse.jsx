@@ -3,7 +3,7 @@ import { SearchBar } from "../components/SearchBar";
 import { TabsBar } from "../components/TabsBar";
 import { ItemsContainer } from "../components/ItemsContainer";
 import ReportButton from "../components/ReportButton.";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Sparkles, SlidersHorizontal } from "lucide-react";
 import { useItemType } from "../context/ItemTypeContext";
 
@@ -16,6 +16,7 @@ const BrowsePage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [page, setPage] = useState(1);
+  const pageTopRef = useRef(null);
   const [itemsMeta, setItemsMeta] = useState({
     total: 0,
     loading: false,
@@ -51,6 +52,12 @@ const BrowsePage = () => {
     setPage(1);
   }, [bar]);
 
+  useEffect(() => {
+    if (page > 1) {
+      pageTopRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [page]);
+
   const apiFilters = useMemo(
     () => ({
       category: filters.category,
@@ -64,7 +71,10 @@ const BrowsePage = () => {
   );
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-sky-50 via-blue-50/40 to-white px-3 pb-12 pt-3 md:px-6 md:pt-4 lg:pt-6">
+    <div
+      ref={pageTopRef}
+      className="relative min-h-screen overflow-hidden bg-gradient-to-b from-sky-50 via-blue-50/40 to-white px-3 pb-12 pt-3 md:px-6 md:pt-4 lg:pt-6"
+    >
       <div className="pointer-events-none absolute -left-24 top-20 h-56 w-56 rounded-full bg-sky-300/25 blur-3xl" />
       <div className="pointer-events-none absolute right-0 top-0 h-72 w-72 rounded-full bg-indigo-300/15 blur-3xl" />
 
