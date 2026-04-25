@@ -6,23 +6,11 @@ import { useLocation, Link } from "react-router-dom";
 import { useAuthStore } from "@/store/useAuthStore";
 import { Logo } from "../components/logo";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import {
-  Menu,
-  MessageSquare,
-  User,
-  LayoutGrid,
-  PlusIcon,
-  ChevronRight,
-  Bell,
-  ChevronsLeft,
-  ChevronsRight,
-  X,
-} from "lucide-react";
+import { Menu, MessageSquare, User, LayoutGrid, PlusIcon, ChevronRight, Bell, ChevronsLeft, ChevronsRight, X } from "lucide-react";
 import { useItemType } from "@/features/items/context/ItemTypeContext";
 
 export const MainNavbar = () => {
-  const { openSidebar, setOpenSidebar, sidebarMode, setSidebarMode } =
-    useNavContext();
+  const { openSidebar, setOpenSidebar, sidebarMode, setSidebarMode } = useNavContext();
   const { setPostType } = useItemType();
   const location = useLocation();
   const user = useAuthStore((state) => state.user);
@@ -30,22 +18,14 @@ export const MainNavbar = () => {
   const isDesktopHidden = sidebarMode === "hidden";
 
   const pathParts = location.pathname.split("/");
-  const currentChatId = location.pathname.startsWith("/chat/")
-    ? pathParts[2]
-    : null;
+  const currentChatId = location.pathname.startsWith("/chat/") ? pathParts[2] : null;
 
-  const unreadCount = useChatStore((state) =>
-    state.getUnreadCount(currentChatId),
-  );
+  const unreadCount = useChatStore((state) => state.getUnreadCount(currentChatId));
 
-  const isBrowseActive =
-    location.pathname === "/" || location.pathname.startsWith("/items");
-  const isReportActive =
-    location.pathname.startsWith("/report") || location.pathname.startsWith("/update");
-  const isMessageActive =
-    location.pathname.startsWith("/chats") || location.pathname.startsWith("/chat/");
-  const isProfileActive =
-    location.pathname.startsWith("/profile") || location.pathname.startsWith("/change-password");
+  const isBrowseActive = location.pathname === "/" || location.pathname.startsWith("/items");
+  const isReportActive = location.pathname.startsWith("/report") || location.pathname.startsWith("/update");
+  const isMessageActive = location.pathname.startsWith("/chats") || location.pathname.startsWith("/chat/");
+  const isProfileActive = location.pathname.startsWith("/profile") || location.pathname.startsWith("/change-password");
 
   const desktopLinks = [
     {
@@ -106,11 +86,7 @@ export const MainNavbar = () => {
           <div className="pointer-events-none absolute -right-10 -top-8 h-36 w-36 rounded-full bg-sky-200/35 blur-2xl" />
           <div className="pointer-events-none absolute -left-8 bottom-20 h-44 w-44 rounded-full bg-indigo-200/30 blur-3xl" />
 
-          <div
-            className={`relative flex h-full flex-col text-slate-800 ${
-              isCompactDesktop ? "p-3" : "p-5"
-            }`}
-          >
+          <div className={`relative flex h-full flex-col text-slate-800 ${isCompactDesktop ? "p-3" : "p-5"}`}>
             <div className={`flex items-center ${isCompactDesktop ? "justify-center" : "justify-between"}`}>
               <Link to="/" className="inline-flex items-center gap-2">
                 {isCompactDesktop ? (
@@ -157,9 +133,7 @@ export const MainNavbar = () => {
                   title={label}
                   onClick={onClick}
                   className={`group relative flex items-center rounded-xl text-sm font-semibold transition ${
-                    active
-                      ? "bg-white text-slate-900 shadow-lg shadow-sky-900/10"
-                      : "text-slate-600 hover:bg-sky-50"
+                    active ? "bg-white text-slate-900 shadow-lg shadow-sky-900/10" : "text-slate-600 hover:bg-sky-50"
                   } ${isCompactDesktop ? "justify-center px-2 py-3" : "justify-between px-3 py-3"}`}
                 >
                   <span className={`flex items-center ${isCompactDesktop ? "" : "gap-2.5"}`}>
@@ -169,9 +143,7 @@ export const MainNavbar = () => {
                   {!isCompactDesktop ? (
                     <span className="flex items-center gap-2">
                       {badge ? (
-                        <span className="rounded-full bg-blue-600 px-2 py-0.5 text-[10px] font-bold text-white">
-                          {badge}
-                        </span>
+                        <span className="rounded-full bg-blue-600 px-2 py-0.5 text-[10px] font-bold text-white">{badge}</span>
                       ) : null}
                       <ChevronRight className={`h-4 w-4 transition ${active ? "opacity-100" : "opacity-0 group-hover:opacity-100"}`} />
                     </span>
@@ -184,19 +156,10 @@ export const MainNavbar = () => {
               ))}
             </nav>
 
-            <div
-              className={`mt-auto rounded-2xl border border-slate-200 bg-white/85 ${
-                isCompactDesktop ? "p-2" : "p-3"
-              }`}
-            >
-              <Link
-                to="/profile"
-                className={`flex items-center ${isCompactDesktop ? "justify-center" : "gap-3"}`}
-              >
+            <div className={`mt-auto rounded-2xl border border-slate-200 bg-white/85 ${isCompactDesktop ? "p-2" : "p-3"}`}>
+              <Link to="/profile" className={`flex items-center ${isCompactDesktop ? "justify-center" : "gap-3"}`}>
                 <Avatar className="h-10 w-10">
-                  {user?.profilePic ? (
-                    <AvatarImage src={user.profilePic} alt={getDisplayName()} />
-                  ) : null}
+                  {user?.profilePic ? <AvatarImage src={user.profilePic} alt={getDisplayName()} /> : null}
                   <AvatarFallback className="bg-gradient-to-br from-sky-500 to-blue-600 text-sm font-bold uppercase text-white">
                     {getDisplayName().slice(0, 1)}
                   </AvatarFallback>
