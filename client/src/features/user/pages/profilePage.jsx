@@ -1,39 +1,147 @@
-/* eslint-disable no-unused-vars */
-import React, { useState } from "react";
-import { User, Mail, Calendar, GraduationCap, BookOpen, Shield, Loader2, Edit2, Plus, LogOut } from "lucide-react";
+import { useMemo } from "react";
+import {
+  User,
+  Mail,
+  Calendar,
+  GraduationCap,
+  BookOpen,
+  Shield,
+  Loader2,
+  Edit2,
+  Plus,
+  LogOut,
+  KeyRound,
+} from "lucide-react";
 import { useAuthStore } from "@/store/useAuthStore";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+
+const FieldCard = ({
+  icon: Icon,
+  label,
+  value,
+  helper,
+  tone = "blue",
+  isEmpty = false,
+  onEmptyAction,
+}) => {
+  const tones = {
+    blue: {
+      dot: "bg-blue-500",
+      icon: "text-blue-700",
+      iconBg: "bg-blue-100",
+      hover: "hover:border-blue-200",
+    },
+    emerald: {
+      dot: "bg-emerald-500",
+      icon: "text-emerald-700",
+      iconBg: "bg-emerald-100",
+      hover: "hover:border-emerald-200",
+    },
+    violet: {
+      dot: "bg-violet-500",
+      icon: "text-violet-700",
+      iconBg: "bg-violet-100",
+      hover: "hover:border-violet-200",
+    },
+    slate: {
+      dot: "bg-slate-500",
+      icon: "text-slate-700",
+      iconBg: "bg-slate-100",
+      hover: "hover:border-slate-300",
+    },
+    amber: {
+      dot: "bg-amber-500",
+      icon: "text-amber-700",
+      iconBg: "bg-amber-100",
+      hover: "hover:border-amber-200",
+    },
+  };
+
+  const style = tones[tone] || tones.blue;
+
+  if (isEmpty) {
+    return (
+      <button
+        type="button"
+        onClick={onEmptyAction}
+        className="w-full rounded-2xl border-2 border-dashed border-slate-300 bg-white p-4 text-left transition hover:border-blue-300 hover:bg-blue-50/40"
+      >
+        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">
+          {label}
+        </p>
+        <div className="mt-3 flex items-center gap-3">
+          <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-slate-100 text-slate-500">
+            <Plus className="h-4 w-4" />
+          </span>
+          <div>
+            <p className="text-sm font-semibold text-slate-700">Add {label}</p>
+            <p className="text-xs text-slate-500">Tap to complete your profile.</p>
+          </div>
+        </div>
+      </button>
+    );
+  }
+
+  return (
+    <div className={`rounded-2xl border border-slate-200 bg-white p-4 transition ${style.hover}`}>
+      <div className="flex items-center gap-2">
+        <span className={`h-2 w-2 rounded-full ${style.dot}`} />
+        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">
+          {label}
+        </p>
+      </div>
+      <div className="mt-3 flex items-center gap-3">
+        <span className={`inline-flex h-9 w-9 items-center justify-center rounded-lg ${style.iconBg}`}>
+          <Icon className={`h-4 w-4 ${style.icon}`} />
+        </span>
+        <div className="min-w-0">
+          <p className="truncate text-sm font-semibold text-slate-900">{value}</p>
+          {helper ? <p className="mt-0.5 text-xs text-slate-500">{helper}</p> : null}
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export function ProfilePage() {
   const navigate = useNavigate();
   const user = useAuthStore((state) => state.user);
   const isCheckingAuth = useAuthStore((state) => state.isCheckingAuth);
   const logOut = useAuthStore((state) => state.logOut);
-  const [isEditing, setIsEditing] = useState(false);
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleDateString("en-US", { month: "long", year: "numeric" });
   };
 
-  const calculateMembershipDuration = (dateString) => {
+  const membershipDuration = (dateString) => {
     const created = new Date(dateString);
     const now = new Date();
-    const diffTime = Math.abs(now - created);
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    const diffDays = Math.max(
+      Math.ceil((Math.abs(now - created) / (1000 * 60 * 60 * 24))),
+      0
+    );
     const years = Math.floor(diffDays / 365);
     const months = Math.floor((diffDays % 365) / 30);
 
     if (years > 0) {
-      return `${years} year${years > 1 ? "s" : ""}, ${months} month${months !== 1 ? "s" : ""}`;
+      return `${years} year${years > 1 ? "s" : ""}, ${months} month${months === 1 ? "" : "s"}`;
     }
-    return `${months} month${months !== 1 ? "s" : ""}`;
+    return `${months} month${months === 1 ? "" : "s"}`;
   };
 
-  const handleEditClick = () => {
-    setIsEditing(true);
-    navigate("/profile/edit");
-  };
+  const accountName = useMemo(() => {
+    if (!user) return "";
+    const joined = `${user.firstName || ""} ${user.lastName || ""}`.trim();
+    return joined || user.username || "User";
+  }, [user]);
+
+  const accountUsername = useMemo(() => {
+    if (!user) return "";
+    return user.displayUsername || user.username || "user";
+  }, [user]);
+
+  const handleEditClick = () => navigate("/profile/edit");
 
   const handleLogout = async () => {
     await logOut();
@@ -42,263 +150,167 @@ export function ProfilePage() {
 
   if (isCheckingAuth) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <Loader2 className="w-12 h-12 animate-spin text-blue-500" />
+      <div className="flex min-h-screen items-center justify-center bg-slate-50">
+        <Loader2 className="h-12 w-12 animate-spin text-blue-500" />
       </div>
     );
   }
 
-  const InfoCard = ({ icon: Icon, title, value, subtitle, color, isEmpty, onAdd }) => {
-    if (isEmpty) {
-      return (
-        <div
-          onClick={onAdd}
-          className="group bg-white rounded-xl border-2 border-dashed border-gray-300 p-4 sm:p-5 hover:border-blue-400 hover:bg-blue-50/30 transition-all duration-200 cursor-pointer"
-        >
-          <div className="flex items-center gap-2 mb-2 sm:mb-3">
-            <div className="w-2 h-2 rounded-full bg-gray-300"></div>
-            <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">{title}</h4>
-          </div>
-          <div className="flex items-center gap-3 sm:gap-4">
-            <div className="p-2 sm:p-2.5 bg-gray-100 rounded-lg shrink-0">
-              <Plus className="w-4 h-4 text-gray-400" />
-            </div>
-            <div>
-              <p className="text-sm font-medium text-gray-500">Add {title}</p>
-              <p className="text-gray-400 text-xs mt-0.5">Click to add information</p>
-            </div>
-          </div>
-        </div>
-      );
-    }
-
-    const colorMap = {
-      blue: {
-        border: "border-blue-200",
-        dot: "bg-blue-500",
-        bg: "bg-blue-50",
-        icon: "text-blue-600",
-      },
-      green: {
-        border: "border-green-200",
-        dot: "bg-green-500",
-        bg: "bg-green-50",
-        icon: "text-green-600",
-      },
-      purple: {
-        border: "border-purple-200",
-        dot: "bg-purple-500",
-        bg: "bg-purple-50",
-        icon: "text-purple-600",
-      },
-    };
-
-    const colors = colorMap[color] || colorMap.blue;
-
-    return (
-      <div
-        className={`group bg-white rounded-xl border border-gray-200 p-4 sm:p-5 hover:shadow-md transition-all duration-200 hover:${colors.border}`}
-      >
-        <div className="flex items-center gap-2 mb-2 sm:mb-3">
-          <div className={`w-2 h-2 rounded-full ${colors.dot}`}></div>
-          <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">{title}</h4>
-        </div>
-        <div className="flex items-center gap-3 sm:gap-4">
-          <div className={`p-2 sm:p-2.5 ${colors.bg} rounded-lg shadow-sm shrink-0`}>
-            <Icon className={`w-4 h-4 ${colors.icon}`} />
-          </div>
-          <div className="min-w-0 flex-1">
-            <p className="text-sm font-semibold text-gray-900 truncate">{value}</p>
-            {subtitle && <p className="text-gray-400 text-xs mt-0.5">{subtitle}</p>}
-          </div>
-        </div>
-      </div>
-    );
-  };
-
   if (!user) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="flex min-h-screen items-center justify-center bg-slate-50 px-4">
         <div className="text-center">
-          <User className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-          <h2 className="text-xl font-semibold text-gray-700">No User Found</h2>
-          <p className="text-gray-500 mt-2">Please log in to continue</p>
+          <User className="mx-auto mb-4 h-16 w-16 text-slate-400" />
+          <h2 className="text-xl font-semibold text-slate-700">No User Found</h2>
+          <p className="mt-2 text-slate-500">Please log in to continue.</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-4 sm:py-8 mt-12">
-      <div className="px-4 sm:px-6 max-w-5xl mx-auto">
-        {/* Header */}
-        <div className="mb-6 sm:mb-8">
-          <div className="inline-flex items-center gap-2 mb-2">
-            <div className="w-6 sm:w-8 h-1 bg-linear-to-r from-blue-500 to-indigo-500 rounded-full"></div>
-            <h1 className="text-xl sm:text-2xl font-bold text-gray-900 tracking-tight">Profile</h1>
-          </div>
-          <p className="text-gray-500 text-xs sm:text-sm">Personal information and academic details</p>
-        </div>
+    <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-sky-50 via-blue-50/35 to-white px-3 pb-10 pt-3 sm:px-5 md:px-6">
+      <div className="pointer-events-none absolute -left-20 top-10 h-56 w-56 rounded-full bg-sky-300/20 blur-3xl" />
+      <div className="pointer-events-none absolute right-0 top-0 h-64 w-64 rounded-full bg-indigo-200/20 blur-3xl" />
 
-        {/* User Card */}
-        <div className="mb-6 sm:mb-8 bg-linear-to-br from-white to-gray-50 rounded-xl sm:rounded-2xl border border-gray-100 p-4 sm:p-6 shadow-sm">
-          <div className="flex items-center gap-3 sm:gap-4">
-            <div className="relative">
-              <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-linear-to-br from-blue-500 to-indigo-500 p-0.5">
-                <div className="w-full h-full rounded-full bg-white flex items-center justify-center overflow-hidden">
+      <div className="relative mx-auto w-full max-w-6xl">
+        <section className="rounded-3xl border border-sky-100 bg-[linear-gradient(135deg,#f8fbff_0%,#eef5ff_54%,#f7f9ff_100%)] px-4 py-5 shadow-[0_35px_90px_-70px_rgba(37,99,235,0.6)] sm:px-6 sm:py-6">
+          <p className="inline-flex rounded-full border border-sky-200 bg-white px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-sky-700">
+            Findora Profile
+          </p>
+          <h1 className="mt-3 font-display text-2xl font-bold text-slate-900 sm:text-3xl">
+            Your Account
+          </h1>
+          <p className="mt-1 text-sm text-slate-600">
+            Manage your profile details and security settings.
+          </p>
+        </section>
+
+        <section className="mt-4 rounded-3xl border border-slate-200/80 bg-white/90 p-4 shadow-[0_30px_90px_-75px_rgba(15,23,42,0.8)] sm:p-5">
+          <div className="flex items-center gap-4">
+            <div className="relative shrink-0">
+              <div className="h-16 w-16 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 p-0.5 sm:h-20 sm:w-20">
+                <div className="flex h-full w-full items-center justify-center overflow-hidden rounded-full bg-white">
                   {user.profilePic ? (
-                    <img src={user.profilePic} alt="Profile" className="w-full h-full rounded-full object-cover" />
+                    <img
+                      src={user.profilePic}
+                      alt="Profile"
+                      className="h-full w-full object-cover"
+                    />
                   ) : (
-                    <User className="w-6 h-6 sm:w-7 sm:h-7 text-indigo-600" />
+                    <User className="h-8 w-8 text-indigo-600 sm:h-9 sm:w-9" />
                   )}
                 </div>
               </div>
-              <div className="absolute -bottom-1 -right-1 w-5 h-5 sm:w-6 sm:h-6 bg-blue-500 rounded-full border-2 border-white flex items-center justify-center">
-                <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-white rounded-full"></div>
-              </div>
+              <span className="absolute -bottom-1 -right-1 inline-flex h-5 w-5 items-center justify-center rounded-full border-2 border-white bg-blue-600">
+                <span className="h-2 w-2 rounded-full bg-white" />
+              </span>
             </div>
-            <div className="flex-1 min-w-0">
-              <h2 className="text-lg sm:text-xl font-semibold text-gray-900 truncate">{`${user.firstName} ${user.lastName}`}</h2>
-              <p className="text-gray-500 text-xs sm:text-sm font-medium truncate">{`@${user.displayUsername}`}</p>
-            </div>
-            <div className="hidden sm:block text-xs font-medium text-blue-600 bg-blue-50 px-3 py-1.5 rounded-full capitalize shrink-0">
-              {user.role} Account
-            </div>
-          </div>
-          {/* Mobile role badge */}
-          <div className="sm:hidden mt-3 pt-3 border-t border-gray-100">
-            <div className="inline-block text-xs font-medium text-blue-600 bg-blue-50 px-3 py-1.5 rounded-full capitalize">
-              {user.role} Account
-            </div>
-          </div>
-        </div>
 
-        {/* Info Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
-          {/* ACADEMIC INFO Section */}
-          <div className="space-y-4 sm:space-y-5">
-            <div className="flex items-center gap-2 sm:gap-3 px-1">
-              <div className="p-2 sm:p-2.5 bg-linear-to-br from-blue-500 to-blue-600 rounded-lg sm:rounded-xl shadow-sm">
-                <GraduationCap className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
-              </div>
+            <div className="min-w-0 flex-1">
+              <h2 className="truncate font-display text-xl font-bold text-slate-900 sm:text-2xl">
+                {accountName}
+              </h2>
+              <p className="truncate text-sm text-slate-500">@{accountUsername}</p>
+              <span className="mt-2 inline-flex rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold capitalize text-blue-700">
+                {user.role} account
+              </span>
+            </div>
+          </div>
+        </section>
+
+        <section className="mt-4 grid gap-4 lg:grid-cols-2">
+          <div className="space-y-3 rounded-3xl border border-slate-200/80 bg-white/90 p-4 shadow-[0_30px_90px_-75px_rgba(15,23,42,0.8)] sm:p-5">
+            <div className="flex items-center gap-2">
+              <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-blue-100 text-blue-700">
+                <GraduationCap className="h-4 w-4" />
+              </span>
               <div>
-                <h3 className="text-base sm:text-lg font-semibold text-gray-900">Academic Info</h3>
-                <p className="text-gray-400 text-xs mt-0.5">University department & role</p>
+                <h3 className="font-display text-lg font-semibold text-slate-900">Academic Info</h3>
+                <p className="text-xs text-slate-500">Department and faculty details</p>
               </div>
             </div>
 
-            <div className="space-y-3 sm:space-y-4">
-              <InfoCard
-                icon={BookOpen}
-                title="Department"
-                value={user.department}
-                subtitle="Department Information"
-                color="blue"
-                isEmpty={!user.department || user.department === ""}
-                onAdd={handleEditClick}
-              />
-
-              <InfoCard
-                icon={GraduationCap}
-                title="Faculty"
-                value={user.foculty}
-                subtitle="Faculty Information"
-                color="green"
-                isEmpty={!user.foculty || user.foculty === ""}
-                onAdd={handleEditClick}
-              />
-
-              <InfoCard
-                icon={Shield}
-                title="Role"
-                value={user.role.charAt(0).toUpperCase() + user.role.slice(1)}
-                subtitle={`${user.role === "student" ? "Undergraduate" : "Academic"} Member`}
-                color="purple"
-                isEmpty={false}
-              />
-            </div>
+            <FieldCard
+              icon={BookOpen}
+              label="Department"
+              value={user.department}
+              helper="Department information"
+              tone="blue"
+              isEmpty={!user.department}
+              onEmptyAction={handleEditClick}
+            />
+            <FieldCard
+              icon={GraduationCap}
+              label="Faculty"
+              value={user.foculty}
+              helper="Faculty information"
+              tone="emerald"
+              isEmpty={!user.foculty}
+              onEmptyAction={handleEditClick}
+            />
+            <FieldCard
+              icon={Shield}
+              label="Role"
+              value={user.role?.charAt(0).toUpperCase() + user.role?.slice(1)}
+              helper={user.role === "student" ? "Undergraduate member" : "Academic member"}
+              tone="violet"
+            />
           </div>
 
-          {/* ACCOUNT DETAILS Section */}
-          <div className="space-y-4 sm:space-y-5">
-            <div className="flex items-center gap-2 sm:gap-3 px-1">
-              <div className="p-2 sm:p-2.5 bg-linear-to-br from-gray-700 to-gray-900 rounded-lg sm:rounded-xl shadow-sm">
-                <User className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
-              </div>
+          <div className="space-y-3 rounded-3xl border border-slate-200/80 bg-white/90 p-4 shadow-[0_30px_90px_-75px_rgba(15,23,42,0.8)] sm:p-5">
+            <div className="flex items-center gap-2">
+              <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-slate-100 text-slate-700">
+                <User className="h-4 w-4" />
+              </span>
               <div>
-                <h3 className="text-base sm:text-lg font-semibold text-gray-900">Account Details</h3>
-                <p className="text-gray-400 text-xs mt-0.5">Personal account information</p>
+                <h3 className="font-display text-lg font-semibold text-slate-900">Account Details</h3>
+                <p className="text-xs text-slate-500">Personal and membership info</p>
               </div>
             </div>
 
-            <div className="space-y-3 sm:space-y-4">
-              <div className="group bg-white rounded-xl border border-gray-200 p-4 sm:p-5 hover:shadow-md transition-all duration-200 hover:border-gray-300">
-                <div className="flex items-center gap-2 mb-2 sm:mb-3">
-                  <div className="w-2 h-2 rounded-full bg-linear-to-r from-gray-600 to-gray-800"></div>
-                  <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Email</h4>
-                </div>
-                <div className="flex items-center gap-3 sm:gap-4">
-                  <div className="p-2 sm:p-2.5 bg-linear-to-br from-gray-50 to-gray-100 rounded-lg shadow-sm shrink-0">
-                    <Mail className="w-4 h-4 text-gray-600" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-semibold text-gray-900 truncate">{user.email}</p>
-                    <p className="text-gray-400 text-xs mt-0.5">Primary email address</p>
-                  </div>
-                </div>
-              </div>
+            <FieldCard
+              icon={Mail}
+              label="Email"
+              value={user.email}
+              helper="Primary email address"
+              tone="slate"
+            />
+            <FieldCard
+              icon={Calendar}
+              label="Member Since"
+              value={formatDate(user.createdAt)}
+              helper={membershipDuration(user.createdAt)}
+              tone="amber"
+            />
 
-              <div className="group bg-white rounded-xl border border-gray-200 p-4 sm:p-5 hover:shadow-md transition-all duration-200 hover:border-orange-200">
-                <div className="flex items-center gap-2 mb-2 sm:mb-3">
-                  <div className="w-2 h-2 rounded-full bg-linear-to-r from-orange-500 to-amber-500"></div>
-                  <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Member Since</h4>
-                </div>
-                <div className="flex items-center gap-3 sm:gap-4">
-                  <div className="p-2 sm:p-2.5 bg-linear-to-br from-orange-50 to-amber-100 rounded-lg shadow-sm shrink-0">
-                    <Calendar className="w-4 h-4 text-orange-600" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-semibold text-gray-900">{formatDate(user.createdAt)}</p>
-                    <p className="text-gray-400 text-xs mt-0.5">{calculateMembershipDuration(user.createdAt)}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Edit and Logout buttons */}
-            <div className="pt-2 sm:pt-4 space-y-3">
+            <div className="space-y-2 pt-2">
               <button
                 onClick={handleEditClick}
-                className="w-full group relative overflow-hidden bg-linear-to-r from-blue-600 to-indigo-600 text-white text-sm font-semibold py-2.5 sm:py-3 px-4 rounded-lg sm:rounded-xl hover:shadow-lg transition-all duration-300 hover:from-blue-700 hover:to-indigo-700"
+                className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-slate-900 px-4 text-sm font-semibold text-white transition hover:bg-slate-800"
               >
-                <span className="relative z-10 flex items-center justify-center gap-2">
-                  <Edit2 className="w-4 h-4" />
-                  Edit Profile Settings
-                  <svg
-                    className="w-4 h-4 group-hover:translate-x-1 transition-transform"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                  </svg>
-                </span>
-                <div className="absolute inset-0 bg-linear-to-r from-blue-700 to-indigo-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <Edit2 className="h-4 w-4" />
+                Edit Profile
               </button>
+
+              <Link
+                to="/change-password"
+                className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
+              >
+                <KeyRound className="h-4 w-4" />
+                Change Password
+              </Link>
 
               <button
                 onClick={handleLogout}
-                className="w-full group relative overflow-hidden bg-linear-to-r from-red-500 to-red-600 text-white text-sm font-semibold py-2.5 sm:py-3 px-4 rounded-lg sm:rounded-xl hover:shadow-lg transition-all duration-300 hover:from-red-600 hover:to-red-700"
+                className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-red-600 px-4 text-sm font-semibold text-white transition hover:bg-red-700"
               >
-                <span className="relative z-10 flex items-center justify-center gap-2">
-                  <LogOut className="w-4 h-4" />
-                  Logout
-                </span>
-                <div className="absolute inset-0 bg-linear-to-r from-red-600 to-red-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <LogOut className="h-4 w-4" />
+                Logout
               </button>
             </div>
           </div>
-        </div>
+        </section>
       </div>
     </div>
   );
