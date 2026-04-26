@@ -6,26 +6,37 @@ import { useNavigate } from "react-router-dom";
 import { DeleteItemButton, RequestButton } from "./AlertDialogBox";
 import { createFlag } from "@/features/flags/services/flagApi";
 import { toast } from "react-toastify";
+import { useState } from "react";
 
 export const DetailedItemCard = ({ item }) => {
   const navigate = useNavigate();
   const { user } = useAuthStore();
   const { status, reportedBy, _id, name, image } = item;
   const isOwner = user?._id === reportedBy?._id;
+  const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+  const [reportReason, setReportReason] = useState("");
+  const [isSubmittingReport, setIsSubmittingReport] = useState(false);
 
   const handleReportItem = async () => {
-    const reason = window.prompt("Why are you reporting this item?");
-    if (!reason || !reason.trim()) return;
+    if (!reportReason.trim()) {
+      toast.error("Please add a reason before submitting.");
+      return;
+    }
 
     try {
+      setIsSubmittingReport(true);
       await createFlag({
         targetType: "item",
         targetId: _id,
-        reason: reason.trim(),
+        reason: reportReason.trim(),
       });
       toast.success("Report submitted. Admin will review it.");
+      setIsReportModalOpen(false);
+      setReportReason("");
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to submit report");
+    } finally {
+      setIsSubmittingReport(false);
     }
   };
 
@@ -73,7 +84,7 @@ export const DetailedItemCard = ({ item }) => {
               />
               <Button
                 type="button"
-                onClick={handleReportItem}
+                onClick={() => setIsReportModalOpen(true)}
                 className="rounded-lg sm:rounded-xl font-medium text-sm px-5 sm:px-6 py-2 sm:py-2.5 h-10 sm:h-11 flex items-center justify-center active:scale-95 transition-all bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 shadow-sm hover:shadow-md"
               >
                 Report Item
@@ -130,7 +141,7 @@ export const DetailedItemCard = ({ item }) => {
                 />
                 <Button
                   type="button"
-                  onClick={handleReportItem}
+                  onClick={() => setIsReportModalOpen(true)}
                   className="w-full rounded-xl font-medium text-sm xl:text-base active:scale-95 transition-all px-5 py-2.5 h-10 xl:h-11 flex items-center justify-center bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 shadow-sm hover:shadow-md"
                 >
                   Report Item
@@ -149,6 +160,47 @@ export const DetailedItemCard = ({ item }) => {
           <ItemInfo item={item} layoutMode="detailed" />
         </div>
       </div>
+
+      {isReportModalOpen ? (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/55 px-4">
+          <div className="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-5 shadow-2xl">
+            <h3 className="font-display text-xl font-bold text-slate-900">
+              Report This Item
+            </h3>
+            <p className="mt-1 text-sm text-slate-600">
+              Tell us what seems wrong. Admins will review this report.
+            </p>
+            <textarea
+              value={reportReason}
+              onChange={(e) => setReportReason(e.target.value)}
+              rows={4}
+              placeholder="Example: This item appears fraudulent or contains misleading details."
+              className="mt-4 w-full rounded-xl border border-slate-200 px-3 py-2.5 text-sm text-slate-700 outline-none transition focus:border-blue-300 focus:ring-2 focus:ring-blue-100"
+            />
+            <div className="mt-4 flex items-center justify-end gap-2">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => {
+                  if (isSubmittingReport) return;
+                  setIsReportModalOpen(false);
+                  setReportReason("");
+                }}
+              >
+                Cancel
+              </Button>
+              <Button
+                type="button"
+                onClick={handleReportItem}
+                disabled={isSubmittingReport}
+                className="bg-blue-600 text-white hover:bg-blue-700"
+              >
+                {isSubmittingReport ? "Submitting..." : "Submit Report"}
+              </Button>
+            </div>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 };
