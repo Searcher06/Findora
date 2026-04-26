@@ -26,6 +26,11 @@ export const authMiddleWare = async (req, res, next) => {
       throw new Error("Not authorized, user not found");
     }
 
+    if (user.isSuspended) {
+      res.status(403);
+      throw new Error("Your account has been suspended");
+    }
+
     if ((decodedToken.tokenVersion || 0) !== (user.tokenVersion || 0)) {
       res.status(401);
       throw new Error("Session expired. Please login again");
@@ -36,6 +41,9 @@ export const authMiddleWare = async (req, res, next) => {
     next();
   } catch (error) {
     console.log(error);
+    if (res.statusCode !== 200) {
+      throw error;
+    }
     res.status(401);
     throw new Error("Not authorized, token failed");
   }

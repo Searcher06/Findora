@@ -9,6 +9,11 @@ const claimItem = async (req, res) => {
   const item = await itemModel.findById(itemId);
   const finderId = item.reportedBy;
 
+  if (item.isHidden) {
+    res.status(403);
+    throw new Error("This item is not available for requests");
+  }
+
   // Check if request already exists
   const requestExist = await requestModel.findOne({
     claimerId: userID,
@@ -66,6 +71,11 @@ const sendFoundRequest = async (req, res) => {
   const { id: itemId } = req.item;
   const item = await itemModel.findById(itemId);
   const claimerId = item.reportedBy;
+
+  if (item.isHidden) {
+    res.status(403);
+    throw new Error("This item is not available for requests");
+  }
 
   const requestExists = await requestModel.findOne({
     itemId,
@@ -156,6 +166,11 @@ const acceptClaim = async (req, res) => {
   const item = await itemModel.findById(itemId);
   let finderCode = "";
   let claimerCode = "";
+
+  if (request.status !== "pending") {
+    res.status(400);
+    throw new Error("Only pending requests can be accepted");
+  }
 
   item.status = "claimed";
   request.status = "accepted";

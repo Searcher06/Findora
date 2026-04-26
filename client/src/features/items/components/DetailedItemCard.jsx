@@ -4,11 +4,30 @@ import { ItemInfo } from "./ItemInfo";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useNavigate } from "react-router-dom";
 import { DeleteItemButton, RequestButton } from "./AlertDialogBox";
+import { createFlag } from "@/features/flags/services/flagApi";
+import { toast } from "react-toastify";
 
 export const DetailedItemCard = ({ item }) => {
   const navigate = useNavigate();
   const { user } = useAuthStore();
   const { status, reportedBy, _id, name, image } = item;
+  const isOwner = user?._id === reportedBy?._id;
+
+  const handleReportItem = async () => {
+    const reason = window.prompt("Why are you reporting this item?");
+    if (!reason || !reason.trim()) return;
+
+    try {
+      await createFlag({
+        targetType: "item",
+        targetId: _id,
+        reason: reason.trim(),
+      });
+      toast.success("Report submitted. Admin will review it.");
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Failed to submit report");
+    }
+  };
 
   return (
     <div className="w-full px-3 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-10">
@@ -30,7 +49,7 @@ export const DetailedItemCard = ({ item }) => {
 
         {/* Action Buttons */}
         <div className="w-full flex justify-center px-3">
-          {user?._id === reportedBy?._id ? (
+          {isOwner ? (
             <div className="flex gap-2 sm:gap-3 w-auto items-center">
               <DeleteItemButton
                 itemId={_id}
@@ -45,12 +64,21 @@ export const DetailedItemCard = ({ item }) => {
               </Button>
             </div>
           ) : (
-            <RequestButton
-              itemId={_id}
-              itemName={name}
-              status={status}
-              className="rounded-lg sm:rounded-xl font-medium text-sm px-6 sm:px-8 py-2 sm:py-2.5 h-10 sm:h-11 flex items-center justify-center active:scale-95 transition-all bg-blue-600 hover:bg-blue-700 shadow-sm hover:shadow-md"
-            />
+            <div className="flex flex-wrap justify-center gap-2 sm:gap-3">
+              <RequestButton
+                itemId={_id}
+                itemName={name}
+                status={status}
+                className="rounded-lg sm:rounded-xl font-medium text-sm px-6 sm:px-8 py-2 sm:py-2.5 h-10 sm:h-11 flex items-center justify-center active:scale-95 transition-all bg-blue-600 hover:bg-blue-700 shadow-sm hover:shadow-md"
+              />
+              <Button
+                type="button"
+                onClick={handleReportItem}
+                className="rounded-lg sm:rounded-xl font-medium text-sm px-5 sm:px-6 py-2 sm:py-2.5 h-10 sm:h-11 flex items-center justify-center active:scale-95 transition-all bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 shadow-sm hover:shadow-md"
+              >
+                Report Item
+              </Button>
+            </div>
           )}
         </div>
 
@@ -78,7 +106,7 @@ export const DetailedItemCard = ({ item }) => {
 
           {/* Action Buttons */}
           <div className="flex flex-col gap-2.5 w-full">
-            {user?._id === reportedBy?._id ? (
+            {isOwner ? (
               <>
                 <DeleteItemButton
                   itemId={_id}
@@ -93,12 +121,21 @@ export const DetailedItemCard = ({ item }) => {
                 </Button>
               </>
             ) : (
-              <RequestButton
-                itemId={_id}
-                itemName={name}
-                status={status}
-                className="w-full rounded-xl font-medium text-sm xl:text-base active:scale-95 transition-all px-5 py-2.5 h-10 xl:h-11 flex items-center justify-center bg-blue-600 hover:bg-blue-700 shadow-sm hover:shadow-md"
-              />
+              <>
+                <RequestButton
+                  itemId={_id}
+                  itemName={name}
+                  status={status}
+                  className="w-full rounded-xl font-medium text-sm xl:text-base active:scale-95 transition-all px-5 py-2.5 h-10 xl:h-11 flex items-center justify-center bg-blue-600 hover:bg-blue-700 shadow-sm hover:shadow-md"
+                />
+                <Button
+                  type="button"
+                  onClick={handleReportItem}
+                  className="w-full rounded-xl font-medium text-sm xl:text-base active:scale-95 transition-all px-5 py-2.5 h-10 xl:h-11 flex items-center justify-center bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 shadow-sm hover:shadow-md"
+                >
+                  Report Item
+                </Button>
+              </>
             )}
           </div>
 

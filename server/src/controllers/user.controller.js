@@ -135,6 +135,11 @@ const login = async (req, res) => {
   }
 
   let user = await userModel.findOne({ email });
+  if (user && user.isSuspended) {
+    res.status(403);
+    throw new Error("Your account has been suspended");
+  }
+
   if (user && (await bcrypt.compare(password, user.password))) {
     generateToken(user, res);
     res.status(200).json(sanitizeUser(user));

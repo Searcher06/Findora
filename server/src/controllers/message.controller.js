@@ -76,6 +76,11 @@ const sendMessage = async (req, res) => {
     throw new Error("Request not found");
   }
 
+  if (requestDoc.status === "closed") {
+    res.status(403);
+    throw new Error("This chat has been closed by admin");
+  }
+
   const isFinder = requestDoc.finderId.toString() === userId;
   const senderSeenField = isFinder ? "lastSeen.finder" : "lastSeen.claimer";
 
@@ -130,6 +135,11 @@ const getAllMessages = async (req, res) => {
   if (!request) {
     res.status(404);
     throw new Error("Chat not found");
+  }
+
+  if (request.status === "closed") {
+    res.status(403);
+    throw new Error("This chat has been closed by admin");
   }
 
   res.status(200).json(request.conversation);

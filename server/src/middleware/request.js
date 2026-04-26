@@ -31,6 +31,12 @@ export const requestDecisionMiddleware = async (req, res, next) => {
     res.status(400);
     throw new Error("Item Already returned!");
   }
+
+  if (request.status === "closed") {
+    res.status(400);
+    throw new Error("Request has been closed");
+  }
+
   req.requestObject = await requestModel.findById(request.id);
   next();
 };

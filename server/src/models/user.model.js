@@ -63,7 +63,19 @@ const schema = new mongoose.Schema({
   },
   role: {
     type: String,
+    enum: ["student", "admin", "moderator"],
     default: "student",
+  },
+  isSuspended: {
+    type: Boolean,
+    default: false,
+  },
+  suspensionReason: {
+    type: String,
+    trim: true,
+  },
+  suspendedAt: {
+    type: Date,
   },
   department: {
     type: String,

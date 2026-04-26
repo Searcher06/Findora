@@ -2,7 +2,8 @@ import { X, ChevronsLeft, ChevronsRight } from "lucide-react";
 import { Logo } from "./logo";
 import { Link, useLocation } from "react-router-dom";
 import { useEffect, useRef } from "react";
-import { LayoutGrid, MessageSquare, PlusIcon, User, ChevronRight } from "lucide-react";
+import { LayoutGrid, MessageSquare, PlusIcon, User, ChevronRight, ShieldCheck } from "lucide-react";
+import { useAuthStore } from "@/store/useAuthStore";
 
 export const SideBar = ({
   setOpenSidebar,
@@ -15,6 +16,7 @@ export const SideBar = ({
   const location = useLocation();
   const previousPathRef = useRef(location.pathname);
   const isCompact = sidebarMode === "icons";
+  const user = useAuthStore((state) => state.user);
 
   useEffect(() => {
     if (previousPathRef.current !== location.pathname) {
@@ -52,6 +54,15 @@ export const SideBar = ({
       active: currentPath.startsWith("/profile") || currentPath.startsWith("/change-password"),
     },
   ];
+
+  if (["admin", "moderator"].includes(user?.role)) {
+    links.push({
+      to: "/admin",
+      icon: ShieldCheck,
+      label: "Admin",
+      active: currentPath.startsWith("/admin"),
+    });
+  }
 
   return (
     <div

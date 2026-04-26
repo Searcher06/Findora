@@ -48,6 +48,18 @@ const itemSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
+    isHidden: {
+      type: Boolean,
+      default: false,
+    },
+    hiddenReason: {
+      type: String,
+      trim: true,
+    },
+    hiddenBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
     dateLostOrFound: {
       type: Date,
       required: true,

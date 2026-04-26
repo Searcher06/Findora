@@ -233,7 +233,7 @@ const deleteItem = async (req, res) => {
 };
 const allItems = async (req, res) => {
   const { category, date, search, status } = req.query;
-  const query = {};
+  const query = { isHidden: { $ne: true } };
   const now = new Date();
   let sortOption = { dateReported: -1 }; // Default to latest
   const page = Math.max(parseInt(req.query.page, 10) || 1, 1);
@@ -290,16 +290,19 @@ const allItems = async (req, res) => {
   });
 };
 const lostItems = async (req, res) => {
-  const items = await itemModel.find({ status: "lost" });
+  const items = await itemModel.find({ status: "lost", isHidden: { $ne: true } });
   res.status(200).json(items);
 };
 const foundItems = async (req, res) => {
-  const items = await itemModel.find({ status: "found" });
+  const items = await itemModel.find({ status: "found", isHidden: { $ne: true } });
   res.status(200).json(items);
 };
 const getUserItems = async (req, res) => {
   const user = await userModel.findById(req.user._id);
-  const items = await itemModel.find({ reportedBy: user._id.toString() });
+  const items = await itemModel.find({
+    reportedBy: user._id.toString(),
+    isHidden: { $ne: true },
+  });
   res.status(200).json(items);
 };
 const getUserPostsByUsername = async (req, res) => {
@@ -314,7 +317,10 @@ const getUserPostsByUsername = async (req, res) => {
     throw new Error("User not found");
   }
 
-  const items = await itemModel.find({ reportedBy: user._id.toString() });
+  const items = await itemModel.find({
+    reportedBy: user._id.toString(),
+    isHidden: { $ne: true },
+  });
   res.status(200).json(items);
 };
 const getItemById = async (req, res) => {
@@ -333,6 +339,14 @@ const getItemById = async (req, res) => {
     res.status(404);
     throw new Error("Item not found!");
   }
+
+  const isOwner = item.reportedBy?._id?.toString() === req.user._id.toString();
+  const isAdmin = ["admin", "moderator"].includes(req.user.role);
+  if (item.isHidden && !isOwner && !isAdmin) {
+    res.status(404);
+    throw new Error("Item not found!");
+  }
+
   res.status(200).json(item);
 };
 

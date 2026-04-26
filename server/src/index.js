@@ -6,6 +6,8 @@ import userRoute from "./routes/user.routes.js";
 import itemRoute from "./routes/items.routes.js";
 import requestRoute from "./routes/requests.routes.js";
 import messageRoute from "./routes/message.routes.js";
+import adminRoute from "./routes/admin.routes.js";
+import flagRoute from "./routes/flags.routes.js";
 import cookieParser from "cookie-parser";
 import loggerMiddleware from "./middleware/logger.js";
 import { errorMiddleware } from "./middleware/error.js";
@@ -41,6 +43,12 @@ app.use("/api/v1/request", requestRoute);
 
 // message route
 app.use("/api/v1/chat", messageRoute);
+
+// user-created moderation flags route
+app.use("/api/v1/flags", flagRoute);
+
+// admin route
+app.use("/api/v1/admin", adminRoute);
 
 // api testing
 app.get("/api/v1/welcome", async (req, res) => {

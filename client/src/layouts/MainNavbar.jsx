@@ -6,7 +6,7 @@ import { useLocation, Link } from "react-router-dom";
 import { useAuthStore } from "@/store/useAuthStore";
 import { Logo } from "../components/logo";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { Menu, MessageSquare, User, LayoutGrid, PlusIcon, ChevronRight, Bell, ChevronsLeft, ChevronsRight, X } from "lucide-react";
+import { Menu, MessageSquare, User, LayoutGrid, PlusIcon, ChevronRight, Bell, ChevronsLeft, ChevronsRight, X, ShieldCheck } from "lucide-react";
 import { useItemType } from "@/features/items/context/ItemTypeContext";
 
 export const MainNavbar = () => {
@@ -26,6 +26,8 @@ export const MainNavbar = () => {
   const isReportActive = location.pathname.startsWith("/report") || location.pathname.startsWith("/update");
   const isMessageActive = location.pathname.startsWith("/chats") || location.pathname.startsWith("/chat/");
   const isProfileActive = location.pathname.startsWith("/profile") || location.pathname.startsWith("/change-password");
+  const isAdminActive = location.pathname.startsWith("/admin");
+  const canAccessAdmin = ["admin", "moderator"].includes(user?.role);
 
   const desktopLinks = [
     {
@@ -58,6 +60,16 @@ export const MainNavbar = () => {
       onClick: undefined,
     },
   ];
+
+  if (canAccessAdmin) {
+    desktopLinks.push({
+      to: "/admin",
+      icon: ShieldCheck,
+      label: "Admin",
+      active: isAdminActive,
+      onClick: undefined,
+    });
+  }
 
   const getDisplayName = () => {
     if (!user) return "Guest";

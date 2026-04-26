@@ -11,6 +11,7 @@ import {
   Plus,
   LogOut,
   KeyRound,
+  Flag,
 } from "lucide-react";
 import { useAuthStore } from "@/store/useAuthStore";
 import { Link, useNavigate } from "react-router-dom";
@@ -299,6 +300,14 @@ export function ProfilePage() {
               >
                 <KeyRound className="h-4 w-4" />
                 Change Password
+              </Link>
+
+              <Link
+                to="/my-flags"
+                className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
+              >
+                <Flag className="h-4 w-4" />
+                My Reports
               </Link>
 
               <button

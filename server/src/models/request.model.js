@@ -43,8 +43,17 @@ const schema = new mongoose.Schema(
     participants: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     status: {
       type: String,
-      enum: ["pending", "accepted", "returned"],
+      enum: ["pending", "accepted", "returned", "closed"],
       default: "pending",
+    },
+    closedAt: Date,
+    closedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+    closeReason: {
+      type: String,
+      trim: true,
     },
 
     // Verification Logic

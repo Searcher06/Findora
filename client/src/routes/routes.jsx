@@ -1,12 +1,15 @@
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import { BrowsePage, ReportPage, ViewItem, UpdateItem } from "@/features/items";
+import { AdminDashboardPage } from "@/features/admin";
+import { MyFlagsPage } from "@/features/flags";
 import { AppLayout } from "@/layouts/AppLayout";
 import { ItemTypeProvider } from "@/features/items/context/ItemTypeContext";
 import { LoginPage, ResendEmail, SignUpPage, EmailVerify, ForgotPasswordPage, ResetPasswordPage, ChangePasswordPage } from "@/features/authentication";
 import { UploadPhotoProvider } from "@/features/items/context/UploadPhotoContext";
 import { ToastContainer } from "react-toastify";
 import PrivateRoute from "./privateRoute";
+import AdminRoute from "./adminRoute";
 import { ChatPage, ChatSelectionPage } from "@/features/chat";
 import { NavProvider } from "@/context/NavContext";
 import { CodeExchangePage } from "@/features/codeExchange";
@@ -26,6 +29,8 @@ const getPageTitle = (pathname) => {
   if (pathname === "/chats") return "Conversations | Findora";
   if (pathname === "/profile") return "Profile | Findora";
   if (pathname === "/profile/edit") return "Edit Profile | Findora";
+  if (pathname === "/my-flags") return "My Reports | Findora";
+  if (pathname === "/admin") return "Admin Dashboard | Findora";
   if (pathname.startsWith("/items/")) return "Item Details | Findora";
   if (pathname.startsWith("/update/")) return "Update Item | Findora";
   if (pathname.startsWith("/chat/")) return "Chat | Findora";
@@ -74,6 +79,10 @@ function AppRoutes() {
                   <Route path="/chats" element={<ChatSelectionPage />} />
                   <Route path="/profile" element={<ProfilePage />} />
                   <Route path="/profile/edit" element={<EditProfilePage />} />
+                  <Route path="/my-flags" element={<MyFlagsPage />} />
+                  <Route element={<AdminRoute />}>
+                    <Route path="/admin" element={<AdminDashboardPage />} />
+                  </Route>
                 </Route>
               </Route>
             </Routes>
