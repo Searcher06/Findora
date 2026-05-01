@@ -1,4 +1,5 @@
 import { userModel } from "../models/user.model.js";
+import { requestModel } from "../models/request.model.js";
 import bcrypt from "bcryptjs";
 import generateToken from "../utils/generateToken.js";
 import { clearCookie } from "../utils/clearCookies.js";
@@ -30,6 +31,21 @@ const sanitizeUser = (user) => {
   delete obj.passwordResetExpires;
   delete obj.__v;
   return obj;
+};
+
+const TRUST_POINTS_PER_SUCCESS = 10;
+
+const getComputedTrustStats = async (userId) => {
+  const successfulReturns = await requestModel.countDocuments({
+    status: "returned",
+    $or: [{ finderId: userId }, { claimerId: userId }],
+  });
+
+  return {
+    successfulReturns,
+    trustPoints: successfulReturns * TRUST_POINTS_PER_SUCCESS,
+    hasVerifiedReturnBadge: successfulReturns > 0,
+  };
 };
 
 const createUser = async (req, res) => {
@@ -157,7 +173,11 @@ const signOut = async (req, res) => {
 };
 const getUser = async (req, res) => {
   const user = await userModel.findById(req.user._id);
-  res.status(200).json(sanitizeUser(user));
+  const computedTrust = await getComputedTrustStats(req.user._id);
+  res.status(200).json({
+    ...sanitizeUser(user),
+    ...computedTrust,
+  });
 };
 const updateProfile = async (req, res) => {
   const { firstName, lastName, email, oldPassword, newPassword, department, foculty } = req.body;
@@ -315,7 +335,60 @@ const getUserByUsername = async (req, res) => {
     throw new Error("User not found");
   }
 
-  res.status(200).json(sanitizeUser(user));
+  const computedTrust = await getComputedTrustStats(user._id);
+  res.status(200).json({
+    ...sanitizeUser(user),
+    ...computedTrust,
+  });
+};
+
+const getTrustLeaderboard = async (req, res) => {
+  const limit = Math.min(Math.max(parseInt(req.query.limit, 10) || 20, 1), 100);
+
+  // Source of truth: compute returns directly from request history.
+  const returnedStats = await requestModel.aggregate([
+    { $match: { status: "returned" } },
+    { $project: { participants: ["$finderId", "$claimerId"] } },
+    { $unwind: "$participants" },
+    { $group: { _id: "$participants", successfulReturns: { $sum: 1 } } },
+  ]);
+
+  const statsMap = new Map(
+    returnedStats.map((entry) => [entry._id.toString(), entry.successfulReturns])
+  );
+  const users = await userModel
+    .find({})
+    .select(
+      "firstName lastName username displayUsername profilePic role trustPoints successfulReturns hasVerifiedReturnBadge createdAt"
+    );
+
+  const merged = users.map((userDoc) => {
+    const user = sanitizeUser(userDoc);
+    const computedReturns = statsMap.get(user._id.toString()) || 0;
+    const computedPoints = computedReturns * TRUST_POINTS_PER_SUCCESS;
+
+    return {
+      ...user,
+      successfulReturns: computedReturns,
+      trustPoints: computedPoints,
+      hasVerifiedReturnBadge: computedReturns > 0 || Boolean(user.hasVerifiedReturnBadge),
+    };
+  });
+
+  merged.sort((a, b) => {
+    if (b.trustPoints !== a.trustPoints) return b.trustPoints - a.trustPoints;
+    if (b.successfulReturns !== a.successfulReturns) {
+      return b.successfulReturns - a.successfulReturns;
+    }
+    return new Date(a.createdAt) - new Date(b.createdAt);
+  });
+
+  const ranked = merged.slice(0, limit).map((user, index) => ({
+    rank: index + 1,
+    ...user,
+  }));
+
+  res.status(200).json(ranked);
 };
 const verifyEmail = async (req, res) => {
   const { token } = req.body;
@@ -489,4 +562,17 @@ const changePassword = async (req, res) => {
   res.status(200).json({ message: "Password changed successfully" });
 };
 
-export { createUser, login, updateProfile, signOut, getUser, getUserByUsername, verifyEmail, resendEmail, forgotPassword, resetPassword, changePassword };
+export {
+  createUser,
+  login,
+  updateProfile,
+  signOut,
+  getUser,
+  getUserByUsername,
+  getTrustLeaderboard,
+  verifyEmail,
+  resendEmail,
+  forgotPassword,
+  resetPassword,
+  changePassword,
+};

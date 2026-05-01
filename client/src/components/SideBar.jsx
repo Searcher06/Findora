@@ -2,7 +2,7 @@ import { X, ChevronsLeft, ChevronsRight } from "lucide-react";
 import { Logo } from "./logo";
 import { Link, useLocation } from "react-router-dom";
 import { useEffect, useRef } from "react";
-import { LayoutGrid, MessageSquare, PlusIcon, User, ChevronRight, ShieldCheck } from "lucide-react";
+import { LayoutGrid, MessageSquare, PlusIcon, User, ChevronRight, ShieldCheck, Trophy } from "lucide-react";
 import { useAuthStore } from "@/store/useAuthStore";
 
 export const SideBar = ({
@@ -52,6 +52,12 @@ export const SideBar = ({
       icon: User,
       label: "Profile",
       active: currentPath.startsWith("/profile") || currentPath.startsWith("/change-password"),
+    },
+    {
+      to: "/leaderboard",
+      icon: Trophy,
+      label: "Leaderboard",
+      active: currentPath.startsWith("/leaderboard"),
     },
   ];
 

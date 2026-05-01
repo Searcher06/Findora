@@ -7,6 +7,7 @@ import {
   signOut,
   getUser,
   getUserByUsername,
+  getTrustLeaderboard,
   verifyEmail,
   resendEmail,
   forgotPassword,
@@ -31,6 +32,7 @@ router.post("/reset-password", resetPassword);
 router.post("/change-password", authMiddleWare, changePassword);
 
 router.get("/", authMiddleWare, getUser);
+router.get("/leaderboard", authMiddleWare, getTrustLeaderboard);
 
 router.get("/:username", authMiddleWare, getUserByUsername);
 

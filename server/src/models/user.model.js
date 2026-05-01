@@ -66,6 +66,20 @@ const schema = new mongoose.Schema({
     enum: ["student", "admin", "moderator"],
     default: "student",
   },
+  trustPoints: {
+    type: Number,
+    default: 0,
+    min: 0,
+  },
+  successfulReturns: {
+    type: Number,
+    default: 0,
+    min: 0,
+  },
+  hasVerifiedReturnBadge: {
+    type: Boolean,
+    default: false,
+  },
   isSuspended: {
     type: Boolean,
     default: false,

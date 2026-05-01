@@ -6,12 +6,14 @@ import {
   GraduationCap,
   BookOpen,
   Shield,
+  Award,
   Loader2,
   Edit2,
   Plus,
   LogOut,
   KeyRound,
   Flag,
+  Trophy,
 } from "lucide-react";
 import { useAuthStore } from "@/store/useAuthStore";
 import { Link, useNavigate } from "react-router-dom";
@@ -213,9 +215,17 @@ export function ProfilePage() {
                 {accountName}
               </h2>
               <p className="truncate text-sm text-slate-500">@{accountUsername}</p>
-              <span className="mt-2 inline-flex rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold capitalize text-blue-700">
-                {user.role} account
-              </span>
+              <div className="mt-2 flex flex-wrap items-center gap-2">
+                <span className="inline-flex rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold capitalize text-blue-700">
+                  {user.role} account
+                </span>
+                {user.hasVerifiedReturnBadge ? (
+                  <span className="inline-flex items-center gap-1 rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-700">
+                    <Award className="h-3.5 w-3.5" />
+                    Verified Return
+                  </span>
+                ) : null}
+              </div>
             </div>
           </div>
         </section>
@@ -256,6 +266,20 @@ export function ProfilePage() {
               value={user.role?.charAt(0).toUpperCase() + user.role?.slice(1)}
               helper={user.role === "student" ? "Undergraduate member" : "Academic member"}
               tone="violet"
+            />
+            <FieldCard
+              icon={Award}
+              label="Campus Trust Points"
+              value={String(user.trustPoints || 0)}
+              helper="Earned from successful verified handovers"
+              tone="emerald"
+            />
+            <FieldCard
+              icon={Shield}
+              label="Successful Returns"
+              value={String(user.successfulReturns || 0)}
+              helper="Completed handovers with both codes verified"
+              tone="amber"
             />
           </div>
 
@@ -308,6 +332,14 @@ export function ProfilePage() {
               >
                 <Flag className="h-4 w-4" />
                 My Reports
+              </Link>
+
+              <Link
+                to="/leaderboard"
+                className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl border border-amber-200 bg-amber-50 px-4 text-sm font-semibold text-amber-800 transition hover:bg-amber-100"
+              >
+                <Trophy className="h-4 w-4" />
+                Trust Leaderboard
               </Link>
 
               <button

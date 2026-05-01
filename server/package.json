@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "nodemon src/index.js",
-    "start": "node src/index.js"
+    "start": "node src/index.js",
+    "sync:trust": "node src/scripts/syncTrustStats.js"
   },
   "keywords": [],
   "author": "Ahmad Ibrahim",

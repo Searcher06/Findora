@@ -1,5 +1,6 @@
 import { itemModel } from "../models/item.model.js";
 import { requestModel } from "../models/request.model.js";
+import { userModel } from "../models/user.model.js";
 import { validateId } from "../utils/validateID.js";
 import { getRecieverSocketId, io } from "../lib/socket.js";
 
@@ -266,6 +267,37 @@ const handleItem = async (req, res) => {
     item.status = "returned";
     await item.save();
     await updatedRequest.save();
+
+    // Campus trust system: reward both participants after successful handover.
+    const TRUST_POINTS_PER_SUCCESS = 10;
+    const finderId = updatedRequest.finderId?._id || updatedRequest.finderId;
+    const claimerId = updatedRequest.claimerId?._id || updatedRequest.claimerId;
+
+    await Promise.all([
+      userModel.findByIdAndUpdate(finderId, [
+        {
+          $set: {
+            trustPoints: {
+              $add: [{ $ifNull: ["$trustPoints", 0] }, TRUST_POINTS_PER_SUCCESS],
+            },
+            successfulReturns: { $add: [{ $ifNull: ["$successfulReturns", 0] }, 1] },
+            hasVerifiedReturnBadge: true,
+          },
+        },
+      ]),
+      userModel.findByIdAndUpdate(claimerId, [
+        {
+          $set: {
+            trustPoints: {
+              $add: [{ $ifNull: ["$trustPoints", 0] }, TRUST_POINTS_PER_SUCCESS],
+            },
+            successfulReturns: { $add: [{ $ifNull: ["$successfulReturns", 0] }, 1] },
+            hasVerifiedReturnBadge: true,
+          },
+        },
+      ]),
+    ]);
+
     const finalRequestDoc = await requestModel
       .findById(requestId)
       .populate("finderId", "firstName lastName username profilePic")
