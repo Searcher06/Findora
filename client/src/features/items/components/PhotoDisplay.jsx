@@ -1,6 +1,6 @@
 import { useUploadPhoto } from "../context/UploadPhotoContext";
 // import { usePhotoUpload } from "../hooks/usePhotoUpload";
-const PhotoDisplay = ({ handlePhotoChange, preview }) => {
+const PhotoDisplay = ({ handlePhotoChange, preview, onRemovePhoto }) => {
   const { on } = useUploadPhoto();
   // const { preview, handlePhotoChange } = usePhotoUpload(setItemData);
   return (
@@ -18,18 +18,30 @@ const PhotoDisplay = ({ handlePhotoChange, preview }) => {
             </p>
           ) : null}
         </div>
-        <label htmlFor="photo-upload">
-          <input
-            type="file"
-            accept="image/*"
-            className="hidden"
-            id="photo-upload"
-            onChange={handlePhotoChange}
-          />
-          <span className="inline-flex min-h-10 cursor-pointer items-center rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50">
-            Upload new photo
-          </span>
-        </label>
+        <div className="flex flex-wrap items-center gap-2">
+          <label htmlFor="photo-upload">
+            <input
+              type="file"
+              accept="image/*"
+              className="hidden"
+              id="photo-upload"
+              onChange={handlePhotoChange}
+            />
+            <span className="inline-flex min-h-10 cursor-pointer items-center rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50">
+              Upload new photo
+            </span>
+          </label>
+
+          {preview && onRemovePhoto ? (
+            <button
+              type="button"
+              onClick={onRemovePhoto}
+              className="inline-flex min-h-10 items-center rounded-xl border border-rose-200 bg-rose-50 px-4 py-2 text-sm font-semibold text-rose-700 transition hover:bg-rose-100"
+            >
+              Remove photo
+            </button>
+          ) : null}
+        </div>
       </div>
     )
   );

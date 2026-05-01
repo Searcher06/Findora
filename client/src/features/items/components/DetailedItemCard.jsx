@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import { imagesample } from "..";
 import { ItemInfo } from "./ItemInfo";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useNavigate } from "react-router-dom";
@@ -12,6 +11,7 @@ export const DetailedItemCard = ({ item }) => {
   const navigate = useNavigate();
   const { user } = useAuthStore();
   const { status, reportedBy, _id, name, image } = item;
+  const placeholderImage = "/item-placeholder.svg";
   const isOwner = user?._id === reportedBy?._id;
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const [reportReason, setReportReason] = useState("");
@@ -47,7 +47,7 @@ export const DetailedItemCard = ({ item }) => {
         {/* Image */}
         <div className="w-full flex justify-center px-0">
           <img
-            src={image || imagesample}
+            src={image || placeholderImage}
             alt={name}
             className="w-[95%] sm:w-[90%] md:w-[75%] lg:w-[75%] rounded-2xl sm:rounded-3xl shadow-[0_30px_90px_-75px_rgba(15,23,42,0.8)] object-cover aspect-video sm:aspect-video md:aspect-video lg:aspect-square border border-slate-200/50"
           />
@@ -104,7 +104,7 @@ export const DetailedItemCard = ({ item }) => {
           {/* Image */}
           <div className="w-full">
             <img
-              src={image || imagesample}
+              src={image || placeholderImage}
               alt={name}
               className="w-full rounded-2xl shadow-[0_30px_90px_-75px_rgba(15,23,42,0.8)] object-cover aspect-[4/3] xl:aspect-square border border-slate-200/50"
             />

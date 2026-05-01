@@ -37,6 +37,10 @@ const itemSchema = new mongoose.Schema(
     image: {
       type: String,
     },
+    imagePublicId: {
+      type: String,
+      trim: true,
+    },
     status: {
       type: String,
       enum: ["lost", "found", "returned", "claimed"],

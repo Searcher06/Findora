@@ -1,5 +1,4 @@
 import { MapPin, CalendarDays } from "lucide-react";
-import image from "../../items/item.png";
 import { ItemStatus } from "@/features/items";
 import { useSingleItem } from "@/features/items";
 import { formatDate } from "@/utils/formatDate";
@@ -10,6 +9,7 @@ export const RequestDetail = ({
   request,
   isDesktopSidebar = false,
 }) => {
+  const placeholderImage = "/item-placeholder.svg";
   const { item, loading, error } = useSingleItem(request?.itemId?._id);
 
   if (loading || requestLoading) {
@@ -54,7 +54,7 @@ export const RequestDetail = ({
 
         <div className="relative aspect-square w-full overflow-hidden rounded-2xl border border-slate-200 bg-slate-100">
           <img
-            src={item.image || image}
+            src={item.image || placeholderImage}
             alt={item.name}
             className="w-full h-full object-cover"
           />
@@ -112,7 +112,7 @@ export const RequestDetail = ({
         </div>
         <div className="shrink-0">
           <img
-            src={item.image || image}
+            src={item.image || placeholderImage}
             alt="Item Image"
             className="h-14 w-16 rounded-lg border border-slate-200 object-cover sm:h-16 sm:w-[74px]"
           />

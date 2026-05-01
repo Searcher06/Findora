@@ -1,8 +1,12 @@
 import { textValidator } from "../utils/symbolchecker.js";
 import { itemModel } from "../models/item.model.js";
 import { userModel } from "../models/user.model.js";
-import cloudinary from "../config/cloudinary.js";
 import mongoose from "mongoose";
+import { deleteCloudinaryImage } from "../utils/cloudinaryImage.js";
+import {
+  uploadImageToCloudinary,
+  getCloudinaryUploadErrorMessage,
+} from "../utils/uploadImageToCloudinary.js";
 
 const createItem = async (req, res) => {
   let {
@@ -62,6 +66,7 @@ const createItem = async (req, res) => {
 
   // Handle image if uploaded
   let imageUrl = null;
+  let imagePublicId = null;
   const file = req.file;
 
   if (file) {
@@ -81,15 +86,16 @@ const createItem = async (req, res) => {
       throw new Error("File data is corrupted");
     }
 
-    // Upload to Cloudinary
-    const base64 = file.buffer.toString("base64");
-    const dataUri = `data:${file.mimetype};base64,${base64}`;
-
-    const uploadResult = await cloudinary.uploader.upload(dataUri, {
-      folder: "lost_found_items",
-    });
-
-    imageUrl = uploadResult.secure_url;
+    try {
+      const uploadResult = await uploadImageToCloudinary(file.buffer, {
+        folder: "lost_found_items",
+      });
+      imageUrl = uploadResult.secure_url;
+      imagePublicId = uploadResult.public_id;
+    } catch (error) {
+      res.status(503);
+      throw new Error(getCloudinaryUploadErrorMessage(error));
+    }
   }
 
   // Trim fields
@@ -107,6 +113,7 @@ const createItem = async (req, res) => {
     reportedBy: user._id,
     dateLostOrFound,
     image: imageUrl,
+    imagePublicId,
   });
 
   if (item) {
@@ -124,6 +131,7 @@ const updateItem = async (req, res) => {
     location,
     status,
     dateLostOrFound,
+    removeImage,
   } = req.body;
 
   const item = await itemModel.findById(req.item._id);
@@ -182,6 +190,8 @@ const updateItem = async (req, res) => {
     item.dateLostOrFound = dateLostOrFound;
   }
 
+  const shouldRemoveImage =
+    removeImage === true || removeImage === "true" || removeImage === 1 || removeImage === "1";
   const file = req.file;
   if (file) {
     // Validation checks first
@@ -200,15 +210,34 @@ const updateItem = async (req, res) => {
       throw new Error("File data is corrupted");
     }
 
-    // Upload to Cloudinary
-    const base64 = file.buffer.toString("base64");
-    const dataUri = `data:${file.mimetype};base64,${base64}`;
+    let uploadResult;
+    try {
+      uploadResult = await uploadImageToCloudinary(file.buffer, {
+        folder: "lost_found_items",
+      });
+    } catch (error) {
+      res.status(503);
+      throw new Error(getCloudinaryUploadErrorMessage(error));
+    }
 
-    const uploadResult = await cloudinary.uploader.upload(dataUri, {
-      folder: "lost_found_items",
-    });
+    if (item.image || item.imagePublicId) {
+      await deleteCloudinaryImage({
+        publicId: item.imagePublicId,
+        imageUrl: item.image,
+      });
+    }
 
     item.image = uploadResult.secure_url;
+    item.imagePublicId = uploadResult.public_id;
+  } else if (shouldRemoveImage) {
+    if (item.image || item.imagePublicId) {
+      await deleteCloudinaryImage({
+        publicId: item.imagePublicId,
+        imageUrl: item.image,
+      });
+    }
+    item.image = null;
+    item.imagePublicId = null;
   }
 
   await item.save();
@@ -221,6 +250,13 @@ const deleteItem = async (req, res) => {
   if (item.status == "claimed") {
     res.status(403);
     throw new Error("Item can't be deleted, It has already been claimed");
+  }
+
+  if (item.image || item.imagePublicId) {
+    await deleteCloudinaryImage({
+      publicId: item.imagePublicId,
+      imageUrl: item.image,
+    });
   }
 
   const deletedItem = await itemModel.findByIdAndDelete(item.id);

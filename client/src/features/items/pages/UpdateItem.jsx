@@ -5,13 +5,16 @@ import { useState, useEffect } from "react";
 import AddInfo from "../components/AddInfo";
 import { toast } from "react-toastify";
 import { useItems } from "../hooks/useItems";
+import { useUploadPhoto } from "../context/UploadPhotoContext";
 
 export const UpdateItem = () => {
   const { loading, updateAnItem } = useItems();
+  const { setOn } = useUploadPhoto();
   const navigate = useNavigate();
   const { id } = useParams();
   const { item, loading: itemLoading, error } = useSingleItem(id);
   const [preview, setPreview] = useState(null);
+  const [removeImage, setRemoveImage] = useState(false);
   const [itemData, setItemData] = useState({
     itemName: "",
     itemDescription: "",
@@ -24,6 +27,8 @@ export const UpdateItem = () => {
 
   useEffect(() => {
     if (item) {
+      setPreview(item.image || null);
+      setOn(Boolean(item.image));
       setItemData({
         itemName: item.name || "",
         itemDescription: item.description || "",
@@ -33,8 +38,9 @@ export const UpdateItem = () => {
         status: item.status || "",
         dateLostOrFound: item.dateLostOrFound.split("T")[0] || "",
       });
+      setRemoveImage(false);
     }
-  }, [item]);
+  }, [item, setOn]);
 
   if (itemLoading) {
     return <DetailedItemCardSkeleton />;
@@ -74,10 +80,11 @@ export const UpdateItem = () => {
     if (itemData.itemName) formData.append("itemName", itemData.itemName);
     if (itemData.itemDescription) formData.append("itemDescription", itemData.itemDescription);
     if (itemData.category) formData.append("category", itemData.category);
-    if (itemData.image) formData.append("image", itemData.image);
+    if (itemData.image instanceof File) formData.append("image", itemData.image);
     if (itemData.location) formData.append("location", itemData.location);
     if (itemData.dateLostOrFound) formData.append("dateLostOrFound", itemData.dateLostOrFound);
     if (itemData.status) formData.append("status", itemData.status);
+    if (removeImage) formData.append("removeImage", "true");
 
     try {
       const response = await updateAnItem(item._id, formData);
@@ -100,10 +107,18 @@ export const UpdateItem = () => {
     const file = event.target.files[0];
     if (file) {
       setItemData((prevs) => ({ ...prevs, image: file }));
+      setRemoveImage(false);
       const reader = new FileReader();
       reader.onloadend = () => setPreview(reader.result);
       reader.readAsDataURL(file);
     }
+  };
+
+  const handleRemovePhoto = () => {
+    setItemData((prev) => ({ ...prev, image: "" }));
+    setPreview(null);
+    setRemoveImage(true);
+    setOn(false);
   };
 
   return (
@@ -136,6 +151,7 @@ export const UpdateItem = () => {
           loading={loading}
           handlePhotoChange={handlePhotoChange}
           preview={preview}
+          onRemovePhoto={handleRemovePhoto}
         />
       </div>
     </div>

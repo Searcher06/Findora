@@ -6,7 +6,17 @@ import Label from "./Label";
 import ToggleImage from "./ToggleImage";
 import PhotoDisplay from "./PhotoDisplay";
 
-const AddInfo = ({ className, itemData, handleInputChange, handleSubmit, loading, setItemData, handlePhotoChange, preview }) => {
+const AddInfo = ({
+  className,
+  itemData,
+  handleInputChange,
+  handleSubmit,
+  loading,
+  setItemData,
+  handlePhotoChange,
+  preview,
+  onRemovePhoto,
+}) => {
   const location = useLocation();
   const isUpdateRoute = location.pathname.startsWith("/update/");
 
@@ -154,7 +164,12 @@ const AddInfo = ({ className, itemData, handleInputChange, handleSubmit, loading
         <ToggleImage />
       </div>
 
-      <PhotoDisplay setItemData={setItemData} handlePhotoChange={handlePhotoChange} preview={preview} />
+      <PhotoDisplay
+        setItemData={setItemData}
+        handlePhotoChange={handlePhotoChange}
+        preview={preview}
+        onRemovePhoto={onRemovePhoto}
+      />
 
       <Button
         className="mt-4 sm:mt-5 md:mt-6 h-10 sm:h-11 md:h-12 w-full rounded-lg sm:rounded-xl bg-blue-600 hover:bg-blue-700 text-xs sm:text-sm md:text-base font-bold text-white transition-all shadow-sm hover:shadow-md active:scale-95"

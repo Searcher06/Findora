@@ -1,5 +1,4 @@
 import { ItemCard } from "./ItemCard";
-import itemImage from "../item.png";
 import { useItems } from "../hooks/useItems";
 import { ItemCardSkeleton } from "./ItemCardSkeleton";
 import { useEffect } from "react";
@@ -11,6 +10,7 @@ export const ItemsContainer = ({
   onMetaChange,
   onPageChange,
 }) => {
+  const placeholderImage = "/item-placeholder.svg";
   const { items, loading, error, pagination } = useItems(filters);
 
   useEffect(() => {
@@ -56,9 +56,10 @@ export const ItemsContainer = ({
                   name={current.name}
                   location={current.location}
                   date={current.dateReported}
-                  image={itemImage}
+                  image={current.image || placeholderImage}
                   description={current.description}
                   status={current.status}
+                  category={current.category}
                   id={current._id}
                   key={current._id}
                 />

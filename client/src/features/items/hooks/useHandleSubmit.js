@@ -11,7 +11,7 @@ export const useHandleSubmit = (itemData) => {
     if (itemData.itemDescription)
       formData.append("itemDescription", itemData.itemDescription);
     if (itemData.category) formData.append("category", itemData.category);
-    if (itemData.image) formData.append("image", itemData.image);
+    if (itemData.image instanceof File) formData.append("image", itemData.image);
     if (itemData.location) formData.append("location", itemData.location);
     if (itemData.dateLostOrFound)
       formData.append("dateLostOrFound", itemData.dateLostOrFound);

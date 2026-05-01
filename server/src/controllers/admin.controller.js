@@ -5,6 +5,7 @@ import { requestModel } from "../models/request.model.js";
 import { adminFlagModel } from "../models/adminFlag.model.js";
 import { adminAuditLogModel } from "../models/adminAuditLog.model.js";
 import { logAdminAction } from "../utils/adminAudit.js";
+import { deleteCloudinaryImage } from "../utils/cloudinaryImage.js";
 
 const parsePagination = (req, defaultLimit = 20) => {
   const page = Math.max(parseInt(req.query.page, 10) || 1, 1);
@@ -315,6 +316,13 @@ const deleteItemByAdmin = async (req, res) => {
   if (!item) {
     res.status(404);
     throw new Error("Item not found");
+  }
+
+  if (item.image || item.imagePublicId) {
+    await deleteCloudinaryImage({
+      publicId: item.imagePublicId,
+      imageUrl: item.image,
+    });
   }
 
   await itemModel.findByIdAndDelete(itemId);
