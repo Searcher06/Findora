@@ -1,5 +1,6 @@
 import { textValidator } from "../utils/symbolchecker.js";
 import { itemModel } from "../models/item.model.js";
+import { requestModel } from "../models/request.model.js";
 import { userModel } from "../models/user.model.js";
 import mongoose from "mongoose";
 import { deleteCloudinaryImage } from "../utils/cloudinaryImage.js";
@@ -250,6 +251,14 @@ const deleteItem = async (req, res) => {
   if (item.status == "claimed") {
     res.status(403);
     throw new Error("Item can't be deleted, It has already been claimed");
+  }
+
+  const linkedRequestExists = await requestModel.exists({ itemId: item._id });
+  if (linkedRequestExists) {
+    res.status(409);
+    throw new Error(
+      "Item cannot be deleted because it is linked to one or more requests"
+    );
   }
 
   if (item.image || item.imagePublicId) {

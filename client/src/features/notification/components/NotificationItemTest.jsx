@@ -9,6 +9,7 @@ const NotificationItemTest = ({ notification, currentUserId }) => {
   // Determine if current user is finder or claimer
   const isFinder = currentUserId === notification.finderId._id;
   const isClaimer = currentUserId === notification.claimerId._id;
+  const itemName = notification?.itemId?.name || "this item";
 
   // Helper function to get full name
   const getFullName = (user) => {
@@ -27,7 +28,7 @@ const NotificationItemTest = ({ notification, currentUserId }) => {
               icon: "HelpCircle",
               title: "Someone is claiming your found item",
               description: `${getFullName(notification.claimerId)} says "${
-                notification.itemId.name
+                itemName
               }" is theirs. Ask 2-4 questions to verify their story.`,
               buttonText: "Verify Their Claim",
               status: "Action Required",
@@ -45,7 +46,7 @@ const NotificationItemTest = ({ notification, currentUserId }) => {
               title: "Waiting for their answers",
               description: `✓ Questions delivered. Awaiting ${getFullName(
                 notification.claimerId
-              )}'s response about "${notification.itemId.name}".`,
+              )}'s response about "${itemName}".`,
               buttonText: null,
               status: "Waiting",
               color: "orange",
@@ -62,7 +63,7 @@ const NotificationItemTest = ({ notification, currentUserId }) => {
               description: `${getFullName(
                 notification.claimerId
               )} answered your questions about "${
-                notification.itemId.name
+                itemName
               }". Do their answers convince you?`,
               buttonText: "Review & Decide",
               status: "Action Required",
@@ -74,7 +75,7 @@ const NotificationItemTest = ({ notification, currentUserId }) => {
           return {
             icon: "HelpCircle",
             title: "Verify their story",
-            description: `Ask questions to make sure "${notification.itemId.name}" really belongs to them.`,
+            description: `Ask questions to make sure "${itemName}" really belongs to them.`,
             buttonText: "Ask Questions",
             status: "Action Required",
             color: "blue",
@@ -86,7 +87,7 @@ const NotificationItemTest = ({ notification, currentUserId }) => {
             icon: "XCircle",
             title: "You said no to their claim",
             description: `You decided "${
-              notification.itemId.name
+              itemName
             }" doesn't belong to ${getFullName(notification.claimerId)}.`,
             buttonText: null,
             status: "Done",
@@ -99,7 +100,7 @@ const NotificationItemTest = ({ notification, currentUserId }) => {
             description: `Great! You agreed ${getFullName(
               notification.claimerId
             )} owns "${
-              notification.itemId.name
+              itemName
             }". Now arrange how to return it.`,
             buttonText: "Arrange Return",
             status: "Next Step",
@@ -110,7 +111,7 @@ const NotificationItemTest = ({ notification, currentUserId }) => {
           return {
             icon: "CheckCircle2",
             title: "Item returned successfully",
-            description: `"${notification.itemId.name}" is now back with its owner. Good deed done!`,
+            description: `"${itemName}" is now back with its owner. Good deed done!`,
             buttonText: null,
             status: "Completed",
             color: "green",
@@ -119,7 +120,7 @@ const NotificationItemTest = ({ notification, currentUserId }) => {
           return {
             icon: "HelpCircle",
             title: "Verify ownership",
-            description: `Someone says "${notification.itemId.name}" belongs to them. Let's check if they're telling the truth.`,
+            description: `Someone says "${itemName}" belongs to them. Let's check if they're telling the truth.`,
             buttonText: "Start Verification",
             status: "Action Required",
             color: "blue",
@@ -138,7 +139,7 @@ const NotificationItemTest = ({ notification, currentUserId }) => {
               description: `${getFullName(
                 notification.finderId
               )} has your item. They need to ask you questions about "${
-                notification.itemId.name
+                itemName
               }" first.`,
               buttonText: null,
               status: "Waiting",
@@ -156,7 +157,7 @@ const NotificationItemTest = ({ notification, currentUserId }) => {
               description: `${getFullName(
                 notification.finderId
               )} wants to make sure "${
-                notification.itemId.name
+                itemName
               }" is really yours. Answer their questions.`,
               buttonText: "Prove It's Yours",
               status: "Action Required",
@@ -173,7 +174,7 @@ const NotificationItemTest = ({ notification, currentUserId }) => {
               icon: "UserCheck",
               title: "Waiting for their decision",
               description: `You answered questions about "${
-                notification.itemId.name
+                itemName
               }". Now ${getFullName(notification.finderId)} needs to decide.`,
               buttonText: null,
               status: "Waiting",
@@ -184,7 +185,7 @@ const NotificationItemTest = ({ notification, currentUserId }) => {
           return {
             icon: "Clock",
             title: "Processing your claim",
-            description: `The finder of "${notification.itemId.name}" is reviewing your claim.`,
+            description: `The finder of "${itemName}" is reviewing your claim.`,
             buttonText: null,
             status: "Processing",
             color: "orange",
@@ -198,7 +199,7 @@ const NotificationItemTest = ({ notification, currentUserId }) => {
             description: `${getFullName(
               notification.finderId
             )} decided your answers about "${
-              notification.itemId.name
+              itemName
             }" weren't convincing enough.`,
             buttonText: null,
             status: "Denied",
@@ -211,7 +212,7 @@ const NotificationItemTest = ({ notification, currentUserId }) => {
             description: `Good job! ${getFullName(
               notification.finderId
             )} is convinced "${
-              notification.itemId.name
+              itemName
             }" is yours. Let's arrange getting it back.`,
             buttonText: "Get Your Item",
             status: "Success",
@@ -222,7 +223,7 @@ const NotificationItemTest = ({ notification, currentUserId }) => {
           return {
             icon: "CheckCircle2",
             title: "You got your item back!",
-            description: `"${notification.itemId.name}" is now back with you. Thank you for being honest!`,
+            description: `"${itemName}" is now back with you. Thank you for being honest!`,
             buttonText: null,
             status: "Success",
             color: "green",
@@ -233,7 +234,7 @@ const NotificationItemTest = ({ notification, currentUserId }) => {
             title: "Claim sent successfully",
             description: `You told ${getFullName(
               notification.finderId
-            )} that "${notification.itemId.name}" belongs to you.`,
+            )} that "${itemName}" belongs to you.`,
             buttonText: null,
             status: "Sent",
             color: "blue",

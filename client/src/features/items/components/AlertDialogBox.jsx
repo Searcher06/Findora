@@ -6,12 +6,10 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useVerify } from "@/features/verification";
 import { useAuthStore } from "@/store/useAuthStore";
+import { useState } from "react";
 export const DeleteItemButton = ({ itemId, itemName, className }) => {
-  const {
-    deleteAnItem,
-    loading: isDeleting,
-    setLoading: setIsDeleting,
-  } = useItems();
+  const { deleteAnItem } = useItems(null, { autoFetch: false });
+  const [isDeleting, setIsDeleting] = useState(false);
   const navigate = useNavigate();
   const handleDelete = async () => {
     try {

@@ -173,6 +173,15 @@ const acceptClaim = async (req, res) => {
     throw new Error("Only pending requests can be accepted");
   }
 
+  if (!item) {
+    request.status = "closed";
+    request.closedAt = new Date();
+    request.closeReason = "Linked item is missing";
+    await request.save();
+    res.status(409);
+    throw new Error("Cannot accept this request because the linked item is missing");
+  }
+
   item.status = "claimed";
   request.status = "accepted";
 
@@ -263,6 +272,16 @@ const handleItem = async (req, res) => {
 
   if (updatedRequest.finderVerified && updatedRequest.claimerVerified) {
     const item = await itemModel.findById(request.itemId);
+    if (!item) {
+      updatedRequest.status = "closed";
+      updatedRequest.closedAt = new Date();
+      updatedRequest.closeReason = "Linked item is missing";
+      await updatedRequest.save();
+      res.status(409);
+      throw new Error(
+        "Cannot complete handover because the linked item is missing"
+      );
+    }
     updatedRequest.status = "returned";
     item.status = "returned";
     await item.save();

@@ -11,7 +11,8 @@ import {
   getFilteredItems, // Import the new function
 } from "../api/itemApi";
 
-export const useItems = (filters = null) => {
+export const useItems = (filters = null, options = {}) => {
+  const { autoFetch = true } = options;
   const [items, setItems] = useState([]);
   const [pagination, setPagination] = useState({
     page: 1,
@@ -26,6 +27,7 @@ export const useItems = (filters = null) => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    if (!autoFetch) return;
     const loadItems = async () => {
       try {
         setLoading(true);
@@ -72,7 +74,7 @@ export const useItems = (filters = null) => {
       }
     };
     loadItems();
-  }, [JSON.stringify(filters)]);
+  }, [autoFetch, JSON.stringify(filters)]);
 
   const createAnItem = async (itemData) => {
     try {

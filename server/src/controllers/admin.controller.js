@@ -318,6 +318,14 @@ const deleteItemByAdmin = async (req, res) => {
     throw new Error("Item not found");
   }
 
+  const linkedRequestExists = await requestModel.exists({ itemId: item._id });
+  if (linkedRequestExists) {
+    res.status(409);
+    throw new Error(
+      "Item cannot be deleted because it is linked to one or more requests"
+    );
+  }
+
   if (item.image || item.imagePublicId) {
     await deleteCloudinaryImage({
       publicId: item.imagePublicId,
