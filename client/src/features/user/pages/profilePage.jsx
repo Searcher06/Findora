@@ -172,27 +172,27 @@ export function ProfilePage() {
   }
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-sky-50 via-blue-50/35 to-white px-3 pb-10 pt-3 sm:px-5 md:px-6">
+    <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-sky-50 via-blue-50/35 to-white px-2.5 pb-8 pt-2.5 sm:px-5 sm:pb-10 sm:pt-3 md:px-6">
       <div className="pointer-events-none absolute -left-20 top-10 h-56 w-56 rounded-full bg-sky-300/20 blur-3xl" />
       <div className="pointer-events-none absolute right-0 top-0 h-64 w-64 rounded-full bg-indigo-200/20 blur-3xl" />
 
       <div className="relative mx-auto w-full max-w-6xl">
-        <section className="rounded-3xl border border-sky-100 bg-[linear-gradient(135deg,#f8fbff_0%,#eef5ff_54%,#f7f9ff_100%)] px-4 py-5 shadow-[0_35px_90px_-70px_rgba(37,99,235,0.6)] sm:px-6 sm:py-6">
+        <section className="rounded-2xl border border-sky-100 bg-[linear-gradient(135deg,#f8fbff_0%,#eef5ff_54%,#f7f9ff_100%)] px-3 py-4 shadow-[0_35px_90px_-70px_rgba(37,99,235,0.6)] sm:rounded-3xl sm:px-6 sm:py-6">
           <p className="inline-flex rounded-full border border-sky-200 bg-white px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-sky-700">
             Findora Profile
           </p>
-          <h1 className="mt-3 font-display text-2xl font-bold text-slate-900 sm:text-3xl">
+          <h1 className="mt-2.5 font-display text-xl font-bold text-slate-900 sm:mt-3 sm:text-3xl">
             Your Account
           </h1>
-          <p className="mt-1 text-sm text-slate-600">
+          <p className="mt-1 text-xs text-slate-600 sm:text-sm">
             Manage your profile details and security settings.
           </p>
         </section>
 
-        <section className="mt-4 rounded-3xl border border-slate-200/80 bg-white/90 p-4 shadow-[0_30px_90px_-75px_rgba(15,23,42,0.8)] sm:p-5">
-          <div className="flex items-center gap-4">
+        <section className="mt-3.5 rounded-2xl border border-slate-200/80 bg-white/90 p-3.5 shadow-[0_30px_90px_-75px_rgba(15,23,42,0.8)] sm:mt-4 sm:rounded-3xl sm:p-5">
+          <div className="flex flex-col items-center gap-3.5 text-center min-[390px]:flex-row min-[390px]:items-center min-[390px]:text-left sm:gap-4">
             <div className="relative shrink-0">
-              <div className="h-16 w-16 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 p-0.5 sm:h-20 sm:w-20">
+              <div className="h-14 w-14 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 p-0.5 min-[390px]:h-16 min-[390px]:w-16 sm:h-20 sm:w-20">
                 <div className="flex h-full w-full items-center justify-center overflow-hidden rounded-full bg-white">
                   {user.profilePic ? (
                     <img
@@ -201,7 +201,7 @@ export function ProfilePage() {
                       className="h-full w-full object-cover"
                     />
                   ) : (
-                    <User className="h-8 w-8 text-indigo-600 sm:h-9 sm:w-9" />
+                    <User className="h-7 w-7 text-indigo-600 min-[390px]:h-8 min-[390px]:w-8 sm:h-9 sm:w-9" />
                   )}
                 </div>
               </div>
@@ -211,11 +211,11 @@ export function ProfilePage() {
             </div>
 
             <div className="min-w-0 flex-1">
-              <h2 className="truncate font-display text-xl font-bold text-slate-900 sm:text-2xl">
+              <h2 className="truncate font-display text-lg font-bold text-slate-900 min-[390px]:text-xl sm:text-2xl">
                 {accountName}
               </h2>
-              <p className="truncate text-sm text-slate-500">@{accountUsername}</p>
-              <div className="mt-2 flex flex-wrap items-center gap-2">
+              <p className="truncate text-xs text-slate-500 min-[390px]:text-sm">@{accountUsername}</p>
+              <div className="mt-2 flex flex-wrap items-center justify-center gap-2 min-[390px]:justify-start">
                 <span className="inline-flex rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold capitalize text-blue-700">
                   {user.role} account
                 </span>
@@ -230,14 +230,14 @@ export function ProfilePage() {
           </div>
         </section>
 
-        <section className="mt-4 grid gap-4 lg:grid-cols-2">
-          <div className="space-y-3 rounded-3xl border border-slate-200/80 bg-white/90 p-4 shadow-[0_30px_90px_-75px_rgba(15,23,42,0.8)] sm:p-5">
+        <section className="mt-3.5 grid gap-3.5 lg:mt-4 lg:gap-4 lg:grid-cols-2">
+          <div className="space-y-3 rounded-2xl border border-slate-200/80 bg-white/90 p-3.5 shadow-[0_30px_90px_-75px_rgba(15,23,42,0.8)] sm:rounded-3xl sm:p-5">
             <div className="flex items-center gap-2">
               <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-blue-100 text-blue-700">
                 <GraduationCap className="h-4 w-4" />
               </span>
               <div>
-                <h3 className="font-display text-lg font-semibold text-slate-900">Academic Info</h3>
+                <h3 className="font-display text-base font-semibold text-slate-900 sm:text-lg">Academic Info</h3>
                 <p className="text-xs text-slate-500">Department and faculty details</p>
               </div>
             </div>
@@ -283,13 +283,13 @@ export function ProfilePage() {
             />
           </div>
 
-          <div className="space-y-3 rounded-3xl border border-slate-200/80 bg-white/90 p-4 shadow-[0_30px_90px_-75px_rgba(15,23,42,0.8)] sm:p-5">
+          <div className="space-y-3 rounded-2xl border border-slate-200/80 bg-white/90 p-3.5 shadow-[0_30px_90px_-75px_rgba(15,23,42,0.8)] sm:rounded-3xl sm:p-5">
             <div className="flex items-center gap-2">
               <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-slate-100 text-slate-700">
                 <User className="h-4 w-4" />
               </span>
               <div>
-                <h3 className="font-display text-lg font-semibold text-slate-900">Account Details</h3>
+                <h3 className="font-display text-base font-semibold text-slate-900 sm:text-lg">Account Details</h3>
                 <p className="text-xs text-slate-500">Personal and membership info</p>
               </div>
             </div>
