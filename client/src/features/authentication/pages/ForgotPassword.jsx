@@ -75,7 +75,7 @@ export const ForgotPasswordPage = () => {
 
       <p className="mt-6 text-center text-sm text-slate-600">
         Remember your password?{" "}
-        <Link to="/login" className="font-semibold text-cyan-700 hover:text-cyan-800">
+        <Link to="/login" className="font-semibold text-violet-700 hover:text-violet-800">
           Go to Login
         </Link>
       </p>

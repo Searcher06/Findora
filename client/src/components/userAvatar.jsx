@@ -57,7 +57,7 @@ export const UserAvatar = ({ profilePic }) => {
             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center bg-linear-to-br from-blue-500 to-indigo-600">
+          <div className="w-full h-full flex items-center justify-center bg-linear-to-br from-indigo-600 to-violet-600">
             <span className="text-white font-semibold text-sm">
               {getUserInitials()}
             </span>

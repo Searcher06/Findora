@@ -24,8 +24,8 @@ export const AuthInput = ({
         </label>
       ) : null}
 
-      <div className="group flex h-12 w-full items-center rounded-xl border border-slate-200 bg-slate-50/60 px-3 transition focus-within:border-cyan-500 focus-within:bg-white focus-within:ring-4 focus-within:ring-cyan-100">
-        {Icon ? <Icon className="h-5 w-5 text-slate-400 transition group-focus-within:text-cyan-600" /> : null}
+      <div className="group flex h-12 w-full items-center rounded-xl border border-slate-200 bg-slate-50/60 px-3 transition focus-within:border-violet-500 focus-within:bg-white focus-within:ring-4 focus-within:ring-violet-100">
+        {Icon ? <Icon className="h-5 w-5 text-slate-400 transition group-focus-within:text-violet-600" /> : null}
         <input
           id={id}
           type={inputType}

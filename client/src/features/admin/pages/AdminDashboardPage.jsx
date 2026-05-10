@@ -66,7 +66,7 @@ const ActionModal = ({
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center bg-blue-950/30 px-3 pb-3 sm:items-center sm:px-4 sm:pb-0">
+    <div className="fixed inset-0 z-50 flex items-end justify-center bg-indigo-950/30 px-3 pb-3 sm:items-center sm:px-4 sm:pb-0">
       <div className="w-full max-w-lg rounded-2xl border border-slate-200 bg-white p-4 shadow-2xl sm:rounded-3xl sm:p-6">
         <div className="flex items-start justify-between gap-3">
           <div>
@@ -96,7 +96,7 @@ const ActionModal = ({
               onChange={(e) => onInputChange(e.target.value)}
               rows={3}
               placeholder={inputPlaceholder}
-              className="mt-2 w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-xs text-slate-700 outline-none transition focus:border-blue-300 focus:ring-2 focus:ring-blue-100 sm:text-sm"
+              className="mt-2 w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-xs text-slate-700 outline-none transition focus:border-indigo-300 focus:ring-2 focus:ring-violet-100 sm:text-sm"
             />
           </label>
         ) : null}
@@ -117,7 +117,7 @@ const ActionModal = ({
             disabled={loading}
             onClick={onConfirm}
             className={`w-full rounded-xl px-4 py-2 text-sm font-semibold text-white transition sm:w-auto ${
-              danger ? "bg-red-600 hover:bg-red-700" : "bg-blue-600 hover:bg-blue-700"
+              danger ? "bg-red-600 hover:bg-red-700" : "bg-indigo-700 hover:bg-indigo-700"
             }`}
           >
             {loading ? "Working..." : confirmLabel}
@@ -133,13 +133,13 @@ const getStatusPill = (status) => {
     suspended: "bg-amber-100 text-amber-700",
     active: "bg-emerald-100 text-emerald-700",
     hidden: "bg-rose-100 text-rose-700",
-    visible: "bg-blue-100 text-blue-700",
+    visible: "bg-indigo-100 text-indigo-700",
     open: "bg-amber-100 text-amber-700",
-    in_review: "bg-blue-100 text-blue-700",
+    in_review: "bg-indigo-100 text-indigo-700",
     resolved: "bg-emerald-100 text-emerald-700",
     dismissed: "bg-slate-100 text-slate-700",
     pending: "bg-amber-100 text-amber-700",
-    accepted: "bg-blue-100 text-blue-700",
+    accepted: "bg-indigo-100 text-indigo-700",
     returned: "bg-emerald-100 text-emerald-700",
     closed: "bg-slate-100 text-slate-700",
   };
@@ -238,7 +238,7 @@ export const AdminDashboardPage = () => {
         label: "Total Users",
         value: overview.users?.total ?? 0,
         hint: "Registered accounts",
-        color: "from-blue-500/15 to-cyan-500/15 border-blue-200",
+        color: "from-indigo-600/15 to-violet-500/15 border-indigo-200",
       },
       {
         label: "Suspended Users",
@@ -274,7 +274,7 @@ export const AdminDashboardPage = () => {
         label: "Return Success Rate",
         value: `${analytics.requests?.returnSuccessRate ?? 0}%`,
         hint: "Requests converted to returns",
-        color: "from-sky-500/15 to-indigo-500/15 border-sky-200",
+        color: "from-slate-500/15 to-indigo-500/15 border-violet-200",
       },
       {
         label: "Open Flags",
@@ -409,15 +409,15 @@ export const AdminDashboardPage = () => {
   }, [modalState]);
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[radial-gradient(circle_at_top_right,#d8f0ff_0%,#edf7ff_36%,#f8fbff_74%,#ffffff_100%)] px-2 pb-8 pt-2 sm:px-5 sm:pb-10 sm:pt-4 md:px-7">
-      <div className="pointer-events-none absolute -left-24 top-28 hidden h-64 w-64 rounded-full bg-sky-200/45 blur-3xl sm:block" />
+    <div className="relative min-h-screen overflow-hidden bg-[radial-gradient(circle_at_top_right,#ede9fe_0%,#f3f0ff_36%,#faf9ff_74%,#ffffff_100%)] px-2 pb-8 pt-2 sm:px-5 sm:pb-10 sm:pt-4 md:px-7">
+      <div className="pointer-events-none absolute -left-24 top-28 hidden h-64 w-64 rounded-full bg-violet-200/45 blur-3xl sm:block" />
       <div className="pointer-events-none absolute -right-24 top-2 hidden h-72 w-72 rounded-full bg-indigo-200/45 blur-3xl sm:block" />
 
       <div className="relative mx-auto w-full max-w-7xl">
-        <section className="rounded-2xl border border-sky-100 bg-[linear-gradient(135deg,#f8fbff_0%,#eaf4ff_52%,#f6f8ff_100%)] px-4 py-5 text-slate-900 shadow-[0_35px_90px_-65px_rgba(29,78,216,0.45)] sm:rounded-[28px] sm:px-8 sm:py-7">
+        <section className="rounded-2xl border border-indigo-100 bg-[linear-gradient(135deg,#faf9ff_0%,#ede9fe_52%,#f8f7ff_100%)] px-4 py-5 text-slate-900 shadow-[0_35px_90px_-65px_rgba(67,56,202,0.45)] sm:rounded-[28px] sm:px-8 sm:py-7">
           <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-start sm:justify-between sm:gap-5">
             <div>
-              <p className="inline-flex items-center gap-2 rounded-full border border-sky-200 bg-white px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-sky-700">
+              <p className="inline-flex items-center gap-2 rounded-full border border-violet-200 bg-white px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-violet-700">
                 <ShieldAlert className="h-3.5 w-3.5" />
                 Trust & Moderation
               </p>
@@ -432,7 +432,7 @@ export const AdminDashboardPage = () => {
             <button
               onClick={refreshTab}
               type="button"
-              className="inline-flex h-10 w-full items-center justify-center gap-2 rounded-xl border border-sky-200 bg-white px-4 text-sm font-semibold text-sky-700 transition hover:bg-sky-50 sm:h-11 sm:w-auto"
+              className="inline-flex h-10 w-full items-center justify-center gap-2 rounded-xl border border-violet-200 bg-white px-4 text-sm font-semibold text-violet-700 transition hover:bg-indigo-50 sm:h-11 sm:w-auto"
             >
               <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
               Refresh {activeTab}
@@ -440,16 +440,16 @@ export const AdminDashboardPage = () => {
           </div>
 
           <div className="mt-4 grid gap-2 sm:mt-5 sm:grid-cols-3 sm:gap-3">
-            <div className="rounded-xl border border-sky-100 bg-white/85 p-3 sm:rounded-2xl sm:p-4">
-              <p className="text-xs uppercase tracking-[0.14em] text-sky-700">Your role</p>
+            <div className="rounded-xl border border-indigo-100 bg-white/85 p-3 sm:rounded-2xl sm:p-4">
+              <p className="text-xs uppercase tracking-[0.14em] text-violet-700">Your role</p>
               <p className="mt-1 text-base font-bold text-slate-900 sm:text-lg">{user?.role || "moderator"}</p>
             </div>
-            <div className="rounded-xl border border-sky-100 bg-white/85 p-3 sm:rounded-2xl sm:p-4">
-              <p className="text-xs uppercase tracking-[0.14em] text-sky-700">Open flags</p>
+            <div className="rounded-xl border border-indigo-100 bg-white/85 p-3 sm:rounded-2xl sm:p-4">
+              <p className="text-xs uppercase tracking-[0.14em] text-violet-700">Open flags</p>
               <p className="mt-1 text-base font-bold text-slate-900 sm:text-lg">{overview?.moderation?.openFlags ?? "-"}</p>
             </div>
-            <div className="rounded-xl border border-sky-100 bg-white/85 p-3 sm:rounded-2xl sm:p-4">
-              <p className="text-xs uppercase tracking-[0.14em] text-sky-700">Pending requests</p>
+            <div className="rounded-xl border border-indigo-100 bg-white/85 p-3 sm:rounded-2xl sm:p-4">
+              <p className="text-xs uppercase tracking-[0.14em] text-violet-700">Pending requests</p>
               <p className="mt-1 text-base font-bold text-slate-900 sm:text-lg">{overview?.requests?.pending ?? "-"}</p>
             </div>
           </div>
@@ -467,7 +467,7 @@ export const AdminDashboardPage = () => {
                 onClick={() => setActiveTab(tab.id)}
                 className={`inline-flex shrink-0 items-center gap-1.5 rounded-xl px-3 py-2 text-xs font-semibold transition sm:gap-2 sm:px-4 sm:py-2.5 sm:text-sm ${
                   isActive
-                    ? "bg-blue-600 text-white shadow-lg"
+                    ? "bg-indigo-700 text-white shadow-lg"
                     : "border border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
                 }`}
               >
@@ -509,12 +509,12 @@ export const AdminDashboardPage = () => {
                   value={usersSearch}
                   onChange={(e) => setUsersSearch(e.target.value)}
                   placeholder="Search by name, username, or email"
-                  className="h-10 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm text-slate-700 outline-none transition focus:border-blue-300 focus:ring-2 focus:ring-blue-100 sm:max-w-md"
+                  className="h-10 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm text-slate-700 outline-none transition focus:border-indigo-300 focus:ring-2 focus:ring-violet-100 sm:max-w-md"
                 />
                 <button
                   type="button"
                   onClick={loadUsers}
-                  className="h-10 w-full rounded-xl bg-blue-600 px-4 text-sm font-semibold text-white transition hover:bg-blue-700 sm:w-auto"
+                  className="h-10 w-full rounded-xl bg-indigo-700 px-4 text-sm font-semibold text-white transition hover:bg-indigo-700 sm:w-auto"
                 >
                   Search
                 </button>
@@ -611,12 +611,12 @@ export const AdminDashboardPage = () => {
                   value={itemsSearch}
                   onChange={(e) => setItemsSearch(e.target.value)}
                   placeholder="Search items by name, location, description"
-                  className="h-10 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm text-slate-700 outline-none transition focus:border-blue-300 focus:ring-2 focus:ring-blue-100 sm:max-w-md"
+                  className="h-10 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm text-slate-700 outline-none transition focus:border-indigo-300 focus:ring-2 focus:ring-violet-100 sm:max-w-md"
                 />
                 <button
                   type="button"
                   onClick={loadItems}
-                  className="h-10 w-full rounded-xl bg-blue-600 px-4 text-sm font-semibold text-white transition hover:bg-blue-700 sm:w-auto"
+                  className="h-10 w-full rounded-xl bg-indigo-700 px-4 text-sm font-semibold text-white transition hover:bg-indigo-700 sm:w-auto"
                 >
                   Search
                 </button>
@@ -812,7 +812,7 @@ export const AdminDashboardPage = () => {
                               status: "dismissed",
                             })
                           }
-                          className="w-full rounded-lg bg-blue-700 px-3 py-2 text-xs font-semibold text-white sm:w-auto sm:py-1.5"
+                          className="w-full rounded-lg bg-indigo-700 px-3 py-2 text-xs font-semibold text-white sm:w-auto sm:py-1.5"
                         >
                           Dismiss
                         </button>

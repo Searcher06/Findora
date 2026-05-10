@@ -70,15 +70,15 @@ const LoginPage = () => {
               type="checkbox"
               checked={rememberMe}
               onChange={(e) => setRememberMe(e.target.checked)}
-              className="h-4 w-4 rounded border-slate-300 text-cyan-600 focus:ring-cyan-500"
+              className="h-4 w-4 rounded border-slate-300 text-violet-600 focus:ring-violet-500"
             />
             Remember me
           </label>
           <div className="flex items-center gap-3 text-sm">
-            <Link to="/forgot-password" className="font-semibold text-cyan-700 transition hover:text-cyan-800">
+            <Link to="/forgot-password" className="font-semibold text-violet-700 transition hover:text-violet-800">
               Forgot password?
             </Link>
-            <Link to="/resend-email" className="font-semibold text-cyan-700 transition hover:text-cyan-800">
+            <Link to="/resend-email" className="font-semibold text-violet-700 transition hover:text-violet-800">
               Verify email
             </Link>
           </div>
@@ -97,7 +97,7 @@ const LoginPage = () => {
       <div className="mt-6 space-y-4">
         <p className="text-center text-sm text-slate-600">
           New to Findora?{" "}
-          <Link to="/signup" className="font-semibold text-cyan-700 hover:text-cyan-800">
+          <Link to="/signup" className="font-semibold text-violet-700 hover:text-violet-800">
             Create your account
           </Link>
         </p>

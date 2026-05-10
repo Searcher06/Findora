@@ -65,7 +65,7 @@ const QuestionsSections = ({
           onChange={(e) => setAddQuestion(e.target.value)}
         ></textarea>
         <Button
-          className="text-xs bg-blue-600 h-[34px] rounded-sm"
+          className="text-xs bg-indigo-700 h-[34px] rounded-sm"
           onClick={handleAddQuestion}
           disabled={!addQuestion.trim()}
         >

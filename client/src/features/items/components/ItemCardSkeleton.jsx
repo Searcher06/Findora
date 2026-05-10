@@ -3,7 +3,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export const ItemCardSkeleton = () => {
   return (
-    <Card className="w-full max-w-[320px] overflow-hidden rounded-3xl border border-sky-100">
+    <Card className="w-full max-w-[320px] overflow-hidden rounded-3xl border border-indigo-100">
       <div className="flex flex-col gap-3 p-3.5">
         {/* Image placeholder */}
         <Skeleton className="h-36 w-full rounded-2xl" />

@@ -3,8 +3,8 @@ import { ShieldCheck, Sparkles, CheckCircle2 } from "lucide-react";
 
 export const AuthShell = ({ title, subtitle, children, bottomNote }) => {
   return (
-    <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-slate-100 via-cyan-50 to-emerald-50 px-4 py-8 sm:px-6 lg:px-8">
-      <div className="pointer-events-none absolute -left-16 top-20 h-56 w-56 rounded-full bg-cyan-300/35 blur-3xl" />
+    <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-slate-100 via-violet-50 to-emerald-50 px-4 py-8 sm:px-6 lg:px-8">
+      <div className="pointer-events-none absolute -left-16 top-20 h-56 w-56 rounded-full bg-violet-300/35 blur-3xl" />
       <div className="pointer-events-none absolute -right-16 bottom-16 h-56 w-56 rounded-full bg-emerald-300/35 blur-3xl" />
       <div className="pointer-events-none absolute right-1/3 top-1/4 h-40 w-40 rounded-full bg-amber-300/25 blur-3xl" />
 

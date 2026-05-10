@@ -15,7 +15,7 @@ export const EnterCodeSection = ({
     </h2>
     <p className="text-gray-600 text-[10px] sm:text-xs md:text-sm mb-3 sm:mb-4 text-center font-sans">Type the code they shared with you</p>
 
-    <div className="flex justify-center mb-4 sm:mb-5 bg-gradient-to-b from-blue-50 to-sky-50/50 p-2.5 sm:p-3 md:p-4 rounded-xl sm:rounded-2xl border border-sky-100">
+    <div className="flex justify-center mb-4 sm:mb-5 bg-gradient-to-b from-indigo-50 to-violet-50/50 p-2.5 sm:p-3 md:p-4 rounded-xl sm:rounded-2xl border border-indigo-100">
       <InputOTP maxLength={5} value={otp} onChange={setOtp} disabled={isOtherUserVerified}>
         <InputOTPGroup>
           {[0, 1, 2, 3, 4].map((index) => (
@@ -25,7 +25,7 @@ export const EnterCodeSection = ({
               className={`w-8 h-10 sm:w-9 md:w-11 sm:h-12 md:h-14 text-base sm:text-lg md:text-xl font-bold rounded-lg border-2 transition-all ${
                 isOtherUserVerified
                   ? "bg-gray-50 border-gray-200 text-gray-400"
-                  : "border-sky-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                  : "border-violet-200 focus:border-indigo-500 focus:ring-2 focus:ring-violet-100"
               }`}
             />
           ))}
@@ -39,7 +39,7 @@ export const EnterCodeSection = ({
       className={`w-full font-medium py-2 sm:py-2.5 md:py-3 rounded-lg sm:rounded-xl text-xs sm:text-sm md:text-base transition-all duration-200 font-sans ${
         isOtherUserVerified
           ? "bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white cursor-default shadow-md"
-          : "bg-gradient-to-r from-blue-500 to-sky-500 hover:from-blue-600 hover:to-sky-600 text-white shadow-md hover:shadow-lg"
+          : "bg-gradient-to-r from-indigo-600 to-violet-500 hover:from-indigo-600 hover:to-violet-600 text-white shadow-md hover:shadow-lg"
       }`}
     >
       {sending ? "Verifying..." : isOtherUserVerified ? "✓ Verification Complete" : buttonText}
@@ -55,8 +55,8 @@ export const EnterCodeSection = ({
     )}
 
     {!isOtherUserVerified && isUserVerified && (
-      <div className="mt-3 sm:mt-4 p-2.5 sm:p-3 md:p-3 rounded-lg sm:rounded-xl bg-gradient-to-r from-blue-50 to-sky-50 border border-blue-200 text-center">
-        <p className="text-blue-700 text-xs sm:text-sm md:text-base font-medium font-sans">
+      <div className="mt-3 sm:mt-4 p-2.5 sm:p-3 md:p-3 rounded-lg sm:rounded-xl bg-gradient-to-r from-indigo-50 to-violet-50 border border-indigo-200 text-center">
+        <p className="text-indigo-700 text-xs sm:text-sm md:text-base font-medium font-sans">
           They've verified you! Now enter their code above.
         </p>
       </div>

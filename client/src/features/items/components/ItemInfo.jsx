@@ -57,7 +57,7 @@ export const ItemInfo = ({ item, layoutMode = "default" }) => {
 
         {/* Item Details Grid */}
         <div className="space-y-3.5 xl:space-y-4">
-          <div className="border-l-4 border-blue-500 pl-4 sm:pl-5">
+          <div className="border-l-4 border-indigo-500 pl-4 sm:pl-5">
             <SpecificInfo infotype="Category" value={category} size="lg" />
           </div>
           <div>
@@ -72,7 +72,7 @@ export const ItemInfo = ({ item, layoutMode = "default" }) => {
         </div>
 
         {/* Description */}
-        <div className="rounded-2xl bg-gradient-to-br from-blue-50 to-sky-50/50 p-4 xl:p-5 border border-sky-100 shadow-sm">
+        <div className="rounded-2xl bg-gradient-to-br from-indigo-50 to-violet-50/50 p-4 xl:p-5 border border-indigo-100 shadow-sm">
           <h3 className="font-display font-bold text-gray-900 text-xs xl:text-sm uppercase tracking-[0.1em] mb-2.5 xl:mb-3">Description</h3>
           <p className="text-gray-800 text-sm xl:text-base leading-relaxed">{description}</p>
         </div>

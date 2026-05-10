@@ -3,7 +3,7 @@ export const YourCodeSection = ({ userCode, isUserVerified, codeType = "Your 5-d
     <div className="text-center">
       <h3 className="font-semibold mb-2 sm:mb-3 text-xs sm:text-sm md:text-base font-display text-gray-900">{codeType}</h3>
       <div className="mb-3 sm:mb-4">
-        <p className="text-2xl sm:text-3xl md:text-4xl font-bold text-blue-600 font-mono tracking-[0.15em] sm:tracking-[0.2em] md:tracking-[0.25em] mb-2 sm:mb-3 bg-gradient-to-r from-blue-600 to-sky-600 bg-clip-text text-transparent">
+        <p className="text-2xl sm:text-3xl md:text-4xl font-bold text-indigo-600 font-mono tracking-[0.15em] sm:tracking-[0.2em] md:tracking-[0.25em] mb-2 sm:mb-3 bg-gradient-to-r from-indigo-600 to-violet-600 bg-clip-text text-transparent">
           {userCode}
         </p>
         <div className="space-y-1 sm:space-y-1.5">

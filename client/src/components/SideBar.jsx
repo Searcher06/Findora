@@ -128,7 +128,7 @@ export const SideBar = ({
               }}
               className={`group relative flex items-center rounded-xl text-sm font-semibold transition ${
                 active
-                  ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-500/25"
+                  ? "bg-gradient-to-r from-indigo-600 to-violet-600 text-white shadow-lg shadow-indigo-500/25"
                   : "text-slate-700 hover:bg-slate-100"
               } ${
                 isCompact
@@ -142,7 +142,7 @@ export const SideBar = ({
               </span>
               <span className={`flex items-center ${isCompact ? "absolute right-1 top-1" : "gap-2"}`}>
                 {badge ? (
-                  <span className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${active ? "bg-white text-blue-700" : "bg-blue-600 text-white"}`}>
+                  <span className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${active ? "bg-white text-indigo-700" : "bg-indigo-700 text-white"}`}>
                     {badge}
                   </span>
                 ) : null}

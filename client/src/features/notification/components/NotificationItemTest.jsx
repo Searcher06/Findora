@@ -274,7 +274,7 @@ const NotificationItemTest = ({ notification, currentUserId }) => {
   const getIconContainerClass = () => {
     switch (config.color) {
       case "blue":
-        return "bg-blue-100 text-blue-600";
+        return "bg-indigo-100 text-indigo-600";
       case "orange":
         return "bg-orange-100 text-orange-600";
       case "red":
@@ -291,7 +291,7 @@ const NotificationItemTest = ({ notification, currentUserId }) => {
 
     switch (config.color) {
       case "blue":
-        return `${baseClasses} bg-blue-600 hover:bg-blue-700`;
+        return `${baseClasses} bg-indigo-700 hover:bg-indigo-700`;
       case "orange":
         return `${baseClasses} bg-orange-600 hover:bg-orange-700`;
       case "red":
@@ -299,7 +299,7 @@ const NotificationItemTest = ({ notification, currentUserId }) => {
       case "green":
         return `${baseClasses} bg-green-600 hover:bg-green-700`;
       default:
-        return `${baseClasses} bg-blue-600 hover:bg-blue-700`;
+        return `${baseClasses} bg-indigo-700 hover:bg-indigo-700`;
     }
   };
 

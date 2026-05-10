@@ -39,8 +39,8 @@ export const ChatPage = () => {
   }, [messages]);
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-slate-50 via-blue-50/25 to-white">
-      <div className="pointer-events-none absolute -left-24 top-6 h-64 w-64 rounded-full bg-sky-300/20 blur-3xl" />
+    <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-slate-50 via-slate-100/45 to-white">
+      <div className="pointer-events-none absolute -left-24 top-6 h-64 w-64 rounded-full bg-violet-300/20 blur-3xl" />
       <div className="pointer-events-none absolute right-0 top-0 h-72 w-72 rounded-full bg-indigo-200/20 blur-3xl" />
 
       <div className="relative lg:hidden h-[calc(100dvh-3.5rem)] md:h-[calc(100dvh-4rem)]">

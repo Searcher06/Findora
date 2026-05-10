@@ -56,7 +56,7 @@ export const ResetPasswordPage = () => {
       <AuthShell title="Invalid Reset Link" subtitle="This link is missing a token or has expired.">
         <div className="rounded-2xl border border-rose-200 bg-rose-50 p-5 text-sm text-rose-800">Please request a fresh reset link and try again.</div>
         <p className="mt-6 text-center text-sm text-slate-600">
-          <Link to="/forgot-password" className="font-semibold text-cyan-700 hover:text-cyan-800">
+          <Link to="/forgot-password" className="font-semibold text-violet-700 hover:text-violet-800">
             Request new reset link
           </Link>
         </p>
@@ -110,7 +110,7 @@ export const ResetPasswordPage = () => {
 
       <p className="mt-6 text-center text-sm text-slate-600">
         Back to{" "}
-        <Link to="/login" className="font-semibold text-cyan-700 hover:text-cyan-800">
+        <Link to="/login" className="font-semibold text-violet-700 hover:text-violet-800">
           Login
         </Link>
       </p>

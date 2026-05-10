@@ -30,7 +30,7 @@ export const QuestionCard = ({ question, onEdit, onDelete }) => {
           />
           <button
             onClick={handleSave}
-            className="text-xs text-blue-600 font-medium"
+            className="text-xs text-indigo-600 font-medium"
           >
             Save
           </button>

@@ -79,9 +79,9 @@ export const CodeExchangePage = () => {
 
   // Original verification UI with enhanced status tracking
   return (
-    <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-sky-50 via-blue-50/35 to-white px-3 sm:px-4 md:px-6 py-4 sm:py-6 flex flex-col">
+    <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-slate-50 via-slate-100/55 to-white px-3 sm:px-4 md:px-6 py-4 sm:py-6 flex flex-col">
       {/* Decorative blur circles */}
-      <div className="pointer-events-none absolute -left-20 top-16 h-56 w-56 rounded-full bg-sky-300/20 blur-3xl" />
+      <div className="pointer-events-none absolute -left-20 top-16 h-56 w-56 rounded-full bg-violet-300/20 blur-3xl" />
       <div className="pointer-events-none absolute right-0 top-10 h-72 w-72 rounded-full bg-indigo-200/20 blur-3xl" />
 
       {/* Content */}

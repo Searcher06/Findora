@@ -61,7 +61,7 @@ export const ChatSelectionPage = () => {
     const name = userData?.username || "User";
     return `https://ui-avatars.com/api/?name=${encodeURIComponent(
       name,
-    )}&background=3B82F6&color=fff&bold=true`;
+    )}&background=4338CA&color=fff&bold=true`;
   };
 
   const transformConversationsToChats = () => {
@@ -103,12 +103,12 @@ export const ChatSelectionPage = () => {
   );
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-sky-50 via-blue-50/35 to-white px-3 pb-8 pt-3 sm:px-5 md:px-6">
-      <div className="pointer-events-none absolute -left-20 top-16 h-56 w-56 rounded-full bg-sky-300/20 blur-3xl" />
+    <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-slate-50 via-slate-100/55 to-white px-3 pb-8 pt-3 sm:px-5 md:px-6">
+      <div className="pointer-events-none absolute -left-20 top-16 h-56 w-56 rounded-full bg-violet-300/20 blur-3xl" />
       <div className="pointer-events-none absolute right-0 top-10 h-72 w-72 rounded-full bg-indigo-200/20 blur-3xl" />
 
       <div className="relative mx-auto w-full max-w-6xl">
-        <section className="rounded-3xl border border-sky-100 bg-[linear-gradient(135deg,#f8fbff_0%,#eef5ff_54%,#f7f9ff_100%)] px-4 py-5 shadow-[0_35px_90px_-70px_rgba(37,99,235,0.6)] sm:px-6 sm:py-6">
+        <section className="rounded-3xl border border-indigo-100 bg-[linear-gradient(135deg,#faf9ff_0%,#f3f0ff_54%,#f8f7ff_100%)] px-4 py-5 shadow-[0_35px_90px_-70px_rgba(79,70,229,0.6)] sm:px-6 sm:py-6">
           <div className="flex items-center justify-between gap-3">
             <button
               onClick={() => window.history.back()}
@@ -119,7 +119,7 @@ export const ChatSelectionPage = () => {
             </button>
             <button
               onClick={() => useChatStore.getState().fetchUsersToChat()}
-              className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-blue-700 transition hover:bg-blue-50"
+              className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-indigo-700 transition hover:bg-indigo-50"
               aria-label="Refresh chats"
             >
               <RefreshCw
@@ -129,7 +129,7 @@ export const ChatSelectionPage = () => {
           </div>
 
           <div className="mt-4">
-            <p className="inline-flex rounded-full border border-sky-200 bg-white px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-sky-700">
+            <p className="inline-flex rounded-full border border-violet-200 bg-white px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-violet-700">
               Findora Messages
             </p>
             <h1 className="mt-3 font-display text-2xl font-bold text-slate-900 sm:text-3xl">
@@ -148,7 +148,7 @@ export const ChatSelectionPage = () => {
               placeholder="Search people, items, or roles..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="h-11 w-full rounded-xl border border-sky-100 bg-white pl-9 pr-3 text-sm text-slate-700 outline-none transition focus:border-blue-300 focus:ring-2 focus:ring-blue-100"
+              className="h-11 w-full rounded-xl border border-indigo-100 bg-white pl-9 pr-3 text-sm text-slate-700 outline-none transition focus:border-indigo-300 focus:ring-2 focus:ring-violet-100"
             />
           </div>
         </section>
@@ -169,7 +169,7 @@ export const ChatSelectionPage = () => {
                   onClick={() => handleChatSelect(chat)}
                   className={`w-full rounded-2xl border px-3 py-3 text-left transition sm:px-4 ${
                     chat.isUnread
-                      ? "border-blue-200 bg-blue-50/65 shadow-sm"
+                      ? "border-indigo-200 bg-indigo-50/65 shadow-sm"
                       : "border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50"
                   }`}
                 >
@@ -181,7 +181,7 @@ export const ChatSelectionPage = () => {
                         className="h-11 w-11 rounded-full object-cover ring-2 ring-white sm:h-12 sm:w-12"
                       />
                       {chat.isUnread ? (
-                        <span className="absolute -right-0.5 -top-0.5 h-3 w-3 rounded-full border-2 border-white bg-blue-600" />
+                        <span className="absolute -right-0.5 -top-0.5 h-3 w-3 rounded-full border-2 border-white bg-indigo-700" />
                       ) : null}
                     </div>
 
@@ -190,12 +190,12 @@ export const ChatSelectionPage = () => {
                         <h3 className={`truncate font-display text-sm sm:text-base ${chat.isUnread ? "font-bold text-slate-900" : "font-semibold text-slate-900"}`}>
                           {chat.userName}
                         </h3>
-                        <span className={`shrink-0 text-[11px] font-medium ${chat.isUnread ? "text-blue-700" : "text-slate-500"}`}>
+                        <span className={`shrink-0 text-[11px] font-medium ${chat.isUnread ? "text-indigo-700" : "text-slate-500"}`}>
                           {chat.timestamp}
                         </span>
                       </div>
 
-                      <div className="mt-1 inline-flex rounded-md bg-sky-100 px-2 py-0.5 text-[11px] font-semibold text-sky-700">
+                      <div className="mt-1 inline-flex rounded-md bg-violet-100 px-2 py-0.5 text-[11px] font-semibold text-violet-700">
                         {chat.role}
                       </div>
 

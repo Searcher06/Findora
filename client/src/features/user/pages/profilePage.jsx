@@ -29,10 +29,10 @@ const FieldCard = ({
 }) => {
   const tones = {
     blue: {
-      dot: "bg-blue-500",
-      icon: "text-blue-700",
-      iconBg: "bg-blue-100",
-      hover: "hover:border-blue-200",
+      dot: "bg-indigo-500",
+      icon: "text-indigo-700",
+      iconBg: "bg-indigo-100",
+      hover: "hover:border-indigo-200",
     },
     emerald: {
       dot: "bg-emerald-500",
@@ -67,7 +67,7 @@ const FieldCard = ({
       <button
         type="button"
         onClick={onEmptyAction}
-        className="w-full rounded-2xl border-2 border-dashed border-slate-300 bg-white p-4 text-left transition hover:border-blue-300 hover:bg-blue-50/40"
+        className="w-full rounded-2xl border-2 border-dashed border-slate-300 bg-white p-4 text-left transition hover:border-indigo-300 hover:bg-indigo-50/40"
       >
         <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">
           {label}
@@ -154,7 +154,7 @@ export function ProfilePage() {
   if (isCheckingAuth) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-slate-50">
-        <Loader2 className="h-12 w-12 animate-spin text-blue-500" />
+        <Loader2 className="h-12 w-12 animate-spin text-indigo-500" />
       </div>
     );
   }
@@ -172,13 +172,13 @@ export function ProfilePage() {
   }
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-sky-50 via-blue-50/35 to-white px-2.5 pb-8 pt-2.5 sm:px-5 sm:pb-10 sm:pt-3 md:px-6">
-      <div className="pointer-events-none absolute -left-20 top-10 h-56 w-56 rounded-full bg-sky-300/20 blur-3xl" />
+    <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-slate-50 via-slate-100/55 to-white px-2.5 pb-8 pt-2.5 sm:px-5 sm:pb-10 sm:pt-3 md:px-6">
+      <div className="pointer-events-none absolute -left-20 top-10 h-56 w-56 rounded-full bg-violet-300/20 blur-3xl" />
       <div className="pointer-events-none absolute right-0 top-0 h-64 w-64 rounded-full bg-indigo-200/20 blur-3xl" />
 
       <div className="relative mx-auto w-full max-w-6xl">
-        <section className="rounded-2xl border border-sky-100 bg-[linear-gradient(135deg,#f8fbff_0%,#eef5ff_54%,#f7f9ff_100%)] px-3 py-4 shadow-[0_35px_90px_-70px_rgba(37,99,235,0.6)] sm:rounded-3xl sm:px-6 sm:py-6">
-          <p className="inline-flex rounded-full border border-sky-200 bg-white px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-sky-700">
+        <section className="rounded-2xl border border-indigo-100 bg-[linear-gradient(135deg,#faf9ff_0%,#f3f0ff_54%,#f8f7ff_100%)] px-3 py-4 shadow-[0_35px_90px_-70px_rgba(79,70,229,0.6)] sm:rounded-3xl sm:px-6 sm:py-6">
+          <p className="inline-flex rounded-full border border-violet-200 bg-white px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-violet-700">
             Findora Profile
           </p>
           <h1 className="mt-2.5 font-display text-xl font-bold text-slate-900 sm:mt-3 sm:text-3xl">
@@ -192,7 +192,7 @@ export function ProfilePage() {
         <section className="mt-3.5 rounded-2xl border border-slate-200/80 bg-white/90 p-3.5 shadow-[0_30px_90px_-75px_rgba(15,23,42,0.8)] sm:mt-4 sm:rounded-3xl sm:p-5">
           <div className="flex flex-col items-center gap-3.5 text-center min-[390px]:flex-row min-[390px]:items-center min-[390px]:text-left sm:gap-4">
             <div className="relative shrink-0">
-              <div className="h-14 w-14 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 p-0.5 min-[390px]:h-16 min-[390px]:w-16 sm:h-20 sm:w-20">
+              <div className="h-14 w-14 rounded-full bg-gradient-to-br from-indigo-600 to-violet-600 p-0.5 min-[390px]:h-16 min-[390px]:w-16 sm:h-20 sm:w-20">
                 <div className="flex h-full w-full items-center justify-center overflow-hidden rounded-full bg-white">
                   {user.profilePic ? (
                     <img
@@ -205,7 +205,7 @@ export function ProfilePage() {
                   )}
                 </div>
               </div>
-              <span className="absolute -bottom-1 -right-1 inline-flex h-5 w-5 items-center justify-center rounded-full border-2 border-white bg-blue-600">
+              <span className="absolute -bottom-1 -right-1 inline-flex h-5 w-5 items-center justify-center rounded-full border-2 border-white bg-indigo-700">
                 <span className="h-2 w-2 rounded-full bg-white" />
               </span>
             </div>
@@ -216,7 +216,7 @@ export function ProfilePage() {
               </h2>
               <p className="truncate text-xs text-slate-500 min-[390px]:text-sm">@{accountUsername}</p>
               <div className="mt-2 flex flex-wrap items-center justify-center gap-2 min-[390px]:justify-start">
-                <span className="inline-flex rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold capitalize text-blue-700">
+                <span className="inline-flex rounded-full bg-indigo-100 px-3 py-1 text-xs font-semibold capitalize text-indigo-700">
                   {user.role} account
                 </span>
                 {user.hasVerifiedReturnBadge ? (
@@ -233,7 +233,7 @@ export function ProfilePage() {
         <section className="mt-3.5 grid gap-3.5 lg:mt-4 lg:gap-4 lg:grid-cols-2">
           <div className="space-y-3 rounded-2xl border border-slate-200/80 bg-white/90 p-3.5 shadow-[0_30px_90px_-75px_rgba(15,23,42,0.8)] sm:rounded-3xl sm:p-5">
             <div className="flex items-center gap-2">
-              <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-blue-100 text-blue-700">
+              <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-100 text-indigo-700">
                 <GraduationCap className="h-4 w-4" />
               </span>
               <div>

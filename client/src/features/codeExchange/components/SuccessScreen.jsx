@@ -41,17 +41,17 @@ export const SuccessScreen = ({ request, navigate }) => (
         </div>
       </div>
 
-      <div className="rounded-2xl sm:rounded-2xl border border-sky-100 bg-[linear-gradient(135deg,#f8fbff_0%,#eef5ff_54%,#f7f9ff_100%)] p-3 sm:p-3.5 md:p-4">
+      <div className="rounded-2xl sm:rounded-2xl border border-indigo-100 bg-[linear-gradient(135deg,#faf9ff_0%,#f3f0ff_54%,#f8f7ff_100%)] p-3 sm:p-3.5 md:p-4">
         <h3 className="text-xs sm:text-sm md:text-base font-bold text-gray-900 font-display mb-2 sm:mb-2.5 md:mb-3">What's Next?</h3>
         <div className="space-y-1.5 sm:space-y-2">
           <div className="flex items-start gap-1.5 sm:gap-2">
-            <div className="w-4 sm:w-5 h-4 sm:h-5 rounded-full bg-blue-500 text-white flex items-center justify-center shrink-0 mt-0.5 text-[10px] sm:text-xs font-bold">
+            <div className="w-4 sm:w-5 h-4 sm:h-5 rounded-full bg-indigo-500 text-white flex items-center justify-center shrink-0 mt-0.5 text-[10px] sm:text-xs font-bold">
               ✓
             </div>
             <p className="text-gray-700 text-xs sm:text-sm md:text-base font-sans">Exchange recorded in secure database</p>
           </div>
           <div className="flex items-start gap-1.5 sm:gap-2">
-            <div className="w-4 sm:w-5 h-4 sm:h-5 rounded-full bg-blue-500 text-white flex items-center justify-center shrink-0 mt-0.5 text-[10px] sm:text-xs font-bold">
+            <div className="w-4 sm:w-5 h-4 sm:h-5 rounded-full bg-indigo-500 text-white flex items-center justify-center shrink-0 mt-0.5 text-[10px] sm:text-xs font-bold">
               ✓
             </div>
             <p className="text-gray-700 text-xs sm:text-sm md:text-base font-sans">You can close this or go to Home page</p>

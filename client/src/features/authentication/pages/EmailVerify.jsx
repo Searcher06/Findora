@@ -89,7 +89,7 @@ export const EmailVerify = () => {
     <AuthShell title={titleMap[status]} subtitle={subtitleMap[status]}>
       {status === "verifying" ? (
         <div className="rounded-2xl border border-slate-200 bg-slate-50 p-8 text-center">
-          <Loader2 className="mx-auto h-12 w-12 animate-spin text-cyan-700" />
+          <Loader2 className="mx-auto h-12 w-12 animate-spin text-violet-700" />
           <p className="mt-4 text-sm text-slate-600">This should only take a moment.</p>
         </div>
       ) : null}
@@ -141,7 +141,7 @@ export const EmailVerify = () => {
 
           <div className="text-center text-sm text-slate-600">
             Already verified?{" "}
-            <Link to="/login" className="font-semibold text-cyan-700 hover:text-cyan-800">
+            <Link to="/login" className="font-semibold text-violet-700 hover:text-violet-800">
               Go to Login
             </Link>
           </div>
@@ -150,7 +150,7 @@ export const EmailVerify = () => {
 
       <div className="mt-6 text-center text-sm text-slate-600">
         Need another link?{" "}
-        <Link to="/resend-email" className="font-semibold text-cyan-700 hover:text-cyan-800">
+        <Link to="/resend-email" className="font-semibold text-violet-700 hover:text-violet-800">
           Resend from here
         </Link>
       </div>

@@ -34,8 +34,8 @@ const AddInfo = ({
       className={`w-full overflow-visible rounded-2xl sm:rounded-3xl border border-slate-200 bg-white/90 p-4 sm:p-6 md:p-8 shadow-[0_30px_90px_-75px_rgba(15,23,42,0.8)] backdrop-blur ${className}`}
       onSubmit={(event) => event.preventDefault()}
     >
-      <div className="rounded-2xl border border-sky-100 bg-gradient-to-br from-sky-50 to-blue-50/50 p-3.5 sm:p-4 md:p-5">
-        <p className="text-[10px] sm:text-xs md:text-xs font-bold uppercase tracking-[0.18em] text-sky-700">Report Details</p>
+      <div className="rounded-2xl border border-indigo-100 bg-gradient-to-br from-slate-50 to-indigo-50/50 p-3.5 sm:p-4 md:p-5">
+        <p className="text-[10px] sm:text-xs md:text-xs font-bold uppercase tracking-[0.18em] text-violet-700">Report Details</p>
         <p className="mt-1.5 sm:mt-2 text-xs sm:text-sm md:text-base text-slate-700 leading-relaxed">
           Fill in the key details so people can quickly identify the item.
         </p>
@@ -50,7 +50,7 @@ const AddInfo = ({
             onClick={() => handleInputChange({ target: { name: "status", value: "lost" } })}
             className={`flex min-h-11 sm:min-h-12 items-center justify-center gap-2 rounded-xl border px-3 py-2 text-xs sm:text-sm font-semibold transition-all ${
               itemData.status === "lost"
-                ? "border-blue-300 bg-blue-50 text-blue-700 shadow-sm"
+                ? "border-indigo-300 bg-indigo-50 text-indigo-700 shadow-sm"
                 : "border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50"
             }`}
           >
@@ -81,7 +81,7 @@ const AddInfo = ({
               type="text"
               name="itemName"
               placeholder="e.g. Samsung Galaxy S5"
-              className="h-10 sm:h-11 w-full rounded-lg sm:rounded-xl border border-slate-300 bg-white pl-10 pr-3 text-xs sm:text-sm text-slate-800 outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-100"
+              className="h-10 sm:h-11 w-full rounded-lg sm:rounded-xl border border-slate-300 bg-white pl-10 pr-3 text-xs sm:text-sm text-slate-800 outline-none transition focus:border-indigo-400 focus:ring-2 focus:ring-violet-100"
               value={itemData.itemName}
               onChange={handleInputChange}
             />
@@ -94,7 +94,7 @@ const AddInfo = ({
             name="category"
             id="category"
             value={itemData.category}
-            className="mt-2.5 sm:mt-3 block h-10 sm:h-11 w-full rounded-lg sm:rounded-xl border border-slate-300 bg-white px-3 text-xs sm:text-sm text-slate-800 outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-100"
+            className="mt-2.5 sm:mt-3 block h-10 sm:h-11 w-full rounded-lg sm:rounded-xl border border-slate-300 bg-white px-3 text-xs sm:text-sm text-slate-800 outline-none transition focus:border-indigo-400 focus:ring-2 focus:ring-violet-100"
             onChange={handleInputChange}
           >
             <option value="" disabled>
@@ -124,7 +124,7 @@ const AddInfo = ({
               onChange={handleInputChange}
               id="dateLostOrFound"
               max={maxDate}
-              className="block h-10 sm:h-11 w-full rounded-lg sm:rounded-xl border border-slate-300 bg-white pl-10 pr-3 text-xs sm:text-sm text-slate-800 outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-100"
+              className="block h-10 sm:h-11 w-full rounded-lg sm:rounded-xl border border-slate-300 bg-white pl-10 pr-3 text-xs sm:text-sm text-slate-800 outline-none transition focus:border-indigo-400 focus:ring-2 focus:ring-violet-100"
             />
           </div>
         </div>
@@ -138,7 +138,7 @@ const AddInfo = ({
             onChange={handleInputChange}
             rows={4}
             placeholder="A dark colored Samsung phone left in the library..."
-            className="mt-2.5 sm:mt-3 block w-full resize-none rounded-lg sm:rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-xs sm:text-sm text-slate-800 outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-100"
+            className="mt-2.5 sm:mt-3 block w-full resize-none rounded-lg sm:rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-xs sm:text-sm text-slate-800 outline-none transition focus:border-indigo-400 focus:ring-2 focus:ring-violet-100"
           ></textarea>
         </div>
 
@@ -153,7 +153,7 @@ const AddInfo = ({
               value={itemData.location}
               onChange={handleInputChange}
               placeholder="e.g. Main library"
-              className="h-10 sm:h-11 w-full rounded-lg sm:rounded-xl border border-slate-300 bg-white pl-10 pr-3 text-xs sm:text-sm text-slate-800 outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-100"
+              className="h-10 sm:h-11 w-full rounded-lg sm:rounded-xl border border-slate-300 bg-white pl-10 pr-3 text-xs sm:text-sm text-slate-800 outline-none transition focus:border-indigo-400 focus:ring-2 focus:ring-violet-100"
             />
           </div>
         </div>
@@ -172,7 +172,7 @@ const AddInfo = ({
       />
 
       <Button
-        className="mt-4 sm:mt-5 md:mt-6 h-10 sm:h-11 md:h-12 w-full rounded-lg sm:rounded-xl bg-blue-600 hover:bg-blue-700 text-xs sm:text-sm md:text-base font-bold text-white transition-all shadow-sm hover:shadow-md active:scale-95"
+        className="mt-4 sm:mt-5 md:mt-6 h-10 sm:h-11 md:h-12 w-full rounded-lg sm:rounded-xl bg-indigo-700 hover:bg-indigo-700 text-xs sm:text-sm md:text-base font-bold text-white transition-all shadow-sm hover:shadow-md active:scale-95"
         onClick={handleSubmit}
       >
         {loading ? <Spinner /> : null}

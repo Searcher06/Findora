@@ -10,7 +10,7 @@ export const ChatArea = ({ loading, messages, error, messageEndref }) => {
     return (
       <div className="h-full flex items-center justify-center">
         <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
           <p className="mt-2 text-sm text-gray-600">Loading messages...</p>
         </div>
       </div>
@@ -26,7 +26,7 @@ export const ChatArea = ({ loading, messages, error, messageEndref }) => {
             Failed to load messages
           </h3>
           <p className="text-xs sm:text-sm text-gray-600 mt-1">{error}</p>
-          <button className="mt-4 rounded-lg bg-blue-600 px-3 py-1.5 text-xs text-white transition-colors hover:bg-blue-700 sm:px-4 sm:py-2 sm:text-sm">
+          <button className="mt-4 rounded-lg bg-indigo-700 px-3 py-1.5 text-xs text-white transition-colors hover:bg-indigo-700 sm:px-4 sm:py-2 sm:text-sm">
             Retry
           </button>
         </div>
@@ -35,11 +35,11 @@ export const ChatArea = ({ loading, messages, error, messageEndref }) => {
   }
 
   return (
-    <div className="h-full overflow-y-auto bg-[linear-gradient(180deg,#f8fbff_0%,#f7faff_45%,#f3f7ff_100%)] p-3 sm:p-4 lg:p-6">
+    <div className="h-full overflow-y-auto bg-[linear-gradient(180deg,#faf9ff_0%,#f7faff_45%,#f3f7ff_100%)] p-3 sm:p-4 lg:p-6">
       {messages?.length === 0 ? (
         <div className="h-full flex flex-col items-center justify-center text-center p-4 sm:p-8">
-          <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-blue-100 flex items-center justify-center mb-3 sm:mb-4">
-            <span className="text-xl sm:text-2xl text-blue-600">💬</span>
+          <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-indigo-100 flex items-center justify-center mb-3 sm:mb-4">
+            <span className="text-xl sm:text-2xl text-indigo-600">💬</span>
           </div>
           <h3 className="font-semibold text-gray-900 text-base sm:text-lg mb-1">
             Start the conversation
@@ -61,12 +61,12 @@ export const ChatArea = ({ loading, messages, error, messageEndref }) => {
                   className="my-4 flex flex-col items-center sm:my-6 lg:my-8"
                   ref={messageEndref}
                 >
-                  <div className="relative w-full max-w-[95%] overflow-hidden rounded-xl border border-blue-100 bg-white p-3 text-center shadow-sm sm:w-auto sm:max-w-[90%] sm:p-4 lg:p-5">
-                    <div className="absolute top-0 left-0 w-full h-1 bg-blue-500" />
-                    <div className="mb-2 inline-flex size-8 items-center justify-center rounded-full bg-blue-50 text-blue-600 sm:mb-3 sm:size-10">
+                  <div className="relative w-full max-w-[95%] overflow-hidden rounded-xl border border-indigo-100 bg-white p-3 text-center shadow-sm sm:w-auto sm:max-w-[90%] sm:p-4 lg:p-5">
+                    <div className="absolute top-0 left-0 w-full h-1 bg-indigo-500" />
+                    <div className="mb-2 inline-flex size-8 items-center justify-center rounded-full bg-indigo-50 text-indigo-600 sm:mb-3 sm:size-10">
                       <Handshake className="h-4 w-4 sm:h-5 sm:w-5" strokeWidth={2.5} />
                     </div>
-                    <h4 className="mb-1 flex items-center justify-center gap-1 text-[9px] font-bold uppercase tracking-[0.15em] text-blue-600 sm:gap-1.5 sm:text-[10px] sm:tracking-[0.2em]">
+                    <h4 className="mb-1 flex items-center justify-center gap-1 text-[9px] font-bold uppercase tracking-[0.15em] text-indigo-600 sm:gap-1.5 sm:text-[10px] sm:tracking-[0.2em]">
                       <Info className="h-2.5 w-2.5 sm:h-3 sm:w-3" strokeWidth={3} />
                       Official Request
                     </h4>
@@ -110,7 +110,7 @@ export const ChatArea = ({ loading, messages, error, messageEndref }) => {
                     </div>
                     <div
                       className={`absolute -bottom-0.5 -right-0.5 size-2 sm:size-2.5 lg:size-3 rounded-full border-2 border-white ${
-                        isMe ? "bg-green-500" : "bg-blue-500"
+                        isMe ? "bg-green-500" : "bg-indigo-500"
                       }`}
                     />
                   </div>
@@ -138,7 +138,7 @@ export const ChatArea = ({ loading, messages, error, messageEndref }) => {
                     <div
                       className={`relative overflow-hidden rounded-xl shadow-sm transition-shadow duration-200 hover:shadow sm:rounded-2xl ${
                         isMe
-                          ? "bg-blue-600 text-white"
+                          ? "bg-indigo-700 text-white"
                           : "border border-slate-200 bg-white text-slate-900"
                       } ${
                         message.image
@@ -177,7 +177,7 @@ export const ChatArea = ({ loading, messages, error, messageEndref }) => {
                     {isMe && (
                       <div className="flex items-center gap-0.5 sm:gap-1 mt-1 sm:mt-1.5">
                         {message.read ? (
-                          <span className="flex items-center gap-1 text-[10px] font-semibold text-blue-500 sm:text-xs">
+                          <span className="flex items-center gap-1 text-[10px] font-semibold text-indigo-500 sm:text-xs">
                             <CheckCheck className="h-3 w-3 sm:h-3.5 sm:w-3.5" /> Read
                           </span>
                         ) : (

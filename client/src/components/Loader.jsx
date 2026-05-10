@@ -9,10 +9,10 @@ export const Loader = () => {
 
       {/* Themed loading */}
       <div className="relative">
-        <div className="w-16 h-16 border-4 border-gray-200 border-l-blue-500 border-t-blue-500 rounded-full animate-spin"></div>
+        <div className="w-16 h-16 border-4 border-gray-200 border-l-indigo-500 border-t-indigo-500 rounded-full animate-spin"></div>
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
           <svg
-            className="w-6 h-6 text-blue-500"
+            className="w-6 h-6 text-indigo-500"
             fill="currentColor"
             viewBox="0 0 20 20"
           >

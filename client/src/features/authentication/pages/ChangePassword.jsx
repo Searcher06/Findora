@@ -100,7 +100,7 @@ export const ChangePasswordPage = () => {
 
       <p className="mt-6 text-center text-sm text-slate-600">
         Back to{" "}
-        <Link to="/profile" className="font-semibold text-cyan-700 hover:text-cyan-800">
+        <Link to="/profile" className="font-semibold text-violet-700 hover:text-violet-800">
           Profile
         </Link>
       </p>

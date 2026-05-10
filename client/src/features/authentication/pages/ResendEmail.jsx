@@ -122,14 +122,14 @@ export const ResendEmail = () => {
       <div className="mt-6 text-center text-sm text-slate-600">
         <p>
           Already have an account?{" "}
-          <Link to="/login" className="font-semibold text-cyan-700 hover:text-cyan-800">
+          <Link to="/login" className="font-semibold text-violet-700 hover:text-violet-800">
             Go to Login
           </Link>
         </p>
         {!isSignUp ? (
           <p className="mt-2">
             Need an account?{" "}
-            <Link to="/signup" className="font-semibold text-cyan-700 hover:text-cyan-800">
+            <Link to="/signup" className="font-semibold text-violet-700 hover:text-violet-800">
               Create one
             </Link>
           </p>

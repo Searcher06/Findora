@@ -68,7 +68,7 @@ export const DetailedItemCard = ({ item }) => {
                 className="bg-red-500 hover:bg-red-600 rounded-lg sm:rounded-xl font-medium text-sm px-4 sm:px-6 py-2 sm:py-2.5 h-10 sm:h-11 flex items-center justify-center transition-all shadow-sm hover:shadow-md"
               />
               <Button
-                className="rounded-lg sm:rounded-xl font-medium text-sm px-4 sm:px-6 py-2 sm:py-2.5 h-10 sm:h-11 active:scale-95 transition-all bg-blue-600 hover:bg-blue-700 shadow-sm hover:shadow-md"
+                className="rounded-lg sm:rounded-xl font-medium text-sm px-4 sm:px-6 py-2 sm:py-2.5 h-10 sm:h-11 active:scale-95 transition-all bg-indigo-700 hover:bg-indigo-700 shadow-sm hover:shadow-md"
                 onClick={() => navigate(`/update/${_id}`)}
               >
                 Update
@@ -80,7 +80,7 @@ export const DetailedItemCard = ({ item }) => {
                 itemId={_id}
                 itemName={name}
                 status={status}
-                className="rounded-lg sm:rounded-xl font-medium text-sm px-6 sm:px-8 py-2 sm:py-2.5 h-10 sm:h-11 flex items-center justify-center active:scale-95 transition-all bg-blue-600 hover:bg-blue-700 shadow-sm hover:shadow-md"
+                className="rounded-lg sm:rounded-xl font-medium text-sm px-6 sm:px-8 py-2 sm:py-2.5 h-10 sm:h-11 flex items-center justify-center active:scale-95 transition-all bg-indigo-700 hover:bg-indigo-700 shadow-sm hover:shadow-md"
               />
               <Button
                 type="button"
@@ -125,7 +125,7 @@ export const DetailedItemCard = ({ item }) => {
                   className="w-full bg-red-500 hover:bg-red-600 rounded-xl font-medium text-sm xl:text-base active:scale-95 transition-all px-5 py-2.5 h-10 xl:h-11 flex items-center justify-center shadow-sm hover:shadow-md"
                 />
                 <Button
-                  className="w-full rounded-xl font-medium text-sm xl:text-base active:scale-95 transition-all px-5 py-2.5 h-10 xl:h-11 flex items-center justify-center bg-blue-600 hover:bg-blue-700 shadow-sm hover:shadow-md"
+                  className="w-full rounded-xl font-medium text-sm xl:text-base active:scale-95 transition-all px-5 py-2.5 h-10 xl:h-11 flex items-center justify-center bg-indigo-700 hover:bg-indigo-700 shadow-sm hover:shadow-md"
                   onClick={() => navigate(`/update/${_id}`)}
                 >
                   Update
@@ -137,7 +137,7 @@ export const DetailedItemCard = ({ item }) => {
                   itemId={_id}
                   itemName={name}
                   status={status}
-                  className="w-full rounded-xl font-medium text-sm xl:text-base active:scale-95 transition-all px-5 py-2.5 h-10 xl:h-11 flex items-center justify-center bg-blue-600 hover:bg-blue-700 shadow-sm hover:shadow-md"
+                  className="w-full rounded-xl font-medium text-sm xl:text-base active:scale-95 transition-all px-5 py-2.5 h-10 xl:h-11 flex items-center justify-center bg-indigo-700 hover:bg-indigo-700 shadow-sm hover:shadow-md"
                 />
                 <Button
                   type="button"
@@ -175,7 +175,7 @@ export const DetailedItemCard = ({ item }) => {
               onChange={(e) => setReportReason(e.target.value)}
               rows={4}
               placeholder="Example: This item appears fraudulent or contains misleading details."
-              className="mt-4 w-full rounded-xl border border-slate-200 px-3 py-2.5 text-sm text-slate-700 outline-none transition focus:border-blue-300 focus:ring-2 focus:ring-blue-100"
+              className="mt-4 w-full rounded-xl border border-slate-200 px-3 py-2.5 text-sm text-slate-700 outline-none transition focus:border-indigo-300 focus:ring-2 focus:ring-violet-100"
             />
             <div className="mt-4 flex items-center justify-end gap-2">
               <Button
@@ -193,7 +193,7 @@ export const DetailedItemCard = ({ item }) => {
                 type="button"
                 onClick={handleReportItem}
                 disabled={isSubmittingReport}
-                className="bg-blue-600 text-white hover:bg-blue-700"
+                className="bg-indigo-700 text-white hover:bg-indigo-700"
               >
                 {isSubmittingReport ? "Submitting..." : "Submit Report"}
               </Button>

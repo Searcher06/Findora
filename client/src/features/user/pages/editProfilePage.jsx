@@ -156,7 +156,7 @@ export const EditProfilePage = () => {
         {/* Title section - ensures proper alignment */}
         <div className="mt-2">
           <div className="flex items-center gap-2 mb-2">
-            <div className="w-8 h-1 bg-linear-to-r from-blue-500 to-indigo-500 rounded-full"></div>
+            <div className="w-8 h-1 bg-linear-to-r from-indigo-600 to-indigo-500 rounded-full"></div>
             <h1 className="text-xl sm:text-2xl font-bold text-gray-900 sans display tracking-tight">
               Edit Profile
             </h1>
@@ -166,7 +166,7 @@ export const EditProfilePage = () => {
           </p>
           <Link
             to="/change-password"
-            className="mt-3 inline-flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-700 transition hover:border-blue-300 hover:text-blue-700"
+            className="mt-3 inline-flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-700 transition hover:border-indigo-300 hover:text-indigo-700"
           >
             <KeyRound className="h-4 w-4" />
             Change Password
@@ -195,7 +195,7 @@ export const EditProfilePage = () => {
           <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6">
             {/* Profile Picture Preview */}
             <div className="relative shrink-0">
-              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-linear-to-br from-blue-500 to-indigo-500 p-0.5">
+              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-linear-to-br from-indigo-600 to-indigo-500 p-0.5">
                 <div className="w-full h-full rounded-full bg-white flex items-center justify-center overflow-hidden">
                   {previewImage ? (
                     <img
@@ -225,8 +225,8 @@ export const EditProfilePage = () => {
                 htmlFor="profilePic"
                 className="group cursor-pointer block w-full"
               >
-                <div className="border-2 border-dashed border-gray-300 rounded-lg sm:rounded-xl p-3 sm:p-4 text-center hover:border-blue-400 hover:bg-blue-50/30 transition-all duration-200">
-                  <Upload className="w-5 h-5 sm:w-6 sm:h-6 text-gray-400 mx-auto mb-1 sm:mb-1.5 group-hover:text-blue-500 transition-colors" />
+                <div className="border-2 border-dashed border-gray-300 rounded-lg sm:rounded-xl p-3 sm:p-4 text-center hover:border-indigo-400 hover:bg-indigo-50/30 transition-all duration-200">
+                  <Upload className="w-5 h-5 sm:w-6 sm:h-6 text-gray-400 mx-auto mb-1 sm:mb-1.5 group-hover:text-indigo-500 transition-colors" />
                   <p className="text-sm font-semibold text-gray-700 sans mb-0.5">
                     Click to upload
                   </p>
@@ -250,7 +250,7 @@ export const EditProfilePage = () => {
         {/* Academic Information Card */}
         <div className="bg-white rounded-xl sm:rounded-2xl border border-gray-200 p-4 sm:p-6 shadow-sm">
           <div className="flex items-center gap-3 mb-4 sm:mb-6">
-            <div className="p-2 sm:p-2.5 bg-linear-to-br from-blue-500 to-blue-600 rounded-lg sm:rounded-xl shadow-sm">
+            <div className="p-2 sm:p-2.5 bg-linear-to-br from-indigo-600 to-violet-600 rounded-lg sm:rounded-xl shadow-sm">
               <GraduationCap className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
             </div>
             <div>
@@ -270,7 +270,7 @@ export const EditProfilePage = () => {
                 htmlFor="department"
                 className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2 sans"
               >
-                <BookOpen className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-600" />
+                <BookOpen className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-indigo-600" />
                 Department
               </label>
               <input
@@ -280,7 +280,7 @@ export const EditProfilePage = () => {
                 value={formData.department}
                 onChange={handleChange}
                 placeholder="e.g., Computer Science & AI"
-                className="w-full px-3 sm:px-4 py-2 sm:py-2.5 bg-gray-50 border border-gray-200 rounded-lg sm:rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all sans text-sm"
+                className="w-full px-3 sm:px-4 py-2 sm:py-2.5 bg-gray-50 border border-gray-200 rounded-lg sm:rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all sans text-sm"
               />
               <p className="text-xs text-gray-500 mt-1.5 ml-1 sans">
                 {user.department
@@ -330,7 +330,7 @@ export const EditProfilePage = () => {
                 </p>
               </div>
             </div>
-            <div className="text-xs font-medium text-blue-600 bg-blue-50 px-3 py-1.5 rounded-full sans capitalize self-start sm:self-auto">
+            <div className="text-xs font-medium text-indigo-600 bg-indigo-50 px-3 py-1.5 rounded-full sans capitalize self-start sm:self-auto">
               {user.role}
             </div>
           </div>
@@ -350,7 +350,7 @@ export const EditProfilePage = () => {
             type="button"
             onClick={handleSubmit}
             disabled={isUpdating || !hasChanges}
-            className="flex-1 group relative overflow-hidden bg-linear-to-r from-blue-600 to-indigo-600 text-white font-medium py-2.5 px-4 rounded-lg hover:shadow-md transition-all duration-300 hover:from-blue-700 hover:to-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-none sans text-sm"
+            className="flex-1 group relative overflow-hidden bg-linear-to-r from-indigo-600 to-violet-600 text-white font-medium py-2.5 px-4 rounded-lg hover:shadow-md transition-all duration-300 hover:from-indigo-700 hover:to-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-none sans text-sm"
           >
             <span className="relative z-10 flex items-center justify-center gap-2">
               {isUpdating ? (
@@ -385,7 +385,7 @@ export const EditProfilePage = () => {
               )}
             </span>
             {!isUpdating && (
-              <div className="absolute inset-0 bg-linear-to-r from-blue-700 to-indigo-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div className="absolute inset-0 bg-linear-to-r from-indigo-700 to-indigo-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             )}
           </button>
         </div>

@@ -99,18 +99,18 @@ export const MainNavbar = () => {
     <>
       {!isDesktopHidden ? (
         <aside
-          className={`fixed left-0 top-0 z-20 hidden h-screen overflow-hidden border-r border-sky-100 bg-[linear-gradient(180deg,#f9fbff_0%,#eef5ff_55%,#ffffff_100%)] transition-all lg:flex lg:flex-col ${
+          className={`fixed left-0 top-0 z-20 hidden h-screen overflow-hidden border-r border-indigo-100 bg-[linear-gradient(180deg,#f9fbff_0%,#f3f0ff_55%,#ffffff_100%)] transition-all lg:flex lg:flex-col ${
             isCompactDesktop ? "w-20" : "w-72"
           }`}
         >
-          <div className="pointer-events-none absolute -right-10 -top-8 h-36 w-36 rounded-full bg-sky-200/35 blur-2xl" />
+          <div className="pointer-events-none absolute -right-10 -top-8 h-36 w-36 rounded-full bg-violet-200/35 blur-2xl" />
           <div className="pointer-events-none absolute -left-8 bottom-20 h-44 w-44 rounded-full bg-indigo-200/30 blur-3xl" />
 
           <div className={`relative flex h-full flex-col text-slate-800 ${isCompactDesktop ? "p-3" : "p-5"}`}>
             <div className={`flex items-center ${isCompactDesktop ? "justify-center" : "justify-between"}`}>
               <Link to="/" className="inline-flex items-center gap-2">
                 {isCompactDesktop ? (
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-sky-100 bg-white text-sm font-bold text-blue-700">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-indigo-100 bg-white text-sm font-bold text-indigo-700">
                     F
                   </div>
                 ) : (
@@ -140,7 +140,7 @@ export const MainNavbar = () => {
             </div>
 
             {!isCompactDesktop ? (
-              <div className="mt-2 rounded-xl border border-sky-100 bg-white/80 px-3 py-2 text-xs text-slate-600">
+              <div className="mt-2 rounded-xl border border-indigo-100 bg-white/80 px-3 py-2 text-xs text-slate-600">
                 Smart lost & found workspace
               </div>
             ) : null}
@@ -153,22 +153,22 @@ export const MainNavbar = () => {
                   title={label}
                   onClick={onClick}
                   className={`group relative flex items-center rounded-xl text-sm font-semibold transition ${
-                    active ? "bg-white text-slate-900 shadow-lg shadow-sky-900/10" : "text-slate-600 hover:bg-sky-50"
+                    active ? "bg-white text-slate-900 shadow-lg shadow-violet-900/10" : "text-slate-600 hover:bg-indigo-50"
                   } ${isCompactDesktop ? "justify-center px-2 py-3" : "justify-between px-3 py-3"}`}
                 >
                   <span className={`flex items-center ${isCompactDesktop ? "" : "gap-2.5"}`}>
-                    <Icon className={`h-4 w-4 ${active ? "text-blue-700" : "text-slate-400"}`} />
+                    <Icon className={`h-4 w-4 ${active ? "text-indigo-700" : "text-slate-400"}`} />
                     {!isCompactDesktop ? label : null}
                   </span>
                   {!isCompactDesktop ? (
                     <span className="flex items-center gap-2">
                       {badge ? (
-                        <span className="rounded-full bg-blue-600 px-2 py-0.5 text-[10px] font-bold text-white">{badge}</span>
+                        <span className="rounded-full bg-indigo-700 px-2 py-0.5 text-[10px] font-bold text-white">{badge}</span>
                       ) : null}
                       <ChevronRight className={`h-4 w-4 transition ${active ? "opacity-100" : "opacity-0 group-hover:opacity-100"}`} />
                     </span>
                   ) : badge ? (
-                    <span className="absolute right-1 top-1 rounded-full bg-blue-600 px-1.5 py-0.5 text-[9px] font-bold text-white">
+                    <span className="absolute right-1 top-1 rounded-full bg-indigo-700 px-1.5 py-0.5 text-[9px] font-bold text-white">
                       {badge > 9 ? "9+" : badge}
                     </span>
                   ) : null}
@@ -180,7 +180,7 @@ export const MainNavbar = () => {
               <Link to="/profile" className={`flex items-center ${isCompactDesktop ? "justify-center" : "gap-3"}`}>
                 <Avatar className="h-10 w-10">
                   {user?.profilePic ? <AvatarImage src={user.profilePic} alt={getDisplayName()} /> : null}
-                  <AvatarFallback className="bg-gradient-to-br from-sky-500 to-blue-600 text-sm font-bold uppercase text-white">
+                  <AvatarFallback className="bg-gradient-to-br from-slate-500 to-violet-600 text-sm font-bold uppercase text-white">
                     {getDisplayName().slice(0, 1)}
                   </AvatarFallback>
                 </Avatar>
@@ -238,7 +238,7 @@ export const MainNavbar = () => {
             <Menu className="h-5 w-5" />
           </button>
           {unreadCount > 0 && (
-            <span className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-blue-600 px-1 text-[10px] font-bold text-white">
+            <span className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-indigo-700 px-1 text-[10px] font-bold text-white">
               {unreadCount > 9 ? "9+" : unreadCount}
             </span>
           )}
@@ -255,7 +255,7 @@ export const MainNavbar = () => {
         >
           <Bell className="h-5 w-5" />
           {unreadCount > 0 ? (
-            <span className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-blue-600 px-1 text-[10px] font-bold text-white">
+            <span className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-indigo-700 px-1 text-[10px] font-bold text-white">
               {unreadCount > 9 ? "9+" : unreadCount}
             </span>
           ) : null}

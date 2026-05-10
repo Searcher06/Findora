@@ -10,7 +10,7 @@ export const ItemCard = ({ image, name, description, location, date, id, status,
   const isLost = status === "lost";
 
   return (
-    <Card className="group flex w-full max-w-[320px] flex-col overflow-hidden rounded-3xl border border-sky-100 bg-white shadow-[0_20px_60px_-40px_rgba(15,23,42,0.65)] transition duration-300 hover:-translate-y-1 hover:border-sky-200 hover:shadow-[0_28px_70px_-38px_rgba(29,78,216,0.4)]">
+    <Card className="group flex w-full max-w-[320px] flex-col overflow-hidden rounded-3xl border border-indigo-100 bg-white shadow-[0_20px_60px_-40px_rgba(15,23,42,0.65)] transition duration-300 hover:-translate-y-1 hover:border-violet-200 hover:shadow-[0_28px_70px_-38px_rgba(67,56,202,0.4)]">
       <div className="relative">
         <img
           src={image}
@@ -35,18 +35,18 @@ export const ItemCard = ({ image, name, description, location, date, id, status,
           <p className="line-clamp-2 text-[13px] leading-relaxed text-slate-600">{description}</p>
         </div>
 
-        <div className="space-y-1.5 rounded-2xl border border-slate-200/80 bg-gradient-to-br from-slate-50 to-sky-50/40 p-2.5">
+        <div className="space-y-1.5 rounded-2xl border border-slate-200/80 bg-gradient-to-br from-slate-50 to-violet-50/40 p-2.5">
           <div className="flex items-center gap-2 text-xs text-slate-700">
-            <MapPin className="h-3.5 w-3.5 shrink-0 text-sky-700" />
+            <MapPin className="h-3.5 w-3.5 shrink-0 text-violet-700" />
             <p className="line-clamp-1">{location}</p>
           </div>
           <div className="flex items-center gap-2 text-xs text-slate-700">
-            <CalendarDays className="h-3.5 w-3.5 shrink-0 text-sky-700" />
+            <CalendarDays className="h-3.5 w-3.5 shrink-0 text-violet-700" />
             <p>Reported {dateReported}</p>
           </div>
           {category ? (
             <div className="flex items-center gap-2 text-xs text-slate-700">
-              <Tag className="h-3.5 w-3.5 shrink-0 text-sky-700" />
+              <Tag className="h-3.5 w-3.5 shrink-0 text-violet-700" />
               <p className="line-clamp-1">{category}</p>
             </div>
           ) : null}
@@ -56,7 +56,7 @@ export const ItemCard = ({ image, name, description, location, date, id, status,
           onClick={() => {
             navigate(`items/${id}`);
           }}
-          className="mt-auto h-9 rounded-xl bg-gradient-to-r from-slate-900 to-slate-800 text-xs font-semibold text-white transition hover:from-sky-700 hover:to-blue-700"
+          className="mt-auto h-9 rounded-xl bg-gradient-to-r from-slate-900 to-slate-800 text-xs font-semibold text-white transition hover:from-violet-700 hover:to-indigo-700"
         >
           View Details
           <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
