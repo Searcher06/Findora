@@ -19,16 +19,16 @@ export const TabsBar = ({
 
   return (
     <div className={`w-full ${className} font-display`}>
-      <div className="rounded-2xl border border-slate-200/80 bg-white/85 p-3 shadow-[0_20px_50px_-40px_rgba(15,23,42,0.55)] backdrop-blur">
+      <div className="rounded-2xl border border-indigo-200/70 bg-white/85 p-3 shadow-[0_20px_50px_-40px_rgba(15,23,42,0.55)] backdrop-blur">
         <div className="flex flex-col items-stretch gap-3 lg:flex-row lg:items-center lg:justify-between">
-          <div className="inline-flex w-full items-center rounded-xl bg-slate-100 p-1 lg:w-auto">
+          <div className="inline-flex w-full items-center rounded-xl bg-indigo-50 p-1 lg:w-auto">
             <button
               type="button"
               onClick={() => setBar("lost")}
               className={`h-9 flex-1 rounded-lg px-4 text-sm font-semibold transition lg:min-w-[92px] ${
                 bar === "lost"
-                  ? "bg-white text-slate-900 shadow-sm"
-                  : "text-slate-500 hover:text-slate-700"
+                  ? "bg-indigo-700 text-white shadow-sm"
+                  : "text-slate-600 hover:text-indigo-800"
               }`}
             >
               Lost
@@ -38,8 +38,8 @@ export const TabsBar = ({
               onClick={() => setBar("found")}
               className={`h-9 flex-1 rounded-lg px-4 text-sm font-semibold transition lg:min-w-[92px] ${
                 bar === "found"
-                  ? "bg-white text-slate-900 shadow-sm"
-                  : "text-slate-500 hover:text-slate-700"
+                  ? "bg-violet-700 text-white shadow-sm"
+                  : "text-slate-600 hover:text-violet-800"
               }`}
             >
               Found
@@ -53,11 +53,11 @@ export const TabsBar = ({
             >
               <SelectTrigger
                 aria-label="Category"
-                className="h-10 w-full min-w-[180px] rounded-xl border-slate-200 bg-slate-50 px-3 text-sm font-medium text-slate-700 shadow-none"
+                className="h-10 w-full min-w-[180px] rounded-xl border-indigo-200 bg-indigo-50/60 px-3 text-sm font-medium text-indigo-900 shadow-none"
               >
                 <SelectValue placeholder="Category" className="truncate" />
               </SelectTrigger>
-              <SelectContent className="rounded-xl border-slate-200">
+              <SelectContent className="rounded-xl border-indigo-200">
                 <SelectItem value="all">All Categories</SelectItem>
                 <SelectItem value="Electronics">Electronics</SelectItem>
                 <SelectItem value="Books & Stationary">
@@ -86,11 +86,11 @@ export const TabsBar = ({
             >
               <SelectTrigger
                 aria-label="Date"
-                className="h-10 w-full min-w-[160px] rounded-xl border-slate-200 bg-slate-50 px-3 text-sm font-medium text-slate-700 shadow-none"
+                className="h-10 w-full min-w-[160px] rounded-xl border-indigo-200 bg-indigo-50/60 px-3 text-sm font-medium text-indigo-900 shadow-none"
               >
                 <SelectValue placeholder="Date" className="truncate" />
               </SelectTrigger>
-              <SelectContent className="rounded-xl border-slate-200">
+              <SelectContent className="rounded-xl border-indigo-200">
                 <SelectItem value="latest">Latest</SelectItem>
                 <SelectItem value="oldest">Oldest</SelectItem>
                 <SelectItem value="last7">Last 7 days</SelectItem>

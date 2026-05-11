@@ -41,7 +41,7 @@ export const DetailedItemCard = ({ item }) => {
   };
 
   return (
-    <div className="w-full px-3 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-10">
+    <div className="w-full px-3 py-4 sm:px-6 sm:py-6 lg:px-8 lg:py-10">
       {/* Mobile & Tablet Layout (stacked) */}
       <div className="lg:hidden flex flex-col gap-4 sm:gap-5 md:gap-6">
         {/* Image */}
@@ -54,7 +54,7 @@ export const DetailedItemCard = ({ item }) => {
         </div>
 
         {/* Item Info */}
-        <div className="w-[95%] sm:w-[90%] md:w-[75%] mx-auto rounded-2xl sm:rounded-3xl border border-slate-200 bg-white/90 backdrop-blur-sm p-4 sm:p-5 md:p-6 shadow-[0_30px_90px_-75px_rgba(15,23,42,0.8)]">
+        <div className="w-[95%] sm:w-[90%] md:w-[75%] mx-auto rounded-2xl border border-indigo-200/70 bg-gradient-to-br from-white to-violet-50/65 p-4 shadow-[0_30px_90px_-75px_rgba(15,23,42,0.8)] backdrop-blur-sm sm:rounded-3xl sm:p-5 md:p-6">
           <ItemInfo item={item} layoutMode="default" />
         </div>
 
@@ -85,7 +85,7 @@ export const DetailedItemCard = ({ item }) => {
               <Button
                 type="button"
                 onClick={() => setIsReportModalOpen(true)}
-                className="rounded-lg sm:rounded-xl font-medium text-sm px-5 sm:px-6 py-2 sm:py-2.5 h-10 sm:h-11 flex items-center justify-center active:scale-95 transition-all bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 shadow-sm hover:shadow-md"
+                className="rounded-lg border border-indigo-200 bg-white text-indigo-900 shadow-sm transition-all h-10 px-5 py-2 text-sm font-medium active:scale-95 hover:bg-violet-50 hover:shadow-md sm:h-11 sm:rounded-xl sm:px-6 sm:py-2.5"
               >
                 Report Item
               </Button>
@@ -100,7 +100,7 @@ export const DetailedItemCard = ({ item }) => {
       {/* Desktop Layout */}
       <div className="hidden lg:grid lg:grid-cols-12 gap-6 xl:gap-8 items-start max-w-6xl mx-auto">
         {/* Left Column */}
-        <div className="lg:col-span-5 xl:col-span-4 flex flex-col gap-4 xl:gap-5">
+        <div className="flex flex-col gap-4 lg:col-span-5 xl:col-span-4 xl:gap-5">
           {/* Image */}
           <div className="w-full">
             <img
@@ -111,7 +111,7 @@ export const DetailedItemCard = ({ item }) => {
           </div>
 
           {/* Owner/Finder Info */}
-          <div className="rounded-2xl border border-slate-200 bg-white/90 backdrop-blur-sm p-4 xl:p-5 shadow-[0_30px_90px_-75px_rgba(15,23,42,0.8)]">
+          <div className="rounded-2xl border border-indigo-200/70 bg-gradient-to-br from-white to-violet-50/65 p-4 shadow-[0_30px_90px_-75px_rgba(15,23,42,0.8)] backdrop-blur-sm xl:p-5">
             <ItemInfo item={item} layoutMode="compact" />
           </div>
 
@@ -142,7 +142,7 @@ export const DetailedItemCard = ({ item }) => {
                 <Button
                   type="button"
                   onClick={() => setIsReportModalOpen(true)}
-                  className="w-full rounded-xl font-medium text-sm xl:text-base active:scale-95 transition-all px-5 py-2.5 h-10 xl:h-11 flex items-center justify-center bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 shadow-sm hover:shadow-md"
+                  className="flex h-10 w-full items-center justify-center rounded-xl border border-indigo-200 bg-white px-5 py-2.5 text-sm font-medium text-indigo-900 shadow-sm transition-all active:scale-95 hover:bg-violet-50 hover:shadow-md xl:h-11 xl:text-base"
                 >
                   Report Item
                 </Button>
@@ -150,24 +150,24 @@ export const DetailedItemCard = ({ item }) => {
             )}
           </div>
 
-          <p className="font-sans text-xs text-gray-600 text-center">
+          <p className="text-center font-sans text-xs text-indigo-800/80">
             Request must be verified before chat access
           </p>
         </div>
 
         {/* Right Column */}
-        <div className="lg:col-span-7 xl:col-span-8 rounded-2xl border border-slate-200 bg-white/90 backdrop-blur-sm p-5 xl:p-6 shadow-[0_30px_90px_-75px_rgba(15,23,42,0.8)]">
+        <div className="rounded-2xl border border-indigo-200/70 bg-gradient-to-br from-white to-violet-50/65 p-5 shadow-[0_30px_90px_-75px_rgba(15,23,42,0.8)] backdrop-blur-sm lg:col-span-7 xl:col-span-8 xl:p-6">
           <ItemInfo item={item} layoutMode="detailed" />
         </div>
       </div>
 
       {isReportModalOpen ? (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/55 px-4">
-          <div className="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-5 shadow-2xl">
-            <h3 className="font-display text-xl font-bold text-slate-900">
+          <div className="w-full max-w-md rounded-2xl border border-indigo-200 bg-gradient-to-br from-white to-violet-50/70 p-5 shadow-2xl">
+            <h3 className="font-display text-xl font-bold text-indigo-950">
               Report This Item
             </h3>
-            <p className="mt-1 text-sm text-slate-600">
+            <p className="mt-1 text-sm text-indigo-800/80">
               Tell us what seems wrong. Admins will review this report.
             </p>
             <textarea

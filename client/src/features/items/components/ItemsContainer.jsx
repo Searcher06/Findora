@@ -65,10 +65,10 @@ export const ItemsContainer = ({
                 />
               ))
               : (
-                <div className="col-span-full w-full rounded-2xl border border-dashed border-slate-300 bg-white/80 px-6 py-12 text-center">
-                  <Inbox className="mx-auto h-10 w-10 text-slate-400" />
-                  <h3 className="mt-4 font-display text-xl font-bold text-slate-900">No items match this filter</h3>
-                  <p className="mt-1 text-sm text-slate-600">Try a different keyword, category, or date range.</p>
+                <div className="col-span-full w-full rounded-2xl border border-dashed border-indigo-300/70 bg-gradient-to-br from-white to-violet-50/70 px-6 py-12 text-center">
+                  <Inbox className="mx-auto h-10 w-10 text-violet-500" />
+                  <h3 className="mt-4 font-display text-xl font-bold text-indigo-950">No items match this filter</h3>
+                  <p className="mt-1 text-sm text-indigo-800/80">Try a different keyword, category, or date range.</p>
                 </div>
               )}
       </div>
@@ -79,19 +79,19 @@ export const ItemsContainer = ({
             type="button"
             onClick={handlePrev}
             disabled={!pagination?.hasPrevPage}
-            className="inline-flex h-10 items-center gap-1 rounded-xl border border-slate-200 bg-white px-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-45"
+            className="inline-flex h-10 items-center gap-1 rounded-xl border border-indigo-200 bg-white px-3 text-sm font-semibold text-indigo-900 transition hover:bg-violet-50 disabled:cursor-not-allowed disabled:opacity-45"
           >
             <ChevronLeft className="h-4 w-4" />
             Prev
           </button>
-          <div className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700">
+          <div className="rounded-xl border border-indigo-200 bg-gradient-to-r from-white to-violet-50 px-4 py-2 text-sm font-semibold text-indigo-900">
             Page {currentPage} of {totalPages}
           </div>
           <button
             type="button"
             onClick={handleNext}
             disabled={!pagination?.hasNextPage}
-            className="inline-flex h-10 items-center gap-1 rounded-xl border border-slate-200 bg-white px-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-45"
+            className="inline-flex h-10 items-center gap-1 rounded-xl border border-indigo-200 bg-white px-3 text-sm font-semibold text-indigo-900 transition hover:bg-violet-50 disabled:cursor-not-allowed disabled:opacity-45"
           >
             Next
             <ChevronRight className="h-4 w-4" />

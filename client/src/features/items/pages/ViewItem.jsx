@@ -16,7 +16,7 @@ export const ViewItem = () => {
       <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-slate-50 via-slate-100/55 to-white flex items-center justify-center px-4">
         <div className="pointer-events-none absolute -left-20 top-20 h-60 w-60 rounded-full bg-violet-300/20 blur-3xl" />
         <div className="pointer-events-none absolute right-0 top-1/3 h-72 w-72 rounded-full bg-indigo-200/20 blur-3xl" />
-        <div className="relative z-10 text-center">
+        <div className="relative z-10 rounded-2xl border border-rose-200 bg-white/80 px-5 py-4 text-center shadow-sm backdrop-blur">
           <p className="text-red-600 text-base sm:text-lg md:text-xl font-sans">Error: {error}</p>
         </div>
       </div>
@@ -28,8 +28,8 @@ export const ViewItem = () => {
       <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-slate-50 via-slate-100/55 to-white flex items-center justify-center px-4">
         <div className="pointer-events-none absolute -left-20 top-20 h-60 w-60 rounded-full bg-violet-300/20 blur-3xl" />
         <div className="pointer-events-none absolute right-0 top-1/3 h-72 w-72 rounded-full bg-indigo-200/20 blur-3xl" />
-        <div className="relative z-10 text-center">
-          <p className="text-gray-600 text-base sm:text-lg md:text-xl font-sans">Item not found</p>
+        <div className="relative z-10 rounded-2xl border border-indigo-200 bg-gradient-to-br from-white to-violet-50/70 px-5 py-4 text-center shadow-sm backdrop-blur">
+          <p className="text-indigo-800 text-base sm:text-lg md:text-xl font-sans">Item not found</p>
         </div>
       </div>
     );

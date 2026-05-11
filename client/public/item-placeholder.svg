@@ -1,28 +1,28 @@
 <svg width="800" height="520" viewBox="0 0 800 520" fill="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="800" y2="520" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#EFF6FF"/>
-      <stop offset="1" stop-color="#DBEAFE"/>
+      <stop stop-color="#F7F5FF"/>
+      <stop offset="1" stop-color="#EDE9FE"/>
     </linearGradient>
     <linearGradient id="card" x1="0" y1="0" x2="1" y2="1">
       <stop stop-color="#FFFFFF"/>
-      <stop offset="1" stop-color="#F8FAFC"/>
+      <stop offset="1" stop-color="#F5F3FF"/>
     </linearGradient>
   </defs>
   <rect width="800" height="520" fill="url(#bg)"/>
-  <circle cx="120" cy="120" r="80" fill="#BFDBFE" fill-opacity="0.55"/>
-  <circle cx="710" cy="90" r="95" fill="#93C5FD" fill-opacity="0.35"/>
-  <circle cx="700" cy="450" r="110" fill="#BFDBFE" fill-opacity="0.45"/>
+  <circle cx="120" cy="120" r="80" fill="#C4B5FD" fill-opacity="0.5"/>
+  <circle cx="710" cy="90" r="95" fill="#A5B4FC" fill-opacity="0.35"/>
+  <circle cx="700" cy="450" r="110" fill="#C4B5FD" fill-opacity="0.42"/>
 
-  <rect x="180" y="90" width="440" height="340" rx="28" fill="url(#card)" stroke="#BFDBFE" stroke-width="2"/>
+  <rect x="180" y="90" width="440" height="340" rx="28" fill="url(#card)" stroke="#C4B5FD" stroke-width="2"/>
 
-  <rect x="260" y="182" width="280" height="160" rx="18" fill="#E0ECFF"/>
-  <path d="M275 313L348 240L404 293L447 254L525 342H275V313Z" fill="#93C5FD"/>
-  <circle cx="470" cy="226" r="22" fill="#60A5FA"/>
+  <rect x="260" y="182" width="280" height="160" rx="18" fill="#EDE9FE"/>
+  <path d="M275 313L348 240L404 293L447 254L525 342H275V313Z" fill="#A5B4FC"/>
+  <circle cx="470" cy="226" r="22" fill="#7C3AED"/>
 
-  <rect x="260" y="130" width="180" height="18" rx="9" fill="#3B82F6" fill-opacity="0.22"/>
-  <rect x="260" y="356" width="210" height="14" rx="7" fill="#93C5FD"/>
-  <rect x="260" y="380" width="165" height="12" rx="6" fill="#BFDBFE"/>
+  <rect x="260" y="130" width="180" height="18" rx="9" fill="#4F46E5" fill-opacity="0.2"/>
+  <rect x="260" y="356" width="210" height="14" rx="7" fill="#A5B4FC"/>
+  <rect x="260" y="380" width="165" height="12" rx="6" fill="#C4B5FD"/>
 
-  <text x="400" y="462" text-anchor="middle" fill="#1E3A8A" font-family="Arial, sans-serif" font-size="28" font-weight="700">Findora Item Photo</text>
+  <text x="400" y="462" text-anchor="middle" fill="#312E81" font-family="Manrope, Arial, sans-serif" font-size="28" font-weight="700">Findora Item Photo</text>
 </svg>

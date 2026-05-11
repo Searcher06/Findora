@@ -31,7 +31,7 @@ export const ItemCard = ({ image, name, description, location, date, id, status,
 
       <div className="flex flex-1 flex-col gap-3 p-3.5">
         <div className="min-h-[64px]">
-          <h1 className="mb-1 line-clamp-1 font-display text-base font-bold text-slate-900">{name}</h1>
+          <h1 className="mb-1 line-clamp-1 font-display text-base font-bold text-indigo-950">{name}</h1>
           <p className="line-clamp-2 text-[13px] leading-relaxed text-slate-600">{description}</p>
         </div>
 
@@ -56,7 +56,7 @@ export const ItemCard = ({ image, name, description, location, date, id, status,
           onClick={() => {
             navigate(`items/${id}`);
           }}
-          className="mt-auto h-9 rounded-xl bg-gradient-to-r from-slate-900 to-slate-800 text-xs font-semibold text-white transition hover:from-violet-700 hover:to-indigo-700"
+          className="mt-auto h-9 rounded-xl bg-gradient-to-r from-indigo-800 to-indigo-700 text-xs font-semibold text-white transition hover:from-violet-700 hover:to-indigo-700"
         >
           View Details
           <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />

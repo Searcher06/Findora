@@ -20,7 +20,7 @@ export const ItemInfo = ({ item, layoutMode = "default" }) => {
       <div className="flex flex-col w-full gap-3 sm:gap-4 md:gap-5">
         {/* Item Name & Status */}
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 sm:gap-3">
-          <h1 className="font-display font-bold text-xl sm:text-2xl md:text-3xl text-gray-900">{name}</h1>
+          <h1 className="font-display font-bold text-xl text-indigo-950 sm:text-2xl md:text-3xl">{name}</h1>
           <div className="sm:ml-auto">
             <ItemStatus status={status} />
           </div>
@@ -50,7 +50,7 @@ export const ItemInfo = ({ item, layoutMode = "default" }) => {
         {/* Item Name */}
         <div>
           <div className="flex items-start justify-between gap-3 sm:gap-4 mb-1.5">
-            <h1 className="font-display font-bold text-2xl xl:text-3xl text-gray-900 leading-snug">{name}</h1>
+            <h1 className="font-display font-bold text-2xl leading-snug text-indigo-950 xl:text-3xl">{name}</h1>
             <ItemStatus status={status} />
           </div>
         </div>
@@ -73,8 +73,8 @@ export const ItemInfo = ({ item, layoutMode = "default" }) => {
 
         {/* Description */}
         <div className="rounded-2xl bg-gradient-to-br from-indigo-50 to-violet-50/50 p-4 xl:p-5 border border-indigo-100 shadow-sm">
-          <h3 className="font-display font-bold text-gray-900 text-xs xl:text-sm uppercase tracking-[0.1em] mb-2.5 xl:mb-3">Description</h3>
-          <p className="text-gray-800 text-sm xl:text-base leading-relaxed">{description}</p>
+          <h3 className="mb-2.5 font-display text-xs font-bold uppercase tracking-[0.1em] text-indigo-900 xl:mb-3 xl:text-sm">Description</h3>
+          <p className="text-sm leading-relaxed text-indigo-900/90 xl:text-base">{description}</p>
         </div>
       </div>
     );
