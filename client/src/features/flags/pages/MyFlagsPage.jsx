@@ -32,9 +32,7 @@ export const MyFlagsPage = () => {
     <div className="min-h-screen bg-gradient-to-b from-slate-50 via-slate-100/50 to-white px-3 pb-10 pt-3 sm:px-5 md:px-6">
       <div className="mx-auto w-full max-w-5xl">
         <section className="rounded-3xl border border-indigo-100 bg-[linear-gradient(135deg,#faf9ff_0%,#f3f0ff_54%,#f8f7ff_100%)] px-5 py-7 shadow-[0_35px_90px_-70px_rgba(79,70,229,0.6)] sm:px-7">
-          <p className="inline-flex rounded-full border border-violet-200 bg-white px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-violet-700">
-            Findora Safety
-          </p>
+          <img src="/iconplusfindoratext.png" alt="Findora" className="h-7 w-auto" />
           <h1 className="mt-3 font-display text-2xl font-bold text-slate-900 sm:text-3xl">
             My Reports
           </h1>

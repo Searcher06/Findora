@@ -19,13 +19,13 @@ export const AuthInput = ({
   return (
     <div>
       {label ? (
-        <label htmlFor={id} className="mb-2 block text-sm font-semibold text-slate-700">
+        <label htmlFor={id} className="mb-2 block text-sm font-semibold tracking-wide text-slate-700">
           {label}
         </label>
       ) : null}
 
-      <div className="group flex h-12 w-full items-center rounded-xl border border-slate-200 bg-slate-50/60 px-3 transition focus-within:border-violet-500 focus-within:bg-white focus-within:ring-4 focus-within:ring-violet-100">
-        {Icon ? <Icon className="h-5 w-5 text-slate-400 transition group-focus-within:text-violet-600" /> : null}
+      <div className="group flex h-12 w-full items-center rounded-xl border border-slate-200 bg-white px-3 shadow-sm transition focus-within:border-indigo-500 focus-within:ring-4 focus-within:ring-indigo-100">
+        {Icon ? <Icon className="h-5 w-5 text-slate-400 transition group-focus-within:text-indigo-600" /> : null}
         <input
           id={id}
           type={inputType}
@@ -41,7 +41,7 @@ export const AuthInput = ({
           <button
             type="button"
             onClick={() => setShowPassword((prev) => !prev)}
-            className="rounded-md p-1 text-slate-500 transition hover:bg-slate-200 hover:text-slate-700"
+            className="rounded-md p-1 text-slate-500 transition hover:bg-slate-100 hover:text-slate-700"
             aria-label={showPassword ? "Hide password" : "Show password"}
           >
             {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}

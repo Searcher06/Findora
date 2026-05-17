@@ -74,9 +74,7 @@ const ReportPage = () => {
 
       <div className="relative mx-auto w-full max-w-5xl">
         <section className="rounded-3xl border border-indigo-100 bg-[linear-gradient(135deg,#faf9ff_0%,#ede9fe_52%,#f8f7ff_100%)] px-5 py-7 shadow-[0_35px_90px_-65px_rgba(79,70,229,0.6)] sm:px-8 sm:py-9">
-          <p className="inline-flex items-center rounded-full border border-violet-200 bg-white px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-violet-700">
-            Findora Reporting
-          </p>
+          <img src="/iconplusfindoratext.png" alt="Findora" className="h-7 w-auto" />
           <h1 className="mt-3 font-display text-2xl font-bold leading-tight text-slate-900 sm:text-3xl md:text-4xl">
             Report {itemData.status === "lost" ? "Lost" : "Found"} Item
           </h1>

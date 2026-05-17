@@ -163,7 +163,7 @@ export const SignUpPage = () => {
         <button
           type="submit"
           disabled={isDisabled}
-          className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-slate-900 px-4 text-sm font-semibold text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-50"
+          className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 px-4 text-sm font-semibold text-white shadow-lg shadow-indigo-500/25 transition hover:from-indigo-700 hover:to-violet-700 disabled:cursor-not-allowed disabled:opacity-50"
         >
           {isSigningUp ? <Spinner /> : null}
           {isSigningUp ? "Creating your account..." : "Create Account"}
@@ -178,8 +178,8 @@ export const SignUpPage = () => {
           </Link>
         </p>
 
-        <div className="flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-600">
-          <ShieldCheck className="h-4 w-4 text-slate-700" />
+        <div className="flex items-center justify-center gap-2 rounded-xl border border-indigo-100 bg-indigo-50/60 px-3 py-2 text-xs text-slate-600">
+          <ShieldCheck className="h-4 w-4 text-indigo-700" />
           Protected by Findora's secure verification system
         </div>
       </div>

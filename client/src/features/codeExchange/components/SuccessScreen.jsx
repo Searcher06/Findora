@@ -68,9 +68,11 @@ export const SuccessScreen = ({ request, navigate }) => (
     </button>
 
     <div className="relative z-10 mt-6 sm:mt-7 md:mt-8 pt-4 sm:pt-5 md:pt-6 border-t border-slate-200 text-center">
-      <p className="text-gray-500 text-[10px] sm:text-xs md:text-sm font-sans">
-        ✓ Transaction securely recorded • Findora Verification • 2026
-      </p>
+      <div className="flex items-center justify-center gap-2 text-gray-500 text-[10px] sm:text-xs md:text-sm font-sans">
+        <span>✓ Transaction securely recorded</span>
+        <img src="/iconplusfindoratext.png" alt="Findora" className="h-4 w-auto" />
+        <span>Verification • 2026</span>
+      </div>
     </div>
   </div>
 );

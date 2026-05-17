@@ -421,9 +421,7 @@ export const AdminDashboardPage = () => {
                 <ShieldAlert className="h-3.5 w-3.5" />
                 Trust & Moderation
               </p>
-              <h1 className="mt-3 font-display text-2xl font-bold tracking-tight text-slate-900 sm:mt-4 sm:text-4xl">
-                Findora Command Center
-              </h1>
+              <img src="/iconplusfindoratext.png" alt="Findora" className="mt-3 h-9 w-auto sm:mt-4 sm:h-10" />
               <p className="mt-2 max-w-2xl text-xs text-slate-600 sm:text-base">
                 Moderate reports, protect users, and keep recovery workflows healthy from one polished workspace.
               </p>

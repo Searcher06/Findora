@@ -5,6 +5,7 @@ const API_BASE_URL =
 
 export const Api = axios.create({
   baseURL: API_BASE_URL,
+  timeout: 10000,
   withCredentials: true,
   headers: {
     "Content-Type": "application/json",
@@ -12,6 +13,7 @@ export const Api = axios.create({
 });
 export const Api2 = axios.create({
   baseURL: API_BASE_URL,
+  timeout: 10000,
   withCredentials: true,
   headers: {
     "Content-Type": "multipart/form-data",

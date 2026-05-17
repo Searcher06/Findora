@@ -114,7 +114,7 @@ export const MainNavbar = () => {
                     F
                   </div>
                 ) : (
-                  <Logo className="h-14 w-auto text-slate-900" />
+                  <Logo variant="icon" className="h-14 w-auto text-slate-900" />
                 )}
               </Link>
               {!isCompactDesktop ? (
@@ -245,7 +245,7 @@ export const MainNavbar = () => {
         </div>
 
         <Link to="/" className="inline-flex items-center">
-          <Logo className="h-12 w-auto text-slate-900" />
+          <Logo variant="icon" className="h-12 w-auto text-slate-900" />
         </Link>
 
         <Link

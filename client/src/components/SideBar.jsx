@@ -79,7 +79,7 @@ export const SideBar = ({
       <div className={`h-16 border-b border-slate-200 ${isCompact ? "px-2" : "px-4"}`}>
         <div className="flex h-full items-center justify-between">
           {!isCompact ? (
-            <Logo className="h-12 w-auto text-slate-900" />
+            <Logo variant="icon" className="h-12 w-auto text-slate-900" />
           ) : (
             <button
               type="button"

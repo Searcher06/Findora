@@ -178,9 +178,7 @@ export function ProfilePage() {
 
       <div className="relative mx-auto w-full max-w-6xl">
         <section className="rounded-2xl border border-indigo-100 bg-[linear-gradient(135deg,#faf9ff_0%,#f3f0ff_54%,#f8f7ff_100%)] px-3 py-4 shadow-[0_35px_90px_-70px_rgba(79,70,229,0.6)] sm:rounded-3xl sm:px-6 sm:py-6">
-          <p className="inline-flex rounded-full border border-violet-200 bg-white px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-violet-700">
-            Findora Profile
-          </p>
+          <img src="/iconplusfindoratext.png" alt="Findora" className="h-7 w-auto" />
           <h1 className="mt-2.5 font-display text-xl font-bold text-slate-900 sm:mt-3 sm:text-3xl">
             Your Account
           </h1>

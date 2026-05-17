@@ -129,9 +129,7 @@ export const ChatSelectionPage = () => {
           </div>
 
           <div className="mt-4">
-            <p className="inline-flex rounded-full border border-violet-200 bg-white px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-violet-700">
-              Findora Messages
-            </p>
+            <img src="/iconplusfindoratext.png" alt="Findora" className="h-7 w-auto" />
             <h1 className="mt-3 font-display text-2xl font-bold text-slate-900 sm:text-3xl">
               Conversations
             </h1>
