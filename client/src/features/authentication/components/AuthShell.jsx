@@ -4,7 +4,7 @@ import { Logo } from "@/components/logo";
 
 export const AuthShell = ({ title, subtitle, children, bottomNote }) => {
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[radial-gradient(circle_at_top_left,#f5f3ff_0%,#eef2ff_33%,#f8fafc_72%,#ffffff_100%)] px-4 py-8 sm:px-6 lg:px-8">
+    <div className="relative min-h-screen overflow-hidden bg-[radial-gradient(circle_at_top_left,#f5f3ff_0%,#eef2ff_33%,#f8fafc_72%,#ffffff_100%)] px-3 py-5 sm:px-6 sm:py-8 lg:px-8">
       <div className="pointer-events-none absolute -left-20 top-14 h-64 w-64 rounded-full bg-violet-300/30 blur-3xl" />
       <div className="pointer-events-none absolute -right-20 bottom-14 h-64 w-64 rounded-full bg-cyan-200/30 blur-3xl" />
       <div className="pointer-events-none absolute left-1/3 top-1/2 h-44 w-44 rounded-full bg-amber-200/30 blur-3xl" />
@@ -40,8 +40,8 @@ export const AuthShell = ({ title, subtitle, children, bottomNote }) => {
             </div>
           </section>
 
-          <section className="rounded-[2rem] border border-slate-200/80 bg-white/95 p-6 shadow-[0_35px_110px_-70px_rgba(30,41,59,0.7)] backdrop-blur sm:p-8 lg:p-10">
-            <div className="mb-8">
+          <section className="rounded-[2rem] border border-slate-200/80 bg-white/95 p-5 shadow-[0_35px_110px_-70px_rgba(30,41,59,0.7)] backdrop-blur sm:p-8 lg:p-10">
+            <div className="mb-6 sm:mb-8">
               <Link to="/" className="mb-6 inline-flex items-center lg:hidden">
                 <Logo className="h-11 w-auto" />
               </Link>

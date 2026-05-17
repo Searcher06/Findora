@@ -1,5 +1,5 @@
 export const YourCodeSection = ({ userCode, isUserVerified, codeType = "Your 5-digit code" }) => (
-  <div className="rounded-2xl sm:rounded-3xl border border-slate-200 bg-white/90 backdrop-blur-sm p-4 sm:p-5 md:p-6 max-w-xs w-full shadow-[0_30px_90px_-75px_rgba(15,23,42,0.8)]">
+  <div className="rounded-2xl sm:rounded-3xl border border-slate-200 bg-white/90 backdrop-blur-sm p-4 sm:p-5 md:p-6 max-w-sm w-full shadow-[0_30px_90px_-75px_rgba(15,23,42,0.8)]">
     <div className="text-center">
       <h3 className="font-semibold mb-2 sm:mb-3 text-xs sm:text-sm md:text-base font-display text-gray-900">{codeType}</h3>
       <div className="mb-3 sm:mb-4">

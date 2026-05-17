@@ -76,7 +76,7 @@ export function TrustLeaderboardPage() {
                 return (
                   <div
                     key={user._id}
-                    className={`flex items-center justify-between rounded-xl border p-3 ${
+                    className={`flex flex-col gap-3 rounded-xl border p-3 sm:flex-row sm:items-center sm:justify-between ${
                       isCurrentUser
                         ? "border-violet-300 bg-indigo-50"
                         : "border-slate-200 bg-white"
@@ -87,13 +87,13 @@ export function TrustLeaderboardPage() {
                         {user.rank}
                       </span>
                       <div className="min-w-0">
-                        <p className="truncate text-sm font-semibold text-slate-900">
+                        <p className="break-words text-sm font-semibold text-slate-900">
                           {user.firstName} {user.lastName} <span className="text-slate-500">@{user.displayUsername || user.username}</span>
                         </p>
                         <p className="text-xs text-slate-500">{user.successfulReturns || 0} successful returns</p>
                       </div>
                     </div>
-                    <div className="ml-3 shrink-0 text-right">
+                    <div className="shrink-0 text-left sm:ml-3 sm:text-right">
                       <p className="text-sm font-bold text-violet-700">{user.trustPoints || 0} pts</p>
                       {user.hasVerifiedReturnBadge ? (
                         <span className="mt-1 inline-flex items-center gap-1 rounded-full bg-emerald-100 px-2 py-0.5 text-[11px] font-semibold text-emerald-700">

@@ -9,7 +9,7 @@ export const EnterCodeSection = ({
   sending,
   buttonText = "Complete Verification",
 }) => (
-  <div className="rounded-2xl sm:rounded-3xl border border-slate-200 bg-white/90 backdrop-blur-sm p-4 sm:p-5 md:p-6 max-w-xs w-full shadow-[0_30px_90px_-75px_rgba(15,23,42,0.8)]">
+  <div className="rounded-2xl sm:rounded-3xl border border-slate-200 bg-white/90 backdrop-blur-sm p-4 sm:p-5 md:p-6 max-w-sm w-full shadow-[0_30px_90px_-75px_rgba(15,23,42,0.8)]">
     <h2 className="text-xs sm:text-sm md:text-base font-semibold mb-1 sm:mb-1.5 text-center font-display text-gray-900">
       Enter their 5-digit code
     </h2>

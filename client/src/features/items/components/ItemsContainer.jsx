@@ -74,7 +74,7 @@ export const ItemsContainer = ({
       </div>
 
       {!loading && !error && totalPages > 1 ? (
-        <div className="mt-7 flex items-center justify-center gap-2">
+        <div className="mt-7 flex flex-wrap items-center justify-center gap-2">
           <button
             type="button"
             onClick={handlePrev}
@@ -84,7 +84,7 @@ export const ItemsContainer = ({
             <ChevronLeft className="h-4 w-4" />
             Prev
           </button>
-          <div className="rounded-xl border border-indigo-200 bg-gradient-to-r from-white to-violet-50 px-4 py-2 text-sm font-semibold text-indigo-900">
+          <div className="order-first w-full rounded-xl border border-indigo-200 bg-gradient-to-r from-white to-violet-50 px-4 py-2 text-center text-sm font-semibold text-indigo-900 sm:order-none sm:w-auto">
             Page {currentPage} of {totalPages}
           </div>
           <button

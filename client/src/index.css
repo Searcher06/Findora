@@ -172,9 +172,30 @@
 }
 
 @layer base {
+  html,
+  body,
+  #root {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  img,
+  svg,
+  video,
+  canvas {
+    max-width: 100%;
+    height: auto;
+  }
+
   * {
     @apply border-border outline-ring/50;
   }
+
+  * {
+    min-width: 0;
+  }
+
   body {
     @apply bg-background text-foreground;
   }

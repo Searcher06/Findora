@@ -49,12 +49,12 @@ export const DetailedItemCard = ({ item }) => {
           <img
             src={image || placeholderImage}
             alt={name}
-            className="w-[95%] sm:w-[90%] md:w-[75%] lg:w-[75%] rounded-2xl sm:rounded-3xl shadow-[0_30px_90px_-75px_rgba(15,23,42,0.8)] object-cover aspect-video sm:aspect-video md:aspect-video lg:aspect-square border border-slate-200/50"
+            className="w-full max-w-2xl rounded-2xl sm:rounded-3xl shadow-[0_30px_90px_-75px_rgba(15,23,42,0.8)] object-cover aspect-video lg:aspect-square border border-slate-200/50"
           />
         </div>
 
         {/* Item Info */}
-        <div className="w-[95%] sm:w-[90%] md:w-[75%] mx-auto rounded-2xl border border-indigo-200/70 bg-gradient-to-br from-white to-violet-50/65 p-4 shadow-[0_30px_90px_-75px_rgba(15,23,42,0.8)] backdrop-blur-sm sm:rounded-3xl sm:p-5 md:p-6">
+        <div className="w-full max-w-2xl mx-auto rounded-2xl border border-indigo-200/70 bg-gradient-to-br from-white to-violet-50/65 p-4 shadow-[0_30px_90px_-75px_rgba(15,23,42,0.8)] backdrop-blur-sm sm:rounded-3xl sm:p-5 md:p-6">
           <ItemInfo item={item} layoutMode="default" />
         </div>
 
