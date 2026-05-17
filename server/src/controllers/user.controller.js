@@ -10,6 +10,8 @@ import crypto from "crypto";
 import { sendEmail } from "../utils/sendEmail.js";
 import { verifyEmailTemplate, resetPasswordTemplate } from "../utils/emailTemplates.js";
 
+const CLIENT_URL = process.env.CLIENT_URL || "http://localhost:5173";
+
 const hashPassword = async (password) => {
   const salt = await bcrypt.genSalt(12);
   return bcrypt.hash(password, salt);
@@ -124,7 +126,7 @@ const createUser = async (req, res) => {
     emailVerificationExpires: Date.now() + 24 * 60 * 60 * 1000,
   });
 
-  const verifyUrl = `${process.env.FRONTEND_URL}/verify-email?token=${rawEmailtoken}`;
+  const verifyUrl = `${CLIENT_URL}/verify-email?token=${rawEmailtoken}`;
 
   const html = verifyEmailTemplate(firstName, verifyUrl);
 
@@ -445,7 +447,7 @@ const resendEmail = async (req, res) => {
   user.emailVerificationExpires = Date.now() + 24 * 60 * 60 * 1000;
   await user.save();
 
-  const verifyUrl = `${process.env.FRONTEND_URL}/verify-email?token=${rawEmailtoken}`;
+  const verifyUrl = `${CLIENT_URL}/verify-email?token=${rawEmailtoken}`;
   const html = verifyEmailTemplate(user.firstName, verifyUrl);
   await sendEmail({
     to: user.email,
@@ -478,7 +480,7 @@ const forgotPassword = async (req, res) => {
   user.passwordResetExpires = Date.now() + 30 * 60 * 1000;
   await user.save();
 
-  const resetUrl = `${process.env.FRONTEND_URL}/reset-password?token=${rawResetToken}`;
+  const resetUrl = `${CLIENT_URL}/reset-password?token=${rawResetToken}`;
   const html = resetPasswordTemplate(user.firstName, resetUrl);
 
   await sendEmail({

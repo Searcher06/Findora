@@ -58,9 +58,16 @@ app.get("/api/v1/welcome", async (req, res) => {
 // Error Handler middleware
 app.use(errorMiddleware);
 
-// db connection
-connectDB(DATABASE_URI);
+const startServer = async () => {
+  try {
+    await connectDB(DATABASE_URI);
+    server.listen(PORT, "0.0.0.0", () => {
+      console.log("Server up and running on port: " + PORT);
+    });
+  } catch (error) {
+    console.error("Failed to start server:", error.message);
+    process.exit(1);
+  }
+};
 
-server.listen(PORT, "0.0.0.0", () => {
-  console.log("Server up and running on port: " + PORT);
-});
+startServer();

@@ -3,7 +3,10 @@ import { io } from "socket.io-client";
 import { changePassword, getCurrentUser, loginUser, logoutUser, registerUser } from "@/features/authentication";
 import { updateProfile } from "@/features/user/services/api";
 import { toast } from "react-toastify";
-const BASE_URL = "http://localhost:8080";
+
+const SOCKET_URL =
+  import.meta.env.VITE_SOCKET_URL || "http://localhost:8080";
+
 export const useAuthStore = create((set, get) => ({
   user: null,
   isCheckingAuth: true,
@@ -113,7 +116,7 @@ export const useAuthStore = create((set, get) => ({
     const { user } = get();
     if (!user || get().socket?.connected) return;
 
-    const socket = io(BASE_URL, {
+    const socket = io(SOCKET_URL, {
       query: {
         username: user.username,
       },
