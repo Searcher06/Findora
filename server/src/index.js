@@ -13,6 +13,7 @@ import loggerMiddleware from "./middleware/logger.js";
 import { errorMiddleware } from "./middleware/error.js";
 import cors from "cors";
 import { app, server } from "./lib/socket.js";
+import helmet from "helmet";
 
 app.use(express.json());
 const PORT = process.env.PORT || 8080;
@@ -21,10 +22,22 @@ const DATABASE_URI =
 
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(helmet());
+
+const allowedOrigins = new Set(
+  (process.env.CLIENT_URLS || process.env.CLIENT_URL || "http://localhost:5173")
+    .split(",")
+    .map((origin) => origin.trim())
+    .filter(Boolean)
+);
 
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || "http://localhost:5173",
+    origin(origin, callback) {
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.has(origin)) return callback(null, true);
+      return callback(new Error("CORS origin not allowed"));
+    },
     credentials: true,
   })
 );
