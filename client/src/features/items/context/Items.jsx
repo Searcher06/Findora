@@ -1,11 +1,7 @@
-import { createContext, useState } from "react";
+import { createContext } from "react";
 
 const ItemsContext = createContext();
 
 export const ItemsProvider = ({ children }) => {
-  const [items, setItems] = useState({
-    lost: [],
-    found: [],
-  });
-  return <ItemsContext.Provider>{children}</ItemsContext.Provider>;
+  return <ItemsContext.Provider value={{}}>{children}</ItemsContext.Provider>;
 };

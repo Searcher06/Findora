@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { createElement, useMemo } from "react";
 import {
   User,
   Mail,
@@ -19,7 +19,7 @@ import { useAuthStore } from "@/store/useAuthStore";
 import { Link, useNavigate } from "react-router-dom";
 
 const FieldCard = ({
-  icon: Icon,
+  icon,
   label,
   value,
   helper,
@@ -95,7 +95,7 @@ const FieldCard = ({
       </div>
       <div className="mt-3 flex items-center gap-3">
         <span className={`inline-flex h-9 w-9 items-center justify-center rounded-lg ${style.iconBg}`}>
-          <Icon className={`h-4 w-4 ${style.icon}`} />
+          {createElement(icon, { className: `h-4 w-4 ${style.icon}` })}
         </span>
         <div className="min-w-0">
           <p className="truncate text-sm font-semibold text-slate-900">{value}</p>

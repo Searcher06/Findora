@@ -146,30 +146,30 @@ export const MainNavbar = () => {
             ) : null}
 
             <nav className={`space-y-2 ${isCompactDesktop ? "mt-5" : "mt-8"}`}>
-              {desktopLinks.map(({ to, icon: Icon, label, active, badge, onClick }) => (
+              {desktopLinks.map((link) => (
                 <Link
-                  key={to}
-                  to={to}
-                  title={label}
-                  onClick={onClick}
+                  key={link.to}
+                  to={link.to}
+                  title={link.label}
+                  onClick={link.onClick}
                   className={`group relative flex items-center rounded-xl text-sm font-semibold transition ${
-                    active ? "bg-white text-slate-900 shadow-lg shadow-violet-900/10" : "text-slate-600 hover:bg-indigo-50"
+                    link.active ? "bg-white text-slate-900 shadow-lg shadow-violet-900/10" : "text-slate-600 hover:bg-indigo-50"
                   } ${isCompactDesktop ? "justify-center px-2 py-3" : "justify-between px-3 py-3"}`}
                 >
                   <span className={`flex items-center ${isCompactDesktop ? "" : "gap-2.5"}`}>
-                    <Icon className={`h-4 w-4 ${active ? "text-indigo-700" : "text-slate-400"}`} />
-                    {!isCompactDesktop ? label : null}
+                    <link.icon className={`h-4 w-4 ${link.active ? "text-indigo-700" : "text-slate-400"}`} />
+                    {!isCompactDesktop ? link.label : null}
                   </span>
                   {!isCompactDesktop ? (
                     <span className="flex items-center gap-2">
-                      {badge ? (
-                        <span className="rounded-full bg-indigo-700 px-2 py-0.5 text-[10px] font-bold text-white">{badge}</span>
+                      {link.badge ? (
+                        <span className="rounded-full bg-indigo-700 px-2 py-0.5 text-[10px] font-bold text-white">{link.badge}</span>
                       ) : null}
-                      <ChevronRight className={`h-4 w-4 transition ${active ? "opacity-100" : "opacity-0 group-hover:opacity-100"}`} />
+                      <ChevronRight className={`h-4 w-4 transition ${link.active ? "opacity-100" : "opacity-0 group-hover:opacity-100"}`} />
                     </span>
-                  ) : badge ? (
+                  ) : link.badge ? (
                     <span className="absolute right-1 top-1 rounded-full bg-indigo-700 px-1.5 py-0.5 text-[9px] font-bold text-white">
-                      {badge > 9 ? "9+" : badge}
+                      {link.badge > 9 ? "9+" : link.badge}
                     </span>
                   ) : null}
                 </Link>

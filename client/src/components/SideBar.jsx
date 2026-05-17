@@ -117,17 +117,17 @@ export const SideBar = ({
           </div>
         ) : null}
         <div className="space-y-2">
-          {links.map(({ to, icon: Icon, label, active, badge, onClick }) => (
+          {links.map((link) => (
             <Link
-              key={to}
-              to={to}
-              title={label}
+              key={link.to}
+              to={link.to}
+              title={link.label}
               onClick={() => {
-                onClick?.();
+                link.onClick?.();
                 setOpenSidebar(false);
               }}
               className={`group relative flex items-center rounded-xl text-sm font-semibold transition ${
-                active
+                link.active
                   ? "bg-gradient-to-r from-indigo-600 to-violet-600 text-white shadow-lg shadow-indigo-500/25"
                   : "text-slate-700 hover:bg-slate-100"
               } ${
@@ -137,13 +137,13 @@ export const SideBar = ({
               }`}
             >
               <span className={`flex items-center ${isCompact ? "" : "gap-2.5"}`}>
-                <Icon className="h-4 w-4" />
-                {!isCompact ? label : null}
+                <link.icon className="h-4 w-4" />
+                {!isCompact ? link.label : null}
               </span>
               <span className={`flex items-center ${isCompact ? "absolute right-1 top-1" : "gap-2"}`}>
-                {badge ? (
-                  <span className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${active ? "bg-white text-indigo-700" : "bg-indigo-700 text-white"}`}>
-                    {badge}
+                {link.badge ? (
+                  <span className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${link.active ? "bg-white text-indigo-700" : "bg-indigo-700 text-white"}`}>
+                    {link.badge}
                   </span>
                 ) : null}
                 {!isCompact ? <ChevronRight className="h-4 w-4 opacity-60" /> : null}

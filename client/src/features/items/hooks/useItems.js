@@ -1,5 +1,5 @@
 // hooks/useItems.js - Modified version
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   getAllItems,
   createItem,
@@ -13,6 +13,7 @@ import {
 
 export const useItems = (filters = null, options = {}) => {
   const { autoFetch = true } = options;
+  const filtersKey = useMemo(() => JSON.stringify(filters), [filters]);
   const [items, setItems] = useState([]);
   const [pagination, setPagination] = useState({
     page: 1,
@@ -74,7 +75,7 @@ export const useItems = (filters = null, options = {}) => {
       }
     };
     loadItems();
-  }, [autoFetch, JSON.stringify(filters)]);
+  }, [autoFetch, filters, filtersKey]);
 
   const createAnItem = async (itemData) => {
     try {
