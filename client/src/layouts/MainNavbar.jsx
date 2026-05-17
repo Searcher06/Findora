@@ -228,8 +228,7 @@ export const MainNavbar = () => {
       )}
 
       <nav className="fixed left-0 top-0 z-20 flex h-14 w-full items-center justify-between border-b border-slate-200/90 bg-white/90 px-3 backdrop-blur md:h-16 md:px-4 lg:hidden">
-        <div className="flex items-center gap-2">
-          <div className="relative">
+        <div className="relative">
           <button
             type="button"
             onClick={handleMobileMenuClick}
@@ -243,10 +242,6 @@ export const MainNavbar = () => {
               {unreadCount > 9 ? "9+" : unreadCount}
             </span>
           )}
-        </div>
-          <Link to="/" className="inline-flex items-center">
-            <Logo variant="icon" className="h-8 w-auto text-slate-900 md:h-10" />
-          </Link>
         </div>
 
         <Link
