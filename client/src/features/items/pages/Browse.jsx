@@ -4,7 +4,7 @@ import { TabsBar } from "../components/TabsBar";
 import { ItemsContainer } from "../components/ItemsContainer";
 import ReportButton from "../components/ReportButton.";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Sparkles, SlidersHorizontal } from "lucide-react";
+import { SlidersHorizontal } from "lucide-react";
 import { useItemType } from "../context/ItemTypeContext";
 
 const BrowsePage = () => {
@@ -86,8 +86,7 @@ const BrowsePage = () => {
           <div className="pointer-events-none absolute inset-y-0 -left-1/3 w-1/3 -skew-x-12 bg-gradient-to-r from-transparent via-white/45 to-transparent opacity-60 transition-transform duration-1000 group-hover:translate-x-[420%]" />
           <div className="relative flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
             <div className="max-w-2xl">
-              <p className="mb-3 inline-flex items-center gap-2 rounded-full border border-violet-200 bg-white px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-violet-700">
-                <Sparkles className="h-3.5 w-3.5" />
+              <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-indigo-700/90">
                 Campus Lost & Found Hub
               </p>
               <Header className="text-2xl font-bold leading-tight text-indigo-950 sm:text-4xl lg:text-5xl">
