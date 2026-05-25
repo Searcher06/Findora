@@ -35,6 +35,11 @@ export const getItemInfo = async (id) => {
   return data;
 };
 
+export const getMyItems = async () => {
+  const { data } = await Api.get("/items/user");
+  return data;
+};
+
 export const getFilteredItems = async (filters = {}) => {
   const params = new URLSearchParams();
 

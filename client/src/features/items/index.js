@@ -7,6 +7,7 @@ import { UpdateItem } from "./pages/UpdateItem";
 import Label from "./components/Label";
 import { ItemStatus } from "./components/ItemStatus";
 import { useSingleItem } from "./hooks/useSingleItemFetch";
+import { MyItemsPage } from "./pages/MyItemsPage";
 export {
   BrowsePage,
   ViewItem,
@@ -17,4 +18,5 @@ export {
   Label,
   ItemStatus,
   useSingleItem,
+  MyItemsPage,
 };

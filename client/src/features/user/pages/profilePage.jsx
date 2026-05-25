@@ -15,6 +15,7 @@ import {
   Flag,
   Trophy,
   Phone,
+  Layers,
 } from "lucide-react";
 import { useAuthStore } from "@/store/useAuthStore";
 import { Link, useNavigate } from "react-router-dom";
@@ -332,6 +333,14 @@ export function ProfilePage() {
               >
                 <KeyRound className="h-4 w-4" />
                 Change Password
+              </Link>
+
+              <Link
+                to="/my-items"
+                className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl border border-indigo-200 bg-indigo-50 px-4 text-sm font-semibold text-indigo-800 transition hover:bg-indigo-100"
+              >
+                <Layers className="h-4 w-4" />
+                My Items
               </Link>
 
               <Link

@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { useEffect } from "react";
-import { BrowsePage, ReportPage, ViewItem, UpdateItem } from "@/features/items";
+import { BrowsePage, ReportPage, ViewItem, UpdateItem, MyItemsPage } from "@/features/items";
 import { AdminDashboardPage } from "@/features/admin";
 import { MyFlagsPage } from "@/features/flags";
 import { AppLayout } from "@/layouts/AppLayout";
@@ -33,6 +33,7 @@ const getPageTitle = (pathname) => {
   if (pathname === "/profile/edit") return "Edit Profile | Findora";
   if (pathname === "/my-flags") return "My Reports | Findora";
   if (pathname === "/notifications") return "Notifications | Findora";
+  if (pathname === "/my-items") return "My Items | Findora";
   if (pathname === "/admin") return "Admin Dashboard | Findora";
   if (pathname.startsWith("/items/")) return "Item Details | Findora";
   if (pathname.startsWith("/update/")) return "Update Item | Findora";
@@ -87,6 +88,7 @@ function AppRoutes() {
                   <Route path="/my-flags" element={<MyFlagsPage />} />
                   <Route path="/u/:username" element={<PublicProfilePage />} />
                   <Route path="/notifications" element={<NotificationsPage />} />
+                  <Route path="/my-items" element={<MyItemsPage />} />
                   <Route element={<AdminRoute />}>
                     <Route path="/admin" element={<AdminDashboardPage />} />
                   </Route>

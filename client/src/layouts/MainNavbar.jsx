@@ -6,7 +6,7 @@ import { useLocation, Link } from "react-router-dom";
 import { useAuthStore } from "@/store/useAuthStore";
 import { Logo } from "../components/logo";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { Menu, MessageSquare, User, LayoutGrid, PlusIcon, ChevronRight, Bell, ChevronsLeft, ChevronsRight, X, ShieldCheck, Trophy } from "lucide-react";
+import { Menu, MessageSquare, User, LayoutGrid, PlusIcon, ChevronRight, Bell, ChevronsLeft, ChevronsRight, X, ShieldCheck, Trophy, Layers } from "lucide-react";
 import { useItemType } from "@/features/items/context/ItemTypeContext";
 
 export const MainNavbar = () => {
@@ -26,6 +26,7 @@ export const MainNavbar = () => {
   const isReportActive = location.pathname.startsWith("/report") || location.pathname.startsWith("/update");
   const isMessageActive = location.pathname.startsWith("/chats") || location.pathname.startsWith("/chat/");
   const isProfileActive = location.pathname.startsWith("/profile") || location.pathname.startsWith("/change-password");
+  const isMyItemsActive = location.pathname.startsWith("/my-items");
   const isLeaderboardActive = location.pathname.startsWith("/leaderboard");
   const isNotificationsActive = location.pathname.startsWith("/notifications");
   const isAdminActive = location.pathname.startsWith("/admin");
@@ -59,6 +60,13 @@ export const MainNavbar = () => {
       icon: User,
       label: "Profile",
       active: isProfileActive,
+      onClick: undefined,
+    },
+    {
+      to: "/my-items",
+      icon: Layers,
+      label: "My Items",
+      active: isMyItemsActive,
       onClick: undefined,
     },
     {
