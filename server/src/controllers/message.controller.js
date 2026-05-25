@@ -1,6 +1,8 @@
 import { requestModel } from "../models/request.model.js";
+import { userModel } from "../models/user.model.js";
 import { getRecieverSocketId, io } from "../lib/socket.js";
 import cloudinary from "../config/cloudinary.js";
+import { sendWhatsApp } from "../utils/sendWhatsApp.js";
 
 // Function to clear the red dot (mark as read)
 const markAsRead = async (req, res) => {
@@ -121,6 +123,20 @@ const sendMessage = async (req, res) => {
     // 3. Emit the enriched object
     io.to(receiverSocketId).emit("newMessage", messageWithRequestId);
     io.to(receiverSocketId).emit("newMessageNotification", { requestId });
+  } else {
+    // Receiver is offline — send a WhatsApp nudge (fire-and-forget)
+    userModel
+      .findById(userToChatId)
+      .select("whatsappPhone")
+      .then((u) => {
+        if (u?.whatsappPhone) {
+          sendWhatsApp(
+            u.whatsappPhone,
+            `💬 You have a new message on Findora. Open the app to reply.`
+          );
+        }
+      })
+      .catch(() => {});
   }
 
   res.status(201).json(messageWithRequestId);

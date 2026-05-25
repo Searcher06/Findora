@@ -3,6 +3,7 @@ import { requestModel } from "../models/request.model.js";
 import { userModel } from "../models/user.model.js";
 import { validateId } from "../utils/validateID.js";
 import { getRecieverSocketId, io } from "../lib/socket.js";
+import { sendWhatsApp } from "../utils/sendWhatsApp.js";
 
 const claimItem = async (req, res) => {
   const { id: userID } = req.user;
@@ -63,6 +64,20 @@ const claimItem = async (req, res) => {
   if (receiverSocketId) {
     io.to(receiverSocketId).emit("newChatRequest", populatedRequest);
   }
+
+  // WhatsApp notification to finder — fire-and-forget, never blocks response
+  userModel
+    .findById(finderId)
+    .select("whatsappPhone")
+    .then((u) => {
+      if (u?.whatsappPhone) {
+        sendWhatsApp(
+          u.whatsappPhone,
+          `📦 Someone submitted a claim for your item "${item.name}" on Findora. Open the app to review it.`
+        );
+      }
+    })
+    .catch(() => {});
 
   res.status(201).json(populatedRequest);
 };
@@ -132,6 +147,20 @@ const sendFoundRequest = async (req, res) => {
   if (receiverSocketId) {
     io.to(receiverSocketId).emit("newChatRequest", populatedRequest);
   }
+
+  // WhatsApp notification to claimer/item owner — fire-and-forget
+  userModel
+    .findById(claimerId)
+    .select("whatsappPhone")
+    .then((u) => {
+      if (u?.whatsappPhone) {
+        sendWhatsApp(
+          u.whatsappPhone,
+          `🔍 Someone believes they found your lost item "${item.name}" on Findora. Open the app to respond.`
+        );
+      }
+    })
+    .catch(() => {});
 
   res.status(201).json(populatedRequest);
 };
@@ -208,6 +237,15 @@ const acceptClaim = async (req, res) => {
   if (receiverSocketId) {
     io.to(receiverSocketId).emit("acceptClaim", updatedRequest);
     console.log("Claim accepted");
+  }
+
+  // WhatsApp notification to claimer — fire-and-forget
+  // updatedRequest.claimerId is fully populated (no field restriction), so whatsappPhone is present
+  if (updatedRequest.claimerId?.whatsappPhone) {
+    sendWhatsApp(
+      updatedRequest.claimerId.whatsappPhone,
+      `✅ Your claim for "${item.name}" has been accepted on Findora! Open the app to get your handover code.`
+    ).catch(() => {});
   }
 
   res.status(200).json(updatedRequest);
@@ -324,6 +362,22 @@ const handleItem = async (req, res) => {
       .populate("itemId", "name image");
 
     io.to(`request:${requestId}`).emit("request:verified", finalRequestDoc);
+
+    // WhatsApp notifications to both parties — fire-and-forget
+    // updatedRequest has finderId, claimerId, itemId all fully populated
+    const itemName = updatedRequest.itemId?.name || "your item";
+    if (updatedRequest.finderId?.whatsappPhone) {
+      sendWhatsApp(
+        updatedRequest.finderId.whatsappPhone,
+        `🎉 Handover complete for "${itemName}"! You've earned 10 trust points. Thanks for your honesty!`
+      ).catch(() => {});
+    }
+    if (updatedRequest.claimerId?.whatsappPhone) {
+      sendWhatsApp(
+        updatedRequest.claimerId.whatsappPhone,
+        `🎉 Handover complete for "${itemName}"! You've earned 10 trust points. Welcome back your item!`
+      ).catch(() => {});
+    }
 
     return res.status(200).json(finalRequestDoc);
   }
