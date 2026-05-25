@@ -99,6 +99,11 @@ const schema = new mongoose.Schema({
     type: String,
     trim: true,
   },
+  whatsappPhone: {
+    type: String,
+    trim: true,
+    match: [/^\+[1-9]\d{6,14}$/, "Phone number must be in international format (e.g. +2347012345678)"],
+  },
   createdAt: {
     type: Date,
     default: Date.now(),

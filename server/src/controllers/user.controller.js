@@ -51,7 +51,7 @@ const getComputedTrustStats = async (userId) => {
 };
 
 const createUser = async (req, res) => {
-  let { firstName, lastName, email, password, username } = req.body;
+  let { firstName, lastName, email, password, username, whatsappPhone } = req.body;
   if (!firstName || !lastName || !email || !password || !username) {
     res.status(400);
     throw new Error("Please add all fields");
@@ -110,6 +110,16 @@ const createUser = async (req, res) => {
     throw new Error("Use of special characters is not allowed for Firstname and Lastname");
   }
 
+  // Validate whatsappPhone if provided
+  let sanitizedPhone;
+  if (whatsappPhone && whatsappPhone.trim()) {
+    sanitizedPhone = whatsappPhone.trim();
+    if (!/^\+[1-9]\d{6,14}$/.test(sanitizedPhone)) {
+      res.status(400);
+      throw new Error("Phone number must be in international format (e.g. +2347012345678)");
+    }
+  }
+
   const hashedpwd = await hashPassword(password);
 
   const rawEmailtoken = crypto.randomBytes(32).toString("hex");
@@ -124,17 +134,19 @@ const createUser = async (req, res) => {
     password: hashedpwd,
     emailVerificationToken: hashedEmailToken,
     emailVerificationExpires: Date.now() + 24 * 60 * 60 * 1000,
+    ...(sanitizedPhone && { whatsappPhone: sanitizedPhone }),
   });
 
   const verifyUrl = `${CLIENT_URL}/verify-email?token=${rawEmailtoken}`;
 
   const html = verifyEmailTemplate(firstName, verifyUrl);
 
-  await sendEmail({
+  // TODO: revert to await once email service is fixed
+  sendEmail({
     to: email,
     subject: "Verify Your Findora Account",
     html,
-  });
+  }).catch((err) => console.error("[Email] sign-up verification failed:", err.message));
 
   if (user) {
     generateToken(user, res);
@@ -182,7 +194,7 @@ const getUser = async (req, res) => {
   });
 };
 const updateProfile = async (req, res) => {
-  const { firstName, lastName, email, oldPassword, newPassword, department, foculty } = req.body;
+  const { firstName, lastName, email, oldPassword, newPassword, department, foculty, whatsappPhone } = req.body;
 
   // Check if there are any changes including file upload
   const condition =
@@ -191,8 +203,9 @@ const updateProfile = async (req, res) => {
     !email &&
     !oldPassword &&
     !newPassword &&
-    department === undefined && // Changed from !department
-    foculty === undefined && // Changed from !foculty
+    department === undefined &&
+    foculty === undefined &&
+    whatsappPhone === undefined &&
     !req.file; // Also check for file upload
 
   if (condition) {
@@ -287,6 +300,19 @@ const updateProfile = async (req, res) => {
   // Check if foculty is defined (can be empty string to clear)
   if (foculty !== undefined) {
     user.foculty = foculty; // This allows empty string to clear the field
+  }
+
+  // WhatsApp phone — empty string clears it, otherwise validate E.164 format
+  if (whatsappPhone !== undefined) {
+    const trimmedPhone = whatsappPhone.trim();
+    if (trimmedPhone === "") {
+      user.whatsappPhone = undefined;
+    } else if (!/^\+[1-9]\d{6,14}$/.test(trimmedPhone)) {
+      res.status(400);
+      throw new Error("Phone number must be in international format (e.g. +2347012345678)");
+    } else {
+      user.whatsappPhone = trimmedPhone;
+    }
   }
 
   const file = req.file;
@@ -449,11 +475,12 @@ const resendEmail = async (req, res) => {
 
   const verifyUrl = `${CLIENT_URL}/verify-email?token=${rawEmailtoken}`;
   const html = verifyEmailTemplate(user.firstName, verifyUrl);
-  await sendEmail({
+  // TODO: revert to await once email service is fixed
+  sendEmail({
     to: user.email,
     subject: "Verify your email",
     html: html,
-  });
+  }).catch((err) => console.error("[Email] resend verification failed:", err.message));
 
   res.status(200).json({ message: "Verification email sent" });
 };
@@ -483,11 +510,12 @@ const forgotPassword = async (req, res) => {
   const resetUrl = `${CLIENT_URL}/reset-password?token=${rawResetToken}`;
   const html = resetPasswordTemplate(user.firstName, resetUrl);
 
-  await sendEmail({
+  // TODO: revert to await once email service is fixed
+  sendEmail({
     to: user.email,
     subject: "Reset your Findora password",
     html,
-  });
+  }).catch((err) => console.error("[Email] password reset failed:", err.message));
 
   res.status(200).json({ message: genericMessage });
 };
