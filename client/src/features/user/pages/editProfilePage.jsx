@@ -10,6 +10,7 @@ import {
   Camera,
   Upload,
   KeyRound,
+  Phone,
 } from "lucide-react";
 import { useAuthStore } from "@/store/useAuthStore";
 import { Link, useNavigate } from "react-router-dom";
@@ -24,6 +25,7 @@ export const EditProfilePage = () => {
   const [formData, setFormData] = useState({
     department: "",
     foculty: "",
+    whatsappPhone: "",
     profilePic: "",
   });
   const [previewImage, setPreviewImage] = useState("");
@@ -34,6 +36,7 @@ export const EditProfilePage = () => {
       setFormData({
         department: user.department || "",
         foculty: user.foculty || "",
+        whatsappPhone: user.whatsappPhone || "",
         profilePic: user.profilePic || "",
       });
       setPreviewImage(user.profilePic || "");
@@ -99,6 +102,7 @@ export const EditProfilePage = () => {
       // Append text fields
       formDataToSend.append("department", formData.department);
       formDataToSend.append("foculty", formData.foculty);
+      formDataToSend.append("whatsappPhone", formData.whatsappPhone);
 
       // Append image file if a new one was selected
       if (imageFile) {
@@ -122,6 +126,7 @@ export const EditProfilePage = () => {
   const hasChanges =
     formData.department !== (user?.department || "") ||
     formData.foculty !== (user?.foculty || "") ||
+    formData.whatsappPhone !== (user?.whatsappPhone || "") ||
     formData.profilePic !== (user?.profilePic || "");
 
   if (!user) {
@@ -313,6 +318,45 @@ export const EditProfilePage = () => {
                   : "Enter your faculty name"}
               </p>
             </div>
+          </div>
+        </div>
+
+        {/* WhatsApp Notifications Card */}
+        <div className="bg-white rounded-xl sm:rounded-2xl border border-gray-200 p-4 sm:p-6 shadow-sm">
+          <div className="flex items-center gap-3 mb-4 sm:mb-6">
+            <div className="p-2 sm:p-2.5 bg-linear-to-br from-green-500 to-green-600 rounded-lg sm:rounded-xl shadow-sm">
+              <Phone className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+            </div>
+            <div>
+              <h3 className="text-base sm:text-lg font-semibold text-gray-900 sans">
+                WhatsApp Notifications
+              </h3>
+              <p className="text-gray-400 text-xs sm:text-sm sans mt-0.5">
+                Get notified even when you're not on the app
+              </p>
+            </div>
+          </div>
+
+          <div>
+            <label
+              htmlFor="whatsappPhone"
+              className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2 sans"
+            >
+              <Phone className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-green-600" />
+              WhatsApp Number
+            </label>
+            <input
+              type="tel"
+              id="whatsappPhone"
+              name="whatsappPhone"
+              value={formData.whatsappPhone}
+              onChange={handleChange}
+              placeholder="+2347012345678"
+              className="w-full px-3 sm:px-4 py-2 sm:py-2.5 bg-gray-50 border border-gray-200 rounded-lg sm:rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all sans text-sm"
+            />
+            <p className="text-xs text-gray-500 mt-1.5 ml-1 sans">
+              International format with country code — e.g. <span className="font-medium text-gray-700">+2347012345678</span>. Leave blank to disable WhatsApp alerts.
+            </p>
           </div>
         </div>
 

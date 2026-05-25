@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Mail, Lock, User, AtSign, ShieldCheck } from "lucide-react";
+import { Mail, Lock, User, AtSign, ShieldCheck, Phone } from "lucide-react";
 import { toast } from "react-toastify";
 import { Spinner } from "@/components/ui/spinner";
 import { validateEmail } from "@/utils/validateEmail";
@@ -19,6 +19,7 @@ export const SignUpPage = () => {
     username: "",
     email: "",
     password: "",
+    whatsappPhone: "",
   });
 
   const isDisabled =
@@ -32,12 +33,20 @@ export const SignUpPage = () => {
   const handleSignUp = async (event) => {
     event.preventDefault();
 
+    const trimmedPhone = formData.whatsappPhone.trim();
+
+    if (trimmedPhone && !/^\+[1-9]\d{6,14}$/.test(trimmedPhone)) {
+      toast.error("WhatsApp number must be in international format (e.g. +2347012345678)");
+      return;
+    }
+
     const payload = {
       firstName: formData.firstName.trim(),
       lastName: formData.lastName.trim(),
       email: formData.email.trim(),
       username: formData.username.trim(),
       password: formData.password,
+      ...(trimmedPhone && { whatsappPhone: trimmedPhone }),
     };
 
     if (!payload.firstName || !payload.lastName || !payload.email || !payload.password || !payload.username) {
@@ -88,6 +97,7 @@ export const SignUpPage = () => {
         username: "",
         password: "",
         email: "",
+        whatsappPhone: "",
       });
     }
   };
@@ -159,6 +169,23 @@ export const SignUpPage = () => {
           autoComplete="new-password"
           disabled={isSigningUp}
         />
+
+        <div>
+          <AuthInput
+            id="whatsappPhone"
+            label="WhatsApp Number (optional)"
+            type="tel"
+            placeholder="+2347012345678"
+            value={formData.whatsappPhone}
+            onChange={(e) => setFormData((prev) => ({ ...prev, whatsappPhone: e.target.value }))}
+            icon={Phone}
+            autoComplete="tel"
+            disabled={isSigningUp}
+          />
+          <p className="mt-1.5 px-1 text-xs text-slate-500">
+            Include your country code. Used to notify you about your items via WhatsApp.
+          </p>
+        </div>
 
         <button
           type="submit"

@@ -14,6 +14,7 @@ import {
   KeyRound,
   Flag,
   Trophy,
+  Phone,
 } from "lucide-react";
 import { useAuthStore } from "@/store/useAuthStore";
 import { Link, useNavigate } from "react-router-dom";
@@ -172,7 +173,7 @@ export function ProfilePage() {
   }
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-slate-50 via-slate-100/55 to-white px-2.5 pb-8 pt-2.5 sm:px-5 sm:pb-10 sm:pt-3 md:px-6">
+    <div className="relative min-h-screen overflow-hidden bg-linear-to-b from-slate-50 via-slate-100/55 to-white px-2.5 pb-8 pt-2.5 sm:px-5 sm:pb-10 sm:pt-3 md:px-6">
       <div className="pointer-events-none absolute -left-20 top-10 h-56 w-56 rounded-full bg-violet-300/20 blur-3xl" />
       <div className="pointer-events-none absolute right-0 top-0 h-64 w-64 rounded-full bg-indigo-200/20 blur-3xl" />
 
@@ -190,7 +191,7 @@ export function ProfilePage() {
         <section className="mt-3.5 rounded-2xl border border-slate-200/80 bg-white/90 p-3.5 shadow-[0_30px_90px_-75px_rgba(15,23,42,0.8)] sm:mt-4 sm:rounded-3xl sm:p-5">
           <div className="flex flex-col items-center gap-3.5 text-center min-[390px]:flex-row min-[390px]:items-center min-[390px]:text-left sm:gap-4">
             <div className="relative shrink-0">
-              <div className="h-14 w-14 rounded-full bg-gradient-to-br from-indigo-600 to-violet-600 p-0.5 min-[390px]:h-16 min-[390px]:w-16 sm:h-20 sm:w-20">
+              <div className="h-14 w-14 rounded-full bg-linear-to-br from-indigo-600 to-violet-600 p-0.5 min-[390px]:h-16 min-[390px]:w-16 sm:h-20 sm:w-20">
                 <div className="flex h-full w-full items-center justify-center overflow-hidden rounded-full bg-white">
                   {user.profilePic ? (
                     <img
@@ -298,6 +299,15 @@ export function ProfilePage() {
               value={user.email}
               helper="Primary email address"
               tone="slate"
+            />
+            <FieldCard
+              icon={Phone}
+              label="WhatsApp"
+              value={user.whatsappPhone}
+              helper="For handover and chat notifications"
+              tone="emerald"
+              isEmpty={!user.whatsappPhone}
+              onEmptyAction={handleEditClick}
             />
             <FieldCard
               icon={Calendar}
