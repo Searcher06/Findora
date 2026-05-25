@@ -49,6 +49,7 @@ const FILTERS = [
   { key: "found", label: "Found" },
   { key: "claimed", label: "Claimed" },
   { key: "returned", label: "Returned" },
+  { key: "resolved", label: "Resolved" },
 ];
 
 const timeAgo = (dateString) => {
@@ -62,7 +63,10 @@ const timeAgo = (dateString) => {
 };
 
 const ItemCard = ({ item }) => {
-  const cfg = STATUS_CONFIG[item.status] || STATUS_CONFIG.lost;
+  const isResolved = item.resolvedByOwner;
+  const cfg = isResolved
+    ? { label: "Resolved", color: "bg-slate-100 text-slate-600", dot: "bg-slate-400", icon: CheckCircle2 }
+    : STATUS_CONFIG[item.status] || STATUS_CONFIG.lost;
   const Icon = cfg.icon;
   const navigate = useNavigate();
 
@@ -102,7 +106,7 @@ const ItemCard = ({ item }) => {
             <Eye className="h-3.5 w-3.5" />
             View
           </Link>
-          {item.status !== "returned" && (
+          {item.status !== "returned" && !item.resolvedByOwner && (
             <button
               type="button"
               onClick={() => navigate(`/update/${item._id}`)}
@@ -134,14 +138,19 @@ export function MyItemsPage() {
 
   const counts = {
     all: items.length,
-    lost: items.filter((i) => i.status === "lost").length,
-    found: items.filter((i) => i.status === "found").length,
+    lost: items.filter((i) => i.status === "lost" && !i.resolvedByOwner).length,
+    found: items.filter((i) => i.status === "found" && !i.resolvedByOwner).length,
     claimed: items.filter((i) => i.status === "claimed").length,
     returned: items.filter((i) => i.status === "returned").length,
+    resolved: items.filter((i) => i.resolvedByOwner).length,
   };
 
   const filtered = items
-    .filter((i) => activeFilter === "all" || i.status === activeFilter)
+    .filter((i) => {
+      if (activeFilter === "all") return true;
+      if (activeFilter === "resolved") return i.resolvedByOwner;
+      return i.status === activeFilter && !i.resolvedByOwner;
+    })
     .filter((i) =>
       search.trim()
         ? i.name.toLowerCase().includes(search.toLowerCase()) ||

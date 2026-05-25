@@ -11,6 +11,7 @@ import {
   getUserPostsByUsername,
   getItemById,
   allItems,
+  resolveItem,
 } from "../controllers/item.controller.js";
 import upload from "../middleware/upload.js";
 const router = express.Router();
@@ -24,6 +25,8 @@ router
   .route("/")
   .post(authMiddleWare, upload.single("image"), createItem)
   .get(authMiddleWare, allItems);
+router.post("/:id/resolve", authMiddleWare, ownerShipMiddleware, resolveItem);
+
 router
   .route("/:id")
   .delete(authMiddleWare, ownerShipMiddleware, deleteItem)

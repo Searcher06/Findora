@@ -4,12 +4,15 @@ import { useEffect } from "react";
 import { useChatStore } from "@/store/useChatStore";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useNavContext } from "@/context/NavContext";
+import { OnboardingModal } from "@/components/OnboardingModal";
+import { usePushNotifications } from "@/hooks/usePushNotifications";
 
 export const AppLayout = () => {
   const { subscribeToMessages, unsubscribeFromMessage, fetchUsersToChat } =
     useChatStore();
   const { user } = useAuthStore();
   const { sidebarMode } = useNavContext();
+  usePushNotifications();
 
   useEffect(() => {
     if (user) {
@@ -36,6 +39,7 @@ export const AppLayout = () => {
       <main className="min-h-screen bg-slate-50 flow-root pt-14 md:pt-16 lg:pt-0">
         <Outlet />
       </main>
+      <OnboardingModal />
     </div>
   );
 };

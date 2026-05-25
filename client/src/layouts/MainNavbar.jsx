@@ -6,7 +6,8 @@ import { useLocation, Link } from "react-router-dom";
 import { useAuthStore } from "@/store/useAuthStore";
 import { Logo } from "../components/logo";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { Menu, MessageSquare, User, LayoutGrid, PlusIcon, ChevronRight, Bell, ChevronsLeft, ChevronsRight, X, ShieldCheck, Trophy, Layers } from "lucide-react";
+import { Menu, MessageSquare, User, LayoutGrid, PlusIcon, ChevronRight, Bell, ChevronsLeft, ChevronsRight, X, ShieldCheck, Trophy, Layers, HelpCircle } from "lucide-react";
+import { resetOnboarding } from "@/components/OnboardingModal";
 import { useItemType } from "@/features/items/context/ItemTypeContext";
 
 export const MainNavbar = () => {
@@ -190,7 +191,18 @@ export const MainNavbar = () => {
               ))}
             </nav>
 
-            <div className={`mt-auto rounded-2xl border border-slate-200 bg-white/85 ${isCompactDesktop ? "p-2" : "p-3"}`}>
+            {/* How it works */}
+            <button
+              type="button"
+              onClick={resetOnboarding}
+              title="How it works"
+              className={`mt-4 flex w-full items-center rounded-xl text-xs font-semibold text-slate-400 transition hover:bg-indigo-50 hover:text-indigo-700 ${isCompactDesktop ? "justify-center px-2 py-2.5" : "gap-2 px-3 py-2.5"}`}
+            >
+              <HelpCircle className="h-4 w-4 shrink-0" />
+              {!isCompactDesktop ? "How it works" : null}
+            </button>
+
+            <div className={`mt-2 rounded-2xl border border-slate-200 bg-white/85 ${isCompactDesktop ? "p-2" : "p-3"}`}>
               <Link to="/profile" className={`flex items-center ${isCompactDesktop ? "justify-center" : "gap-3"}`}>
                 <Avatar className="h-10 w-10">
                   {user?.profilePic ? <AvatarImage src={user.profilePic} alt={getDisplayName()} /> : null}

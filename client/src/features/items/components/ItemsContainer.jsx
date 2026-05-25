@@ -65,10 +65,18 @@ export const ItemsContainer = ({
                 />
               ))
               : (
-                <div className="col-span-full w-full rounded-2xl border border-dashed border-indigo-300/70 bg-gradient-to-br from-white to-violet-50/70 px-6 py-12 text-center">
-                  <Inbox className="mx-auto h-10 w-10 text-violet-500" />
-                  <h3 className="mt-4 font-display text-xl font-bold text-indigo-950">No items match this filter</h3>
-                  <p className="mt-1 text-sm text-indigo-800/80">Try a different keyword, category, or date range.</p>
+                <div className="col-span-full w-full">
+                  <div className="flex flex-col items-center gap-4 rounded-3xl border border-dashed border-indigo-200 bg-linear-to-br from-white to-violet-50/60 px-6 py-16 text-center">
+                    <span className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-indigo-100 shadow-sm">
+                      <Inbox className="h-8 w-8 text-indigo-500" />
+                    </span>
+                    <div>
+                      <h3 className="font-display text-lg font-bold text-slate-900">Nothing here yet</h3>
+                      <p className="mt-1 max-w-xs text-sm text-slate-500">
+                        Try adjusting your search, category, or date filter — or be the first to report an item.
+                      </p>
+                    </div>
+                  </div>
                 </div>
               )}
       </div>
@@ -84,7 +92,7 @@ export const ItemsContainer = ({
             <ChevronLeft className="h-4 w-4" />
             Prev
           </button>
-          <div className="order-first w-full rounded-xl border border-indigo-200 bg-gradient-to-r from-white to-violet-50 px-4 py-2 text-center text-sm font-semibold text-indigo-900 sm:order-none sm:w-auto">
+          <div className="order-first w-full rounded-xl border border-indigo-200 bg-linear-to-r from-white to-violet-50 px-4 py-2 text-center text-sm font-semibold text-indigo-900 sm:order-0 sm:w-auto">
             Page {currentPage} of {totalPages}
           </div>
           <button

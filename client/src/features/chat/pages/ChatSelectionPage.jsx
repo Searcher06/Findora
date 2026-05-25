@@ -103,7 +103,7 @@ export const ChatSelectionPage = () => {
   );
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-slate-50 via-slate-100/55 to-white px-3 pb-8 pt-3 sm:px-5 md:px-6">
+    <div className="relative min-h-screen overflow-hidden bg-linear-to-b from-slate-50 via-slate-100/55 to-white px-3 pb-8 pt-3 sm:px-5 md:px-6">
       <div className="pointer-events-none absolute -left-20 top-16 h-56 w-56 rounded-full bg-violet-300/20 blur-3xl" />
       <div className="pointer-events-none absolute right-0 top-10 h-72 w-72 rounded-full bg-indigo-200/20 blur-3xl" />
 
@@ -206,18 +206,22 @@ export const ChatSelectionPage = () => {
               ))}
             </div>
           ) : (
-            <div className="flex flex-col items-center justify-center px-4 py-16 text-center">
-              <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-100 text-slate-500">
-                {searchQuery ? <Search className="h-8 w-8" /> : <MessageSquareDashed className="h-8 w-8" />}
-              </div>
-              <h3 className="font-display text-xl font-semibold text-slate-900">
-                No conversations found
-              </h3>
-              <p className="mt-1 text-sm text-slate-600">
+            <div className="flex flex-col items-center gap-4 px-4 py-16 text-center">
+              <span className={`inline-flex h-16 w-16 items-center justify-center rounded-2xl shadow-sm ${searchQuery ? "bg-slate-100" : "bg-indigo-100"}`}>
                 {searchQuery
-                  ? "Try a different keyword."
-                  : "Start by opening an item request chat."}
-              </p>
+                  ? <Search className="h-8 w-8 text-slate-400" />
+                  : <MessageSquareDashed className="h-8 w-8 text-indigo-500" />}
+              </span>
+              <div>
+                <h3 className="font-display text-lg font-bold text-slate-900">
+                  {searchQuery ? "No results found" : "No conversations yet"}
+                </h3>
+                <p className="mt-1 max-w-xs text-sm text-slate-500">
+                  {searchQuery
+                    ? "Try searching by name, item, or role."
+                    : "Once a claim request is accepted, your chat will appear here."}
+                </p>
+              </div>
             </div>
           )}
         </section>

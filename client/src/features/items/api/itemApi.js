@@ -40,6 +40,11 @@ export const getMyItems = async () => {
   return data;
 };
 
+export const resolveItem = async (id, reason) => {
+  const { data } = await Api.post(`/items/${id}/resolve`, { reason });
+  return data;
+};
+
 export const getFilteredItems = async (filters = {}) => {
   const params = new URLSearchParams();
 

@@ -68,6 +68,17 @@ const itemSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    resolvedByOwner: {
+      type: Boolean,
+      default: false,
+    },
+    resolvedReason: {
+      type: String,
+      trim: true,
+    },
+    resolvedAt: {
+      type: Date,
+    },
     dateLostOrFound: {
       type: Date,
       required: true,

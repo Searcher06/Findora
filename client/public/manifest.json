@@ -1,0 +1,37 @@
+{
+  "name": "Findora",
+  "short_name": "Findora",
+  "description": "Campus lost and found — report, connect, recover.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f8fafc",
+  "theme_color": "#4338ca",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/findoranavlogo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/findoranavlogo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["utilities", "education"],
+  "shortcuts": [
+    {
+      "name": "Report Item",
+      "url": "/report",
+      "description": "Report a lost or found item"
+    },
+    {
+      "name": "Browse Items",
+      "url": "/",
+      "description": "Browse all lost and found items"
+    }
+  ]
+}

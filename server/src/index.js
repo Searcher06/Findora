@@ -8,6 +8,7 @@ import requestRoute from "./routes/requests.routes.js";
 import messageRoute from "./routes/message.routes.js";
 import adminRoute from "./routes/admin.routes.js";
 import flagRoute from "./routes/flags.routes.js";
+import pushRoute from "./routes/push.routes.js";
 import cookieParser from "cookie-parser";
 import loggerMiddleware from "./middleware/logger.js";
 import { errorMiddleware } from "./middleware/error.js";
@@ -62,6 +63,9 @@ app.use("/api/v1/flags", flagRoute);
 
 // admin route
 app.use("/api/v1/admin", adminRoute);
+
+// push notification route
+app.use("/api/v1/push", pushRoute);
 
 // api testing
 app.get("/api/v1/welcome", async (req, res) => {

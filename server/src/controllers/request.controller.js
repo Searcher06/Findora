@@ -4,6 +4,7 @@ import { userModel } from "../models/user.model.js";
 import { validateId } from "../utils/validateID.js";
 import { getRecieverSocketId, io } from "../lib/socket.js";
 import { sendWhatsApp } from "../utils/sendWhatsApp.js";
+import { sendPushNotification } from "../utils/sendPushNotification.js";
 
 const claimItem = async (req, res) => {
   const { id: userID } = req.user;
@@ -65,7 +66,7 @@ const claimItem = async (req, res) => {
     io.to(receiverSocketId).emit("newChatRequest", populatedRequest);
   }
 
-  // WhatsApp notification to finder — fire-and-forget, never blocks response
+  // WhatsApp + Push notification to finder — fire-and-forget
   userModel
     .findById(finderId)
     .select("whatsappPhone")
@@ -78,6 +79,12 @@ const claimItem = async (req, res) => {
       }
     })
     .catch(() => {});
+
+  sendPushNotification(finderId, {
+    title: "New Claim Request",
+    body: `Someone submitted a claim for "${item.name}". Tap to review.`,
+    url: `/notifications`,
+  }).catch(() => {});
 
   res.status(201).json(populatedRequest);
 };
@@ -239,14 +246,19 @@ const acceptClaim = async (req, res) => {
     console.log("Claim accepted");
   }
 
-  // WhatsApp notification to claimer — fire-and-forget
-  // updatedRequest.claimerId is fully populated (no field restriction), so whatsappPhone is present
+  // WhatsApp + Push notification to claimer — fire-and-forget
   if (updatedRequest.claimerId?.whatsappPhone) {
     sendWhatsApp(
       updatedRequest.claimerId.whatsappPhone,
       `✅ Your claim for "${item.name}" has been accepted on Findora! Open the app to get your handover code.`
     ).catch(() => {});
   }
+
+  sendPushNotification(updatedRequest.claimerId?._id, {
+    title: "Claim Accepted! 🎉",
+    body: `Your claim for "${item.name}" was accepted. Tap to get your handover code.`,
+    url: `/handover/${updatedRequest._id}`,
+  }).catch(() => {});
 
   res.status(200).json(updatedRequest);
 };

@@ -348,11 +348,41 @@ const foundItems = async (req, res) => {
 };
 const getUserItems = async (req, res) => {
   const user = await userModel.findById(req.user._id);
-  const items = await itemModel.find({
-    reportedBy: user._id.toString(),
-    isHidden: { $ne: true },
-  });
+  // Return ALL items including hidden/resolved so the owner has full history
+  const items = await itemModel.find({ reportedBy: user._id.toString() });
   res.status(200).json(items);
+};
+
+const resolveItem = async (req, res) => {
+  const { reason } = req.body;
+
+  const validReasons = [
+    "Found it myself",
+    "Owner retrieved it",
+    "No longer needed",
+    "Posted by mistake",
+  ];
+
+  if (!reason || !validReasons.includes(reason)) {
+    res.status(400);
+    throw new Error("Please select a valid reason");
+  }
+
+  const item = await itemModel.findById(req.item._id);
+
+  if (!["lost", "found"].includes(item.status)) {
+    res.status(400);
+    throw new Error("Only active lost or found items can be resolved");
+  }
+
+  item.isHidden = true;
+  item.resolvedByOwner = true;
+  item.resolvedReason = reason;
+  item.resolvedAt = new Date();
+
+  await item.save();
+
+  res.status(200).json({ message: "Item resolved successfully", item });
 };
 const getUserPostsByUsername = async (req, res) => {
   const { username } = req.params;
@@ -409,4 +439,5 @@ export {
   getUserPostsByUsername,
   getItemById,
   allItems,
+  resolveItem,
 };
