@@ -27,6 +27,7 @@ export const MainNavbar = () => {
   const isMessageActive = location.pathname.startsWith("/chats") || location.pathname.startsWith("/chat/");
   const isProfileActive = location.pathname.startsWith("/profile") || location.pathname.startsWith("/change-password");
   const isLeaderboardActive = location.pathname.startsWith("/leaderboard");
+  const isNotificationsActive = location.pathname.startsWith("/notifications");
   const isAdminActive = location.pathname.startsWith("/admin");
   const canAccessAdmin = ["admin", "moderator"].includes(user?.role);
 
@@ -58,6 +59,13 @@ export const MainNavbar = () => {
       icon: User,
       label: "Profile",
       active: isProfileActive,
+      onClick: undefined,
+    },
+    {
+      to: "/notifications",
+      icon: Bell,
+      label: "Notifications",
+      active: isNotificationsActive,
       onClick: undefined,
     },
     {
@@ -110,11 +118,9 @@ export const MainNavbar = () => {
             <div className={`flex items-center ${isCompactDesktop ? "justify-center" : "justify-between"}`}>
               <Link to="/" className="inline-flex items-center gap-2">
                 {isCompactDesktop ? (
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-indigo-100 bg-white text-sm font-bold text-indigo-700">
-                    F
-                  </div>
+                  <Logo variant="icon" className="h-9 w-9" />
                 ) : (
-                  <Logo variant="icon" className="h-14 w-auto text-slate-900" />
+                  <Logo variant="full" className="h-8 w-auto" />
                 )}
               </Link>
               {!isCompactDesktop ? (
@@ -180,7 +186,7 @@ export const MainNavbar = () => {
               <Link to="/profile" className={`flex items-center ${isCompactDesktop ? "justify-center" : "gap-3"}`}>
                 <Avatar className="h-10 w-10">
                   {user?.profilePic ? <AvatarImage src={user.profilePic} alt={getDisplayName()} /> : null}
-                  <AvatarFallback className="bg-gradient-to-br from-slate-500 to-violet-600 text-sm font-bold uppercase text-white">
+                  <AvatarFallback className="bg-linear-to-br from-slate-500 to-violet-600 text-sm font-bold uppercase text-white">
                     {getDisplayName().slice(0, 1)}
                   </AvatarFallback>
                 </Avatar>
@@ -245,16 +251,11 @@ export const MainNavbar = () => {
         </div>
 
         <Link
-          to="/chats"
+          to="/notifications"
           className="relative inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-700 shadow-sm"
           aria-label="Open notifications"
         >
           <Bell className="h-5 w-5" />
-          {unreadCount > 0 ? (
-            <span className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-indigo-700 px-1 text-[10px] font-bold text-white">
-              {unreadCount > 9 ? "9+" : unreadCount}
-            </span>
-          ) : null}
         </Link>
       </nav>
 

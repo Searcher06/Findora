@@ -382,7 +382,7 @@ const getItemById = async (req, res) => {
 
   const item = await itemModel
     .findOne({ _id: id })
-    .populate("reportedBy", "firstName lastName profilePic");
+    .populate("reportedBy", "firstName lastName profilePic username");
 
   if (!item) {
     res.status(404);

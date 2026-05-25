@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Trophy, Award, Loader2, Shield } from "lucide-react";
+import { Link } from "react-router-dom";
 import { getTrustLeaderboard } from "../services/api";
 import { useAuthStore } from "@/store/useAuthStore";
 
@@ -74,12 +75,13 @@ export function TrustLeaderboardPage() {
                 const isTopThree = user.rank <= 3;
 
                 return (
-                  <div
+                  <Link
                     key={user._id}
-                    className={`flex flex-col gap-3 rounded-xl border p-3 sm:flex-row sm:items-center sm:justify-between ${
+                    to={`/u/${user.username}`}
+                    className={`flex flex-col gap-3 rounded-xl border p-3 transition hover:shadow-sm sm:flex-row sm:items-center sm:justify-between ${
                       isCurrentUser
-                        ? "border-violet-300 bg-indigo-50"
-                        : "border-slate-200 bg-white"
+                        ? "border-violet-300 bg-indigo-50 hover:border-violet-400"
+                        : "border-slate-200 bg-white hover:border-indigo-200 hover:bg-indigo-50/40"
                     }`}
                   >
                     <div className="flex min-w-0 items-center gap-3">
@@ -107,7 +109,7 @@ export function TrustLeaderboardPage() {
                         </span>
                       )}
                     </div>
-                  </div>
+                  </Link>
                 );
               })}
             </div>

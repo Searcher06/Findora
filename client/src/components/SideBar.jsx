@@ -2,7 +2,7 @@ import { X, ChevronsLeft, ChevronsRight } from "lucide-react";
 import { Logo } from "./logo";
 import { Link, useLocation } from "react-router-dom";
 import { useEffect, useRef } from "react";
-import { LayoutGrid, MessageSquare, PlusIcon, User, ChevronRight, ShieldCheck, Trophy } from "lucide-react";
+import { LayoutGrid, MessageSquare, PlusIcon, User, ChevronRight, ShieldCheck, Trophy, Bell } from "lucide-react";
 import { useAuthStore } from "@/store/useAuthStore";
 
 export const SideBar = ({
@@ -46,6 +46,12 @@ export const SideBar = ({
       label: "Messages",
       active: currentPath.startsWith("/chats") || currentPath.startsWith("/chat/"),
       badge: unreadCount > 0 ? unreadCount : null,
+    },
+    {
+      to: "/notifications",
+      icon: Bell,
+      label: "Notifications",
+      active: currentPath.startsWith("/notifications"),
     },
     {
       to: "/profile",

@@ -6,6 +6,39 @@ import { DeleteItemButton, RequestButton } from "./AlertDialogBox";
 import { createFlag } from "@/features/flags/services/flagApi";
 import { toast } from "react-toastify";
 import { useState } from "react";
+import { Share2 } from "lucide-react";
+
+const ShareButton = ({ name, className = "" }) => {
+  const url = window.location.href;
+
+  const handleShare = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: `${name} — Findora`, url });
+      } catch {
+        // user cancelled — do nothing
+      }
+    } else {
+      try {
+        await navigator.clipboard.writeText(url);
+        toast.success("Link copied to clipboard!");
+      } catch {
+        toast.error("Could not copy link");
+      }
+    }
+  };
+
+  return (
+    <button
+      type="button"
+      onClick={handleShare}
+      className={`inline-flex items-center gap-2 rounded-xl border border-indigo-200 bg-white px-4 py-2 text-sm font-medium text-indigo-900 shadow-sm transition-all hover:bg-violet-50 hover:shadow-md active:scale-95 ${className}`}
+    >
+      <Share2 className="h-4 w-4" />
+      Share
+    </button>
+  );
+};
 
 export const DetailedItemCard = ({ item }) => {
   const navigate = useNavigate();
@@ -54,7 +87,7 @@ export const DetailedItemCard = ({ item }) => {
         </div>
 
         {/* Item Info */}
-        <div className="w-full max-w-2xl mx-auto rounded-2xl border border-indigo-200/70 bg-gradient-to-br from-white to-violet-50/65 p-4 shadow-[0_30px_90px_-75px_rgba(15,23,42,0.8)] backdrop-blur-sm sm:rounded-3xl sm:p-5 md:p-6">
+        <div className="w-full max-w-2xl mx-auto rounded-2xl border border-indigo-200/70 bg-linear-to-br from-white to-violet-50/65 p-4 shadow-[0_30px_90px_-75px_rgba(15,23,42,0.8)] backdrop-blur-sm sm:rounded-3xl sm:p-5 md:p-6">
           <ItemInfo item={item} layoutMode="default" />
         </div>
 
@@ -73,6 +106,7 @@ export const DetailedItemCard = ({ item }) => {
               >
                 Update
               </Button>
+              <ShareButton name={name} className="h-10 sm:h-11" />
             </div>
           ) : (
             <div className="flex flex-wrap justify-center gap-2 sm:gap-3">
@@ -89,6 +123,7 @@ export const DetailedItemCard = ({ item }) => {
               >
                 Report Item
               </Button>
+              <ShareButton name={name} className="h-10 sm:h-11" />
             </div>
           )}
         </div>
@@ -106,12 +141,12 @@ export const DetailedItemCard = ({ item }) => {
             <img
               src={image || placeholderImage}
               alt={name}
-              className="w-full rounded-2xl shadow-[0_30px_90px_-75px_rgba(15,23,42,0.8)] object-cover aspect-[4/3] xl:aspect-square border border-slate-200/50"
+              className="w-full rounded-2xl shadow-[0_30px_90px_-75px_rgba(15,23,42,0.8)] object-cover aspect-4/3 xl:aspect-square border border-slate-200/50"
             />
           </div>
 
           {/* Owner/Finder Info */}
-          <div className="rounded-2xl border border-indigo-200/70 bg-gradient-to-br from-white to-violet-50/65 p-4 shadow-[0_30px_90px_-75px_rgba(15,23,42,0.8)] backdrop-blur-sm xl:p-5">
+          <div className="rounded-2xl border border-indigo-200/70 bg-linear-to-br from-white to-violet-50/65 p-4 shadow-[0_30px_90px_-75px_rgba(15,23,42,0.8)] backdrop-blur-sm xl:p-5">
             <ItemInfo item={item} layoutMode="compact" />
           </div>
 
@@ -130,6 +165,7 @@ export const DetailedItemCard = ({ item }) => {
                 >
                   Update
                 </Button>
+                <ShareButton name={name} className="w-full h-10 xl:h-11 justify-center" />
               </>
             ) : (
               <>
@@ -146,6 +182,7 @@ export const DetailedItemCard = ({ item }) => {
                 >
                   Report Item
                 </Button>
+                <ShareButton name={name} className="w-full h-10 xl:h-11 justify-center" />
               </>
             )}
           </div>
@@ -156,14 +193,14 @@ export const DetailedItemCard = ({ item }) => {
         </div>
 
         {/* Right Column */}
-        <div className="rounded-2xl border border-indigo-200/70 bg-gradient-to-br from-white to-violet-50/65 p-5 shadow-[0_30px_90px_-75px_rgba(15,23,42,0.8)] backdrop-blur-sm lg:col-span-7 xl:col-span-8 xl:p-6">
+        <div className="rounded-2xl border border-indigo-200/70 bg-linear-to-br from-white to-violet-50/65 p-5 shadow-[0_30px_90px_-75px_rgba(15,23,42,0.8)] backdrop-blur-sm lg:col-span-7 xl:col-span-8 xl:p-6">
           <ItemInfo item={item} layoutMode="detailed" />
         </div>
       </div>
 
       {isReportModalOpen ? (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/55 px-4">
-          <div className="w-full max-w-md rounded-2xl border border-indigo-200 bg-gradient-to-br from-white to-violet-50/70 p-5 shadow-2xl">
+          <div className="w-full max-w-md rounded-2xl border border-indigo-200 bg-linear-to-br from-white to-violet-50/70 p-5 shadow-2xl">
             <h3 className="font-display text-xl font-bold text-indigo-950">
               Report This Item
             </h3>

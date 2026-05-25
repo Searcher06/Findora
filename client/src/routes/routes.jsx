@@ -14,6 +14,7 @@ import { ChatPage, ChatSelectionPage } from "@/features/chat";
 import { NavProvider } from "@/context/NavContext";
 import { CodeExchangePage } from "@/features/codeExchange";
 import { EditProfilePage, ProfilePage, TrustLeaderboardPage, PublicProfilePage } from "@/features/user";
+import { NotificationsPage } from "@/features/notification";
 import { ScrollToTop } from "@/utils/scrollToTop";
 
 const getPageTitle = (pathname) => {
@@ -31,6 +32,7 @@ const getPageTitle = (pathname) => {
   if (pathname === "/leaderboard") return "Trust Leaderboard | Findora";
   if (pathname === "/profile/edit") return "Edit Profile | Findora";
   if (pathname === "/my-flags") return "My Reports | Findora";
+  if (pathname === "/notifications") return "Notifications | Findora";
   if (pathname === "/admin") return "Admin Dashboard | Findora";
   if (pathname.startsWith("/items/")) return "Item Details | Findora";
   if (pathname.startsWith("/update/")) return "Update Item | Findora";
@@ -84,6 +86,7 @@ function AppRoutes() {
                   <Route path="/profile/edit" element={<EditProfilePage />} />
                   <Route path="/my-flags" element={<MyFlagsPage />} />
                   <Route path="/u/:username" element={<PublicProfilePage />} />
+                  <Route path="/notifications" element={<NotificationsPage />} />
                   <Route element={<AdminRoute />}>
                     <Route path="/admin" element={<AdminDashboardPage />} />
                   </Route>
