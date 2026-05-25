@@ -1,33 +1,34 @@
-import { Logo } from "./logo";
 export const Loader = () => {
   return (
-    <div className="min-h-screen bg-white flex flex-col items-center justify-center">
-      {/* Your app logo */}
-      <div className="mb-8">
-        <Logo />
-      </div>
+    <div className="flex min-h-svh flex-col items-center justify-center bg-linear-to-b from-slate-50 to-white px-6 py-safe">
+      {/* Glow blobs — decorative, pointer-events off */}
+      <div className="pointer-events-none fixed -left-24 top-1/4 h-64 w-64 rounded-full bg-violet-300/20 blur-3xl sm:h-80 sm:w-80" />
+      <div className="pointer-events-none fixed -right-24 bottom-1/4 h-64 w-64 rounded-full bg-indigo-200/20 blur-3xl sm:h-80 sm:w-80" />
 
-      {/* Themed loading */}
-      <div className="relative">
-        <div className="w-16 h-16 border-4 border-gray-200 border-l-indigo-500 border-t-indigo-500 rounded-full animate-spin"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-          <svg
-            className="w-6 h-6 text-indigo-500"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-          >
-            <path
-              fillRule="evenodd"
-              d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z"
-              clipRule="evenodd"
-            />
-          </svg>
+      <div className="relative flex flex-col items-center gap-8 sm:gap-10">
+        {/* Logo */}
+        <img
+          src="/iconplusfindoratext.png"
+          alt="Findora"
+          className="h-9 w-auto sm:h-11"
+          draggable={false}
+        />
+
+        {/* Spinner */}
+        <div className="relative h-14 w-14 sm:h-16 sm:w-16">
+          {/* Outer track */}
+          <div className="absolute inset-0 rounded-full border-4 border-slate-200" />
+          {/* Spinning arc */}
+          <div className="absolute inset-0 animate-spin rounded-full border-4 border-transparent border-l-indigo-500 border-t-indigo-500" />
+          {/* Centre dot */}
+          <span className="absolute left-1/2 top-1/2 h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-indigo-500" />
         </div>
-      </div>
 
-      <p className="mt-6 text-gray-600 text-sm">
-        Loading your secure environment
-      </p>
+        {/* Label */}
+        <p className="text-center text-sm font-medium text-slate-500 sm:text-base">
+          Loading your secure environment…
+        </p>
+      </div>
     </div>
   );
 };
