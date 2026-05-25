@@ -1,4 +1,4 @@
-import { createElement, useMemo } from "react";
+import { createElement, useMemo, useState, useEffect } from "react";
 import {
   User,
   Mail,
@@ -16,7 +16,11 @@ import {
   Trophy,
   Phone,
   Layers,
+  Bell,
+  BellOff,
+  BellRing,
 } from "lucide-react";
+import { requestPushPermission } from "@/hooks/usePushNotifications";
 import { useAuthStore } from "@/store/useAuthStore";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -102,6 +106,92 @@ const FieldCard = ({
         <div className="min-w-0">
           <p className="truncate text-sm font-semibold text-slate-900">{value}</p>
           {helper ? <p className="mt-0.5 text-xs text-slate-500">{helper}</p> : null}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const NotificationCard = () => {
+  const [permission, setPermission] = useState(
+    "Notification" in window ? Notification.permission : "unsupported"
+  );
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (!("Notification" in window)) return;
+    setPermission(Notification.permission);
+  }, []);
+
+  const handleEnable = async () => {
+    setLoading(true);
+    const granted = await requestPushPermission();
+    setPermission(granted ? "granted" : "denied");
+    setLoading(false);
+  };
+
+  if (permission === "unsupported") return null;
+
+  const configs = {
+    granted: {
+      icon: BellRing,
+      iconBg: "bg-emerald-100",
+      iconColor: "text-emerald-700",
+      dot: "bg-emerald-500",
+      label: "Push Notifications",
+      value: "Enabled",
+      helper: "You'll be notified about claims and handovers.",
+      action: null,
+    },
+    denied: {
+      icon: BellOff,
+      iconBg: "bg-rose-100",
+      iconColor: "text-rose-700",
+      dot: "bg-rose-500",
+      label: "Push Notifications",
+      value: "Blocked",
+      helper: "Enable in your browser settings → Site permissions → Notifications.",
+      action: null,
+    },
+    default: {
+      icon: Bell,
+      iconBg: "bg-indigo-100",
+      iconColor: "text-indigo-700",
+      dot: "bg-slate-400",
+      label: "Push Notifications",
+      value: "Not enabled",
+      helper: "Get notified instantly when someone claims your item or accepts your request.",
+      action: handleEnable,
+    },
+  };
+
+  const cfg = configs[permission] || configs.default;
+  const Icon = cfg.icon;
+
+  return (
+    <div className="rounded-2xl border border-slate-200 bg-white p-4 transition hover:border-indigo-200">
+      <div className="flex items-center gap-2">
+        <span className={`h-2 w-2 rounded-full ${cfg.dot}`} />
+        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">{cfg.label}</p>
+      </div>
+      <div className="mt-3 flex items-start gap-3">
+        <span className={`inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${cfg.iconBg}`}>
+          <Icon className={`h-4 w-4 ${cfg.iconColor}`} />
+        </span>
+        <div className="min-w-0 flex-1">
+          <p className="text-sm font-semibold text-slate-900">{cfg.value}</p>
+          <p className="mt-0.5 text-xs text-slate-500">{cfg.helper}</p>
+          {cfg.action && (
+            <button
+              type="button"
+              onClick={cfg.action}
+              disabled={loading}
+              className="mt-3 inline-flex h-8 items-center gap-1.5 rounded-lg bg-indigo-700 px-3 text-xs font-semibold text-white transition hover:bg-indigo-800 disabled:opacity-60"
+            >
+              <Bell className="h-3.5 w-3.5" />
+              {loading ? "Enabling…" : "Enable Notifications"}
+            </button>
+          )}
         </div>
       </div>
     </div>
@@ -317,6 +407,8 @@ export function ProfilePage() {
               helper={membershipDuration(user.createdAt)}
               tone="amber"
             />
+
+            <NotificationCard />
 
             <div className="space-y-2 pt-2">
               <button
