@@ -351,23 +351,21 @@ const updateProfile = async (req, res) => {
   res.status(200).json(sanitizeUser(updatedUser));
 };
 const getUserByUsername = async (req, res) => {
-  // Getting the username from the request parameter
   const { username } = req.params;
 
-  // Getting the full user info from the username provided
-  const user = await userModel.findOne({ username: username });
+  // Select only public-safe fields — never expose email, phone, tokens, etc.
+  const user = await userModel.findOne({ username }).select(
+    "firstName lastName username displayUsername profilePic role " +
+    "trustPoints successfulReturns hasVerifiedReturnBadge department foculty createdAt"
+  );
 
-  // checking if user does not exist
   if (!user) {
     res.status(404);
     throw new Error("User not found");
   }
 
   const computedTrust = await getComputedTrustStats(user._id);
-  res.status(200).json({
-    ...sanitizeUser(user),
-    ...computedTrust,
-  });
+  res.status(200).json({ ...user.toObject(), ...computedTrust });
 };
 
 const getTrustLeaderboard = async (req, res) => {

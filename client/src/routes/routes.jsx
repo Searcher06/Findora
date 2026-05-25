@@ -13,7 +13,7 @@ import AdminRoute from "./adminRoute";
 import { ChatPage, ChatSelectionPage } from "@/features/chat";
 import { NavProvider } from "@/context/NavContext";
 import { CodeExchangePage } from "@/features/codeExchange";
-import { EditProfilePage, ProfilePage, TrustLeaderboardPage } from "@/features/user";
+import { EditProfilePage, ProfilePage, TrustLeaderboardPage, PublicProfilePage } from "@/features/user";
 import { ScrollToTop } from "@/utils/scrollToTop";
 
 const getPageTitle = (pathname) => {
@@ -36,6 +36,7 @@ const getPageTitle = (pathname) => {
   if (pathname.startsWith("/update/")) return "Update Item | Findora";
   if (pathname.startsWith("/chat/")) return "Chat | Findora";
   if (pathname.startsWith("/handover/")) return "Verify Handover | Findora";
+  if (pathname.startsWith("/u/")) return "Profile | Findora";
 
   return "Findora";
 };
@@ -82,6 +83,7 @@ function AppRoutes() {
                   <Route path="/leaderboard" element={<TrustLeaderboardPage />} />
                   <Route path="/profile/edit" element={<EditProfilePage />} />
                   <Route path="/my-flags" element={<MyFlagsPage />} />
+                  <Route path="/u/:username" element={<PublicProfilePage />} />
                   <Route element={<AdminRoute />}>
                     <Route path="/admin" element={<AdminDashboardPage />} />
                   </Route>

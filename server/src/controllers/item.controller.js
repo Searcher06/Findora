@@ -8,6 +8,7 @@ import {
   uploadImageToCloudinary,
   getCloudinaryUploadErrorMessage,
 } from "../utils/uploadImageToCloudinary.js";
+import { archiveExpiredItems } from "../utils/archiveExpiredItems.js";
 
 const createItem = async (req, res) => {
   let {
@@ -277,6 +278,9 @@ const deleteItem = async (req, res) => {
   }
 };
 const allItems = async (req, res) => {
+  // Lazy archival — archive expired items on every browse request (no cron needed)
+  archiveExpiredItems();
+
   const { category, date, search, status } = req.query;
   const query = { isHidden: { $ne: true } };
   const now = new Date();

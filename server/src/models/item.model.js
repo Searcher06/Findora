@@ -64,6 +64,10 @@ const itemSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
+    expiryWarningSent: {
+      type: Boolean,
+      default: false,
+    },
     dateLostOrFound: {
       type: Date,
       required: true,
