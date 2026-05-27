@@ -10,7 +10,6 @@ import { AuthInput } from "../components/AuthInput";
 const LoginPage = () => {
   const { login, isLoggingIng } = useAuthStore();
   const navigate = useNavigate();
-  const [rememberMe, setRememberMe] = useState(true);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -64,24 +63,13 @@ const LoginPage = () => {
           disabled={isLoggingIng}
         />
 
-        <div className="flex items-center justify-between gap-3">
-          <label className="inline-flex cursor-pointer items-center gap-2 text-sm text-slate-600">
-            <input
-              type="checkbox"
-              checked={rememberMe}
-              onChange={(e) => setRememberMe(e.target.checked)}
-              className="h-4 w-4 rounded border-slate-300 text-violet-600 focus:ring-violet-500"
-            />
-            Remember me
-          </label>
-          <div className="flex items-center gap-3 text-sm">
-            <Link to="/forgot-password" className="font-semibold text-violet-700 transition hover:text-violet-800">
-              Forgot password?
-            </Link>
-            <Link to="/resend-email" className="font-semibold text-violet-700 transition hover:text-violet-800">
-              Verify email
-            </Link>
-          </div>
+        <div className="flex flex-wrap items-center justify-between gap-3 text-sm">
+          <Link to="/forgot-password" className="font-semibold text-violet-700 transition hover:text-violet-800">
+            Forgot password?
+          </Link>
+          <Link to="/resend-email" className="font-semibold text-violet-700 transition hover:text-violet-800">
+            Resend email
+          </Link>
         </div>
 
         <button
