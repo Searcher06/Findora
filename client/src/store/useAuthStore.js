@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { io } from "socket.io-client";
 import { changePassword, getCurrentUser, loginUser, logoutUser, registerUser } from "@/features/authentication";
 import { updateProfile } from "@/features/user/services/api";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 
 const SOCKET_URL =
   import.meta.env.VITE_SOCKET_URL || "http://localhost:8080";

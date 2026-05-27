@@ -4,7 +4,7 @@ import { useState, useRef } from "react";
 import { useChatStore } from "@/store/useChatStore";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 
 export const InputsSection = ({
   requestId,

@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 // prettier-ignore
 import {AlertDialog,AlertDialogAction,AlertDialogCancel,AlertDialogContent,AlertDialogDescription,AlertDialogFooter,AlertDialogHeader,AlertDialogTitle,AlertDialogTrigger} from "@/components/ui/alert-dialog";
 import { useItems } from "../hooks/useItems";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import { useVerify } from "@/features/verification";
 import { useAuthStore } from "@/store/useAuthStore";

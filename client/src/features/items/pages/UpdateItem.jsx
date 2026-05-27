@@ -3,7 +3,7 @@ import { DetailedItemCardSkeleton } from "../components/DetailedItemCardSkeleton
 import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import AddInfo from "../components/AddInfo";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import { useItems } from "../hooks/useItems";
 import { useUploadPhoto } from "../context/UploadPhotoContext";
 

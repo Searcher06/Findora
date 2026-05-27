@@ -7,7 +7,6 @@ import { AppLayout } from "@/layouts/AppLayout";
 import { ItemTypeProvider } from "@/features/items/context/ItemTypeContext";
 import { LoginPage, ResendEmail, SignUpPage, EmailVerify, ForgotPasswordPage, ResetPasswordPage, ChangePasswordPage } from "@/features/authentication";
 import { UploadPhotoProvider } from "@/features/items/context/UploadPhotoContext";
-import { ToastContainer } from "react-toastify";
 import PrivateRoute from "./privateRoute";
 import AdminRoute from "./adminRoute";
 import { ChatPage, ChatSelectionPage } from "@/features/chat";
@@ -16,6 +15,7 @@ import { CodeExchangePage } from "@/features/codeExchange";
 import { EditProfilePage, ProfilePage, TrustLeaderboardPage, PublicProfilePage } from "@/features/user";
 import { NotificationsPage } from "@/features/notification";
 import { ScrollToTop } from "@/utils/scrollToTop";
+import { Toaster } from "@/components/ui/sonner";
 
 const getPageTitle = (pathname) => {
   if (pathname === "/") return "Browse Items | Findora";
@@ -95,7 +95,7 @@ function AppRoutes() {
                 </Route>
               </Route>
             </Routes>
-            <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} closeOnClick pauseOnHover theme="light" />
+            <Toaster position="top-right" />
           </UploadPhotoProvider>
         </ItemTypeProvider>
       </BrowserRouter>

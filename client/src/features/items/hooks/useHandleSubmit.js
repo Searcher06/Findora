@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useItems } from "./useItems";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 export const useHandleSubmit = (itemData) => {
   const navigate = useNavigate();
   const { createAnItem } = useItems();

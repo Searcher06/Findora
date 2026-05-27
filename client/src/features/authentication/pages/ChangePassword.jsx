@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Lock, Loader2, ShieldCheck } from "lucide-react";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import { AuthShell } from "../components/AuthShell";
 import { AuthInput } from "../components/AuthInput";
 import { useAuthStore } from "@/store/useAuthStore";

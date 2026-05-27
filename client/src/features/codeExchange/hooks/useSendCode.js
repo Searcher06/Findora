@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import { handleItem } from "../services/codeApi";
 
 // Proper hook for sending OTP code

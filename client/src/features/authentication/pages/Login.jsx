@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Mail, Lock, ShieldCheck } from "lucide-react";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import { Spinner } from "@/components/ui/spinner";
 import { useAuthStore } from "@/store/useAuthStore";
 import { AuthShell } from "../components/AuthShell";

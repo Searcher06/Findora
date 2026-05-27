@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Mail, Loader2, CheckCircle2, AlertCircle } from "lucide-react";
 import { resendVerificationEmail } from "../services/authApi";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import { AuthShell } from "../components/AuthShell";
 import { AuthInput } from "../components/AuthInput";
 

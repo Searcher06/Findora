@@ -1,4 +1,4 @@
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import { validateEmail } from "@/utils/validateEmail";
 import { textValidator } from "@/utils/textValidator";
 const useSignUp = async (formData, setFormData, navigate, signUp) => {

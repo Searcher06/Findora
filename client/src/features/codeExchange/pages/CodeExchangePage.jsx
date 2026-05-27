@@ -2,7 +2,7 @@ import { useFetchRequestById } from "@/features/verification";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import { useSendCode } from "../hooks/useSendCode";
 
 import { VerificationHeader } from "../components/VerificationHeader";

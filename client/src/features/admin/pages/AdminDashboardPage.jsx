@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import {
   getAdminAnalytics,
   getAdminAuditLogs,

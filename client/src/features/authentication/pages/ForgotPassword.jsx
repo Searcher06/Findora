@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Mail, Loader2, CheckCircle2 } from "lucide-react";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import { forgotPassword } from "../services/authApi";
 import { AuthShell } from "../components/AuthShell";
 import { AuthInput } from "../components/AuthInput";

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { getMyFlags } from "../services/flagApi";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 
 const statusClass = {
   open: "bg-amber-100 text-amber-700",

@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { DeleteItemButton, RequestButton } from "./AlertDialogBox";
 import { createFlag } from "@/features/flags/services/flagApi";
 import { resolveItem } from "../api/itemApi";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import { useState } from "react";
 import { Share2, CheckCircle2, X } from "lucide-react";
 

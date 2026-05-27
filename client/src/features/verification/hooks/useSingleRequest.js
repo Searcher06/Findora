@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { useState, useEffect } from "react";
 import { getRequestById, acceptClaim } from "../apis/verificationApi";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import { useAuthStore } from "@/store/useAuthStore";
 export const useFetchRequestById = (requestId) => {
   const [request, setRequest] = useState(null);

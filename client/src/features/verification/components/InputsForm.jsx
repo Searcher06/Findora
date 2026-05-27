@@ -1,7 +1,7 @@
 import { useVerify } from "../hooks/useVerify";
 import { QuestionLabelAndInput } from "./QuestionLabelAndInput";
 import { Button } from "@/components/ui/button";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import { Spinner } from "@/components/ui/spinner";
 import { useEffect, useState } from "react";

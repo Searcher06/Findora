@@ -1,7 +1,7 @@
 import AddInfo from "../components/AddInfo";
 import { useState } from "react";
 import { useItems } from "../hooks/useItems";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import { useItemType } from "../context/ItemTypeContext";
 import { useNavigate } from "react-router-dom";
 

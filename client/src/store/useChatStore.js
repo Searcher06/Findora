@@ -5,7 +5,7 @@ import {
   getUsersToChat,
   markAsRead,
 } from "@/features/chat/services/chatApi";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import { useAuthStore } from "./useAuthStore";
 import sound from "../../public/notification.mp3";
 
