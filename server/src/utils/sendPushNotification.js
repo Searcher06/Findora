@@ -1,17 +1,27 @@
 import webpush from "web-push";
 import { pushSubscriptionModel } from "../models/pushSubscription.model.js";
 
-webpush.setVapidDetails(
-  process.env.VAPID_EMAIL,
-  process.env.VAPID_PUBLIC_KEY,
-  process.env.VAPID_PRIVATE_KEY
-);
+const vapidSubject = process.env.VAPID_EMAIL;
+const vapidPublicKey = process.env.VAPID_PUBLIC_KEY;
+const vapidPrivateKey = process.env.VAPID_PRIVATE_KEY;
+
+const pushNotificationsEnabled =
+  Boolean(vapidSubject) && Boolean(vapidPublicKey) && Boolean(vapidPrivateKey);
+
+if (pushNotificationsEnabled) {
+  webpush.setVapidDetails(vapidSubject, vapidPublicKey, vapidPrivateKey);
+} else {
+  console.warn(
+    "Web push notifications are disabled because VAPID_EMAIL, VAPID_PUBLIC_KEY, or VAPID_PRIVATE_KEY is missing."
+  );
+}
 
 /**
  * Send a push notification to all subscriptions for a given userId.
  * Fire-and-forget — never throws.
  */
 export const sendPushNotification = async (userId, { title, body, url = "/" }) => {
+  if (!pushNotificationsEnabled) return;
   if (!userId) return;
 
   let subs;
