@@ -55,7 +55,7 @@ app.use("/api/v1/items", itemRoute);
 // item claim/found request route
 app.use("/api/v1/request", requestRoute);
 
-// message route
+// message routes
 app.use("/api/v1/chat", messageRoute);
 
 // user-created moderation flags route
@@ -71,6 +71,8 @@ app.use("/api/v1/push", pushRoute);
 app.get("/api/v1/welcome", async (req, res) => {
   res.status(200).json({ message: "welcome to the server" });
 });
+
+// todo:fix whatsapp message
 
 // Error Handler middleware
 app.use(errorMiddleware);
