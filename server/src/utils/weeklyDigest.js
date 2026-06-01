@@ -3,6 +3,7 @@ import { adminFlagModel } from "../models/adminFlag.model.js";
 import { sendWhatsApp } from "./sendWhatsApp.js";
 import { sendPushNotification } from "./sendPushNotification.js";
 import { scoreCandidatesWithGroq } from "./groqMatcher.js";
+import { getCategoryPool } from "./categoryGroups.js";
 
 const DIGEST_LOOKBACK_DAYS = 7;
 const OLD_ITEM_MIN_AGE_DAYS = 7;
@@ -75,7 +76,7 @@ export const runWeeklyDigest = async () => {
 
     const candidates = recentByStatus[oppositeStatus].filter(
       (r) =>
-        r.category === oldItem.category &&
+        getCategoryPool(oldItem.category).includes(r.category) &&
         r.reportedBy.toString() !== owner._id.toString()
     );
 

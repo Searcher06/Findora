@@ -4,6 +4,7 @@ import { adminFlagModel } from "../models/adminFlag.model.js";
 import { sendWhatsApp } from "./sendWhatsApp.js";
 import { sendPushNotification } from "./sendPushNotification.js";
 import { scoreCandidatesWithGroq } from "./groqMatcher.js";
+import { getCategoryPool } from "./categoryGroups.js";
 
 const DATE_WINDOW_DAYS = 30;
 const MAX_CANDIDATES = 15;
@@ -40,7 +41,7 @@ const _run = async (newItem) => {
 
   const candidates = await itemModel
     .find({
-      category: newItem.category,
+      category: { $in: getCategoryPool(newItem.category) },
       status: oppositeStatus,
       isHidden: { $ne: true },
       reportedBy: { $ne: newItem.reportedBy },
