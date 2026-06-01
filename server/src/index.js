@@ -72,8 +72,6 @@ app.get("/api/v1/welcome", async (req, res) => {
   res.status(200).json({ message: "welcome to the server" });
 });
 
-// todo:fix whatsapp message
-
 // Error Handler middleware
 app.use(errorMiddleware);
 

@@ -246,11 +246,18 @@ const acceptClaim = async (req, res) => {
     console.log("Claim accepted");
   }
 
-  // WhatsApp + Push notification to claimer — fire-and-forget
+  // WhatsApp notifications to both parties with their respective codes — fire-and-forget
+  // Each person receives their own code to share with the other at handover
   if (updatedRequest.claimerId?.whatsappPhone) {
     sendWhatsApp(
       updatedRequest.claimerId.whatsappPhone,
-      `✅ Your claim for "${item.name}" has been accepted on Findora! Open the app to get your handover code.`
+      `✅ Your claim for "${item.name}" has been accepted!\n\nYour handover code: *${claimerCode}*\n\nShare this code with the finder when you meet to complete the handover.`
+    ).catch(() => {});
+  }
+  if (updatedRequest.finderId?.whatsappPhone) {
+    sendWhatsApp(
+      updatedRequest.finderId.whatsappPhone,
+      `🤝 You accepted a claim for "${item.name}".\n\nYour handover code: *${finderCode}*\n\nShare this code with the claimer when you meet to complete the handover.`
     ).catch(() => {});
   }
 

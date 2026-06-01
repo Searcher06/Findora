@@ -96,6 +96,12 @@ export const EditProfilePage = () => {
   const handleSubmit = async () => {
     if (!user) return;
 
+    const trimmedPhone = formData.whatsappPhone.trim();
+    if (trimmedPhone && !/^\+[1-9]\d{6,14}$/.test(trimmedPhone)) {
+      toast.error("WhatsApp number must be in international format (e.g. +2347012345678)");
+      return;
+    }
+
     try {
       const formDataToSend = new FormData();
 

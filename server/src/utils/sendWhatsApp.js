@@ -21,12 +21,9 @@ export const sendWhatsApp = async (phone, text) => {
   try {
     await axios.post(
       "https://api.wawp.net/v2/send/text",
-      { instance_id: instanceId, chatId, text },
+      { instance_id: instanceId, access_token: token, chatId, text },
       {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         timeout: 8000,
       }
     );
