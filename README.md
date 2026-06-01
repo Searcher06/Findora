@@ -1,200 +1,205 @@
-# Findora: Connecting Lost & Found on Campus
+# Findora
 
-## Overview
-
-Findora is designed to help campus communities easily recover items that have been lost and quickly return items that have been found. It creates a secure and straightforward way for people to report items, connect with each other, and verify ownership, so valuable belongings don't just disappear. Think of it as your campus's smart lost and found, making sure everything finds its way home.
-
-## Description
-
-Findora is a comprehensive platform built to streamline the process of managing lost and found items within a community, particularly a university campus. It provides a user-friendly interface for reporting lost or found items, facilitates secure communication between the item's owner and finder, and ensures verified handovers. The platform promotes trust and transparency through a unique verification system and offers robust administrative tools for moderation. Whether you've misplaced your laptop or found someone's ID, Findora makes the reunification process simple, efficient, and secure.
+Imagine you've misplaced your laptop on campus. You'd want a quick, reliable way to get the word out and hopefully get it back, right? Findora is designed to do just that for university communities. It's a platform where you can easily report lost or found items, connect with others, and securely coordinate their return.
 
 ## Installation
 
-To get Findora up and running on your local machine, follow these steps:
+Let's get Findora up and running on your local machine. This project is a monorepo, so we'll set up the client (frontend) and server (backend) separately.
 
-1.  **Clone the Repository**
+### 1. Clone the Repository
 
-    ```bash
-    git clone https://github.com/Searcher06/Findora
-    cd Findora
-    ```
+Start by cloning the project from GitHub:
 
-2.  **Set Up the Server**
+```bash
+git clone https://github.com/Searcher06/Findora.git
+cd Findora
+```
 
-    Navigate to the `server` directory, install dependencies, and configure your environment variables.
+### 2. Set up the Server
 
-    ```bash
-    cd server
-    npm install
-    ```
+Navigate into the `server` directory and install its dependencies:
 
-    Create a `.env` file in the `server` directory with the following variables:
+```bash
+cd server
+npm install # or yarn install / pnpm install
+```
 
-    ```env
-    PORT=8080
-    DATABASE_URI=mongodb://127.0.0.1:27017/Findora # Or your MongoDB Atlas URI
-    JWT_SECRET=YOUR_RANDOM_JWT_SECRET
-    CLIENT_URL=http://localhost:5173 # Or your client's URL
+Create a `.env` file in the `server` directory with the following environment variables. Remember to replace the placeholder values with your actual credentials:
 
-    # Cloudinary for image uploads
-    CLOUDINARY_CLOUD_NAME=YOUR_CLOUD_NAME
-    CLOUDINARY_API_KEY=YOUR_API_KEY
-    CLOUDINARY_API_SECRET=YOUR_API_SECRET
+```ini
+PORT=8080
+DATABASE_URI="mongodb://127.0.0.1:27017/Findora"
+CLIENT_URL="http://localhost:5173" # Or comma-separated list for multiple origins
+JWT_SECRET="your_strong_jwt_secret"
+EMAIL_SERVICE_URL="your_email_service_api_endpoint" # e.g., for Nodemailer or a third-party service
 
-    # Web Push Notifications (Optional)
-    VAPID_EMAIL=your_email@example.com
-    VAPID_PUBLIC_KEY=YOUR_VAPID_PUBLIC_KEY
-    VAPID_PRIVATE_KEY=YOUR_VAPID_PRIVATE_KEY
+# Cloudinary for image uploads
+CLOUDINARY_CLOUD_NAME="your_cloudinary_cloud_name"
+CLOUDINARY_API_KEY="your_cloudinary_api_key"
+CLOUDINARY_API_SECRET="your_cloudinary_api_secret"
 
-    # WhatsApp Notifications (Optional, uses wawp.net V2 API)
-    WAWP_INSTANCE_ID=YOUR_WAWP_INSTANCE_ID
-    WAWP_ACCESS_TOKEN=YOUR_WAWP_ACCESS_TOKEN
+# Web Push Notifications (Optional)
+VAPID_PUBLIC_KEY="your_vapid_public_key"
+VAPID_PRIVATE_KEY="your_vapid_private_key"
+VAPID_EMAIL="mailto:your_email@example.com" # Your email address for VAPID contact
 
-    # Email Service (Optional, uses an external service)
-    EMAIL_SERVICE_URL=YOUR_EMAIL_SERVICE_ENDPOINT
-    ```
+# WhatsApp Notifications (Optional, using wawp.net API example)
+WAWP_INSTANCE_ID="your_wawp_instance_id"
+WAWP_ACCESS_TOKEN="your_wawp_access_token"
 
-3.  **Set Up the Client**
+# AI Matching (Optional, using Groq SDK)
+GROQ_API_KEY="your_groq_api_key"
+```
 
-    Navigate to the `client` directory, install dependencies, and configure your environment variables.
+Start the server:
 
-    ```bash
-    cd ../client
-    npm install
-    ```
+```bash
+npm run dev # This uses nodemon for live reloading
+```
 
-    Create a `.env` file in the `client` directory with the following variables:
+The server should now be running, typically on `http://localhost:8080`.
 
-    ```env
-    VITE_SOCKET_URL=http://localhost:8080 # Or your server's URL
-    VITE_API_URL=http://localhost:8080/api/v1 # Or your server's API base URL
-    ```
+### 3. Set up the Client
+
+Open a new terminal, navigate into the `client` directory, and install its dependencies:
+
+```bash
+cd ../client
+npm install # or yarn install / pnpm install
+```
+
+Create a `.env` file in the `client` directory with the following environment variable:
+
+```ini
+VITE_SERVER_URL="http://localhost:8080"
+VITE_SOCKET_URL="http://localhost:8080"
+```
+
+Start the client development server:
+
+```bash
+npm run dev
+```
+
+The client application should now be accessible, typically on `http://localhost:5173`.
 
 ## Usage
 
-Once the client and server are set up, you can start the application and begin using Findora.
+Findora simplifies the process of reuniting lost items with their owners within a university setting. Here's how you and other users can interact with the platform:
 
-1.  **Start the Server**
+### User Workflows
 
-    From the `server` directory:
+1.  **Reporting a Lost or Found Item**:
+    *   After logging in, navigate to the "Report Item" section.
+    *   Select whether you've "Lost an Item" or "Found an Item".
+    *   Fill in details like item name, category (Electronics, Books & Stationary, etc.), description, location, and the date it was lost or found.
+    *   Optionally, upload a clear photo of the item to help with identification.
+    *   Once submitted, your report becomes visible to the community, and the system can automatically suggest matches.
 
-    ```bash
-    npm run dev
-    ```
+2.  **Browsing and Searching Items**:
+    *   On the homepage, you'll find a feed of both lost and found items.
+    *   Use the search bar to look for specific items by name, location, description, or category.
+    *   Apply filters for categories and dates (e.g., "Last 7 days", "Oldest") to narrow down your search.
+    *   You can toggle between "Lost" and "Found" views to see only relevant items.
 
-2.  **Start the Client**
+3.  **Claiming or Marking as Found**:
+    *   If you see an item that might be yours (in the "Found" list) or you've found an item for someone else (in the "Lost" list), you can initiate a request.
+    *   When you claim an item, a chat is opened with the person who reported it.
+    *   The platform then guides both parties through a secure verification process, involving questions and answers to confirm ownership before coordinating the return.
 
-    From the `client` directory:
+4.  **Real-time Messaging and Handover Verification**:
+    *   Once a claim or found request is accepted, a dedicated chat channel opens up.
+    *   You can exchange messages and images in real-time to arrange a meeting.
+    *   For the final handover, a unique 5-digit code exchange system ensures both parties confirm the transaction, boosting trust points for successful returns.
 
-    ```bash
-    npm run dev
-    ```
+5.  **Profile Management and Trust Leaderboard**:
+    *   Your profile allows you to view your reported items, edit personal information, and manage notification settings (including optional WhatsApp and push notifications).
+    *   A "Trust Leaderboard" ranks users by the number of successful, verified item returns, encouraging community participation and honesty.
 
-    Your application should now be accessible in your browser, typically at `http://localhost:5173`.
+### Admin and Moderation
 
-### Key User Flows
-
-*   **Reporting an Item**: If you've lost an item or found something, simply navigate to the "Report Item" page. You'll fill out details like the item's name, description, category, location, and the date it was lost or found. You can also upload a photo to help identify it.
-*   **Browsing Items**: Explore the "Browse Items" page to see all lost and found reports. You can filter by category, date, and search for specific items to quickly find what you're looking for.
-*   **Claiming/Responding to an Item**: If you see an item that might be yours, you can submit a claim request. If you've reported a lost item and someone else has found it, they can send you a "found" request. This kicks off a secure communication process.
-*   **Real-time Chat**: Once a claim or found request is accepted, a chat window opens up between the owner and the finder. Here, you can discuss details, arrange a meeting, and verify specifics about the item.
-*   **Secure Handover**: To ensure items are returned to the rightful owner, Findora implements a two-way code exchange. Both parties receive a unique 5-digit code. At the point of physical handover, you'll exchange these codes within the app to confirm the item's return. This process updates both profiles with "trust points" for successful returns.
-*   **Notifications**: Stay updated on all your activities. You'll receive in-app notifications, and if configured, push notifications and WhatsApp messages for important updates like new messages or accepted claims.
-*   **Profile Management**: View your own profile, including your "Trust Points" earned from successful returns. You can also edit your academic information, profile picture, and change your password.
-*   **Admin and Moderation**: For authorized users, an admin dashboard provides tools to manage users, moderate item listings, review flags, and oversee requests to keep the platform safe and efficient.
-
-*(No screenshots were found in the provided file list.)*
+*   Administrators and moderators have access to a dedicated dashboard.
+*   They can manage users (suspend, reactivate), moderate reported items (hide, unhide, delete), handle requests (force-close), and review user-submitted flags.
+*   An audit log tracks all administrative actions, ensuring transparency and accountability.
 
 ## Features
 
-*   **User Authentication**: Secure sign-up, login, logout, password reset, and email verification.
-*   **Personalized Profiles**: Users can manage their profiles, including academic details, contact information (WhatsApp), and profile pictures.
-*   **Trust & Reputation System**: Earn "trust points" and "verified return" badges for successful and verified item handovers.
-*   **Lost & Found Item Management**:
-    *   Create, view, update, and delete reports for lost or found items.
-    *   Categorize items for easier searching (Electronics, Books, IDs, etc.).
-    *   Upload images for visual identification.
-    *   Resolve items when they are no longer active or have been returned.
-*   **Advanced Item Browsing**: Filter items by category, date, status (lost/found), and comprehensive search functionality.
-*   **Request & Messaging System**:
-    *   Users can send claim requests for found items or "found" requests for lost items.
-    *   Real-time chat functionality for communication between item owner and finder.
-    *   Unread message indicators to keep track of active conversations.
-*   **Secure Handover Verification**: A unique 5-digit code exchange system ensures both parties verify the item's return, adding a layer of trust and security.
-*   **Notifications**: In-app notifications for all activities, with optional push notifications and WhatsApp alerts for critical updates.
-*   **Progressive Web App (PWA)**: The client-side is designed as a PWA, offering an enhanced mobile experience.
-*   **Admin Dashboard**: Dedicated interface for administrators and moderators to oversee user accounts, item listings, requests, manage flags, and review audit logs.
-*   **Robust Error Handling**: Comprehensive server-side error handling and client-side toast notifications for a smooth user experience.
-*   **Image Cloud Storage**: Utilizes Cloudinary for efficient and scalable image storage.
+*   **User Authentication**: Secure sign-up, login, logout, email verification, password reset, and change password functionalities.
+*   **Lost & Found Item Management**: Users can create, update, and delete reports for lost or found items, complete with detailed descriptions, categories, locations, and image uploads.
+*   **Advanced Item Search & Filtering**: Efficiently browse items using keywords, categories, and date ranges.
+*   **Real-time Communication**: Integrated chat system for direct communication between item finders and claimers, facilitating smooth coordination.
+*   **Secure Handover Protocol**: A unique 5-digit code exchange system ensures verified, in-person item returns, enhancing security and trust.
+*   **AI-Powered Item Matching**: Utilizes the Groq SDK (Llama 3.1 8B) for intelligent suggestions of potential item matches, notifying relevant users.
+*   **Trust & Reputation System**: Users earn trust points and badges for successful item returns, displayed on a campus-wide leaderboard.
+*   **Notifications**:
+    *   **Push Notifications**: Instant alerts for new messages, claim requests, and potential item matches (PWA compatible).
+    *   **WhatsApp Notifications**: Optional real-time alerts for critical updates, even when not actively using the app.
+*   **Admin & Moderation Dashboard**: Comprehensive tools for administrators to manage users, moderate items, oversee requests, review flags, and audit platform activities.
+*   **Automated Item Archiving**: Older, unresolved items are automatically archived to keep listings relevant and clean.
+*   **Responsive UI**: A modern, mobile-first design built with React and TailwindCSS ensures a seamless experience across devices.
+*   **Monorepo Structure**: Organized client and server projects within a single repository for streamlined development and deployment.
 
 ## Technologies Used
 
-| Category         | Technology                 | Description                                    |
-| :--------------- | :------------------------- | :--------------------------------------------- |
-| **Frontend**     | [React](https://react.dev/) | JavaScript library for building user interfaces. |
-|                  | [Vite](https://vitejs.dev/) | Next-generation frontend tooling.              |
-|                  | [Tailwind CSS](https://tailwindcss.com/) | Utility-first CSS framework.                 |
-|                  | [Shadcn UI](https://ui.shadcn.com/) | Reusable UI components built with Radix UI. |
-|                  | [Zustand](https://zustand-demo.pmnd.rs/) | Small, fast, and scalable bear-bones state-management solution. |
-|                  | [React Router DOM](https://reactrouter.com/en/main) | Declarative routing for React.           |
-|                  | [Axios](https://axios-http.com/) | Promise-based HTTP client.                   |
-|                  | [Socket.IO Client](https://socket.io/docs/v4/client-api/) | Real-time bidirectional event-based communication. |
-|                  | [next-themes](https://github.com/pacocoursey/next-themes) | Theme management for React applications. |
-|                  | [date-fns](https://date-fns.org/) | Modern JavaScript date utility library.      |
-|                  | [Sonner](https://sonner.emilkowalski.pl/) | An opinionated toast component.              |
-| **Backend**      | [Node.js](https://nodejs.org/en) | JavaScript runtime environment.              |
-|                  | [Express](https://expressjs.com/) | Web application framework for Node.js.     |
-|                  | [MongoDB](https://www.mongodb.com/) | NoSQL database.                             |
-|                  | [Mongoose](https://mongoosejs.com/) | MongoDB object modeling for Node.js.         |
-|                  | [Socket.IO](https://socket.io/) | Real-time bidirectional event-based communication. |
-|                  | [JWT](https://jwt.io/) | JSON Web Tokens for secure authentication.     |
-|                  | [Bcryptjs](https://github.com/dcodeIO/bcrypt.js) | Password hashing library.                  |
-|                  | [Cloudinary](https://cloudinary.com/) | Cloud-based image and video management.        |
-|                  | [Multer](https://github.com/expressjs/multer) | Middleware for handling `multipart/form-data`. |
-|                  | [Cookie-parser](https://github.com/expressjs/cookie-parser) | Parse Cookie header and populate `req.cookies`. |
-|                  | [CORS](https://github.com/expressjs/cors) | Middleware for enabling Cross-Origin Resource Sharing. |
-|                  | [Dotenv](https://github.com/motdotla/dotenv) | Loads environment variables from a `.env` file. |
-|                  | [Express-rate-limit](https://www.npmjs.com/package/express-rate-limit) | Basic rate-limiting middleware.          |
-|                  | [Helmet](https://helmetjs.github.io/) | Helps secure Express apps by setting various HTTP headers. |
-|                  | [Web-push](https://github.com/web-push-libs/web-push) | Library for sending push notifications.      |
-|                  | [Axios](https://axios-http.com/) | Promise-based HTTP client (server-side).     |
+This project is built using a modern JavaScript/TypeScript stack.
+
+| Category   | Technology     | Description                                               |
+| :--------- | :------------- | :-------------------------------------------------------- |
+| **Client** | React          | Frontend library for building user interfaces             |
+|            | Vite           | Fast frontend build tool                                  |
+|            | TypeScript     | Superset of JavaScript for type safety                    |
+|            | TailwindCSS    | Utility-first CSS framework for rapid styling             |
+|            | Zustand        | Lightweight state management for React                    |
+|            | React Query    | Data fetching, caching, and state management              |
+|            | Axios          | Promise-based HTTP client for API requests                |
+|            | Next Themes    | Theme provider for light/dark mode                        |
+|            | Radix UI       | Unstyled, accessible UI components                        |
+|            | Socket.IO      | Real-time bidirectional event-based communication         |
+| **Server** | Node.js        | JavaScript runtime environment                            |
+|            | Express        | Fast, unopinionated, minimalist web framework             |
+|            | MongoDB        | NoSQL database for flexible data storage                  |
+|            | Mongoose       | MongoDB object data modeling (ODM) for Node.js           |
+|            | Socket.IO      | Real-time bidirectional event-based communication         |
+|            | JSON Web Tokens (JWT) | Secure authentication and authorization              |
+|            | bcryptjs       | Password hashing                                          |
+|            | Cloudinary     | Cloud-based image and video management                    |
+|            | Multer         | Node.js middleware for handling `multipart/form-data`     |
+|            | Groq SDK       | AI integration for intelligent item matching              |
+|            | web-push       | Library for sending Web Push Notifications                |
+|            | node-cron      | Task scheduler for automated jobs                         |
+|            | dotenv         | Loads environment variables from a `.env` file            |
+|            | cors           | Middleware for enabling Cross-Origin Resource Sharing     |
+|            | Helmet         | Secures Express apps by setting various HTTP headers      |
+|            | cookie-parser  | Parse `Cookie` header and populate `req.cookies`          |
+|            | express-rate-limit | Basic IP rate-limiting middleware for Express          |
 
 ## Contributing
 
-We welcome contributions to Findora! If you're interested in helping improve the project, please follow these guidelines:
+We'd love for you to contribute to Findora! Here are some guidelines to help you get started:
 
-1.  **Fork the repository**.
-2.  **Create a new branch** for your feature or bug fix: `git checkout -b feature/your-feature-name` or `bugfix/issue-description`.
-3.  **Make your changes**, ensuring they adhere to the project's coding standards.
-4.  **Write clear, concise commit messages**.
-5.  **Submit a pull request** to the `main` branch, describing your changes and the problem they solve.
+1.  **Fork the Repository**: Start by forking the project to your own GitHub account.
+2.  **Create a Branch**: Create a new branch from `main` for your feature or bug fix. Use a descriptive name like `feature/add-dark-mode` or `fix/login-bug`.
+3.  **Make Your Changes**: Implement your changes, ensuring they adhere to the existing code style and conventions.
+4.  **Test Your Changes**: Before submitting, make sure your changes work as expected and don't introduce new issues. Write or update tests if applicable.
+5.  **Commit Your Changes**: Write clear, concise commit messages.
+6.  **Push to Your Fork**: Push your new branch to your forked repository.
+7.  **Open a Pull Request**: Create a pull request to the `main` branch of the original repository. Provide a detailed description of your changes and why they're needed.
 
-Please ensure your code passes all existing tests and consider adding new tests for new features.
+We appreciate your contributions!
 
 ## License
 
-This project does not currently have an explicit license file.
+This project is licensed under the MIT License.
 
 ## Author Info
 
-Ahmad Ibrahim
+Connect with me and see more of my work:
 
 *   LinkedIn: [Your LinkedIn](https://linkedin.com/in/yourusername)
 *   X (Twitter): [@yourhandle](https://x.com/yourhandle)
 
-## Badges
+---
 
-![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
-![Vite](https://img.shields.io/badge/vite-%23646CFF.svg?style=for-the-badge&logo=vite&logoColor=white)
-![TailwindCSS](https://img.shields.io/badge/tailwindCSS-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
-![Node.js](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
-![Express.js](https://img.shields.io/badge/express.js-%23404D59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB)
-![MongoDB](https://img.shields.io/badge/MongoDB-%2347A248.svg?style=for-the-badge&logo=mongodb&logoColor=white)
-![Mongoose](https://img.shields.io/badge/mongoose-%238B0000.svg?style=for-the-badge&logo=mongoose&logoColor=white)
-![Socket.io](https://img.shields.io/badge/Socket.io-010101?style=for-the-badge&logo=socket.io&logoColor=white)
-![Cloudinary](https://img.shields.io/badge/Cloudinary-3448C5?style=for-the-badge&logo=cloudinary&logoColor=white)
-![JWT](https://img.shields.io/badge/json%20web%20tokens-323330?style=for-the-badge&logo=json-web-tokens&logoColor=white)
-![Zustand](https://img.shields.io/badge/Zustand-%23000000.svg?style=for-the-badge&logo=zustand&logoColor=white)
-![PWA](https://img.shields.io/badge/PWA-%235A0FC8.svg?style=for-the-badge&logo=pwa&logoColor=white)
+Made with ❤️ by Ahmad Ibrahim
 
 [![Readme was generated by Dokugen](https://img.shields.io/badge/Readme%20was%20generated%20by-Dokugen-brightgreen)](https://www.npmjs.com/package/dokugen)
