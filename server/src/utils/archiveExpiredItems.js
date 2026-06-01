@@ -39,7 +39,7 @@ export const archiveExpiredItems = () => {
         if (item.reportedBy?.whatsappPhone) {
           sendWhatsApp(
             item.reportedBy.whatsappPhone,
-            `📦 Your item "${item.name}" on Findora has been auto-archived after ${EXPIRY_DAYS} days. Contact support if you need it restored.`
+            `Hi ${item.reportedBy.firstName}! 📦 Your item *"${item.name}"* on Findora has been auto-archived after ${EXPIRY_DAYS} days of inactivity.\n\nIf you still need help finding it, contact support to restore the listing.`
           ).catch(() => {});
         }
       }
@@ -67,7 +67,7 @@ export const archiveExpiredItems = () => {
         if (item.reportedBy?.whatsappPhone) {
           sendWhatsApp(
             item.reportedBy.whatsappPhone,
-            `⏳ Heads up! Your item "${item.name}" on Findora will be auto-archived in 3 days. Open the app if you'd like to update it.`
+            `Hi ${item.reportedBy.firstName}! ⏳ Heads up — your item *"${item.name}"* on Findora will be auto-archived in 3 days due to inactivity.\n\nOpen the app to update your listing and keep it active.`
           ).catch(() => {});
         }
       }

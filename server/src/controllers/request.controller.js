@@ -69,12 +69,12 @@ const claimItem = async (req, res) => {
   // WhatsApp + Push notification to finder — fire-and-forget
   userModel
     .findById(finderId)
-    .select("whatsappPhone")
+    .select("whatsappPhone firstName")
     .then((u) => {
       if (u?.whatsappPhone) {
         sendWhatsApp(
           u.whatsappPhone,
-          `📦 Someone submitted a claim for your item "${item.name}" on Findora. Open the app to review it.`
+          `Hi ${u.firstName}! 📬 Someone just submitted a claim for your found item *"${item.name}"* on Findora.\n\nOpen the app to review their request and accept or decline it.`
         );
       }
     })
@@ -158,12 +158,12 @@ const sendFoundRequest = async (req, res) => {
   // WhatsApp notification to claimer/item owner — fire-and-forget
   userModel
     .findById(claimerId)
-    .select("whatsappPhone")
+    .select("whatsappPhone firstName")
     .then((u) => {
       if (u?.whatsappPhone) {
         sendWhatsApp(
           u.whatsappPhone,
-          `🔍 Someone believes they found your lost item "${item.name}" on Findora. Open the app to respond.`
+          `Hi ${u.firstName}! 🔍 Good news — someone says they've found your lost item *"${item.name}"* on Findora.\n\nOpen the app to connect with them and arrange a handover.`
         );
       }
     })
@@ -251,13 +251,13 @@ const acceptClaim = async (req, res) => {
   if (updatedRequest.claimerId?.whatsappPhone) {
     sendWhatsApp(
       updatedRequest.claimerId.whatsappPhone,
-      `✅ Your claim for "${item.name}" has been accepted!\n\nYour handover code: *${claimerCode}*\n\nShare this code with the finder when you meet to complete the handover.`
+      `Hi ${updatedRequest.claimerId.firstName}! ✅ Your claim for *"${item.name}"* has been accepted!\n\n🔑 Your handover code:\n*${claimerCode}*\n\nWhen you meet the finder, show them this code — they'll enter it to confirm the exchange. Open the Findora app for full details.`
     ).catch(() => {});
   }
   if (updatedRequest.finderId?.whatsappPhone) {
     sendWhatsApp(
       updatedRequest.finderId.whatsappPhone,
-      `🤝 You accepted a claim for "${item.name}".\n\nYour handover code: *${finderCode}*\n\nShare this code with the claimer when you meet to complete the handover.`
+      `Hi ${updatedRequest.finderId.firstName}! 🤝 You've accepted a claim for *"${item.name}"*.\n\n🔑 Your handover code:\n*${finderCode}*\n\nWhen you meet the claimer, show them this code — they'll enter it to confirm the exchange. Open the Findora app for full details.`
     ).catch(() => {});
   }
 
@@ -388,13 +388,13 @@ const handleItem = async (req, res) => {
     if (updatedRequest.finderId?.whatsappPhone) {
       sendWhatsApp(
         updatedRequest.finderId.whatsappPhone,
-        `🎉 Handover complete for "${itemName}"! You've earned 10 trust points. Thanks for your honesty!`
+        `Hi ${updatedRequest.finderId.firstName}! 🎉 Handover complete for *"${itemName}"*!\n\n+10 trust points have been added to your Findora profile. Thank you for your honesty in returning this item — you made someone's day! 🙌`
       ).catch(() => {});
     }
     if (updatedRequest.claimerId?.whatsappPhone) {
       sendWhatsApp(
         updatedRequest.claimerId.whatsappPhone,
-        `🎉 Handover complete for "${itemName}"! You've earned 10 trust points. Welcome back your item!`
+        `Hi ${updatedRequest.claimerId.firstName}! 🎉 Your item *"${itemName}"* has been successfully returned!\n\n+10 trust points have been added to your Findora profile. We're glad Findora helped reunite you with your item! 😊`
       ).catch(() => {});
     }
 

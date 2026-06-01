@@ -127,12 +127,12 @@ const sendMessage = async (req, res) => {
     // Receiver is offline — send a WhatsApp nudge (fire-and-forget)
     userModel
       .findById(userToChatId)
-      .select("whatsappPhone")
+      .select("whatsappPhone firstName")
       .then((u) => {
         if (u?.whatsappPhone) {
           sendWhatsApp(
             u.whatsappPhone,
-            `💬 You have a new message on Findora. Open the app to reply.`
+            `Hi ${u.firstName}! 💬 You have a new unread message on Findora.\n\nOpen the app to read and reply — your conversation is waiting.`
           );
         }
       })
