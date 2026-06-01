@@ -12,9 +12,11 @@ import {
   KeyRound,
   Phone,
 } from "lucide-react";
+import { isValidPhoneNumber } from "react-phone-number-input";
 import { useAuthStore } from "@/store/useAuthStore";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { PhoneNumberInput } from "@/components/ui/PhoneNumberInput";
 
 export const EditProfilePage = () => {
   const navigate = useNavigate();
@@ -93,12 +95,15 @@ export const EditProfilePage = () => {
     }));
   };
 
+  const handlePhoneChange = (value) => {
+    setFormData((prev) => ({ ...prev, whatsappPhone: value || "" }));
+  };
+
   const handleSubmit = async () => {
     if (!user) return;
 
-    const trimmedPhone = formData.whatsappPhone.trim();
-    if (trimmedPhone && !/^\+[1-9]\d{6,14}$/.test(trimmedPhone)) {
-      toast.error("WhatsApp number must be in international format (e.g. +2347012345678)");
+    if (formData.whatsappPhone && !isValidPhoneNumber(formData.whatsappPhone)) {
+      toast.error("Please enter a valid WhatsApp number");
       return;
     }
 
@@ -344,24 +349,18 @@ export const EditProfilePage = () => {
           </div>
 
           <div>
-            <label
-              htmlFor="whatsappPhone"
-              className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2 sans"
-            >
+            <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2 sans">
               <Phone className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-green-600" />
               WhatsApp Number
             </label>
-            <input
-              type="tel"
-              id="whatsappPhone"
-              name="whatsappPhone"
+            <PhoneNumberInput
               value={formData.whatsappPhone}
-              onChange={handleChange}
-              placeholder="+2347012345678"
-              className="w-full px-3 sm:px-4 py-2 sm:py-2.5 bg-gray-50 border border-gray-200 rounded-lg sm:rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all sans text-sm"
+              onChange={handlePhoneChange}
+              placeholder="Enter your WhatsApp number"
+              variant="default"
             />
             <p className="text-xs text-gray-500 mt-1.5 ml-1 sans">
-              International format with country code — e.g. <span className="font-medium text-gray-700">+2347012345678</span>. Leave blank to disable WhatsApp alerts.
+              Select your country code and enter your number. Leave blank to disable WhatsApp alerts.
             </p>
           </div>
         </div>

@@ -171,6 +171,81 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
+/* ── react-phone-number-input overrides ── */
+.phone-input-default,
+.phone-input-auth {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.phone-input-default {
+  background-color: rgb(249 250 251);
+  border: 1px solid rgb(229 231 235);
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  gap: 0.5rem;
+  transition: box-shadow 0.15s ease, border-color 0.15s ease;
+}
+.phone-input-default:focus-within {
+  outline: none;
+  border-color: transparent;
+  box-shadow: 0 0 0 2px rgb(34 197 94 / 0.5);
+}
+
+.phone-input-auth {
+  background-color: white;
+  border: 1px solid rgb(226 232 240);
+  border-radius: 0.75rem;
+  height: 3rem;
+  padding: 0 0.75rem;
+  gap: 0.5rem;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  transition: box-shadow 0.15s ease, border-color 0.15s ease;
+}
+.phone-input-auth:focus-within {
+  border-color: rgb(99 102 241);
+  box-shadow: 0 0 0 4px rgb(99 102 241 / 0.1);
+}
+
+.phone-input-default .PhoneInputCountry,
+.phone-input-auth .PhoneInputCountry {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  flex-shrink: 0;
+}
+
+.phone-input-default .PhoneInputCountrySelect,
+.phone-input-auth .PhoneInputCountrySelect {
+  background: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.phone-input-default .PhoneInputInput,
+.phone-input-auth .PhoneInputInput {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 0.875rem;
+}
+
+.phone-input-default .PhoneInputInput { color: rgb(17 24 39); }
+.phone-input-default .PhoneInputInput::placeholder { color: rgb(156 163 175); }
+
+.phone-input-auth .PhoneInputInput { color: rgb(30 41 59); }
+.phone-input-auth .PhoneInputInput::placeholder { color: rgb(148 163 184); }
+
+.phone-input-default .PhoneInputInput:disabled,
+.phone-input-auth .PhoneInputInput:disabled {
+  cursor: not-allowed;
+  opacity: 0.75;
+}
+
 @layer base {
   html,
   body,

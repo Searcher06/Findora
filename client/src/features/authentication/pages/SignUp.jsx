@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Mail, Lock, User, AtSign, ShieldCheck, Phone } from "lucide-react";
+import { Mail, Lock, User, AtSign, ShieldCheck } from "lucide-react";
+import { isValidPhoneNumber } from "react-phone-number-input";
 import { toast } from "sonner";
 import { Spinner } from "@/components/ui/spinner";
 import { validateEmail } from "@/utils/validateEmail";
@@ -8,6 +9,7 @@ import { textValidator } from "@/utils/textValidator";
 import { useAuthStore } from "@/store/useAuthStore";
 import { AuthShell } from "../components/AuthShell";
 import { AuthInput } from "../components/AuthInput";
+import { PhoneNumberInput } from "@/components/ui/PhoneNumberInput";
 
 export const SignUpPage = () => {
   const navigate = useNavigate();
@@ -33,10 +35,10 @@ export const SignUpPage = () => {
   const handleSignUp = async (event) => {
     event.preventDefault();
 
-    const trimmedPhone = formData.whatsappPhone.trim();
+    const phone = formData.whatsappPhone;
 
-    if (trimmedPhone && !/^\+[1-9]\d{6,14}$/.test(trimmedPhone)) {
-      toast.error("WhatsApp number must be in international format (e.g. +2347012345678)");
+    if (phone && !isValidPhoneNumber(phone)) {
+      toast.error("Please enter a valid WhatsApp number");
       return;
     }
 
@@ -46,7 +48,7 @@ export const SignUpPage = () => {
       email: formData.email.trim(),
       username: formData.username.trim(),
       password: formData.password,
-      ...(trimmedPhone && { whatsappPhone: trimmedPhone }),
+      ...(phone && { whatsappPhone: phone }),
     };
 
     if (!payload.firstName || !payload.lastName || !payload.email || !payload.password || !payload.username) {
@@ -171,19 +173,18 @@ export const SignUpPage = () => {
         />
 
         <div>
-          <AuthInput
-            id="whatsappPhone"
-            label="WhatsApp Number (optional)"
-            type="tel"
-            placeholder="+2347012345678"
+          <label className="mb-2 block text-sm font-semibold tracking-wide text-slate-700">
+            WhatsApp Number <span className="font-normal text-slate-400">(optional)</span>
+          </label>
+          <PhoneNumberInput
             value={formData.whatsappPhone}
-            onChange={(e) => setFormData((prev) => ({ ...prev, whatsappPhone: e.target.value }))}
-            icon={Phone}
-            autoComplete="tel"
+            onChange={(value) => setFormData((prev) => ({ ...prev, whatsappPhone: value || "" }))}
+            placeholder="Enter your WhatsApp number"
+            variant="auth"
             disabled={isSigningUp}
           />
           <p className="mt-1.5 px-1 text-xs text-slate-500">
-            Include your country code. Used to notify you about your items via WhatsApp.
+            Select your country and enter your number. Used to notify you about your items via WhatsApp.
           </p>
         </div>
 
