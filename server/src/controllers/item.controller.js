@@ -9,6 +9,7 @@ import {
   getCloudinaryUploadErrorMessage,
 } from "../utils/uploadImageToCloudinary.js";
 import { archiveExpiredItems } from "../utils/archiveExpiredItems.js";
+import { matchAndNotify } from "../utils/matchItems.js";
 
 const createItem = async (req, res) => {
   let {
@@ -119,6 +120,7 @@ const createItem = async (req, res) => {
   });
 
   if (item) {
+    matchAndNotify(item);
     res.status(201).json(item);
   } else {
     res.status(400);

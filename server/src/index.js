@@ -15,6 +15,8 @@ import { errorMiddleware } from "./middleware/error.js";
 import cors from "cors";
 import { app, server } from "./lib/socket.js";
 import helmet from "helmet";
+import cron from "node-cron";
+import { runWeeklyDigest } from "./utils/weeklyDigest.js";
 
 app.use(express.json());
 const PORT = process.env.PORT || 8080;
@@ -71,6 +73,9 @@ app.use("/api/v1/push", pushRoute);
 app.get("/api/v1/welcome", async (req, res) => {
   res.status(200).json({ message: "welcome to the server" });
 });
+
+// Weekly re-match digest — every Monday at 8:00 AM
+cron.schedule("0 8 * * 1", runWeeklyDigest);
 
 // Error Handler middleware
 app.use(errorMiddleware);
