@@ -109,16 +109,21 @@ export const runWeeklyDigest = async () => {
       }).catch(() => {});
     }
 
-    // Auto-flag high-confidence matches for admin review
+    // Auto-flag high-confidence matches for admin review (skip if already flagged)
     for (const { item: match, confidence } of matchResults) {
       if (confidence >= HIGH_CONFIDENCE) {
         adminFlagModel
-          .create({
-            targetType: "item",
-            targetId: oldItem._id,
-            reason: `Weekly digest auto-match (${Math.round(confidence * 100)}% confidence): "${oldItem.name}" (${oldItem.status}) may be the same item as "${match.name}" (${match.status}) at "${match.location}". Consider connecting these parties.`,
-            reportedBy: owner._id,
-            status: "open",
+          .exists({ targetType: "item", targetId: oldItem._id, status: "open" })
+          .then((exists) => {
+            if (!exists) {
+              return adminFlagModel.create({
+                targetType: "item",
+                targetId: oldItem._id,
+                reason: `Weekly digest auto-match (${Math.round(confidence * 100)}% confidence): "${oldItem.name}" (${oldItem.status}) may be the same item as "${match.name}" (${match.status}) at "${match.location}". Consider connecting these parties.`,
+                reportedBy: owner._id,
+                status: "open",
+              });
+            }
           })
           .catch(() => {});
       }

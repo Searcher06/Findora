@@ -101,15 +101,20 @@ const _run = async (newItem) => {
       }
     }
 
-    // Auto-flag very high-confidence matches for admin review
+    // Auto-flag very high-confidence matches for admin review (skip if already flagged)
     if (confidence >= HIGH_CONFIDENCE) {
       adminFlagModel
-        .create({
-          targetType: "item",
-          targetId: newItem._id,
-          reason: `Auto-match (${Math.round(confidence * 100)}% confidence): "${newItem.name}" (${newItem.status}) may be the same item as "${match.name}" (${match.status}) at "${match.location}". Consider connecting these parties.`,
-          reportedBy: newItem.reportedBy,
-          status: "open",
+        .exists({ targetType: "item", targetId: newItem._id, status: "open" })
+        .then((exists) => {
+          if (!exists) {
+            return adminFlagModel.create({
+              targetType: "item",
+              targetId: newItem._id,
+              reason: `Auto-match (${Math.round(confidence * 100)}% confidence): "${newItem.name}" (${newItem.status}) may be the same item as "${match.name}" (${match.status}) at "${match.location}". Consider connecting these parties.`,
+              reportedBy: newItem.reportedBy,
+              status: "open",
+            });
+          }
         })
         .catch(() => {});
     }
