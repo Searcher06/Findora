@@ -195,8 +195,8 @@ This project is licensed under the MIT License.
 
 Connect with me and see more of my work:
 
-*   LinkedIn: [Your LinkedIn](https://linkedin.com/in/yourusername)
-*   X (Twitter): [@yourhandle](https://x.com/yourhandle)
+*   LinkedIn: [Ahmad Ibrahim](https://linkedin.com/in/ahmadibrahim06)
+*   X (Twitter): [@undefined_dev](https://x.com/unrefined_dev)
 
 ---
 
