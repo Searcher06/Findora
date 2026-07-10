@@ -34,7 +34,7 @@ export const AuthInput = ({
           placeholder={placeholder}
           autoComplete={autoComplete}
           disabled={disabled}
-          className="h-full w-full bg-transparent px-2 text-sm text-slate-800 outline-none placeholder:text-slate-400 disabled:cursor-not-allowed disabled:opacity-75"
+          className="h-full w-full bg-transparent px-2 text-sm text-slate-800 outline-none placeholder:text-slate-400 disabled:cursor-not-allowed disabled:opacity-75 [&:-webkit-autofill]:![background-color:transparent] [&:-webkit-autofill]:[transition:background-color_9999s_ease-in-out_0s] [&:-webkit-autofill]:![-webkit-text-fill-color:theme(colors.slate.800)]"
         />
 
         {isPassword ? (
