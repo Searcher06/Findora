@@ -18,6 +18,7 @@ import helmet from "helmet";
 import cron from "node-cron";
 import { runWeeklyDigest } from "./utils/weeklyDigest.js";
 
+app.set("trust proxy", 1);
 app.use(express.json());
 const PORT = process.env.PORT || 8080;
 const DATABASE_URI =
