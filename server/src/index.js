@@ -48,6 +48,7 @@ app.use(
 
 // Ping endpoint — no logging, used for external uptime/interval calls
 app.get("/api/v1/ping", (req, res) => {
+  console.log(`PING ${new Date().toISOString()}`);
   res.status(200).json({ status: "ok" });
 });
 
