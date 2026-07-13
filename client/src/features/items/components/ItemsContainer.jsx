@@ -4,12 +4,7 @@ import { ItemCardSkeleton } from "./ItemCardSkeleton";
 import { useEffect } from "react";
 import { Inbox, ChevronLeft, ChevronRight } from "lucide-react";
 
-export const ItemsContainer = ({
-  className,
-  filters = {},
-  onMetaChange,
-  onPageChange,
-}) => {
+export const ItemsContainer = ({ className, filters = {}, onMetaChange, onPageChange }) => {
   const placeholderImage = "/item-placeholder.svg";
   const { items, loading, error, pagination } = useItems(filters);
 
@@ -27,85 +22,73 @@ export const ItemsContainer = ({
   const currentPage = pagination?.page || 1;
   const totalPages = pagination?.totalPages || 1;
 
-  const handlePrev = () => {
-    if (pagination?.hasPrevPage) {
-      onPageChange?.(currentPage - 1);
-    }
-  };
-
-  const handleNext = () => {
-    if (pagination?.hasNextPage) {
-      onPageChange?.(currentPage + 1);
-    }
-  };
-
   return (
     <div className={`${className} w-full`}>
-      <div className="grid grid-cols-1 justify-items-center gap-4 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+      {/* 2-col on mobile, 3 on md, 4 on xl */}
+      <div className="grid grid-cols-1 gap-3 sm:gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
         {loading
           ? Array.from({ length: 8 }).map((_, i) => <ItemCardSkeleton key={i} />)
           : error
-            ? (
-              <div className="col-span-full rounded-2xl border border-rose-200 bg-rose-50 px-5 py-4 text-sm font-medium text-rose-700">
-                {error}
-              </div>
-            )
-            : items?.length
-              ? items.map((current) => (
-                <ItemCard
-                  name={current.name}
-                  location={current.location}
-                  date={current.dateReported}
-                  image={current.image || placeholderImage}
-                  description={current.description}
-                  status={current.status}
-                  category={current.category}
-                  id={current._id}
-                  key={current._id}
-                />
-              ))
-              : (
-                <div className="col-span-full w-full">
-                  <div className="flex flex-col items-center gap-4 rounded-3xl border border-dashed border-indigo-200 bg-linear-to-br from-white to-violet-50/60 px-6 py-16 text-center">
-                    <span className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-indigo-100 shadow-sm">
-                      <Inbox className="h-8 w-8 text-indigo-500" />
-                    </span>
-                    <div>
-                      <h3 className="font-display text-lg font-bold text-slate-900">Nothing here yet</h3>
-                      <p className="mt-1 max-w-xs text-sm text-slate-500">
-                        Try adjusting your search, category, or date filter — or be the first to report an item.
-                      </p>
-                    </div>
-                  </div>
+          ? (
+            <div className="col-span-full rounded-2xl border border-rose-200 bg-rose-50 px-5 py-4 text-sm font-medium text-rose-700">
+              {error}
+            </div>
+          )
+          : items?.length
+          ? items.map((item) => (
+              <ItemCard
+                key={item._id}
+                id={item._id}
+                name={item.name}
+                description={item.description}
+                location={item.location}
+                date={item.dateReported}
+                image={item.image || placeholderImage}
+                status={item.status}
+                category={item.category}
+              />
+            ))
+          : (
+            <div className="col-span-full">
+              <div className="flex flex-col items-center gap-4 rounded-3xl border border-dashed border-indigo-200 bg-gradient-to-br from-white to-violet-50/60 px-6 py-16 text-center">
+                <span className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-indigo-100">
+                  <Inbox className="h-8 w-8 text-indigo-500" />
+                </span>
+                <div>
+                  <h3 className="font-display text-lg font-bold text-slate-900">Nothing here yet</h3>
+                  <p className="mt-1 max-w-xs text-sm text-slate-500">
+                    Try adjusting your filters or be the first to report an item.
+                  </p>
                 </div>
-              )}
+              </div>
+            </div>
+          )}
       </div>
 
-      {!loading && !error && totalPages > 1 ? (
-        <div className="mt-7 flex flex-wrap items-center justify-center gap-2">
+      {/* Pagination */}
+      {!loading && !error && totalPages > 1 && (
+        <div className="mt-6 flex flex-wrap items-center justify-center gap-2">
           <button
             type="button"
-            onClick={handlePrev}
+            onClick={() => pagination?.hasPrevPage && onPageChange?.(currentPage - 1)}
             disabled={!pagination?.hasPrevPage}
-            className="inline-flex h-10 items-center gap-1 rounded-xl border border-indigo-200 bg-white px-3 text-sm font-semibold text-indigo-900 transition hover:bg-violet-50 disabled:cursor-not-allowed disabled:opacity-45"
+            className="inline-flex h-10 items-center gap-1 rounded-xl border border-indigo-200 bg-white px-3 text-sm font-semibold text-indigo-900 transition hover:bg-violet-50 disabled:cursor-not-allowed disabled:opacity-40"
           >
-            <ChevronLeft className="h-4 w-4" />
-            Prev
+            <ChevronLeft className="h-4 w-4" /> Prev
           </button>
-          <div className="order-first w-full rounded-xl border border-indigo-200 bg-linear-to-r from-white to-violet-50 px-4 py-2 text-center text-sm font-semibold text-indigo-900 sm:order-0 sm:w-auto">
-            Page {currentPage} of {totalPages}
+          <div className="rounded-xl border border-indigo-200 bg-white px-4 py-2 text-sm font-semibold text-indigo-900">
+            {currentPage} / {totalPages}
           </div>
           <button
             type="button"
-            onClick={handleNext}
+            onClick={() => pagination?.hasNextPage && onPageChange?.(currentPage + 1)}
             disabled={!pagination?.hasNextPage}
-            className="inline-flex h-10 items-center gap-1 rounded-xl border border-indigo-200 bg-white px-3 text-sm font-semibold text-indigo-900 transition hover:bg-violet-50 disabled:cursor-not-allowed disabled:opacity-45"
+            className="inline-flex h-10 items-center gap-1 rounded-xl border border-indigo-200 bg-white px-3 text-sm font-semibold text-indigo-900 transition hover:bg-violet-50 disabled:cursor-not-allowed disabled:opacity-40"
           >
-            Next
-            <ChevronRight className="h-4 w-4" />
+            Next <ChevronRight className="h-4 w-4" />
           </button>
         </div>
-      ) : null}
+      )}
     </div>
   );
 };
