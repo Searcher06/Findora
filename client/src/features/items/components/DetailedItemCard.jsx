@@ -8,6 +8,7 @@ import { resolveItem } from "../api/itemApi";
 import { toast } from "sonner";
 import { useState } from "react";
 import { Share2, CheckCircle2, X } from "lucide-react";
+import { handleApiError } from "@/utils/handleApiError";
 
 const RESOLVE_REASONS = [
   { value: "Found it myself", label: "Found it myself", desc: "I located the item without help from the platform." },
@@ -164,7 +165,7 @@ export const DetailedItemCard = ({ item }) => {
       setIsReportModalOpen(false);
       setReportReason("");
     } catch (error) {
-      toast.error(error.response?.data?.message || "Failed to submit report");
+      handleApiError(error, "Failed to submit report.");
     } finally {
       setIsSubmittingReport(false);
     }

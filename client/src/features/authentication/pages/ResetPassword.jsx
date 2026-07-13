@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { resetPassword } from "../services/authApi";
 import { AuthShell } from "../components/AuthShell";
 import { AuthInput } from "../components/AuthInput";
+import { handleApiError } from "@/utils/handleApiError";
 
 export const ResetPasswordPage = () => {
   const navigate = useNavigate();
@@ -45,7 +46,7 @@ export const ResetPasswordPage = () => {
         navigate("/login");
       }, 1800);
     } catch (error) {
-      toast.error(error.response?.data?.message || "Failed to reset password");
+      handleApiError(error, "Failed to reset password. Please try again.");
     } finally {
       setIsLoading(false);
     }

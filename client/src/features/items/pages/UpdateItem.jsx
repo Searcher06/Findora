@@ -6,6 +6,7 @@ import AddInfo from "../components/AddInfo";
 import { toast } from "sonner";
 import { useItems } from "../hooks/useItems";
 import { useUploadPhoto } from "../context/UploadPhotoContext";
+import { handleApiError } from "@/utils/handleApiError";
 
 export const UpdateItem = () => {
   const { loading, updateAnItem } = useItems();
@@ -92,13 +93,7 @@ export const UpdateItem = () => {
       toast.success("Item updated successfully");
       navigate("/");
     } catch (error) {
-      if (error.response) {
-        toast.error(error.response.data.message || "Failed to update item");
-      } else if (error.request) {
-        toast.error("No response from server");
-      } else {
-        toast.error("An error occured.");
-      }
+      handleApiError(error, "Failed to update item. Please try again.");
       console.error(error);
     }
   };

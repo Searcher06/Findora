@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { verifyEmail, resendVerificationEmail } from "../services/authApi";
 import { AuthShell } from "../components/AuthShell";
 import { AuthInput } from "../components/AuthInput";
+import { handleApiError } from "@/utils/handleApiError";
 
 export const EmailVerify = () => {
   const [searchParams] = useSearchParams();
@@ -39,7 +40,7 @@ export const EmailVerify = () => {
         setStatus("error");
         const errorMsg = error.response?.data?.message || "Failed to verify email";
         setErrorMessage(errorMsg);
-        toast.error(errorMsg);
+        handleApiError(error, "Failed to verify email");
       }
     };
 
@@ -66,8 +67,7 @@ export const EmailVerify = () => {
       toast.success("Verification email sent! Check your inbox.");
       setEmail("");
     } catch (error) {
-      const errorMsg = error.response?.data?.message || "Failed to resend email";
-      toast.error(errorMsg);
+      handleApiError(error, "Failed to resend verification email.");
     } finally {
       setIsResending(false);
     }

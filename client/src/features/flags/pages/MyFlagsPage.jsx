@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { getMyFlags } from "../services/flagApi";
 import { toast } from "sonner";
+import { handleApiError } from "@/utils/handleApiError";
 
 const statusClass = {
   open: "bg-amber-100 text-amber-700",
@@ -20,7 +21,7 @@ export const MyFlagsPage = () => {
         const data = await getMyFlags();
         setFlags(data || []);
       } catch (error) {
-        toast.error(error.response?.data?.message || "Failed to load reports");
+        handleApiError(error, "Failed to load reports.");
       } finally {
         setLoading(false);
       }

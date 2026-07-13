@@ -1,8 +1,8 @@
-/* eslint-disable no-unused-vars */
 import { useState, useEffect } from "react";
 import { getRequestById, acceptClaim } from "../apis/verificationApi";
 import { toast } from "sonner";
 import { useAuthStore } from "@/store/useAuthStore";
+import { handleApiError } from "@/utils/handleApiError";
 export const useFetchRequestById = (requestId) => {
   const [request, setRequest] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -32,7 +32,7 @@ export const useFetchRequestById = (requestId) => {
       setRequest((prevs) => ({ ...prevs, status: "accepted" }));
       toast.success("Claim Accepted Successfull");
     } catch (error) {
-      toast.error(error.response?.data?.message || "Failed to accept claim");
+      handleApiError(error, "Failed to accept claim.");
     } finally {
       setLoading(false);
     }

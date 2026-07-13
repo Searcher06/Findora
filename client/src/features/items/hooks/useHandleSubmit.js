@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
-import { useItems } from "./useItems";
+import { useItems } from "../hooks/useItems";
 import { toast } from "sonner";
+import { handleApiError } from "@/utils/handleApiError";
 export const useHandleSubmit = (itemData) => {
   const navigate = useNavigate();
   const { createAnItem } = useItems();
@@ -16,7 +17,6 @@ export const useHandleSubmit = (itemData) => {
     if (itemData.dateLostOrFound)
       formData.append("dateLostOrFound", itemData.dateLostOrFound);
     if (itemData.status) formData.append("status", itemData.status);
-    console.log(itemData);
 
     try {
       const response = await createAnItem(formData);
@@ -24,15 +24,7 @@ export const useHandleSubmit = (itemData) => {
       navigate("/");
       toast.success("Report created successfully");
     } catch (error) {
-      if (error.response) {
-        // server responded with a non-2xx status
-        toast.error(error.response.data.message || "Item Report failed");
-      } else if (error.request) {
-        toast.error("No response from server");
-      } else {
-        // something else happended
-        toast.error("An error occured.");
-      }
+      handleApiError(error, "Failed to create report. Please try again.");
       console.error(error);
     }
   };

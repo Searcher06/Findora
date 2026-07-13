@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { forgotPassword } from "../services/authApi";
 import { AuthShell } from "../components/AuthShell";
 import { AuthInput } from "../components/AuthInput";
+import { handleApiError } from "@/utils/handleApiError";
 
 export const ForgotPasswordPage = () => {
   const [email, setEmail] = useState("");
@@ -25,7 +26,7 @@ export const ForgotPasswordPage = () => {
       toast.success(response.message || "If that email exists, a reset link has been sent");
       setSent(true);
     } catch (error) {
-      toast.error(error.response?.data?.message || "Failed to send reset email");
+      handleApiError(error, "Failed to send reset email. Please try again.");
     } finally {
       setIsLoading(false);
     }

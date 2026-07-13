@@ -5,6 +5,7 @@ import { resendVerificationEmail } from "../services/authApi";
 import { toast } from "sonner";
 import { AuthShell } from "../components/AuthShell";
 import { AuthInput } from "../components/AuthInput";
+import { handleApiError } from "@/utils/handleApiError";
 
 export const ResendEmail = () => {
   const location = useLocation();
@@ -53,8 +54,7 @@ export const ResendEmail = () => {
         setIsSuccess(false);
       }, 3000);
     } catch (error) {
-      const errorMsg = error.response?.data?.message || "Failed to resend email";
-      toast.error(errorMsg);
+      handleApiError(error, "Failed to resend verification email.");
     } finally {
       setIsLoading(false);
     }

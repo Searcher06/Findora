@@ -3,6 +3,7 @@ import { io } from "socket.io-client";
 import { changePassword, getCurrentUser, loginUser, logoutUser, registerUser } from "@/features/authentication";
 import { updateProfile } from "@/features/user/services/api";
 import { toast } from "sonner";
+import { handleApiError } from "@/utils/handleApiError";
 
 const SOCKET_URL =
   import.meta.env.VITE_SOCKET_URL || "http://localhost:8080";
@@ -41,7 +42,7 @@ export const useAuthStore = create((set, get) => ({
       toast.success("Updated Successfully");
       return response;
     } catch (error) {
-      toast.error(error.response?.data?.message || "Failed to update profile");
+      handleApiError(error, "Failed to update profile");
       console.log("Error in updating profile", error);
       return null;
     } finally {
@@ -59,7 +60,7 @@ export const useAuthStore = create((set, get) => ({
       get().connectSocket(); // connect to socket after successful sign up
       return data;
     } catch (error) {
-      toast.error(error.response?.data?.message || "Sign up Failed");
+      handleApiError(error, "Sign up failed. Please try again.");
       console.log("Error in sign up", error);
       return null;
     } finally {
@@ -77,11 +78,7 @@ export const useAuthStore = create((set, get) => ({
       get().connectSocket();
       return data;
     } catch (error) {
-      if (error.code === "ECONNABORTED" || error.code === "ERR_NETWORK") {
-        toast.error("Request timed out. Please check your connection and try again.");
-      } else {
-        toast.error(error.response?.data?.message || "Login failed. Please try again.");
-      }
+      handleApiError(error, "Login failed. Please try again.");
       console.log("Error in login", error);
       return null;
     } finally {
@@ -97,8 +94,7 @@ export const useAuthStore = create((set, get) => ({
       toast.success("Logged out successfully!");
       get().disconnectSocket();
     } catch (error) {
-      const errorMessage = error.response?.data?.message || "Failed to logout";
-      toast.error(errorMessage);
+      handleApiError(error, "Failed to logout. Please try again.");
       console.log("Error in logout", error);
     } finally {
       set({ isLoggingOut: false });
@@ -112,8 +108,7 @@ export const useAuthStore = create((set, get) => ({
       toast.success(data.message || "Password changed successfully");
       return data;
     } catch (error) {
-      const errorMessage = error.response?.data?.message || "Failed to change password";
-      toast.error(errorMessage);
+      handleApiError(error, "Failed to change password. Please try again.");
       return null;
     } finally {
       set({ isChangingPassword: false });

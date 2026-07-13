@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
+import { handleApiError } from "@/utils/handleApiError";
 import {
   getAdminAnalytics,
   getAdminAuditLogs,
@@ -219,7 +220,7 @@ export const AdminDashboardPage = () => {
       if (activeTab === "flags") await loadFlags();
       if (activeTab === "logs") await loadLogs();
     } catch (error) {
-      toast.error(error.response?.data?.message || "Failed to load admin data");
+      handleApiError(error, "Failed to load admin data.");
     } finally {
       setLoading(false);
     }
@@ -338,7 +339,7 @@ export const AdminDashboardPage = () => {
 
       closeActionModal();
     } catch (error) {
-      toast.error(error.response?.data?.message || "Action failed");
+      handleApiError(error, "Action failed. Please try again.");
     } finally {
       setActionLoading(false);
     }

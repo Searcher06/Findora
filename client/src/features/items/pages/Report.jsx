@@ -4,6 +4,7 @@ import { useItems } from "../hooks/useItems";
 import { toast } from "sonner";
 import { useItemType } from "../context/ItemTypeContext";
 import { useNavigate } from "react-router-dom";
+import { handleApiError } from "@/utils/handleApiError";
 
 const ReportPage = () => {
   const navigate = useNavigate();
@@ -46,13 +47,7 @@ const ReportPage = () => {
       navigate("/");
       toast.success("Report created successfully");
     } catch (error) {
-      if (error.response) {
-        toast.error(error.response.data.message || "Item Report failed");
-      } else if (error.request) {
-        toast.error("No response from server");
-      } else {
-        toast.error("An error occured.");
-      }
+      handleApiError(error, "Failed to create report. Please try again.");
       console.error(error);
     }
   };

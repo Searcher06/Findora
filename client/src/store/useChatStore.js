@@ -8,6 +8,7 @@ import {
 import { toast } from "sonner";
 import { useAuthStore } from "./useAuthStore";
 import sound from "../../public/notification.mp3";
+import { handleApiError } from "@/utils/handleApiError";
 
 const playNotificationSound = () => {
   try {
@@ -36,7 +37,7 @@ export const useChatStore = create((set, get) => ({
       const response = await getMessages(requestId, username);
       set({ messages: response });
     } catch (error) {
-      toast.error(error.response?.data?.message || "failed to fetch messages");
+      handleApiError(error, "Failed to fetch messages.");
     } finally {
       set({ isMessagesLoading: false });
     }
@@ -50,7 +51,7 @@ export const useChatStore = create((set, get) => ({
       const response = await sendMessage(requestId, username, data);
       set({ messages: [...messages, response] });
     } catch (error) {
-      toast.error(error.response?.data?.message || "failed to send message");
+      handleApiError(error, "Failed to send message.");
     }
   },
 
@@ -151,9 +152,7 @@ export const useChatStore = create((set, get) => ({
       );
       set({ usersToChat: sortedResponse });
     } catch (error) {
-      toast.error(
-        error.response?.data?.message || "failed to fetch conversations"
-      );
+      handleApiError(error, "Failed to fetch conversations.");
     } finally {
       set({ isUsersLoading: false });
     }

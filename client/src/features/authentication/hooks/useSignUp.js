@@ -1,9 +1,8 @@
 import { toast } from "sonner";
 import { validateEmail } from "@/utils/validateEmail";
 import { textValidator } from "@/utils/textValidator";
+import { handleApiError } from "@/utils/handleApiError";
 const useSignUp = async (formData, setFormData, navigate, signUp) => {
-  console.log(formData);
-
   formData.firstName = formData.firstName.trim();
   formData.lastName = formData.lastName.trim();
   formData.email = formData.email.trim();
@@ -67,15 +66,7 @@ const useSignUp = async (formData, setFormData, navigate, signUp) => {
       email: "",
     });
   } catch (error) {
-    if (error.response) {
-      // server responded with a non-2xx status
-      toast.error(error.response.data.message || "Sign up failed");
-    } else if (error.request) {
-      toast.error("No response from server");
-    } else {
-      // something else happended
-      toast.error("An error occured.");
-    }
+    handleApiError(error, "Sign up failed. Please try again.");
     console.error(error);
   }
 };
