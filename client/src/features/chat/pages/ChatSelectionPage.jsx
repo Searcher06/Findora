@@ -1,10 +1,10 @@
-/* eslint-disable no-unused-vars */
 import { useEffect, useState } from "react";
-import { ChevronLeft, RefreshCw, Search, MessageSquareDashed } from "lucide-react";
+import { Search, MessageSquareDashed, RefreshCw } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useChatStore } from "@/store/useChatStore";
 import { useAuthStore } from "@/store/useAuthStore";
 import { formatDistanceToNow } from "date-fns";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
 export const ChatSelectionPage = () => {
   const { isUsersLoading, usersToChat } = useChatStore();
@@ -16,215 +16,162 @@ export const ChatSelectionPage = () => {
     useChatStore.getState().fetchUsersToChat();
   }, []);
 
-  const handleChatSelect = (chat) => {
-    navigate(`/chat/${chat.id}/${chat.username}`);
+  const getOtherUser = (conv) =>
+    conv.finderId._id === user._id ? conv.claimerId : conv.finderId;
+
+  const checkUnread = (conv) => {
+    if (!conv.lastMessageAt) return false;
+    const isFinder = conv.finderId._id === user._id;
+    const lastSeen = isFinder ? conv.lastSeen?.finder : conv.lastSeen?.claimer;
+    return new Date(conv.lastMessageAt) > new Date(lastSeen);
   };
 
-  const getRoleText = (conversation) => {
-    if (!user || !user._id) return "User";
-
-    const isCurrentUserFinder = conversation.finderId._id === user._id;
-    const itemName = conversation.itemId?.name || "Item";
-
-    return isCurrentUserFinder
-      ? `Claimer of ${itemName}`
-      : `Finder of ${itemName}`;
-  };
-
-  const checkUnread = (conversation) => {
-    if (!user || !conversation.lastMessageAt) return false;
-    const isFinder = conversation.finderId._id === user._id;
-    const lastSeenTime = isFinder
-      ? conversation.lastSeen.finder
-      : conversation.lastSeen.claimer;
-    return new Date(conversation.lastMessageAt) > new Date(lastSeenTime);
-  };
-
-  const getOtherUser = (conversation) => {
-    if (!user || !user._id) return null;
-    return conversation.finderId._id === user._id
-      ? conversation.claimerId
-      : conversation.finderId;
-  };
-
-  const formatTimestamp = (dateString) => {
-    if (!dateString) return "Recently";
+  const formatTime = (dateString) => {
+    if (!dateString) return "";
     try {
       return formatDistanceToNow(new Date(dateString), { addSuffix: true });
-    } catch (error) {
-      return "Recently";
+    } catch {
+      return "";
     }
   };
 
-  const getAvatarUrl = (userData) => {
-    if (userData?.profilePic) return userData.profilePic;
-    const name = userData?.username || "User";
-    return `https://ui-avatars.com/api/?name=${encodeURIComponent(
-      name,
-    )}&background=4338CA&color=fff&bold=true`;
-  };
-
-  const transformConversationsToChats = () => {
-    if (!user || !user._id || !Array.isArray(usersToChat)) return [];
-
-    return usersToChat.map((conversation) => {
-      const otherUser = getOtherUser(conversation);
-      const isUnread = checkUnread(conversation);
-      const lastMessageSenderId = conversation.lastMessage?.senderId;
-      const lastMessagePrefix = lastMessageSenderId === user._id ? "You: " : "";
-
+  const chats = usersToChat
+    .map((conv) => {
+      const other = getOtherUser(conv);
+      const isUnread = checkUnread(conv);
+      const isMe = conv.lastMessage?.senderId === user._id;
       return {
-        id: conversation._id,
-        userName: otherUser
-          ? `${otherUser.firstName || ""} ${otherUser.lastName || ""}`.trim()
-          : "Unknown User",
-        username: otherUser?.username || "unknown",
-        role: getRoleText(conversation),
-        lastMessage: `${lastMessagePrefix}${
-          conversation.lastMessage?.text || "No messages yet"
-        }`,
-        timestamp: formatTimestamp(
-          conversation.lastMessageAt || conversation.updatedAt,
-        ),
-        avatar: getAvatarUrl(otherUser),
-        isUnread: isUnread,
-        status: conversation.status,
-        itemName: conversation.itemId?.name || "Unknown Item",
-        requestType: conversation.requestType,
+        id: conv._id,
+        username: other?.username || "unknown",
+        name: `${other?.firstName || ""} ${other?.lastName || ""}`.trim() || other?.username || "Unknown",
+        avatar: other?.profilePic || null,
+        initial: (other?.firstName?.[0] || "?").toUpperCase(),
+        itemName: conv.itemId?.name || "Unknown Item",
+        lastMessage: isMe
+          ? `You: ${conv.lastMessage?.text || ""}`
+          : conv.lastMessage?.text || "No messages yet",
+        time: formatTime(conv.lastMessageAt || conv.updatedAt),
+        isUnread,
+        requestType: conv.requestType,
       };
-    });
-  };
-
-  const filteredChats = transformConversationsToChats().filter(
-    (chat) =>
-      chat.userName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      chat.role.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      chat.itemName.toLowerCase().includes(searchQuery.toLowerCase()),
-  );
+    })
+    .filter(
+      (c) =>
+        c.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        c.itemName.toLowerCase().includes(searchQuery.toLowerCase())
+    );
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-linear-to-b from-slate-50 via-slate-100/55 to-white px-3 pb-8 pt-3 sm:px-5 md:px-6">
-      <div className="pointer-events-none absolute -left-20 top-16 h-56 w-56 rounded-full bg-violet-300/20 blur-3xl" />
-      <div className="pointer-events-none absolute right-0 top-10 h-72 w-72 rounded-full bg-indigo-200/20 blur-3xl" />
+    <div className="flex min-h-screen flex-col bg-white">
+      {/* Header */}
+      <div className="sticky top-14 z-10 border-b border-slate-200/80 bg-white/95 px-4 pb-3 pt-4 backdrop-blur-xl md:top-16">
+        <div className="flex items-center justify-between mb-3">
+          <h1 className="font-display text-xl font-bold text-slate-900">Messages</h1>
+          <button
+            type="button"
+            onClick={() => useChatStore.getState().fetchUsersToChat()}
+            aria-label="Refresh"
+            className="flex h-9 w-9 items-center justify-center rounded-full text-slate-500 transition hover:bg-slate-100"
+          >
+            <RefreshCw className={`h-4 w-4 ${isUsersLoading ? "animate-spin text-indigo-600" : ""}`} />
+          </button>
+        </div>
 
-      <div className="relative mx-auto w-full max-w-6xl">
-        <section className="rounded-3xl border border-indigo-100 bg-[linear-gradient(135deg,#faf9ff_0%,#f3f0ff_54%,#f8f7ff_100%)] px-4 py-5 shadow-[0_35px_90px_-70px_rgba(79,70,229,0.6)] sm:px-6 sm:py-6">
-          <div className="flex items-center justify-between gap-3">
-            <button
-              onClick={() => window.history.back()}
-              className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-700 transition hover:bg-slate-50"
-              aria-label="Go back"
-            >
-              <ChevronLeft className="h-5 w-5" />
-            </button>
-            <button
-              onClick={() => useChatStore.getState().fetchUsersToChat()}
-              className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-indigo-700 transition hover:bg-indigo-50"
-              aria-label="Refresh chats"
-            >
-              <RefreshCw
-                className={`h-4 w-4 ${isUsersLoading ? "animate-spin" : ""}`}
-              />
-            </button>
-          </div>
+        {/* Search */}
+        <div className="relative">
+          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+          <input
+            type="text"
+            placeholder="Search conversations..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="h-10 w-full rounded-full border border-slate-200 bg-slate-100 pl-9 pr-4 text-sm text-slate-700 outline-none transition focus:border-indigo-300 focus:bg-white focus:ring-2 focus:ring-indigo-100"
+          />
+        </div>
+      </div>
 
-          <div className="mt-4">
-            <img src="/iconplusfindoratext.png" alt="Findora" className="h-7 w-auto" />
-            <h1 className="mt-3 font-display text-2xl font-bold text-slate-900 sm:text-3xl">
-              Conversations
-            </h1>
-            <p className="mt-1 text-sm text-slate-600">
-              {filteredChats.length} conversation
-              {filteredChats.length !== 1 ? "s" : ""} available
-            </p>
-          </div>
-
-          <div className="relative mt-4">
-            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
-            <input
-              type="text"
-              placeholder="Search people, items, or roles..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="h-11 w-full rounded-xl border border-indigo-100 bg-white pl-9 pr-3 text-sm text-slate-700 outline-none transition focus:border-indigo-300 focus:ring-2 focus:ring-violet-100"
-            />
-          </div>
-        </section>
-
-        <section className="mt-4 rounded-3xl border border-slate-200/80 bg-white/90 p-3 shadow-[0_30px_90px_-75px_rgba(15,23,42,0.8)] sm:p-4">
-          {isUsersLoading && filteredChats.length === 0 ? (
-            <div className="space-y-3 p-2">
-              {Array.from({ length: 5 }).map((_, i) => (
-                <div key={i} className="h-20 animate-pulse rounded-2xl bg-slate-100" />
-              ))}
-            </div>
-          ) : filteredChats.length > 0 ? (
-            <div className="grid gap-3">
-              {filteredChats.map((chat) => (
-                <button
-                  key={chat.id}
-                  type="button"
-                  onClick={() => handleChatSelect(chat)}
-                  className={`w-full rounded-2xl border px-3 py-3 text-left transition sm:px-4 ${
-                    chat.isUnread
-                      ? "border-indigo-200 bg-indigo-50/65 shadow-sm"
-                      : "border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50"
-                  }`}
-                >
-                  <div className="flex items-start gap-3">
-                    <div className="relative">
-                      <img
-                        src={chat.avatar}
-                        alt={chat.userName}
-                        className="h-11 w-11 rounded-full object-cover ring-2 ring-white sm:h-12 sm:w-12"
-                      />
-                      {chat.isUnread ? (
-                        <span className="absolute -right-0.5 -top-0.5 h-3 w-3 rounded-full border-2 border-white bg-indigo-700" />
-                      ) : null}
-                    </div>
-
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-start justify-between gap-2">
-                        <h3 className={`truncate font-display text-sm sm:text-base ${chat.isUnread ? "font-bold text-slate-900" : "font-semibold text-slate-900"}`}>
-                          {chat.userName}
-                        </h3>
-                        <span className={`shrink-0 text-[11px] font-medium ${chat.isUnread ? "text-indigo-700" : "text-slate-500"}`}>
-                          {chat.timestamp}
-                        </span>
-                      </div>
-
-                      <div className="mt-1 inline-flex rounded-md bg-violet-100 px-2 py-0.5 text-[11px] font-semibold text-violet-700">
-                        {chat.role}
-                      </div>
-
-                      <p className={`mt-1.5 truncate text-xs sm:text-sm ${chat.isUnread ? "font-medium text-slate-900" : "text-slate-600"}`}>
-                        {chat.lastMessage}
-                      </p>
-                    </div>
-                  </div>
-                </button>
-              ))}
-            </div>
-          ) : (
-            <div className="flex flex-col items-center gap-4 px-4 py-16 text-center">
-              <span className={`inline-flex h-16 w-16 items-center justify-center rounded-2xl shadow-sm ${searchQuery ? "bg-slate-100" : "bg-indigo-100"}`}>
-                {searchQuery
-                  ? <Search className="h-8 w-8 text-slate-400" />
-                  : <MessageSquareDashed className="h-8 w-8 text-indigo-500" />}
-              </span>
-              <div>
-                <h3 className="font-display text-lg font-bold text-slate-900">
-                  {searchQuery ? "No results found" : "No conversations yet"}
-                </h3>
-                <p className="mt-1 max-w-xs text-sm text-slate-500">
-                  {searchQuery
-                    ? "Try searching by name, item, or role."
-                    : "Once a claim request is accepted, your chat will appear here."}
-                </p>
+      {/* List */}
+      <div className="flex-1">
+        {isUsersLoading && chats.length === 0 ? (
+          <div className="space-y-0 divide-y divide-slate-100">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} className="flex items-center gap-3 px-4 py-3">
+                <div className="h-12 w-12 animate-pulse rounded-full bg-slate-200" />
+                <div className="flex-1 space-y-2">
+                  <div className="h-3.5 w-32 animate-pulse rounded-full bg-slate-200" />
+                  <div className="h-3 w-48 animate-pulse rounded-full bg-slate-100" />
+                </div>
               </div>
+            ))}
+          </div>
+        ) : chats.length > 0 ? (
+          <div className="divide-y divide-slate-100">
+            {chats.map((chat) => (
+              <button
+                key={chat.id}
+                type="button"
+                onClick={() => navigate(`/chat/${chat.id}/${chat.username}`)}
+                className="flex w-full items-center gap-3 px-4 py-3 text-left transition active:bg-slate-50"
+              >
+                {/* Avatar */}
+                <div className="relative shrink-0">
+                  <Avatar className="h-12 w-12">
+                    {chat.avatar ? (
+                      <AvatarImage src={chat.avatar} alt={chat.name} />
+                    ) : null}
+                    <AvatarFallback className="bg-gradient-to-br from-indigo-500 to-violet-600 text-base font-bold text-white">
+                      {chat.initial}
+                    </AvatarFallback>
+                  </Avatar>
+                  {chat.isUnread && (
+                    <span className="absolute -right-0.5 -top-0.5 h-3.5 w-3.5 rounded-full border-2 border-white bg-indigo-600" />
+                  )}
+                </div>
+
+                {/* Content */}
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-baseline justify-between gap-2">
+                    <p className={`truncate text-sm ${chat.isUnread ? "font-bold text-slate-900" : "font-semibold text-slate-800"}`}>
+                      {chat.name}
+                    </p>
+                    <span className={`shrink-0 text-[11px] ${chat.isUnread ? "font-semibold text-indigo-600" : "text-slate-400"}`}>
+                      {chat.time}
+                    </span>
+                  </div>
+                  <p className="mt-0.5 truncate text-xs text-indigo-600/80 font-medium">
+                    Re: {chat.itemName}
+                  </p>
+                  <p className={`mt-0.5 truncate text-xs ${chat.isUnread ? "font-semibold text-slate-800" : "text-slate-500"}`}>
+                    {chat.lastMessage}
+                  </p>
+                </div>
+
+                {/* Unread dot */}
+                {chat.isUnread && (
+                  <span className="h-2.5 w-2.5 shrink-0 rounded-full bg-indigo-600" />
+                )}
+              </button>
+            ))}
+          </div>
+        ) : (
+          <div className="flex flex-col items-center gap-4 px-6 py-20 text-center">
+            <span className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-indigo-50">
+              {searchQuery
+                ? <Search className="h-7 w-7 text-indigo-400" />
+                : <MessageSquareDashed className="h-7 w-7 text-indigo-500" />}
+            </span>
+            <div>
+              <h3 className="font-display text-base font-bold text-slate-900">
+                {searchQuery ? "No results found" : "No conversations yet"}
+              </h3>
+              <p className="mt-1 max-w-xs text-sm text-slate-500">
+                {searchQuery
+                  ? "Try a different search term."
+                  : "Once a claim request is accepted, your chat will appear here."}
+              </p>
             </div>
-          )}
-        </section>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -1,5 +1,6 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import { MainNavbar } from "./MainNavbar";
+import { BottomTabBar } from "./BottomTabBar";
 import { useEffect } from "react";
 import { useChatStore } from "@/store/useChatStore";
 import { useAuthStore } from "@/store/useAuthStore";
@@ -12,14 +13,12 @@ export const AppLayout = () => {
     useChatStore();
   const { user } = useAuthStore();
   const { sidebarMode } = useNavContext();
+  const location = useLocation();
   usePushNotifications();
 
   useEffect(() => {
     if (user) {
-      // 1. Fetch the initial list to calculate unread status
       fetchUsersToChat();
-
-      // 2. Start listening for real-time updates
       subscribeToMessages();
     }
 
@@ -36,9 +35,16 @@ export const AppLayout = () => {
   return (
     <div className={`min-h-screen bg-slate-50 ${desktopPaddingClass}`}>
       <MainNavbar />
-      <main className="min-h-screen bg-slate-50 flow-root pt-14 md:pt-16 lg:pt-0">
+      {/* pt-14 for mobile top bar, pb-20 to clear bottom tab bar, lg resets both
+          Chat page is full-screen so it manages its own layout */}
+      <main className={`min-h-screen bg-slate-50 flow-root lg:pt-0 lg:pb-0 ${
+        location.pathname.startsWith("/chat/")
+          ? "pt-0 pb-0"
+          : "pt-14 pb-20 md:pt-16 md:pb-20"
+      }`}>
         <Outlet />
       </main>
+      <BottomTabBar />
       <OnboardingModal />
     </div>
   );

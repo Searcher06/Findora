@@ -1,17 +1,15 @@
-import { SideBar } from "@/components/SideBar";
 import { useNavContext } from "@/context/NavContext";
-import { Overlay } from "./Overlay";
 import { useChatStore } from "@/store/useChatStore";
 import { useLocation, Link } from "react-router-dom";
 import { useAuthStore } from "@/store/useAuthStore";
 import { Logo } from "../components/logo";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { Menu, MessageSquare, User, LayoutGrid, PlusIcon, ChevronRight, Bell, ChevronsLeft, ChevronsRight, X, ShieldCheck, Trophy, Layers, HelpCircle } from "lucide-react";
+import { Bell, ChevronsLeft, ChevronsRight, X, ShieldCheck, Trophy, Layers, HelpCircle, LayoutGrid, MessageSquare, User, PlusIcon, ChevronRight } from "lucide-react";
 import { resetOnboarding } from "@/components/OnboardingModal";
 import { useItemType } from "@/features/items/context/ItemTypeContext";
 
 export const MainNavbar = () => {
-  const { openSidebar, setOpenSidebar, sidebarMode, setSidebarMode } = useNavContext();
+  const { sidebarMode, setSidebarMode } = useNavContext();
   const { setPostType } = useItemType();
   const location = useLocation();
   const user = useAuthStore((state) => state.user);
@@ -101,15 +99,6 @@ export const MainNavbar = () => {
     if (user.firstName && user.lastName) return `${user.firstName} ${user.lastName}`;
     if (user.firstName) return user.firstName;
     return user.username || "Guest";
-  };
-
-  const handleMobileMenuClick = () => {
-    if (sidebarMode === "hidden") {
-      setSidebarMode("full");
-      setOpenSidebar(true);
-      return;
-    }
-    setOpenSidebar((prev) => !prev);
   };
 
   return (
@@ -253,45 +242,20 @@ export const MainNavbar = () => {
         </button>
       )}
 
-      <nav className="fixed left-0 top-0 z-20 flex h-14 w-full items-center justify-between border-b border-slate-200/90 bg-white/90 px-3 backdrop-blur md:h-16 md:px-4 lg:hidden">
-        <div className="relative">
-          <button
-            type="button"
-            onClick={handleMobileMenuClick}
-            className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-700 shadow-sm transition hover:bg-slate-50"
-            aria-label="Open menu"
-          >
-            <Menu className="h-5 w-5" />
-          </button>
-          {unreadCount > 0 && (
-            <span className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-indigo-700 px-1 text-[10px] font-bold text-white">
-              {unreadCount > 9 ? "9+" : unreadCount}
-            </span>
-          )}
-        </div>
+      {/* Mobile top bar — minimal, just logo + notifications. Hidden on active chat (has its own bar) */}
+      <nav className={`fixed left-0 top-0 z-20 flex h-14 w-full items-center justify-between border-b border-slate-200/90 bg-white/90 px-4 backdrop-blur md:h-16 lg:hidden ${location.pathname.startsWith("/chat/") ? "hidden" : ""}`}>
+        <Link to="/" className="inline-flex items-center">
+          <Logo variant="full" className="h-7 w-auto" />
+        </Link>
 
         <Link
           to="/notifications"
           className="relative inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-700 shadow-sm"
-          aria-label="Open notifications"
+          aria-label="Notifications"
         >
           <Bell className="h-5 w-5" />
         </Link>
       </nav>
-
-      {openSidebar && (
-        <>
-          <Overlay onClick={() => setOpenSidebar(false)} />
-          <SideBar
-            setOpenSidebar={setOpenSidebar}
-            unreadCount={unreadCount}
-            setPostType={setPostType}
-            locationPath={location.pathname}
-            sidebarMode={sidebarMode}
-            setSidebarMode={setSidebarMode}
-          />
-        </>
-      )}
     </>
   );
 };
