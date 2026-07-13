@@ -85,7 +85,7 @@ const itemSchema = new mongoose.Schema(
     },
     dateReported: {
       type: Date,
-      default: Date.now(),
+      default: Date.now,
     },
   },
   { timestamps: true }

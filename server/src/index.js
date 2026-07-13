@@ -46,6 +46,11 @@ app.use(
   })
 );
 
+// Ping endpoint — no logging, used for external uptime/interval calls
+app.get("/api/v1/ping", (req, res) => {
+  res.status(200).json({ status: "ok" });
+});
+
 // Logger middleware
 app.use(loggerMiddleware);
 
