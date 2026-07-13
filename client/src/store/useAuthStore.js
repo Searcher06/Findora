@@ -13,6 +13,7 @@ export const useAuthStore = create((set, get) => ({
   isUpdating: false,
   isSigningUp: false,
   isLoggingIng: false,
+  isLoggingOut: false,
   isChangingPassword: false,
   isUpdatingProfile: false,
   socket: null,
@@ -86,15 +87,17 @@ export const useAuthStore = create((set, get) => ({
 
   logOut: async () => {
     try {
+      set({ isLoggingOut: true });
       await logoutUser();
       set({ user: null });
       toast.success("Logged out successfully!");
-
       get().disconnectSocket();
     } catch (error) {
       const errorMessage = error.response?.data?.message || "Failed to logout";
       toast.error(errorMessage);
       console.log("Error in logout", error);
+    } finally {
+      set({ isLoggingOut: false });
     }
   },
 

@@ -203,6 +203,7 @@ export function ProfilePage() {
   const user = useAuthStore((state) => state.user);
   const isCheckingAuth = useAuthStore((state) => state.isCheckingAuth);
   const logOut = useAuthStore((state) => state.logOut);
+  const isLoggingOut = useAuthStore((state) => state.isLoggingOut);
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -453,10 +454,15 @@ export function ProfilePage() {
 
               <button
                 onClick={handleLogout}
-                className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-red-600 px-4 text-sm font-semibold text-white transition hover:bg-red-700"
+                disabled={isLoggingOut}
+                className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-red-600 px-4 text-sm font-semibold text-white transition hover:bg-red-700 disabled:opacity-70 disabled:cursor-not-allowed"
               >
-                <LogOut className="h-4 w-4" />
-                Logout
+                {isLoggingOut ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <LogOut className="h-4 w-4" />
+                )}
+                {isLoggingOut ? "Logging out..." : "Logout"}
               </button>
             </div>
           </div>
