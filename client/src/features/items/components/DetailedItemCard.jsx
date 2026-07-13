@@ -236,7 +236,7 @@ export const DetailedItemCard = ({ item }) => {
         </div>
 
         {/* Disclaimer Text */}
-        <p className="font-sans text-xs sm:text-sm text-gray-600 text-center px-4">Request must be verified before chat access</p>
+        <p className="font-sans text-xs sm:text-sm text-gray-600 text-center px-4">You'll get chat access once your request is accepted</p>
       </div>
 
       {/* Desktop Layout */}
@@ -305,7 +305,7 @@ export const DetailedItemCard = ({ item }) => {
           </div>
 
           <p className="text-center font-sans text-xs text-indigo-800/80">
-            Request must be verified before chat access
+            You'll get chat access once your request is accepted
           </p>
         </div>
 

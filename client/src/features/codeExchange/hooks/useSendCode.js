@@ -1,24 +1,22 @@
 import { useState } from "react";
 import { toast } from "sonner";
-import { handleItem } from "../services/codeApi";
+import { verifyHandover } from "../services/codeApi";
 
-// Proper hook for sending OTP code
 export const useSendCode = () => {
   const [loading, setLoading] = useState(false);
 
-  // sendCode function to call from component
   const sendCode = async (requestId, code) => {
     if (!requestId || !code) return null;
 
     setLoading(true);
     try {
-      const data = await handleItem(requestId, code);
-      toast.success("Code sent successfully!");
+      const data = await verifyHandover(requestId, code);
+      toast.success("Code verified successfully!");
       return data;
     } catch (error) {
       console.log(error);
       toast.error(
-        error?.response?.data?.message || error?.message || "Error sending code"
+        error?.response?.data?.message || error?.message || "Error verifying code"
       );
       return null;
     } finally {

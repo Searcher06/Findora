@@ -1,7 +1,7 @@
 import { requestModel } from "../models/request.model.js";
 import mongoose from "mongoose";
 
-export const basicRequestMiddleware = async (req, res, next) => {
+export const validateRequestAccess = async (req, res, next) => {
   const { requestId } = req.params;
   // checking if the requestId is valid
   if (!mongoose.Types.ObjectId.isValid(requestId)) {
@@ -18,7 +18,7 @@ export const basicRequestMiddleware = async (req, res, next) => {
   req.requestObject = await requestModel.findById(request.id);
   next();
 };
-export const requestDecisionMiddleware = async (req, res, next) => {
+export const validateAcceptClaim = async (req, res, next) => {
   const { requestObject: request, user } = req;
   // checking if the current user id matches the finder Id
   // cause only the finder can decide whether to accept claim

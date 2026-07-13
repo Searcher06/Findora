@@ -19,16 +19,12 @@ export const DeleteItemButton = ({ itemId, itemName, className }) => {
       toast.success("Item deleted successfully");
     } catch (error) {
       if (error.response) {
-        // server responded with a non-2xx status
         toast.error(error?.response?.data?.message || "Failed to delete item");
       } else if (error.request) {
-        toast.error("No response from server");
+        toast.error("No response from server. Please try again.");
       } else {
-        // something else happended
-        toast.error("An error occured.");
+        toast.error("Something went wrong. Please try again.");
       }
-      console.error(error);
-      toast.error("");
       console.error("Delete error:", error);
     } finally {
       setIsDeleting(false);
@@ -49,11 +45,9 @@ export const DeleteItemButton = ({ itemId, itemName, className }) => {
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+          <AlertDialogTitle>Delete "{itemName}"?</AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete
-            <span className="font-semibold"> "{itemName}" </span> and remove it
-            from our servers.
+            This will permanently remove this item and cannot be undone.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
@@ -63,7 +57,7 @@ export const DeleteItemButton = ({ itemId, itemName, className }) => {
             disabled={isDeleting}
             className="bg-red-600 hover:bg-red-700 text-white"
           >
-            {isDeleting ? "Removing..." : "Delete"}
+            {isDeleting ? "Deleting..." : "Delete Item"}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
@@ -97,19 +91,14 @@ export const RequestButton = ({ itemId, itemName, className, status }) => {
         navigate(
           `/chat/${response._id}/${determineUserTochat(user, response)}`
         );
-        console.log(response);
       }
     } catch (error) {
       if (error.response) {
-        // server responded with a non-2xx status
-        toast.error(
-          error?.response?.data?.message || "Failed to send  request"
-        );
+        toast.error(error?.response?.data?.message || "Failed to send request");
       } else if (error.request) {
-        toast.error("No response from server");
+        toast.error("No response from server. Please try again.");
       } else {
-        // something else happended
-        toast.error("An error occured.");
+        toast.error("Something went wrong. Please try again.");
       }
       console.error(error);
     } finally {
@@ -126,32 +115,32 @@ export const RequestButton = ({ itemId, itemName, className, status }) => {
           disabled={loading}
         >
           {loading
-            ? "In progress..."
+            ? "Sending..."
             : status == "lost"
-            ? "Mark as found"
+            ? "I Found This Item"
             : "Claim This Item"}
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+          <AlertDialogTitle>
+            {status === "found" ? "Claim This Item?" : "I Found This Item?"}
+          </AlertDialogTitle>
           <AlertDialogDescription>
-            {status == "found" ? (
+            {status === "found" ? (
               <>
-                This action cannot be undone. This will send a claim request to
-                the finder of the item, and open a chat window between you and
-                them <span className="font-semibold">"{itemName}"</span>
-                they will then ask you questions for you to answer in order to
-                successfully verify you are the real owner of the item.
+                This will send a claim request to the finder of{" "}
+                <span className="font-semibold">"{itemName}"</span> and open a
+                chat between you and them. The finder will ask you questions to
+                verify you are the real owner before accepting your claim.
               </>
             ) : (
               <>
-                This action cannot be undone. This will alert the owner of the
-                item that you found there item
-                <span className="font-semibold"> "{itemName}" </span> This will
-                open a chat window between you and them in order to co ordinate
-                item return, Note:Ask them questions to prove ownership before
-                pressing accept claim button
+                This will notify the owner of{" "}
+                <span className="font-semibold">"{itemName}"</span> that you
+                found their item and open a chat to coordinate the return. Ask
+                the owner questions to confirm ownership before pressing "Accept
+                Claim".
               </>
             )}
           </AlertDialogDescription>
@@ -160,9 +149,9 @@ export const RequestButton = ({ itemId, itemName, className, status }) => {
           <AlertDialogCancel disabled={loading}>Cancel</AlertDialogCancel>
           <AlertDialogAction onClick={handleRequest} disabled={loading}>
             {loading
-              ? "In Progress..."
-              : status == "lost"
-              ? "Mark as found"
+              ? "Sending..."
+              : status === "lost"
+              ? "I Found This Item"
               : "Claim Item"}
           </AlertDialogAction>
         </AlertDialogFooter>

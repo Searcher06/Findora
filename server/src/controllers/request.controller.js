@@ -2,7 +2,7 @@ import { itemModel } from "../models/item.model.js";
 import { requestModel } from "../models/request.model.js";
 import { userModel } from "../models/user.model.js";
 import { validateId } from "../utils/validateID.js";
-import { getRecieverSocketId, io } from "../lib/socket.js";
+import { getReceiverSocketId, io } from "../lib/socket.js";
 import { sendWhatsApp } from "../utils/sendWhatsApp.js";
 import { sendPushNotification } from "../utils/sendPushNotification.js";
 
@@ -60,7 +60,7 @@ const claimItem = async (req, res) => {
     .populate("itemId");
 
   const receiverUsername = populatedRequest.finderId.username;
-  const receiverSocketId = getRecieverSocketId(receiverUsername);
+  const receiverSocketId = getReceiverSocketId(receiverUsername);
 
   if (receiverSocketId) {
     io.to(receiverSocketId).emit("newChatRequest", populatedRequest);
@@ -89,7 +89,7 @@ const claimItem = async (req, res) => {
   res.status(201).json(populatedRequest);
 };
 
-const sendFoundRequest = async (req, res) => {
+const reportItemFound = async (req, res) => {
   const { id: userID } = req.user;
   const { id: itemId } = req.item;
   const item = await itemModel.findById(itemId);
@@ -149,7 +149,7 @@ const sendFoundRequest = async (req, res) => {
     .populate("itemId");
 
   const receiverUsername = populatedRequest.claimerId.username;
-  const receiverSocketId = getRecieverSocketId(receiverUsername);
+  const receiverSocketId = getReceiverSocketId(receiverUsername);
 
   if (receiverSocketId) {
     io.to(receiverSocketId).emit("newChatRequest", populatedRequest);
@@ -240,7 +240,7 @@ const acceptClaim = async (req, res) => {
     .populate("finderId")
     .populate("claimerId");
 
-  const receiverSocketId = getRecieverSocketId(request.claimerId.username);
+  const receiverSocketId = getReceiverSocketId(request.claimerId.username);
   if (receiverSocketId) {
     io.to(receiverSocketId).emit("acceptClaim", updatedRequest);
     console.log("Claim accepted");
@@ -270,7 +270,7 @@ const acceptClaim = async (req, res) => {
   res.status(200).json(updatedRequest);
 };
 
-const handleItem = async (req, res) => {
+const verifyHandover = async (req, res) => {
   const { requestId } = req.params;
   const { id: userID } = req.user;
   const { code } = req.body;
@@ -405,9 +405,9 @@ const handleItem = async (req, res) => {
 
 export {
   claimItem,
-  sendFoundRequest,
+  reportItemFound,
   getAllRequests,
-  handleItem,
+  verifyHandover,
   getRequestsById,
   acceptClaim,
 };

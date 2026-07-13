@@ -22,7 +22,7 @@ const io = new Server(server, {
 
 // used to store online users
 const userSocketMap = {};
-export const getRecieverSocketId = (username) => {
+export const getReceiverSocketId = (username) => {
   return userSocketMap[username];
 };
 

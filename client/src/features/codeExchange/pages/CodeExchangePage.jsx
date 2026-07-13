@@ -68,7 +68,7 @@ export const CodeExchangePage = () => {
   // Get user's code
   const userCode = isFinder ? request?.finderCode : isClaimer ? request?.claimerCode : null;
 
-  if (loading) return <p className="font-display text-lg">Fetching...</p>;
+  if (loading) return <p className="font-display text-lg">Loading...</p>;
   if (!loading && (request?.status == "pending" || null)) navigate("/");
   if (error) return <p className="font-display text-lg">{error}</p>;
 

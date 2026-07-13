@@ -1,6 +1,6 @@
 import { requestModel } from "../models/request.model.js";
 import { userModel } from "../models/user.model.js";
-import { getRecieverSocketId, io } from "../lib/socket.js";
+import { getReceiverSocketId, io } from "../lib/socket.js";
 import cloudinary from "../config/cloudinary.js";
 import { sendWhatsApp } from "../utils/sendWhatsApp.js";
 
@@ -118,7 +118,7 @@ const sendMessage = async (req, res) => {
     requestId: requestId,
   };
 
-  const receiverSocketId = getRecieverSocketId(userToChatUsername);
+  const receiverSocketId = getReceiverSocketId(userToChatUsername);
   if (receiverSocketId) {
     // 3. Emit the enriched object
     io.to(receiverSocketId).emit("newMessage", messageWithRequestId);
