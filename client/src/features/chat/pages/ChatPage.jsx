@@ -1,11 +1,12 @@
 import { ChatArea } from "../components/ChatArea";
 import { InputsSection } from "../components/InputsSection";
+import { ItemInfoSheet } from "../components/ItemInfoSheet";
 import { useParams, useNavigate } from "react-router-dom";
 import { useFetchRequestById } from "@/features/verification";
 import { useChatStore } from "@/store/useChatStore";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useEffect, useRef } from "react";
-import { ChevronLeft, MoreVertical } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
 export const ChatPage = () => {
@@ -59,7 +60,7 @@ export const ChatPage = () => {
       {/* ── MOBILE / TABLET ── */}
       <div className="fixed inset-0 flex flex-col bg-[#f0f2f5] lg:hidden" style={{ top: 0, bottom: 0 }}>
         {/* Top bar */}
-        <div className="flex h-14 shrink-0 items-center gap-3 border-b border-slate-200/80 bg-white px-3 shadow-sm">
+        <div className="flex h-14 shrink-0 items-center gap-3 bg-white px-3 shadow-sm">
           <button
             type="button"
             onClick={() => navigate(-1)}
@@ -83,20 +84,13 @@ export const ChatPage = () => {
               {otherUserName}
             </p>
             <p className="truncate text-xs text-slate-500">
-              {request?.itemId?.name
-                ? `Re: ${request.itemId.name}`
-                : "Loading..."}
+              @{username}
             </p>
           </div>
-
-          <button
-            type="button"
-            className="flex h-9 w-9 items-center justify-center rounded-full text-slate-600 transition hover:bg-slate-100"
-            aria-label="More options"
-          >
-            <MoreVertical className="h-5 w-5" />
-          </button>
         </div>
+
+        {/* Item info bar — tap to open bottom sheet */}
+        <ItemInfoSheet item={request?.itemId} requestType={request?.requestType} />
 
         {/* Messages — fills remaining space */}
         <div className="flex-1 overflow-hidden">
