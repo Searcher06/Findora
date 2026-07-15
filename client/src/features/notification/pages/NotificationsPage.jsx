@@ -4,15 +4,8 @@ import { useAuthStore } from "@/store/useAuthStore";
 import { getAllRequests } from "../api/notificationApi";
 import NotificationSkeleton from "../components/NotificationSkeleton";
 import {
-  Bell,
-  MessageSquare,
-  CheckCircle2,
-  Clock,
-  Package,
-  XCircle,
-  ShieldCheck,
-  ChevronRight,
-  Inbox,
+  Bell, MessageSquare, CheckCircle2, Clock,
+  Package, XCircle, ShieldCheck, ChevronRight, Inbox, RefreshCw,
 } from "lucide-react";
 
 const timeAgo = (dateString) => {
@@ -46,23 +39,22 @@ const getConfig = (req, userId) => {
           ? `${other} claimed your item`
           : `You reached out about "${item}"`,
         body: req.requestType === "claim"
-          ? `"${item}" — review the request and accept or wait.`
+          ? `"${item}" — review and accept or decline.`
           : `You started a conversation about "${item}".`,
         action: { label: "Open Chat", to: chatLink },
       };
-    } else {
-      return {
-        icon: Clock,
-        color: "amber",
-        title: req.requestType === "claim"
-          ? `Your claim on "${item}" is pending`
-          : `${other} found "${item}"`,
-        body: req.requestType === "claim"
-          ? `Waiting for ${other} to review your request.`
-          : `${other} reached out — check the conversation.`,
-        action: { label: "Open Chat", to: chatLink },
-      };
     }
+    return {
+      icon: Clock,
+      color: "amber",
+      title: req.requestType === "claim"
+        ? `Your claim on "${item}" is pending`
+        : `${other} found "${item}"`,
+      body: req.requestType === "claim"
+        ? `Waiting for ${other} to review your request.`
+        : `${other} reached out — check the conversation.`,
+      action: { label: "Open Chat", to: chatLink },
+    };
   }
 
   if (req.status === "accepted") {
@@ -71,7 +63,7 @@ const getConfig = (req, userId) => {
       color: "emerald",
       title: isFinder ? `You accepted a claim for "${item}"` : `Your claim for "${item}" was accepted!`,
       body: isFinder
-        ? `Exchange your handover codes with ${other} to complete the return.`
+        ? `Exchange handover codes with ${other} to complete the return.`
         : `${other} accepted your claim. Exchange codes to complete the handover.`,
       action: { label: "Verify Handover", to: handoverLink },
     };
@@ -107,42 +99,46 @@ const getConfig = (req, userId) => {
 };
 
 const colorMap = {
-  indigo: { bg: "bg-indigo-100", icon: "text-indigo-700", border: "border-indigo-100", btn: "bg-indigo-700 hover:bg-indigo-800" },
-  amber:  { bg: "bg-amber-100",  icon: "text-amber-700",  border: "border-amber-100",  btn: "bg-amber-600 hover:bg-amber-700" },
-  emerald:{ bg: "bg-emerald-100",icon: "text-emerald-700",border: "border-emerald-100",btn: "bg-emerald-600 hover:bg-emerald-700" },
-  rose:   { bg: "bg-rose-100",   icon: "text-rose-700",   border: "border-rose-100",   btn: "bg-rose-600 hover:bg-rose-700" },
-  slate:  { bg: "bg-slate-100",  icon: "text-slate-700",  border: "border-slate-200",  btn: "bg-slate-700 hover:bg-slate-800" },
+  indigo:  { bg: "bg-indigo-100",  icon: "text-indigo-700",  badge: "bg-indigo-50 text-indigo-600 border-indigo-200",  btn: "bg-indigo-600" },
+  amber:   { bg: "bg-amber-100",   icon: "text-amber-700",   badge: "bg-amber-50 text-amber-600 border-amber-200",     btn: "bg-amber-500"  },
+  emerald: { bg: "bg-emerald-100", icon: "text-emerald-700", badge: "bg-emerald-50 text-emerald-600 border-emerald-200", btn: "bg-emerald-600" },
+  rose:    { bg: "bg-rose-100",    icon: "text-rose-700",    badge: "bg-rose-50 text-rose-600 border-rose-200",        btn: "bg-rose-600"   },
+  slate:   { bg: "bg-slate-100",   icon: "text-slate-600",   badge: "bg-slate-50 text-slate-600 border-slate-200",     btn: "bg-slate-700"  },
 };
 
-const NotifCard = ({ req, userId }) => {
+const NotifItem = ({ req, userId }) => {
   const cfg = getConfig(req, userId);
   const c = colorMap[cfg.color] || colorMap.slate;
   const Icon = cfg.icon;
 
   return (
-    <div className={`flex items-start gap-3 rounded-2xl border ${c.border} bg-white p-4 shadow-sm transition hover:shadow-md`}>
-      <span className={`mt-0.5 inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${c.bg}`}>
+    <div className="flex items-start gap-3 px-4 py-4">
+      {/* Icon */}
+      <span className={`mt-0.5 inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full ${c.bg}`}>
         <Icon className={`h-5 w-5 ${c.icon}`} />
       </span>
 
+      {/* Content */}
       <div className="min-w-0 flex-1">
         <div className="flex items-start justify-between gap-2">
           <p className="text-sm font-semibold text-slate-900 leading-snug">{cfg.title}</p>
-          <span className="shrink-0 text-[11px] text-slate-400">{timeAgo(req.updatedAt)}</span>
+          <span className="shrink-0 text-[11px] text-slate-400 mt-0.5">{timeAgo(req.updatedAt)}</span>
         </div>
-        <p className="mt-1 text-xs text-slate-500 leading-relaxed">{cfg.body}</p>
+        <p className="mt-1 text-xs leading-relaxed text-slate-500">{cfg.body}</p>
 
-        <div className="mt-3 flex items-center gap-3">
+        <div className="mt-2.5 flex items-center gap-2">
           {cfg.action && (
             <Link
               to={cfg.action.to}
-              className={`inline-flex h-8 items-center gap-1.5 rounded-lg px-3 text-xs font-semibold text-white transition ${c.btn}`}
+              className={`inline-flex h-7 items-center gap-1 rounded-full px-3 text-[11px] font-semibold text-white transition active:scale-95 ${c.btn}`}
             >
-              {cfg.action.label === "Open Chat" ? <MessageSquare className="h-3.5 w-3.5" /> : <ChevronRight className="h-3.5 w-3.5" />}
+              {cfg.action.label === "Open Chat"
+                ? <MessageSquare className="h-3 w-3" />
+                : <ChevronRight className="h-3 w-3" />}
               {cfg.action.label}
             </Link>
           )}
-          <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-semibold capitalize ${c.bg} ${c.icon}`}>
+          <span className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-semibold capitalize ${c.badge}`}>
             {req.status}
           </span>
         </div>
@@ -157,54 +153,71 @@ export function NotificationsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  useEffect(() => {
+  const load = () => {
+    setLoading(true);
+    setError("");
     getAllRequests()
       .then((data) => setRequests(Array.isArray(data) ? data : []))
       .catch((err) => setError(err?.response?.data?.message || "Failed to load notifications"))
       .finally(() => setLoading(false));
-  }, []);
+  };
+
+  useEffect(() => { load(); }, []);
 
   const sorted = [...requests].sort(
     (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)
   );
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-linear-to-b from-slate-50 via-slate-100/50 to-white px-3 pb-10 pt-3 sm:px-5 md:px-6">
-      <div className="pointer-events-none absolute -left-20 top-10 h-56 w-56 rounded-full bg-violet-300/20 blur-3xl" />
-      <div className="pointer-events-none absolute right-0 top-0 h-64 w-64 rounded-full bg-indigo-200/20 blur-3xl" />
+    <div className="min-h-screen bg-slate-50">
 
-      <div className="relative mx-auto w-full max-w-2xl">
-        {/* Header */}
-        <section className="rounded-2xl border border-indigo-100 bg-[linear-gradient(135deg,#faf9ff_0%,#f3f0ff_54%,#f8f7ff_100%)] px-4 py-5 shadow-[0_25px_70px_-50px_rgba(79,70,229,0.5)] sm:rounded-3xl sm:px-6 sm:py-6">
-          <div className="flex items-center gap-3">
-            <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-100">
-              <Bell className="h-5 w-5 text-indigo-700" />
+      {/* ── Sticky header ── */}
+      <div className="sticky top-14 z-10 flex items-center justify-between border-b border-slate-200/80 bg-white/95 px-4 py-3.5 backdrop-blur-xl md:top-16">
+        <div>
+          <h1 className="font-display text-lg font-bold text-slate-900">Notifications</h1>
+          <p className="text-xs text-slate-400">Activity across your requests</p>
+        </div>
+        <button
+          type="button"
+          onClick={load}
+          aria-label="Refresh"
+          className="flex h-9 w-9 items-center justify-center rounded-full text-slate-500 transition hover:bg-slate-100"
+        >
+          <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin text-indigo-600" : ""}`} />
+        </button>
+      </div>
+
+      {/* ── Feed ── */}
+      <div className="mx-auto max-w-2xl">
+        {loading ? (
+          <div className="mt-3 overflow-hidden rounded-2xl bg-white mx-3 divide-y divide-slate-100">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <NotificationSkeleton key={i} />
+            ))}
+          </div>
+        ) : error ? (
+          <div className="mx-3 mt-4 rounded-2xl border border-rose-200 bg-rose-50 p-4 text-sm font-medium text-rose-700">
+            {error}
+          </div>
+        ) : sorted.length === 0 ? (
+          <div className="flex flex-col items-center gap-4 px-6 py-20 text-center">
+            <span className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-indigo-50">
+              <Inbox className="h-7 w-7 text-indigo-400" />
             </span>
             <div>
-              <h1 className="font-display text-xl font-bold text-slate-900 sm:text-2xl">Notifications</h1>
-              <p className="text-xs text-slate-500 sm:text-sm">All activity across your requests</p>
+              <h3 className="font-display text-base font-bold text-slate-900">No notifications yet</h3>
+              <p className="mt-1 max-w-xs text-sm text-slate-500">
+                Activity from your claims and found requests will appear here.
+              </p>
             </div>
           </div>
-        </section>
-
-        {/* Feed */}
-        <div className="mt-4 space-y-3">
-          {loading ? (
-            Array.from({ length: 4 }).map((_, i) => <NotificationSkeleton key={i} />)
-          ) : error ? (
-            <div className="rounded-2xl border border-rose-200 bg-rose-50 p-4 text-sm font-medium text-rose-700">{error}</div>
-          ) : sorted.length === 0 ? (
-            <div className="flex flex-col items-center gap-3 rounded-2xl border border-dashed border-slate-300 py-16 text-center">
-              <Inbox className="h-10 w-10 text-slate-400" />
-              <p className="text-sm font-semibold text-slate-600">No notifications yet</p>
-              <p className="text-xs text-slate-400">Activity from your claims and found requests will appear here.</p>
-            </div>
-          ) : (
-            sorted.map((req) => (
-              <NotifCard key={req._id} req={req} userId={user?._id} />
-            ))
-          )}
-        </div>
+        ) : (
+          <div className="mt-3 overflow-hidden rounded-2xl bg-white mx-3 divide-y divide-slate-100">
+            {sorted.map((req) => (
+              <NotifItem key={req._id} req={req} userId={user?._id} />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
