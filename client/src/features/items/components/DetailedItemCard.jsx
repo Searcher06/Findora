@@ -173,61 +173,99 @@ export const DetailedItemCard = ({ item }) => {
   };
 
   return (
-    <div className="w-full px-3 py-4 sm:px-6 sm:py-6 lg:px-8 lg:py-10">
-      {/* Mobile & Tablet Layout (stacked) */}
-      <div className="lg:hidden flex flex-col gap-4 sm:gap-5 md:gap-6">
-        {/* Image */}
-        <div className="w-full flex justify-center px-0">
+    <div className="w-full lg:px-8 lg:py-10">
+      {/* ── MOBILE layout ── */}
+      <div className="lg:hidden">
+        {/* Full-bleed image */}
+        <div className="relative w-full">
           <img
             src={image || placeholderImage}
             alt={name}
-            className="w-full max-w-2xl rounded-2xl sm:rounded-3xl shadow-[0_30px_90px_-75px_rgba(15,23,42,0.8)] object-cover aspect-video lg:aspect-square border border-slate-200/50"
+            className="w-full object-cover aspect-[4/3]"
           />
+          {/* Status badge on image */}
+          <span className={`absolute left-3 top-3 rounded-full px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide backdrop-blur-sm ${
+            status === "lost" ? "bg-rose-500/90 text-white"
+            : status === "found" ? "bg-emerald-500/90 text-white"
+            : status === "returned" ? "bg-emerald-700/90 text-white"
+            : "bg-slate-600/90 text-white"
+          }`}>
+            {status}
+          </span>
+          {/* Share button on image */}
+          <button
+            type="button"
+            onClick={async () => {
+              if (navigator.share) {
+                try { await navigator.share({ title: `${name} — Findora`, url: window.location.href }); } catch {}
+              } else {
+                try { await navigator.clipboard.writeText(window.location.href); toast.success("Link copied!"); } catch {}
+              }
+            }}
+            className="absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-full bg-white/90 text-slate-700 shadow-sm backdrop-blur"
+          >
+            <Share2 className="h-4 w-4" />
+          </button>
         </div>
 
-        {/* Item Info */}
-        <div className="w-full max-w-2xl mx-auto rounded-2xl border border-indigo-200/70 bg-linear-to-br from-white to-violet-50/65 p-4 shadow-[0_30px_90px_-75px_rgba(15,23,42,0.8)] backdrop-blur-sm sm:rounded-3xl sm:p-5 md:p-6">
+        {/* Content */}
+        <div className="px-4 py-4 space-y-4 pb-24">
+          {/* Name */}
+          <h1 className="font-display text-xl font-bold text-slate-900">{name}</h1>
+
+          {/* Item info */}
           <ItemInfo item={item} layoutMode="default" />
+
+          {/* Report item — secondary action */}
+          {!isOwner && (
+            <button
+              type="button"
+              onClick={() => setIsReportModalOpen(true)}
+              className="w-full rounded-2xl border border-slate-200 py-3 text-sm font-medium text-slate-600 transition active:bg-slate-50"
+            >
+              Report this item
+            </button>
+          )}
         </div>
 
-        {/* Action Buttons */}
-        <div className="w-full flex justify-center px-3">
+        {/* Sticky action bar at bottom */}
+        <div className="fixed bottom-0 left-0 right-0 z-30 border-t border-slate-200/80 bg-white/95 px-4 py-3 backdrop-blur-xl">
           {isOwner ? (
-            <div className="flex flex-wrap justify-center gap-2 sm:gap-3">
-              <DeleteItemButton
-                itemId={_id}
-                itemName={name}
-                className="bg-red-500 hover:bg-red-600 rounded-lg sm:rounded-xl font-medium text-sm px-4 sm:px-6 py-2 sm:py-2.5 h-10 sm:h-11 flex items-center justify-center transition-all shadow-sm hover:shadow-md"
-              />
-              <Button
-                className="rounded-lg sm:rounded-xl font-medium text-sm px-4 sm:px-6 py-2 sm:py-2.5 h-10 sm:h-11 active:scale-95 transition-all bg-indigo-700 hover:bg-indigo-700 shadow-sm hover:shadow-md"
-                onClick={() => navigate(`/update/${_id}`)}
-              >
-                Update
-              </Button>
+            <div className="flex gap-2">
               {canResolve && (
                 <button
                   type="button"
                   onClick={() => setIsResolveModalOpen(true)}
-                  className="inline-flex h-10 sm:h-11 items-center gap-2 rounded-lg sm:rounded-xl border border-emerald-200 bg-emerald-50 px-4 sm:px-5 text-sm font-medium text-emerald-800 transition-all hover:bg-emerald-100 active:scale-95"
+                  className="flex flex-1 items-center justify-center gap-2 rounded-2xl border border-emerald-200 bg-emerald-50 py-3 text-sm font-semibold text-emerald-700 transition active:scale-[0.98]"
                 >
                   <CheckCircle2 className="h-4 w-4" />
                   Resolve
                 </button>
               )}
-              <ShareButton name={name} className="h-10 sm:h-11" />
+              <button
+                type="button"
+                onClick={() => navigate(`/update/${_id}`)}
+                className="flex flex-1 items-center justify-center gap-2 rounded-2xl bg-indigo-700 py-3 text-sm font-semibold text-white transition active:scale-[0.98]"
+              >
+                Update Item
+              </button>
+              <DeleteItemButton
+                itemId={_id}
+                itemName={name}
+                className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-red-500 text-white"
+              />
             </div>
           ) : (
-            <div className="flex flex-wrap justify-center gap-2 sm:gap-3">
+            <div className="flex gap-2">
               {canRequest ? (
                 <RequestButton
                   itemId={_id}
                   itemName={name}
                   status={status}
-                  className="rounded-lg sm:rounded-xl font-medium text-sm px-6 sm:px-8 py-2 sm:py-2.5 h-10 sm:h-11 flex items-center justify-center active:scale-95 transition-all bg-indigo-700 hover:bg-indigo-700 shadow-sm hover:shadow-md"
+                  className="flex flex-1 items-center justify-center rounded-2xl bg-gradient-to-r from-indigo-600 to-violet-600 py-3 text-sm font-semibold text-white shadow-sm transition active:scale-[0.98]"
                 />
               ) : (
-                <div className={`inline-flex h-10 sm:h-11 items-center gap-2 rounded-lg sm:rounded-xl px-4 sm:px-5 text-sm font-semibold ${
+                <div className={`flex flex-1 items-center justify-center gap-2 rounded-2xl py-3 text-sm font-semibold ${
                   status === "returned"
                     ? "border border-emerald-200 bg-emerald-50 text-emerald-700"
                     : "border border-slate-200 bg-slate-50 text-slate-600"
@@ -236,20 +274,9 @@ export const DetailedItemCard = ({ item }) => {
                   {status === "returned" ? "Item Returned" : "Item Claimed"}
                 </div>
               )}
-              <Button
-                type="button"
-                onClick={() => setIsReportModalOpen(true)}
-                className="rounded-lg border border-indigo-200 bg-white text-indigo-900 shadow-sm transition-all h-10 px-5 py-2 text-sm font-medium active:scale-95 hover:bg-violet-50 hover:shadow-md sm:h-11 sm:rounded-xl sm:px-6 sm:py-2.5"
-              >
-                Report Item
-              </Button>
-              <ShareButton name={name} className="h-10 sm:h-11" />
             </div>
           )}
         </div>
-
-        {/* Disclaimer Text */}
-        <p className="font-sans text-xs sm:text-sm text-gray-600 text-center px-4">You'll get chat access once your request is accepted</p>
       </div>
 
       {/* Desktop Layout */}
