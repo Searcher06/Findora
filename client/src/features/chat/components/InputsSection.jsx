@@ -87,8 +87,10 @@ export const InputsSection = ({
   const isFinder = request?.finderId?._id === user?._id;
   const isClaimer = request?.claimerId?._id === user?._id;
   const isAccepted = request?.status === "accepted";
+  const isResolved = request?.status === "returned" || request?.status === "closed";
   const showActionButton =
-    !requestLoading && !requestError && (isFinder || (isAccepted && isClaimer));
+    !requestLoading && !requestError && !isResolved &&
+    (isFinder || (isAccepted && isClaimer));
 
   // Clear action label
   const actionLabel =
@@ -100,6 +102,18 @@ export const InputsSection = ({
 
   return (
     <div className="bg-white">
+      {/* Resolved banner — shown when item is returned or request closed */}
+      {isResolved && (
+        <div className={`flex items-center justify-center gap-2 border-b px-3 py-2.5 text-xs font-semibold ${
+          request?.status === "returned"
+            ? "border-emerald-100 bg-emerald-50 text-emerald-700"
+            : "border-slate-100 bg-slate-50 text-slate-500"
+        }`}>
+          <CheckCircle2 className="h-3.5 w-3.5" />
+          {request?.status === "returned" ? "Item successfully returned" : "This request has been closed"}
+        </div>
+      )}
+
       {/* Action button — Accept Claim / Verify Handover */}
       {showActionButton && (
         <div className="border-b border-slate-100 px-3 py-2">
