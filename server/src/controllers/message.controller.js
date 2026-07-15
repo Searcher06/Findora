@@ -39,7 +39,7 @@ const getUsersToChat = async (req, res) => {
   const users = await requestModel
     .find({
       participants: userId,
-      status: { $in: ["pending", "accepted"] },
+      status: { $in: ["pending", "accepted", "returned"] },
     })
     .populate("finderId", "-password")
     .populate("claimerId", "-password")

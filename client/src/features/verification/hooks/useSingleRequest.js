@@ -29,8 +29,8 @@ export const useFetchRequestById = (requestId) => {
     try {
       setLoading(true);
       const response = await acceptClaim(requestId);
-      setRequest((prevs) => ({ ...prevs, status: "accepted" }));
-      toast.success("Claim Accepted Successfull");
+      setRequest(response); // use full server response, not a partial patch
+      toast.success("Claim accepted successfully");
     } catch (error) {
       handleApiError(error, "Failed to accept claim.");
     } finally {
