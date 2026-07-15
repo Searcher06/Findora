@@ -209,7 +209,7 @@ export const DetailedItemCard = ({ item }) => {
         </div>
 
         {/* Content */}
-        <div className="px-4 py-4 space-y-4 pb-24">
+        <div className="px-4 py-4 space-y-4 pb-24 lg:pb-4">
           {/* Name */}
           <h1 className="font-display text-xl font-bold text-slate-900">{name}</h1>
 
@@ -228,8 +228,8 @@ export const DetailedItemCard = ({ item }) => {
           )}
         </div>
 
-        {/* Sticky action bar at bottom */}
-        <div className="fixed bottom-0 left-0 right-0 z-30 border-t border-slate-200/80 bg-white/95 px-4 py-3 backdrop-blur-xl">
+        {/* Sticky action bar at bottom — mobile only */}
+        <div className="fixed bottom-0 left-0 right-0 z-30 border-t border-slate-200/80 bg-white/95 px-4 py-3 backdrop-blur-xl lg:hidden">
           {isOwner ? (
             <div className="flex gap-2">
               {canResolve && (

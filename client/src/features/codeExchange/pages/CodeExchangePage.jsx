@@ -124,7 +124,8 @@ export const CodeExchangePage = () => {
 
   // ── Verification screen ──
   return (
-    <div className="flex min-h-screen flex-col bg-white">
+    <div className="flex min-h-screen flex-col bg-white lg:bg-slate-50">
+      <div className="mx-auto w-full max-w-lg lg:my-auto lg:rounded-3xl lg:border lg:border-slate-200 lg:bg-white lg:shadow-xl lg:my-10">
       {/* Header */}
       <div className="border-b border-slate-100 px-5 pb-4 pt-6 text-center">
         <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-indigo-100">
@@ -239,6 +240,7 @@ export const CodeExchangePage = () => {
           <ShieldCheck className="h-3 w-3" />
           Secure verification · Findora
         </p>
+      </div>
       </div>
     </div>
   );

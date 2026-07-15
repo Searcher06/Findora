@@ -63,35 +63,45 @@ export const ChatSelectionPage = () => {
 
   return (
     <div className="flex min-h-screen flex-col bg-white">
-      {/* Header */}
-      <div className="sticky top-14 z-10 border-b border-slate-200/80 bg-white/95 px-4 pb-3 pt-4 backdrop-blur-xl md:top-16">
+      {/* ── Mobile/tablet header ── */}
+      <div className="sticky top-14 z-10 border-b border-slate-200/80 bg-white/95 px-4 pb-3 pt-4 backdrop-blur-xl md:top-16 lg:hidden">
         <div className="flex items-center justify-between mb-3">
           <h1 className="font-display text-xl font-bold text-slate-900">Messages</h1>
-          <button
-            type="button"
-            onClick={() => useChatStore.getState().fetchUsersToChat()}
-            aria-label="Refresh"
-            className="flex h-9 w-9 items-center justify-center rounded-full text-slate-500 transition hover:bg-slate-100"
-          >
+          <button type="button" onClick={() => useChatStore.getState().fetchUsersToChat()} aria-label="Refresh"
+            className="flex h-9 w-9 items-center justify-center rounded-full text-slate-500 transition hover:bg-slate-100">
             <RefreshCw className={`h-4 w-4 ${isUsersLoading ? "animate-spin text-indigo-600" : ""}`} />
           </button>
         </div>
-
-        {/* Search */}
         <div className="relative">
           <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
-          <input
-            type="text"
-            placeholder="Search conversations..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="h-10 w-full rounded-full border border-slate-200 bg-slate-100 pl-9 pr-4 text-sm text-slate-700 outline-none transition focus:border-indigo-300 focus:bg-white focus:ring-2 focus:ring-indigo-100"
-          />
+          <input type="text" placeholder="Search conversations..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}
+            className="h-10 w-full rounded-full border border-slate-200 bg-slate-100 pl-9 pr-4 text-sm text-slate-700 outline-none transition focus:border-indigo-300 focus:bg-white focus:ring-2 focus:ring-indigo-100" />
+        </div>
+      </div>
+
+      {/* ── Desktop header ── */}
+      <div className="hidden lg:block px-6 pt-6 pb-4 border-b border-slate-100">
+        <div className="mx-auto max-w-2xl flex items-center justify-between gap-4">
+          <div>
+            <h1 className="font-display text-2xl font-bold text-slate-900">Messages</h1>
+            <p className="text-sm text-slate-500">{chats.length} conversation{chats.length !== 1 ? "s" : ""}</p>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="relative">
+              <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+              <input type="text" placeholder="Search conversations..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}
+                className="h-10 w-64 rounded-xl border border-slate-200 bg-slate-50 pl-9 pr-4 text-sm text-slate-700 outline-none transition focus:border-indigo-300 focus:bg-white focus:ring-2 focus:ring-indigo-100" />
+            </div>
+            <button type="button" onClick={() => useChatStore.getState().fetchUsersToChat()} aria-label="Refresh"
+              className="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 text-slate-500 transition hover:bg-slate-50">
+              <RefreshCw className={`h-4 w-4 ${isUsersLoading ? "animate-spin text-indigo-600" : ""}`} />
+            </button>
+          </div>
         </div>
       </div>
 
       {/* List */}
-      <div className="flex-1">
+      <div className="flex-1 lg:mx-auto lg:w-full lg:max-w-2xl">
         {isUsersLoading && chats.length === 0 ? (
           <div className="space-y-0 divide-y divide-slate-100">
             {Array.from({ length: 6 }).map((_, i) => (

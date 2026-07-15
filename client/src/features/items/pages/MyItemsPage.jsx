@@ -162,8 +162,8 @@ export function MyItemsPage() {
   return (
     <div className="min-h-screen bg-slate-50">
 
-      {/* ── Sticky mobile header ── */}
-      <div className="sticky top-14 z-10 border-b border-slate-200/80 bg-white/95 px-3 pb-3 pt-3 backdrop-blur-xl md:top-16">
+      {/* ── Sticky header — mobile/tablet only ── */}
+      <div className="sticky top-14 z-10 border-b border-slate-200/80 bg-white/95 px-3 pb-3 pt-3 backdrop-blur-xl md:top-16 lg:hidden">
         <div className="flex items-center justify-between mb-3">
           <h1 className="font-display text-lg font-bold text-slate-900">My Items</h1>
           <Link
@@ -211,6 +211,67 @@ export function MyItemsPage() {
             ))}
           </div>
         )}
+      </div>
+
+      {/* ── Desktop header ── */}
+      <div className="hidden lg:block px-6 pt-6 pb-4">
+        <div className="mx-auto max-w-5xl">
+          <div className="flex items-center justify-between mb-5">
+            <div className="flex items-center gap-3">
+              <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-100">
+                <Layers className="h-5 w-5 text-indigo-700" />
+              </span>
+              <div>
+                <h1 className="font-display text-2xl font-bold text-slate-900">My Items</h1>
+                <p className="text-sm text-slate-500">All items you've reported</p>
+              </div>
+            </div>
+            <Link
+              to="/report"
+              className="inline-flex items-center gap-2 rounded-xl bg-indigo-700 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-800"
+            >
+              <PlusIcon className="h-4 w-4" />
+              Report Item
+            </Link>
+          </div>
+
+          {/* Desktop filters + search row */}
+          {!loading && items.length > 0 && (
+            <div className="flex items-center justify-between gap-4">
+              <div className="flex items-center gap-1.5 overflow-x-auto">
+                {FILTERS.filter((f) => f.key === "all" || counts[f.key] > 0).map((f) => (
+                  <button
+                    key={f.key}
+                    type="button"
+                    onClick={() => setActiveFilter(f.key)}
+                    className={`shrink-0 rounded-full px-3.5 py-1.5 text-sm font-semibold transition ${
+                      activeFilter === f.key
+                        ? "bg-indigo-700 text-white"
+                        : "border border-slate-200 bg-white text-slate-600 hover:bg-slate-50"
+                    }`}
+                  >
+                    {f.label}
+                    {(f.key === "all" ? counts.all : counts[f.key]) > 0 && (
+                      <span className={`ml-1.5 text-xs ${activeFilter === f.key ? "opacity-80" : "text-slate-400"}`}>
+                        {f.key === "all" ? counts.all : counts[f.key]}
+                      </span>
+                    )}
+                  </button>
+                ))}
+              </div>
+              <div className="relative shrink-0">
+                <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                <input
+                  type="text"
+                  placeholder="Search..."
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  className="h-10 w-56 rounded-xl border border-slate-200 bg-white pl-9 pr-3 text-sm text-slate-700 outline-none transition focus:border-indigo-300 focus:ring-2 focus:ring-indigo-100"
+                />
+              </div>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* ── Content ── */}

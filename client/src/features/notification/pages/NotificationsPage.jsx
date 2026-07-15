@@ -171,24 +171,32 @@ export function NotificationsPage() {
   return (
     <div className="min-h-screen bg-slate-50">
 
-      {/* ── Sticky header ── */}
-      <div className="sticky top-14 z-10 flex items-center justify-between border-b border-slate-200/80 bg-white/95 px-4 py-3.5 backdrop-blur-xl md:top-16">
+      {/* ── Sticky header — mobile only ── */}
+      <div className="sticky top-14 z-10 flex items-center justify-between border-b border-slate-200/80 bg-white/95 px-4 py-3.5 backdrop-blur-xl md:top-16 lg:hidden">
         <div>
           <h1 className="font-display text-lg font-bold text-slate-900">Notifications</h1>
           <p className="text-xs text-slate-400">Activity across your requests</p>
         </div>
-        <button
-          type="button"
-          onClick={load}
-          aria-label="Refresh"
-          className="flex h-9 w-9 items-center justify-center rounded-full text-slate-500 transition hover:bg-slate-100"
-        >
+        <button type="button" onClick={load} aria-label="Refresh"
+          className="flex h-9 w-9 items-center justify-center rounded-full text-slate-500 transition hover:bg-slate-100">
+          <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin text-indigo-600" : ""}`} />
+        </button>
+      </div>
+
+      {/* ── Desktop header ── */}
+      <div className="hidden lg:flex items-center justify-between px-6 py-6">
+        <div>
+          <h1 className="font-display text-2xl font-bold text-slate-900">Notifications</h1>
+          <p className="text-sm text-slate-500">All activity across your requests</p>
+        </div>
+        <button type="button" onClick={load} aria-label="Refresh"
+          className="flex h-9 w-9 items-center justify-center rounded-full text-slate-500 transition hover:bg-slate-100">
           <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin text-indigo-600" : ""}`} />
         </button>
       </div>
 
       {/* ── Feed ── */}
-      <div className="mx-auto max-w-2xl">
+      <div className="mx-auto max-w-2xl lg:max-w-3xl lg:px-6">
         {loading ? (
           <div className="mt-3 overflow-hidden rounded-2xl bg-white mx-3 divide-y divide-slate-100">
             {Array.from({ length: 5 }).map((_, i) => (

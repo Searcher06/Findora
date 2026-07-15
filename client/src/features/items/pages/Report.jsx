@@ -268,76 +268,174 @@ const ReportPage = () => {
   const current = STEPS[step - 1];
 
   return (
-    <div className="flex min-h-screen flex-col bg-white">
-      {/* Header */}
-      <div className="border-b border-slate-100 px-4 pb-4 pt-5">
-        {/* Back + progress */}
-        <div className="mb-4 flex items-center gap-3">
-          <button
-            type="button"
-            onClick={() => step > 1 ? setStep((s) => s - 1) : navigate(-1)}
-            className="flex h-9 w-9 items-center justify-center rounded-full text-slate-600 transition hover:bg-slate-100"
-            aria-label="Back"
-          >
-            <ChevronLeft className="h-5 w-5" />
-          </button>
-          <div className="flex-1">
-            <Progress step={step} total={STEPS.length} />
+    <>
+      {/* ══════════════════════════════════════════
+          MOBILE wizard (hidden on lg+)
+      ══════════════════════════════════════════ */}
+      <div className="flex min-h-screen flex-col bg-white lg:hidden">
+        {/* Header */}
+        <div className="border-b border-slate-100 px-4 pb-4 pt-5">
+          <div className="mb-4 flex items-center gap-3">
+            <button type="button" onClick={() => step > 1 ? setStep((s) => s - 1) : navigate(-1)}
+              className="flex h-9 w-9 items-center justify-center rounded-full text-slate-600 transition hover:bg-slate-100" aria-label="Back">
+              <ChevronLeft className="h-5 w-5" />
+            </button>
+            <div className="flex-1"><Progress step={step} total={STEPS.length} /></div>
+            <span className="text-xs font-semibold text-slate-400">{step}/{STEPS.length}</span>
           </div>
-          <span className="text-xs font-semibold text-slate-400">{step}/{STEPS.length}</span>
+          <h1 className="font-display text-xl font-bold text-slate-900">{current.title}</h1>
+          <p className="mt-0.5 text-sm text-slate-500">{current.subtitle}</p>
         </div>
 
-        <h1 className="font-display text-xl font-bold text-slate-900">{current.title}</h1>
-        <p className="mt-0.5 text-sm text-slate-500">{current.subtitle}</p>
+        <div className="flex-1 overflow-y-auto px-4 py-5">
+          {step === 1 && <Step1 itemData={itemData} onChange={handleInputChange} />}
+          {step === 2 && <Step2 itemData={itemData} onChange={handleInputChange} />}
+          {step === 3 && <Step3 preview={preview} onPhotoChange={handlePhotoChange} onRemove={handleRemovePhoto} />}
+        </div>
+
+        <div className="border-t border-slate-100 px-4 py-4">
+          {step < STEPS.length ? (
+            <button type="button" onClick={handleNext}
+              className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-indigo-600 to-violet-600 py-3.5 text-sm font-semibold text-white shadow-sm transition active:scale-[0.98]">
+              Continue <ChevronRight className="h-4 w-4" />
+            </button>
+          ) : (
+            <button type="button" onClick={handleSubmit} disabled={loading}
+              className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-indigo-600 to-violet-600 py-3.5 text-sm font-semibold text-white shadow-sm transition disabled:opacity-50 active:scale-[0.98]">
+              {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <CheckCircle2 className="h-4 w-4" />}
+              {loading ? "Posting..." : "Post Report"}
+            </button>
+          )}
+          {step === 3 && !loading && (
+            <button type="button" onClick={handleSubmit}
+              className="mt-3 w-full text-center text-sm text-slate-400 transition hover:text-slate-600">
+              Skip photo and post
+            </button>
+          )}
+        </div>
       </div>
 
-      {/* Step content */}
-      <div className="flex-1 overflow-y-auto px-4 py-5">
-        {step === 1 && <Step1 itemData={itemData} onChange={handleInputChange} />}
-        {step === 2 && <Step2 itemData={itemData} onChange={handleInputChange} />}
-        {step === 3 && (
-          <Step3
-            preview={preview}
-            onPhotoChange={handlePhotoChange}
-            onRemove={handleRemovePhoto}
-          />
-        )}
-      </div>
+      {/* ══════════════════════════════════════════
+          DESKTOP single-form layout
+      ══════════════════════════════════════════ */}
+      <div className="hidden lg:block relative min-h-screen overflow-hidden bg-gradient-to-b from-slate-50 via-slate-100/60 to-white px-8 pb-10 pt-6">
+        <div className="pointer-events-none absolute -left-20 top-10 h-52 w-52 rounded-full bg-violet-300/25 blur-3xl" />
+        <div className="pointer-events-none absolute right-0 top-0 h-64 w-64 rounded-full bg-indigo-300/20 blur-3xl" />
+        <div className="relative mx-auto w-full max-w-3xl">
+          <section className="rounded-3xl border border-indigo-100 bg-[linear-gradient(135deg,#faf9ff_0%,#ede9fe_52%,#f8f7ff_100%)] px-8 py-9 shadow-[0_35px_90px_-65px_rgba(79,70,229,0.6)]">
+            <img src="/iconplusfindoratext.png" alt="Findora" className="h-7 w-auto" />
+            <h1 className="mt-3 font-display text-3xl font-bold leading-tight text-slate-900">
+              Report {itemData.status === "lost" ? "Lost" : "Found"} Item
+            </h1>
+            <p className="mt-2 max-w-2xl text-sm text-slate-600">
+              Provide accurate details so the community can match reports faster.
+            </p>
+          </section>
 
-      {/* Bottom action */}
-      <div className="border-t border-slate-100 px-4 py-4">
-        {step < STEPS.length ? (
-          <button
-            type="button"
-            onClick={handleNext}
-            className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-indigo-600 to-violet-600 py-3.5 text-sm font-semibold text-white shadow-sm transition active:scale-[0.98]"
-          >
-            Continue
-            <ChevronRight className="h-4 w-4" />
-          </button>
-        ) : (
-          <button
-            type="button"
-            onClick={handleSubmit}
-            disabled={loading}
-            className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-indigo-600 to-violet-600 py-3.5 text-sm font-semibold text-white shadow-sm transition disabled:opacity-50 active:scale-[0.98]"
-          >
-            {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <CheckCircle2 className="h-4 w-4" />}
-            {loading ? "Posting..." : "Post Report"}
-          </button>
-        )}
+          <form className="mt-6 rounded-3xl border border-slate-200 bg-white/90 p-8 shadow-[0_30px_90px_-75px_rgba(15,23,42,0.8)]"
+            onSubmit={(e) => e.preventDefault()}>
+            {/* Item type */}
+            <div className="mb-6">
+              <label className="mb-3 block text-sm font-semibold text-slate-700">Item Type</label>
+              <div className="grid grid-cols-2 gap-3">
+                <button type="button" onClick={() => handleInputChange({ target: { name: "status", value: "lost" } })}
+                  className={`flex items-center justify-center gap-2 rounded-xl border py-3 text-sm font-semibold transition ${itemData.status === "lost" ? "border-indigo-300 bg-indigo-50 text-indigo-700" : "border-slate-200 bg-white text-slate-600 hover:bg-slate-50"}`}>
+                  <SearchX className="h-4 w-4" /> I Lost an Item
+                </button>
+                <button type="button" onClick={() => handleInputChange({ target: { name: "status", value: "found" } })}
+                  className={`flex items-center justify-center gap-2 rounded-xl border py-3 text-sm font-semibold transition ${itemData.status === "found" ? "border-emerald-300 bg-emerald-50 text-emerald-700" : "border-slate-200 bg-white text-slate-600 hover:bg-slate-50"}`}>
+                  <CheckCircle2 className="h-4 w-4" /> I Found an Item
+                </button>
+              </div>
+            </div>
 
-        {step === 3 && !loading && (
-          <button
-            type="button"
-            onClick={handleSubmit}
-            className="mt-3 w-full text-center text-sm text-slate-400 transition hover:text-slate-600"
-          >
-            Skip photo and post
-          </button>
-        )}
+            <div className="grid gap-5 md:grid-cols-2">
+              <div className="md:col-span-2">
+                <label className="mb-2 block text-sm font-semibold text-slate-700">Item Name</label>
+                <div className="relative">
+                  <ClipboardList className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                  <input type="text" name="itemName" value={itemData.itemName} onChange={handleInputChange} placeholder="e.g. Samsung Galaxy S22"
+                    className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 pl-10 pr-4 text-sm text-slate-800 outline-none transition focus:border-indigo-400 focus:bg-white focus:ring-2 focus:ring-indigo-100" />
+                </div>
+              </div>
+              <div>
+                <label className="mb-2 block text-sm font-semibold text-slate-700">Category</label>
+                <select name="category" value={itemData.category} onChange={handleInputChange}
+                  className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 text-sm text-slate-800 outline-none transition focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100">
+                  <option value="" disabled>Select category</option>
+                  <option value="Electronics">Electronics</option>
+                  <option value="Books & Stationary">Books & Stationary</option>
+                  <option value="Bags & Accessories">Bags & Accessories</option>
+                  <option value="Clothing & Wearables">Clothing & Wearables</option>
+                  <option value="ID & Cards">ID & Cards</option>
+                  <option value="Keys & Locks">Keys & Locks</option>
+                  <option value="Documents">Documents</option>
+                  <option value="Personal Items">Personal Items</option>
+                  <option value="Sports & Equipment">Sports & Equipment</option>
+                  <option value="Others">Others</option>
+                </select>
+              </div>
+              <div>
+                <label className="mb-2 block text-sm font-semibold text-slate-700">
+                  {itemData.status === "lost" ? "Date Lost" : "Date Found"}
+                </label>
+                <div className="relative">
+                  <Calendar className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                  <input type="date" name="dateLostOrFound" value={itemData.dateLostOrFound} onChange={handleInputChange}
+                    max={new Date().toISOString().split("T")[0]}
+                    className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 pl-10 pr-4 text-sm text-slate-800 outline-none transition focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100" />
+                </div>
+              </div>
+              <div className="md:col-span-2">
+                <label className="mb-2 block text-sm font-semibold text-slate-700">Description</label>
+                <textarea name="itemDescription" value={itemData.itemDescription} onChange={handleInputChange} rows={4}
+                  placeholder="Describe the item in detail — color, brand, markings, condition..."
+                  className="w-full resize-none rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100" />
+              </div>
+              <div className="md:col-span-2">
+                <label className="mb-2 block text-sm font-semibold text-slate-700">Location</label>
+                <div className="relative">
+                  <MapPin className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                  <input type="text" name="location" value={itemData.location} onChange={handleInputChange} placeholder="e.g. Main Library, Block A"
+                    className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 pl-10 pr-4 text-sm text-slate-800 outline-none transition focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100" />
+                </div>
+              </div>
+            </div>
+
+            {/* Photo */}
+            <div className="mt-5">
+              <label className="mb-2 block text-sm font-semibold text-slate-700">Photo (optional)</label>
+              {preview ? (
+                <div className="relative">
+                  <img src={preview} alt="Preview" className="w-full rounded-xl border border-slate-200 object-cover aspect-video" />
+                  <button type="button" onClick={handleRemovePhoto}
+                    className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full bg-slate-900/70 text-white">
+                    <X className="h-4 w-4" />
+                  </button>
+                </div>
+              ) : (
+                <label className="flex cursor-pointer flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed border-slate-300 bg-slate-50 py-8 transition hover:border-indigo-300 hover:bg-indigo-50/40">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-100">
+                    <ImageIcon className="h-5 w-5 text-indigo-600" />
+                  </div>
+                  <div className="text-center">
+                    <p className="text-sm font-semibold text-slate-700">Click to upload a photo</p>
+                    <p className="mt-0.5 text-xs text-slate-400">JPEG, PNG or WebP · Max 5MB</p>
+                  </div>
+                  <input type="file" accept="image/*" className="hidden" onChange={handlePhotoChange} />
+                </label>
+              )}
+            </div>
+
+            <button type="button" onClick={handleSubmit} disabled={loading}
+              className="mt-6 flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-indigo-700 text-sm font-bold text-white transition hover:bg-indigo-800 disabled:opacity-50">
+              {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <CheckCircle2 className="h-4 w-4" />}
+              {loading ? "Posting..." : "Post Report"}
+            </button>
+          </form>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
