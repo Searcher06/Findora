@@ -274,7 +274,6 @@ export function MyItemsPage() {
             </div>
           )}
         </div>
-        </div>
       </div>
     </div>
   );
