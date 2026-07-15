@@ -143,6 +143,7 @@ export const DetailedItemCard = ({ item }) => {
   const placeholderImage = "/item-placeholder.svg";
   const isOwner = user?._id === reportedBy?._id;
   const canResolve = isOwner && ["lost", "found"].includes(status);
+  const canRequest = !isOwner && ["lost", "found"].includes(status);
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const [isResolveModalOpen, setIsResolveModalOpen] = useState(false);
   const [reportReason, setReportReason] = useState("");
@@ -218,12 +219,23 @@ export const DetailedItemCard = ({ item }) => {
             </div>
           ) : (
             <div className="flex flex-wrap justify-center gap-2 sm:gap-3">
-              <RequestButton
-                itemId={_id}
-                itemName={name}
-                status={status}
-                className="rounded-lg sm:rounded-xl font-medium text-sm px-6 sm:px-8 py-2 sm:py-2.5 h-10 sm:h-11 flex items-center justify-center active:scale-95 transition-all bg-indigo-700 hover:bg-indigo-700 shadow-sm hover:shadow-md"
-              />
+              {canRequest ? (
+                <RequestButton
+                  itemId={_id}
+                  itemName={name}
+                  status={status}
+                  className="rounded-lg sm:rounded-xl font-medium text-sm px-6 sm:px-8 py-2 sm:py-2.5 h-10 sm:h-11 flex items-center justify-center active:scale-95 transition-all bg-indigo-700 hover:bg-indigo-700 shadow-sm hover:shadow-md"
+                />
+              ) : (
+                <div className={`inline-flex h-10 sm:h-11 items-center gap-2 rounded-lg sm:rounded-xl px-4 sm:px-5 text-sm font-semibold ${
+                  status === "returned"
+                    ? "border border-emerald-200 bg-emerald-50 text-emerald-700"
+                    : "border border-slate-200 bg-slate-50 text-slate-600"
+                }`}>
+                  <CheckCircle2 className="h-4 w-4" />
+                  {status === "returned" ? "Item Returned" : "Item Claimed"}
+                </div>
+              )}
               <Button
                 type="button"
                 onClick={() => setIsReportModalOpen(true)}
@@ -287,12 +299,23 @@ export const DetailedItemCard = ({ item }) => {
               </>
             ) : (
               <>
-                <RequestButton
-                  itemId={_id}
-                  itemName={name}
-                  status={status}
-                  className="w-full rounded-xl font-medium text-sm xl:text-base active:scale-95 transition-all px-5 py-2.5 h-10 xl:h-11 flex items-center justify-center bg-indigo-700 hover:bg-indigo-700 shadow-sm hover:shadow-md"
-                />
+                {canRequest ? (
+                  <RequestButton
+                    itemId={_id}
+                    itemName={name}
+                    status={status}
+                    className="w-full rounded-xl font-medium text-sm xl:text-base active:scale-95 transition-all px-5 py-2.5 h-10 xl:h-11 flex items-center justify-center bg-indigo-700 hover:bg-indigo-700 shadow-sm hover:shadow-md"
+                  />
+                ) : (
+                  <div className={`flex h-10 w-full items-center justify-center gap-2 rounded-xl px-5 text-sm font-semibold xl:h-11 ${
+                    status === "returned"
+                      ? "border border-emerald-200 bg-emerald-50 text-emerald-700"
+                      : "border border-slate-200 bg-slate-50 text-slate-600"
+                  }`}>
+                    <CheckCircle2 className="h-4 w-4" />
+                    {status === "returned" ? "Item Returned" : "Item Claimed"}
+                  </div>
+                )}
                 <Button
                   type="button"
                   onClick={() => setIsReportModalOpen(true)}
