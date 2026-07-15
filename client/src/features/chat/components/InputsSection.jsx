@@ -89,7 +89,7 @@ export const InputsSection = ({
   const isAccepted = request?.status === "accepted";
   const isResolved = request?.status === "returned" || request?.status === "closed";
   const showActionButton =
-    !requestLoading && !requestError && !isResolved &&
+    !requestLoading && !requestError && !!request && !isResolved &&
     (isFinder || (isAccepted && isClaimer));
 
   // Clear action label
