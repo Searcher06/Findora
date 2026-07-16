@@ -62,7 +62,7 @@ export const ChatSelectionPage = () => {
     );
 
   return (
-    <div className="flex min-h-screen flex-col bg-white">
+    <div className="flex min-h-screen flex-col bg-slate-50">
       {/* Mobile/tablet header */}
       <div className="sticky top-14 z-10 border-b border-slate-200/80 bg-white/95 px-4 pb-3 pt-4 backdrop-blur-xl md:top-16 lg:hidden">
         <div className="flex items-center justify-between mb-3">
@@ -79,29 +79,87 @@ export const ChatSelectionPage = () => {
         </div>
       </div>
 
-      {/* Desktop header */}
-      <div className="hidden lg:block px-6 pt-6 pb-4 border-b border-slate-100">
-        <div className="mx-auto max-w-2xl flex items-center justify-between gap-4">
-          <div>
-            <h1 className="font-display text-2xl font-bold text-slate-900">Messages</h1>
-            <p className="text-sm text-slate-500">{chats.length} conversation{chats.length !== 1 ? "s" : ""}</p>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="relative">
-              <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
-              <input type="text" placeholder="Search conversations..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}
-                className="h-10 w-64 rounded-xl border border-slate-200 bg-slate-50 pl-9 pr-4 text-sm text-slate-700 outline-none transition focus:border-indigo-300 focus:bg-white focus:ring-2 focus:ring-indigo-100" />
+      {/* Desktop layout */}
+      <div className="hidden lg:flex flex-1 px-6 py-6 gap-6 max-w-6xl mx-auto w-full">
+        {/* Left panel - conversation list */}
+        <div className="w-96 shrink-0 flex flex-col rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden">
+          {/* Panel header */}
+          <div className="flex items-center justify-between border-b border-slate-100 px-5 py-4">
+            <div>
+              <h1 className="font-display text-xl font-bold text-slate-900">Messages</h1>
+              <p className="text-xs text-slate-500 mt-0.5">{chats.length} conversation{chats.length !== 1 ? "s" : ""}</p>
             </div>
             <button type="button" onClick={() => useChatStore.getState().fetchUsersToChat()} aria-label="Refresh"
-              className="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 text-slate-500 transition hover:bg-slate-50">
+              className="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 text-slate-500 transition hover:bg-slate-50">
               <RefreshCw className={`h-4 w-4 ${isUsersLoading ? "animate-spin text-indigo-600" : ""}`} />
             </button>
+          </div>
+          {/* Search */}
+          <div className="border-b border-slate-100 px-4 py-3">
+            <div className="relative">
+              <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+              <input type="text" placeholder="Search..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}
+                className="h-9 w-full rounded-xl border border-slate-200 bg-slate-50 pl-9 pr-3 text-sm text-slate-700 outline-none transition focus:border-indigo-300 focus:bg-white focus:ring-2 focus:ring-indigo-100" />
+            </div>
+          </div>
+          {/* List */}
+          <div className="flex-1 overflow-y-auto divide-y divide-slate-100">
+            {isUsersLoading && chats.length === 0 ? (
+              Array.from({ length: 5 }).map((_, i) => (
+                <div key={i} className="flex items-center gap-3 px-4 py-3">
+                  <div className="h-11 w-11 animate-pulse rounded-full bg-slate-200 shrink-0" />
+                  <div className="flex-1 space-y-2">
+                    <div className="h-3.5 w-28 animate-pulse rounded-full bg-slate-200" />
+                    <div className="h-3 w-40 animate-pulse rounded-full bg-slate-100" />
+                  </div>
+                </div>
+              ))
+            ) : chats.length > 0 ? (
+              chats.map((chat) => (
+                <button key={chat.id} type="button"
+                  onClick={() => navigate(`/chat/${chat.id}/${chat.username}`)}
+                  className="flex w-full items-center gap-3 px-4 py-3 text-left transition hover:bg-slate-50">
+                  <div className="relative shrink-0">
+                    <Avatar className="h-11 w-11">
+                      {chat.avatar ? <AvatarImage src={chat.avatar} alt={chat.name} /> : null}
+                      <AvatarFallback className="bg-gradient-to-br from-indigo-500 to-violet-600 text-sm font-bold text-white">
+                        {chat.initial}
+                      </AvatarFallback>
+                    </Avatar>
+                    {chat.isUnread && <span className="absolute -right-0.5 -top-0.5 h-3 w-3 rounded-full border-2 border-white bg-indigo-600" />}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-baseline justify-between gap-2">
+                      <p className={`truncate text-sm ${chat.isUnread ? "font-bold text-slate-900" : "font-semibold text-slate-700"}`}>{chat.name}</p>
+                      <span className={`shrink-0 text-[11px] ${chat.isUnread ? "font-semibold text-indigo-600" : "text-slate-400"}`}>{chat.time}</span>
+                    </div>
+                    <p className="mt-0.5 truncate text-xs text-indigo-600/80 font-medium">Re: {chat.itemName}</p>
+                    <p className={`mt-0.5 truncate text-xs ${chat.isUnread ? "font-semibold text-slate-800" : "text-slate-500"}`}>{chat.lastMessage}</p>
+                  </div>
+                  {chat.isUnread && <span className="h-2 w-2 shrink-0 rounded-full bg-indigo-600" />}
+                </button>
+              ))
+            ) : (
+              <div className="flex flex-col items-center gap-3 px-6 py-16 text-center">
+                <MessageSquareDashed className="h-10 w-10 text-slate-300" />
+                <p className="text-sm font-semibold text-slate-500">{searchQuery ? "No results found" : "No conversations yet"}</p>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Right panel - empty state on desktop */}
+        <div className="flex flex-1 items-center justify-center rounded-2xl border border-dashed border-slate-200 bg-white">
+          <div className="text-center">
+            <MessageSquareDashed className="mx-auto h-12 w-12 text-slate-300" />
+            <p className="mt-3 font-display text-lg font-semibold text-slate-400">Select a conversation</p>
+            <p className="mt-1 text-sm text-slate-400">Choose from the list to open a chat</p>
           </div>
         </div>
       </div>
 
-      {/* List */}
-      <div className="flex-1 lg:mx-auto lg:w-full lg:max-w-2xl">
+      {/* Mobile list */}
+      <div className="flex-1 lg:hidden">
         {isUsersLoading && chats.length === 0 ? (
           <div className="space-y-0 divide-y divide-slate-100">
             {Array.from({ length: 6 }).map((_, i) => (

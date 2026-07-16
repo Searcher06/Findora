@@ -278,7 +278,7 @@ export function MyItemsPage() {
       <div className="px-3 pt-4 pb-6 sm:px-4 lg:px-6">
         <div className="mx-auto max-w-5xl">
           {loading ? (
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 md:gap-4 lg:grid-cols-4">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 gap-4 2xl:grid-cols-4">
               {Array.from({ length: 6 }).map((_, i) => (
                 <div key={i} className="animate-pulse rounded-2xl border border-slate-100 bg-white">
                   <div className="aspect-video w-full rounded-t-2xl bg-slate-200" />
@@ -328,7 +328,7 @@ export function MyItemsPage() {
               </button>
             </div>
           ) : (
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 md:gap-4 lg:grid-cols-4">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 gap-4 2xl:grid-cols-4">
               {filtered.map((item) => (
                 <ItemCard key={item._id} item={item} />
               ))}

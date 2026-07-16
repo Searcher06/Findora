@@ -24,8 +24,8 @@ export const ItemsContainer = ({ className, filters = {}, onMetaChange, onPageCh
 
   return (
     <div className={`${className} w-full`}>
-      {/* 2-col on mobile, 3 on md, 4 on xl */}
-      <div className="grid grid-cols-1 gap-3 sm:gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
+      {/* 1-col mobile, 2-col sm, 3-col lg, 4-col 2xl */}
+      <div className="grid grid-cols-1 gap-3 sm:gap-4 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
         {loading
           ? Array.from({ length: 8 }).map((_, i) => <ItemCardSkeleton key={i} />)
           : error

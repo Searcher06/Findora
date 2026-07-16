@@ -113,28 +113,20 @@ const NotifItem = ({ req, userId }) => {
 
   return (
     <div className="flex items-start gap-3 px-4 py-4">
-      {/* Icon */}
       <span className={`mt-0.5 inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full ${c.bg}`}>
         <Icon className={`h-5 w-5 ${c.icon}`} />
       </span>
-
-      {/* Content */}
       <div className="min-w-0 flex-1">
         <div className="flex items-start justify-between gap-2">
           <p className="text-sm font-semibold text-slate-900 leading-snug">{cfg.title}</p>
           <span className="shrink-0 text-[11px] text-slate-400 mt-0.5">{timeAgo(req.updatedAt)}</span>
         </div>
         <p className="mt-1 text-xs leading-relaxed text-slate-500">{cfg.body}</p>
-
         <div className="mt-2.5 flex items-center gap-2">
           {cfg.action && (
-            <Link
-              to={cfg.action.to}
-              className={`inline-flex h-7 items-center gap-1 rounded-full px-3 text-[11px] font-semibold text-white transition active:scale-95 ${c.btn}`}
-            >
-              {cfg.action.label === "Open Chat"
-                ? <MessageSquare className="h-3 w-3" />
-                : <ChevronRight className="h-3 w-3" />}
+            <Link to={cfg.action.to}
+              className={`inline-flex h-7 items-center gap-1 rounded-full px-3 text-[11px] font-semibold text-white transition active:scale-95 ${c.btn}`}>
+              {cfg.action.label === "Open Chat" ? <MessageSquare className="h-3 w-3" /> : <ChevronRight className="h-3 w-3" />}
               {cfg.action.label}
             </Link>
           )}
@@ -142,6 +134,38 @@ const NotifItem = ({ req, userId }) => {
             {req.status}
           </span>
         </div>
+      </div>
+    </div>
+  );
+};
+
+// Desktop card version
+const NotifCard = ({ req, userId }) => {
+  const cfg = getConfig(req, userId);
+  const c = colorMap[cfg.color] || colorMap.slate;
+  const Icon = cfg.icon;
+
+  return (
+    <div className={`flex flex-col rounded-2xl border bg-white p-5 shadow-sm transition hover:shadow-md ${c.badge.includes("indigo") ? "border-indigo-100" : c.badge.includes("amber") ? "border-amber-100" : c.badge.includes("emerald") ? "border-emerald-100" : c.badge.includes("rose") ? "border-rose-100" : "border-slate-200"}`}>
+      <div className="flex items-start justify-between gap-3 mb-3">
+        <span className={`inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl ${c.bg}`}>
+          <Icon className={`h-5 w-5 ${c.icon}`} />
+        </span>
+        <span className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-[10px] font-semibold capitalize ${c.badge}`}>
+          {req.status}
+        </span>
+      </div>
+      <p className="text-sm font-bold text-slate-900 leading-snug flex-1">{cfg.title}</p>
+      <p className="mt-2 text-xs leading-relaxed text-slate-500 flex-1">{cfg.body}</p>
+      <div className="mt-4 flex items-center justify-between">
+        <span className="text-[11px] text-slate-400">{timeAgo(req.updatedAt)}</span>
+        {cfg.action && (
+          <Link to={cfg.action.to}
+            className={`inline-flex h-8 items-center gap-1.5 rounded-xl px-3 text-xs font-semibold text-white transition hover:opacity-90 ${c.btn}`}>
+            {cfg.action.label === "Open Chat" ? <MessageSquare className="h-3.5 w-3.5" /> : <ChevronRight className="h-3.5 w-3.5" />}
+            {cfg.action.label}
+          </Link>
+        )}
       </div>
     </div>
   );
@@ -184,27 +208,29 @@ export function NotificationsPage() {
       </div>
 
       {/* Desktop header */}
-      <div className="hidden lg:flex items-center justify-between px-6 py-6">
-        <div>
-          <h1 className="font-display text-2xl font-bold text-slate-900">Notifications</h1>
-          <p className="text-sm text-slate-500">All activity across your requests</p>
+      <div className="hidden lg:block px-8 pt-8 pb-4">
+        <div className="mx-auto max-w-5xl flex items-center justify-between">
+          <div>
+            <h1 className="font-display text-2xl font-bold text-slate-900">Notifications</h1>
+            <p className="text-sm text-slate-500 mt-1">All activity across your requests</p>
+          </div>
+          <button type="button" onClick={load} aria-label="Refresh"
+            className="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-500 transition hover:bg-slate-50">
+            <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin text-indigo-600" : ""}`} />
+          </button>
         </div>
-        <button type="button" onClick={load} aria-label="Refresh"
-          className="flex h-9 w-9 items-center justify-center rounded-full text-slate-500 transition hover:bg-slate-100">
-          <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin text-indigo-600" : ""}`} />
-        </button>
       </div>
 
       {/* Feed */}
-      <div className="mx-auto max-w-2xl lg:max-w-3xl lg:px-6">
+      <div className="mx-auto max-w-2xl px-3 lg:max-w-5xl lg:px-8">
         {loading ? (
-          <div className="mt-3 overflow-hidden rounded-2xl bg-white mx-3 divide-y divide-slate-100">
+          <div className="mt-3 overflow-hidden rounded-2xl bg-white divide-y divide-slate-100 shadow-sm">
             {Array.from({ length: 5 }).map((_, i) => (
               <NotificationSkeleton key={i} />
             ))}
           </div>
         ) : error ? (
-          <div className="mx-3 mt-4 rounded-2xl border border-rose-200 bg-rose-50 p-4 text-sm font-medium text-rose-700">
+          <div className="mt-4 rounded-2xl border border-rose-200 bg-rose-50 p-4 text-sm font-medium text-rose-700">
             {error}
           </div>
         ) : sorted.length === 0 ? (
@@ -220,11 +246,21 @@ export function NotificationsPage() {
             </div>
           </div>
         ) : (
-          <div className="mt-3 overflow-hidden rounded-2xl bg-white mx-3 divide-y divide-slate-100">
-            {sorted.map((req) => (
-              <NotifItem key={req._id} req={req} userId={user?._id} />
-            ))}
-          </div>
+          <>
+            {/* Mobile: single column feed */}
+            <div className="mt-3 overflow-hidden rounded-2xl bg-white divide-y divide-slate-100 shadow-sm lg:hidden">
+              {sorted.map((req) => (
+                <NotifItem key={req._id} req={req} userId={user?._id} />
+              ))}
+            </div>
+
+            {/* Desktop: card grid */}
+            <div className="hidden lg:grid lg:grid-cols-2 xl:grid-cols-3 gap-4 mt-4">
+              {sorted.map((req) => (
+                <NotifCard key={req._id} req={req} userId={user?._id} />
+              ))}
+            </div>
+          </>
         )}
       </div>
     </div>
