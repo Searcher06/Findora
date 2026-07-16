@@ -21,7 +21,7 @@ export const ItemInfoSheet = ({ item, requestType }) => {
 
   return (
     <>
-      {/* ── Tappable info bar ── */}
+      {/* Tappable info bar */}
       <button
         type="button"
         onClick={() => setOpen(true)}
@@ -51,7 +51,7 @@ export const ItemInfoSheet = ({ item, requestType }) => {
         <ChevronRight className="h-3.5 w-3.5 shrink-0 text-slate-400" />
       </button>
 
-      {/* ── Bottom sheet overlay ── */}
+      {/* Bottom sheet overlay */}
       {open && (
         <>
           {/* Backdrop */}

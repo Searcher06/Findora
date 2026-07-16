@@ -174,7 +174,7 @@ export const DetailedItemCard = ({ item }) => {
 
   return (
     <div className="w-full lg:px-8 lg:py-10">
-      {/* ── MOBILE layout ── */}
+      {/* MOBILE layout */}
       <div className="lg:hidden">
         {/* Full-bleed image */}
         <div className="relative w-full">

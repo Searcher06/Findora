@@ -57,7 +57,7 @@ export const ChatPage = () => {
 
   return (
     <>
-      {/* ── MOBILE / TABLET ── */}
+      {/* MOBILE / TABLET */}
       <div className="fixed inset-0 flex flex-col bg-[#f0f2f5] lg:hidden" style={{ top: 0, bottom: 0 }}>
         {/* Top bar */}
         <div className="flex h-14 shrink-0 items-center gap-3 bg-white px-3 shadow-sm">
@@ -115,7 +115,7 @@ export const ChatPage = () => {
         </div>
       </div>
 
-      {/* ── DESKTOP ── unchanged layout */}
+      {/* DESKTOP layout */}
       <div className="relative mx-auto hidden h-[calc(100dvh-2rem)] w-full max-w-7xl gap-4 px-4 py-4 lg:flex">
         <div className="flex min-w-0 flex-1 flex-col overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-[0_35px_90px_-75px_rgba(15,23,42,0.8)]">
           {/* Desktop top bar */}

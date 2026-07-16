@@ -45,7 +45,7 @@ const BrowsePage = () => {
   return (
     <div ref={pageTopRef} className="min-h-screen bg-slate-50">
 
-      {/* ── MOBILE sticky header ── */}
+      {/* MOBILE sticky header */}
       <div className="sticky top-14 z-10 border-b border-slate-200/80 bg-white/95 px-3 pb-3 pt-3 backdrop-blur-xl md:top-16 lg:hidden">
         {/* Lost / Found pill toggle */}
         <div className="flex items-center justify-between gap-2 mb-3">
@@ -67,7 +67,7 @@ const BrowsePage = () => {
         />
       </div>
 
-      {/* ── DESKTOP hero + filters ── */}
+      {/* DESKTOP hero + filters */}
       <div className="hidden lg:block">
         <div className="relative overflow-hidden bg-gradient-to-b from-slate-50 via-slate-100/60 to-white px-6 pb-6 pt-6">
           <div className="pointer-events-none absolute -left-24 top-20 h-56 w-56 rounded-full bg-violet-300/25 blur-3xl" />
@@ -132,7 +132,7 @@ const BrowsePage = () => {
         </div>
       </div>
 
-      {/* ── Items grid ── */}
+      {/* Items grid */}
       <div className="px-3 pt-4 pb-6 sm:px-4 lg:px-6 lg:pt-0">
         <div className="mx-auto max-w-7xl">
           <ItemsContainer

@@ -162,7 +162,7 @@ export function MyItemsPage() {
   return (
     <div className="min-h-screen bg-slate-50">
 
-      {/* ── Sticky header — mobile/tablet only ── */}
+      {/* Sticky header - mobile/tablet only */}
       <div className="sticky top-14 z-10 border-b border-slate-200/80 bg-white/95 px-3 pb-3 pt-3 backdrop-blur-xl md:top-16 lg:hidden">
         <div className="flex items-center justify-between mb-3">
           <h1 className="font-display text-lg font-bold text-slate-900">My Items</h1>
@@ -213,7 +213,7 @@ export function MyItemsPage() {
         )}
       </div>
 
-      {/* ── Desktop header ── */}
+      {/* Desktop header */}
       <div className="hidden lg:block px-6 pt-6 pb-4">
         <div className="mx-auto max-w-5xl">
           <div className="flex items-center justify-between mb-5">
@@ -274,8 +274,8 @@ export function MyItemsPage() {
         </div>
       </div>
 
-      {/* ── Content ── */}
-      <div className="px-3 pt-4 pb-6 sm:px-4">
+      {/* Content */}
+      <div className="px-3 pt-4 pb-6 sm:px-4 lg:px-6">
         <div className="mx-auto max-w-5xl">
           {loading ? (
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 md:gap-4 lg:grid-cols-4">
@@ -283,8 +283,8 @@ export function MyItemsPage() {
                 <div key={i} className="animate-pulse rounded-2xl border border-slate-100 bg-white">
                   <div className="aspect-video w-full rounded-t-2xl bg-slate-200" />
                   <div className="space-y-2 p-3">
-                    <div className="h-3 w-3/4 rounded bg-slate-200" />
-                    <div className="h-2.5 w-1/2 rounded bg-slate-100" />
+                    <div className="h-3 rounded bg-slate-200" style={{width:"75%"}} />
+                    <div className="h-2.5 rounded bg-slate-100" style={{width:"50%"}} />
                     <div className="mt-3 flex gap-2">
                       <div className="h-8 flex-1 rounded-xl bg-slate-100" />
                       <div className="h-8 flex-1 rounded-xl bg-slate-100" />

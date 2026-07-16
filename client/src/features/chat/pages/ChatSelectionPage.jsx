@@ -63,7 +63,7 @@ export const ChatSelectionPage = () => {
 
   return (
     <div className="flex min-h-screen flex-col bg-white">
-      {/* ── Mobile/tablet header ── */}
+      {/* Mobile/tablet header */}
       <div className="sticky top-14 z-10 border-b border-slate-200/80 bg-white/95 px-4 pb-3 pt-4 backdrop-blur-xl md:top-16 lg:hidden">
         <div className="flex items-center justify-between mb-3">
           <h1 className="font-display text-xl font-bold text-slate-900">Messages</h1>
@@ -79,7 +79,7 @@ export const ChatSelectionPage = () => {
         </div>
       </div>
 
-      {/* ── Desktop header ── */}
+      {/* Desktop header */}
       <div className="hidden lg:block px-6 pt-6 pb-4 border-b border-slate-100">
         <div className="mx-auto max-w-2xl flex items-center justify-between gap-4">
           <div>
